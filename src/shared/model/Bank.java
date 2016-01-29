@@ -42,7 +42,7 @@ public class Bank {
 			// init brick 
 			brickDeck[i] = new ResourceCard(ResourceType.BRICK);
 			// init lumber 
-			lumberDeck[i] = new ResourceCard(ResourceType.LUMBER);
+			lumberDeck[i] = new ResourceCard(ResourceType.WOOD);
 			// init sheep
 			sheepDeck[i] = new ResourceCard(ResourceType.SHEEP);
 			// init ore 

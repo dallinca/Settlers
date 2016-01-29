@@ -56,7 +56,7 @@ public class ResourceCardHand {
 			  sheepCards.add(card);
 		  } else if(card.getResourceType() == ResourceType.WHEAT) {
 			  wheatCards.add(card);
-		  } else if(card.getResourceType() == ResourceType.LUMBER) {
+		  } else if(card.getResourceType() == ResourceType.WOOD) {
 			  woodCards.add(card);
 		  }
 	  }
