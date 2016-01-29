@@ -29,6 +29,10 @@ public class Board {
 	public Board() {
 		// Need to initialize which hex location is starting with the robber (Should be the desert)
 	}
+	/*Dumb comment test and another dumb test!
+	 * 
+	 * 
+	 */
 	
 	/**
 	 * Determines Whether the Robber can be moved to the given hex
