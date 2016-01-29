@@ -1,5 +1,5 @@
 package shared.communication.params;
 
-public class PerformAction_Params {
+public class Save_Params {
 
 }
