@@ -37,30 +37,42 @@ public class Board {
 	private Edge[][] mapUREdges = new Edge[6][6];
 	private Vertex[][] mapVertices = new Vertex[11][11];
 	
-	
+	/**
+	 * Create and instance of the Board Class, and initializes all of the Hexes,
+	 * Edges, and Vertices of the Map.
+	 * 
+	 * @pre none
+	 * 
+	 * @post All of the instances Of Hex, Edge, and Vertex created for the map
+	 */
 	public Board() {
 		// Need to initialize which hex location is starting with the robber (Should be the desert)
 		initHexes();
 		initBorders();
 		initVertices();
 	}
-	/*Dumb comment test and another dumb test!
-	 * 
-	 * 
-	 */
 	
 	
 	/**
-	 * Determines Whether the Robber can be moved to the given hex
+	 * Determines Whether the Robber can be moved to the given hexLocation
 	 * 
-	 * @pre hex must not be null, hex must be a land hex
+	 * @pre hexLocation must not be null, hex must be a land hex
 	 * 
-	 * @post Return value is whether the Robber can be moved to the given hex
+	 * @post Return value is whether the Robber can be moved to the given hexLocation
 	 * 
 	 */
 	public boolean canDoMoveRobberToHex(HexLocation hexLocation) {
+		if(hexLocation == null) {
+			return false;
+		}
+		
 		// Use the hexlocation to find that Hex in our data Structure
-		Hex hex = getHex(hexLocation);
+		Hex hex = null;
+		try {
+			hex = getHex(hexLocation);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		// Check to see if the hex exists in the data structure and if it does
 		// Make sure it isn't the hex that currently has the robber
@@ -71,14 +83,15 @@ public class Board {
 	}
 	
 	/**
-	 * Move the robber to a specified hex
+	 * Move the robber to a specified hexLocation
+	 * @throws Exception 
 	 * 
-	 * @pre canDoMoveRobber(hex) == true
+	 * @pre canDoMoveRobberToHex(hexLocation) == true
 	 * 
-	 * @post hexWithRobber = hex, the Robber has been moved to the new hex,
+	 * @post hexWithRobber = hex of specified hexLocation, the Robber has been moved to the new hex,
 	 * or MoveRobberException thrown
 	 */
-	public void moveRobberToHex(HexLocation hexLocation) throws MoveRobberException {
+	public void moveRobberToHex(HexLocation hexLocation) throws Exception {
 		if(!canDoMoveRobberToHex(hexLocation)) {
 			throw new MoveRobberException("Cannot move robber to given hex");
 		}
@@ -93,13 +106,22 @@ public class Board {
 	 * Determines whether a specified player's road can be placed on a specified edge
 	 * This call should be happening after the player has already verified ability to purchase a road
 	 * 
-	 * @pre player != null, edge != null
+	 * @pre player != null, edgeLocation != null
+	 * @pre player should be verified as having the resources necessary to buy a road
 	 * 
-	 * @post Return value is whether an edge can be placed on the specified edge
+	 * @post Return value is whether an Road can be placed on the specified edgeLocation
 	 */
 	public boolean canDoPlaceRoadOnEdge(Player player, EdgeLocation edgeLocation) {
+		if(edgeLocation == null) {
+			return false;
+		}
 		// Use the edgelocation to find that Edge in our data Structure
-		Edge edge = getEdge(edgeLocation);
+		Edge edge = null;
+		try {
+			edge = getEdge(edgeLocation);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		// player not null, edge not null, and does not have a road
 		if(player == null || edge == null || edge.hasRoad() == true) {
@@ -127,15 +149,13 @@ public class Board {
 	
 	/**
 	 * Places a road on a specified edge
-	 * @throws AllPiecesPlayedException 
-	 * @throws InsufficientPlayerResourcesException 
-	 * @throws CannotBuyException 
+	 * @throws Exception 
 	 * 
 	 * @pre canDoPlaceRoadOnEdge != false,
 	 * 
 	 * @post road is placed on the specified edge, or PlaceRoadOnEdgeException thrown
 	 */
-	public void placeRoadOnEdge(Player player, EdgeLocation edgeLocation) throws PlaceRoadOnEdgeException, CannotBuyException, InsufficientPlayerResourcesException, AllPiecesPlayedException {
+	public void placeRoadOnEdge(Player player, EdgeLocation edgeLocation) throws Exception {
 		if(canDoPlaceRoadOnEdge(player, edgeLocation) == false) {
 			throw new PlaceRoadOnEdgeException("canDoPlaceRoadOnEdge = false");
 		}
@@ -147,16 +167,25 @@ public class Board {
 	}
 
 	/**
-	 * Determine whether a specified player's settlement can be placed on a specified vertex
+	 * Determine whether a specified player's settlement can be placed on a specified vertexLocation
 	 * This call should be happening after the player has already verified ability to purchase a settlement
 	 * 
 	 * @pre vertex != null, settlement != null
+	 * @pre player should be verified as having the resources necessary to buy a settlement
 	 * 
 	 * @post Return value is whether the specified settlement can be placed on the specified vertex
 	 */
 	public boolean canDoPlaceSettlementOnVertex(Player player, VertexLocation vertexLocation) {
+		if(vertexLocation == null) {
+			return false;
+		}
 		// Use the vertexlocation to find that Vertex in our data Structure
-		Vertex vertex = getVertex(vertexLocation);
+		Vertex vertex = null;
+		try {
+			vertex = getVertex(vertexLocation);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		// player not null, vertex not null, and does not have any player's settlement or city
 		if(player == null || vertex == null || vertex.hasMunicipal() == true) {
@@ -180,15 +209,12 @@ public class Board {
 
 	/**
 	 * Places a settlement on a specified vertex
-	 * @throws AllPiecesPlayedException 
-	 * @throws InsufficientPlayerResourcesException 
-	 * @throws CannotBuyException 
-	 * 
+	 * @throws Exception 
 	 * @pre canDoPlaceSettlementOnVertex != false,  
 	 * 
 	 * @post settlement is placed on the specified vertex, or PlaceSettlementOnVertexException thrown
 	 */
-	public void placeSettlementOnVertex(Player player, VertexLocation vertexLocation) throws PlaceSettlementOnVertexException, CannotBuyException, InsufficientPlayerResourcesException, AllPiecesPlayedException {
+	public void placeSettlementOnVertex(Player player, VertexLocation vertexLocation) throws Exception {
 		if(canDoPlaceSettlementOnVertex(player, vertexLocation) == false) {
 			throw new PlaceSettlementOnVertexException("canDoPlaceSettlementOnVertex = false");
 		}
@@ -214,12 +240,21 @@ public class Board {
 	 * This call should be happening after the player has already verified ability to purchase a city
 	 * 
 	 * @pre vertex != null, city != null
+	 * @pre player should be verified as having the resources necessary to buy a city
 	 * 
 	 * @post Return value is whether the city can be placed on the specified vertex
 	 */
 	public boolean canDoPlaceCityOnVertex(Player player, VertexLocation vertexLocation) {
+		if(vertexLocation == null) {
+			return false;
+		}
 		// Use the vertexlocation to find that Vertex in our data Structure
-		Vertex vertex = getVertex(vertexLocation);
+		Vertex vertex = null;
+		try {
+			vertex = getVertex(vertexLocation);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		// Check that the player and vertex are not null, that the vertex has a settlement, and that the settlement is owned by the given player
 		if(player == null || vertex == null || vertex.hasMunicipal() == false || vertex.getMunicipal() instanceof City 
@@ -231,15 +266,12 @@ public class Board {
 
 	/**
 	 * Places a city on a specified vertex
-	 * @throws AllPiecesPlayedException 
-	 * @throws InsufficientPlayerResourcesException 
-	 * @throws CannotBuyException 
-	 * 
+	 * @throws Exception 
 	 * @pre canDoPlaceCityOnVertex != false,  
 	 * 
 	 * @post city is placed on the specified vertex, or PlaceCityOnVertexException thrown
 	 */
-	public void placeCityOnVertex(Player player, VertexLocation vertexLocation) throws PlaceCityOnVertexException, CannotBuyException, InsufficientPlayerResourcesException, AllPiecesPlayedException {
+	public void placeCityOnVertex(Player player, VertexLocation vertexLocation) throws Exception {
 		if(canDoPlaceCityOnVertex(player, vertexLocation) == false) {
 			throw new PlaceCityOnVertexException("canDoPlaceCityOnVertex = false");
 		}
@@ -251,12 +283,16 @@ public class Board {
 	}
 	
 	/**
-	 * TODO
+	 * Gets the Hex according to Our defined x,y Hex plane
 	 * 
 	 * 
 	 * @param x_coord_hex
 	 * @param y_coord_hex
-	 * @return
+	 * 
+	 * @pre x_coord_hex must be between 0 and 5 
+	 * @pre y_coord_hex must be between 0 and 5 
+	 * 
+	 * @post will return null if it is not a valid hex location, else return the hex at the specified location
 	 */
 	public Hex getHex(int x_coord_hex, int y_coord_hex) {
 		// If the queried hex is beyond the preset array bounds, bail
@@ -268,26 +304,38 @@ public class Board {
 	}
 	
 	/**
-	 * TODO
+	 * Gets the hex according to the map-gui defined locations
+	 * @throws Exception
 	 * 
 	 * @param hexLocation
-	 * @return
+	 * 
+	 * @pre HecLocation != null
+	 * 
+	 * @post Returns the Hex at the specified location
 	 */
-	public Hex getHex(HexLocation hexLocation) {
+	public Hex getHex(HexLocation hexLocation) throws Exception {
+		if(hexLocation == null) {
+			throw new Exception(" Should not call getHex(hexLocation) with a null hexLocation");
+		}
 		return getHex(hexLocation.getX() + 3, hexLocation.getY() + 3);
 	}
 	
 	/**
-	 * TODO
+	 * Get the Edge according to our defined x, y, direction plane
 	 * 
 	 * @param x_coord_edg
 	 * @param y_coord_edg
 	 * @param direction_edg
-	 * @return
+	 * 
+	 * @pre x_coord_edg must be between 0 and 6
+	 * @pre y_coord_edg must be between 0 and 6
+	 * @pre direction_edg != null
+	 * 
+	 * @post will return the Edge at the specified location
 	 */
 	public Edge getEdge(int x_coord_edg, int y_coord_edg, ModEdgeDirection direction_edg) {
 		// If the queried hex is beyond the preset array bounds, bail
-		if(x_coord_edg < 0 || x_coord_edg > 5 || y_coord_edg < 0 || y_coord_edg > 5 || direction_edg == null) {
+		if(x_coord_edg < 0 || x_coord_edg > 6 || y_coord_edg < 0 || y_coord_edg > 6 || direction_edg == null) {
 			return null;
 		}
 		// return the Vertex queried, may be null if not a valid location
@@ -301,12 +349,19 @@ public class Board {
 	}
 	
 	/**
-	 * TODO
+	 * Get the Edge according to the map-gui defined locations
 	 * 
 	 * @param edgeLocation
-	 * @return
+	 * @throws Exception 
+	 * 
+	 * @pre edgeLocation != null
+	 * 
+	 * @post Return the Edge at the specified location
 	 */
-	public Edge getEdge(EdgeLocation edgeLocation) {
+	public Edge getEdge(EdgeLocation edgeLocation) throws Exception {
+		if(edgeLocation == null) {
+			throw new Exception("Should not call getEdge(edgeLocation) with a null edgeLocation");
+		}
 		EdgeLocation normalizedLocation = edgeLocation.getNormalizedLocation();
 		if(normalizedLocation.getDir() == EdgeDirection.NorthWest) {
 			return getEdge(edgeLocation.getHexLoc().getX() + 3, edgeLocation.getHexLoc().getY() + 3, ModEdgeDirection.LEFT);
@@ -318,11 +373,15 @@ public class Board {
 	}
 	
 	/**
-	 * TODO
+	 * Get the Edge according to our defined x, y, direction plane
 	 * 
 	 * @param x_coord_ver
 	 * @param y_coord_ver
-	 * @return
+	 * 
+	 * @pre x_coord_ver must be between 0 and 11
+	 * @pre y_coord_ver must be between 0 and 11
+	 * 
+	 * @post will return null if it is not a valid vertex location, else return the vertex at the specified location
 	 */
 	public Vertex getVertex(int x_coord_ver, int y_coord_ver) {
 		// If the queried hex is beyond the preset array bounds, bail
@@ -334,12 +393,19 @@ public class Board {
 	}
 	
 	/**
-	 * TODO
+	 * Get the Vertex according to the map-gui defined locations
 	 * 
 	 * @param vertexLocation
-	 * @return
+	 * @throws Exception 
+	 * 
+	 * @pre vertexLocation != null
+	 * 
+	 * @post Return the Vertex at the specified location
 	 */
-	public Vertex getVertex(VertexLocation vertexLocation) {
+	public Vertex getVertex(VertexLocation vertexLocation) throws Exception {
+		if(vertexLocation == null) {
+			throw new Exception("Should not call getVertex(vertexLocation) with a null vertexLocation");
+		}
 		// Normalized the location received
 		VertexLocation normalizedLocation = vertexLocation.getNormalizedLocation();
 		// If we are converting from the North East
