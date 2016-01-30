@@ -22,7 +22,7 @@ public class Vertex {
 	private int y_coord_ver;
 	
 	/**
-	 * TODO
+	 * Initialize an Instance of the Vertex Class. Should Only be called from the Board Class.
 	 * 
 	 * @param board
 	 * @param x_coord_ver
@@ -35,9 +35,13 @@ public class Vertex {
 	}
 	
 	/**
-	 * TODO
+	 * Retrieves the adjacent Vertices to this vertex. May have null values if where
+	 * the vertex doesn't have a valid adjacent vertex. i.e a vertex on the outer edge
+	 * will only have 2 adjacent vertexes on the map.
 	 * 
-	 * @return
+	 * @pre None
+	 * 
+	 * @post Retrieves the adjacent Vertices to this vertex, Size of 3.
 	 */
 	public Vertex[] getAdjacentVertices() {
 		// the max number of adjacent Vertices is 3
@@ -61,9 +65,13 @@ public class Vertex {
 	}
 	
 	/**
-	 * TODO
+	 * Retrieves the adjacent Hexes to this vertex. May have null values if where
+	 * the vertex doesn't have a valid adjacent Hex. i.e a vertex on the outer edge
+	 * will only have 1 or 2 adjacent Hexes on the map.
 	 * 
+	 * @pre None
 	 * 
+	 * @post Retrieves the adjacen Hexes to this Vertex, Size of 3
 	 */
 	public Hex[] getAdjacentHexes() {
 		// the max number of adjacent Hexes is 3

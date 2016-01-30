@@ -22,12 +22,17 @@ public class Edge {
 	private ModEdgeDirection direction_edg;
 	
 	/**
-	 * TODO
+	 * Initialize instance of Edge. Should only be called by the Board Class.
 	 * 
 	 * @param board
 	 * @param x_coord_edg
 	 * @param y_coord_edg
 	 * @param direction_edg
+	 * 
+	 * @pre board != null
+	 * @pre direction_edg != null 
+	 * 
+	 * @post New edge is instantiated
 	 */
 	public Edge(Board board, int x_coord_edg, int y_coord_edg, ModEdgeDirection direction_edg) {
 		this.board = board;
@@ -37,9 +42,11 @@ public class Edge {
 	}
 	
 	/**
-	 * TODO
+	 * Returns an array of the sides of the Edge as defined by EdgeSide.
 	 * 
-	 * @return
+	 * @pre None
+	 * 
+	 * @return An array of EdgeSide size 2 with the sides of this instance of Edge
 	 */
 	public EdgeSide[] getSides() {
 		// the number of sides of an Edge is always 2
