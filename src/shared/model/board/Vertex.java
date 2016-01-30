@@ -35,6 +35,40 @@ public class Vertex {
 	}
 	
 	/**
+	 * TODO need to figure out the math to get the edges.
+	 * 
+	 * 
+	 * Retrieves the adjacent Edges to this vertex. May have null values if where
+	 * the vertex doesn't have a valid adjacent edge. i.e a vertex on the outer edge
+	 * will only have 2 adjacent edges on the map.
+	 * 
+	 * @pre None
+	 * 
+	 * @post Retrieves the adjacent Vertices to this vertex, Size of 3.
+	 */
+	public Edge[] getAdjacentEdges() {
+		// the max number of adjacent Vertices is 3
+		Edge[] adjacentEdges = new Edge[3];
+		
+		// If x_coord_ver is odd
+		// then vertex has two roads on the left and one on the right
+		if(x_coord_ver % 2 != 0) {
+			adjacentEdges[0] = board.getEdge( x_coord_ver, y_coord_ver, ModEdgeDirection.RIGHT); // Upper Left Road
+			adjacentEdges[1] = board.getEdge( x_coord_ver, y_coord_ver, ModEdgeDirection.UP); // Right Road
+			adjacentEdges[2] = board.getEdge( x_coord_ver, y_coord_ver, ModEdgeDirection.LEFT); // Lower Left Road
+		}
+		// else vertex has two roads on the right and one on the left
+		else {
+			adjacentEdges[0] = board.getEdge( x_coord_ver, y_coord_ver, ModEdgeDirection.UP); // Left Road
+			adjacentEdges[1] = board.getEdge( x_coord_ver, y_coord_ver, ModEdgeDirection.LEFT); // Upper Right Road
+			adjacentEdges[2] = board.getEdge( x_coord_ver, y_coord_ver, ModEdgeDirection.RIGHT); // Lower Right Road
+		}
+		
+		
+		return adjacentEdges;
+	}
+	
+	/**
 	 * Retrieves the adjacent Vertices to this vertex. May have null values if where
 	 * the vertex doesn't have a valid adjacent vertex. i.e a vertex on the outer edge
 	 * will only have 2 adjacent vertexes on the map.
@@ -71,7 +105,7 @@ public class Vertex {
 	 * 
 	 * @pre None
 	 * 
-	 * @post Retrieves the adjacen Hexes to this Vertex, Size of 3
+	 * @post Retrieves the adjacent Hexes to this Vertex, Size of 3
 	 */
 	public Hex[] getAdjacentHexes() {
 		// the max number of adjacent Hexes is 3
