@@ -1,6 +1,5 @@
 package client;
 
-import shared.communication.results.PollServer_Result;
 
 /**
  * Polls server every few seconds to grab new information 

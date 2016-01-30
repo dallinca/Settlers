@@ -1,5 +1,7 @@
 package client;
 
+import client.proxy.IServerProxy;
+import client.proxy.ServerProxy;
 import shared.communication.results.*;
 
 /**
@@ -11,7 +13,7 @@ import shared.communication.results.*;
  */
 public class ClientFacade {
 
-	private ClientCommunicator cc;
+	private IServerProxy sp;
 
 	/**
 	 * Creates fascade, specifying the location of the master server.
@@ -21,12 +23,12 @@ public class ClientFacade {
 	 * @pre Server name and port number specifiy an existing server.
 	 * @post Client will be able to communicate with server.
 	 */
-	ClientFacade(String serverName, int portNumber){
-		cc = new ClientCommunicator(serverName, portNumber);
+	ClientFacade(IServerProxy proxy){
+		sp = proxy;
 	}
 
 	ClientFacade(){		
-		cc = new ClientCommunicator();				
+		sp = new ServerProxy();				
 	}
 
 	/**
