@@ -44,6 +44,10 @@ public class Board {
 		initBorders();
 		initVertices();
 	}
+	/*Dumb comment test and another dumb test!
+	 * 
+	 * 
+	 */
 	
 	
 	/**

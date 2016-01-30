@@ -1,5 +1,5 @@
 package shared.communication.params;
 
-public class PollServer_Params {
+public class Register_Params {
 
 }

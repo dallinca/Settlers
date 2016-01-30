@@ -1,5 +1,5 @@
 package shared.communication.params;
 
-public class JoinGame_Params {
+public class Load_Params {
 
 }
