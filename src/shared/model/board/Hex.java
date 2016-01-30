@@ -19,11 +19,18 @@ import shared.locations.HexLocation;
 public class Hex {
 
 	private boolean hasRobber;
-	private HexLocation location;
 	private HexType hexType;
 	private int rollValue;
 
-	public Hex() {}
+	private Board board;
+	private int x_coord_hex;
+	private int y_coord_hex;
+
+	public Hex(Board board, int x_coord_hex, int y_coord_hex) {
+		this.board = board;
+		this.x_coord_hex = x_coord_hex;
+		this.y_coord_hex = y_coord_hex;
+	}
 	
 	/**
 	 * Returns whether the Hex currently has the robber
@@ -57,14 +64,6 @@ public class Hex {
 	public void takeRobber() {
 		hasRobber = false;
 	}
-	
-	public HexLocation getLocation() {
-		return location;
-	}
-
-	public void setLocation(HexLocation location) {
-		this.location = location;
-	}
 
 	public HexType getHexType() {
 		return hexType;
@@ -88,7 +87,14 @@ public class Hex {
 	public void setRollValue(int rollValue) {
 		this.rollValue = rollValue;
 	}
-	
+
+	public int getX_coord_hex() {
+		return x_coord_hex;
+	}
+
+	public int getY_coord_hex() {
+		return y_coord_hex;
+	}
 	
 	
 	

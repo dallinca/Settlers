@@ -12,11 +12,86 @@ import shared.model.items.Road;
  *
  */
 public class Edge {
+	
 
 	Road road;
-	EdgeLocation edgeLocation;
+
+	private Board board;
+	private int x_coord_edg;
+	private int y_coord_edg;
+	private ModEdgeDirection direction_edg;
 	
-	public Edge() {}
+	/**
+	 * TODO
+	 * 
+	 * @param board
+	 * @param x_coord_edg
+	 * @param y_coord_edg
+	 * @param direction_edg
+	 */
+	public Edge(Board board, int x_coord_edg, int y_coord_edg, ModEdgeDirection direction_edg) {
+		this.board = board;
+		this.x_coord_edg = x_coord_edg;
+		this.y_coord_edg = y_coord_edg;
+		this.direction_edg = direction_edg;
+	}
+	
+	/**
+	 * TODO
+	 * 
+	 * @return
+	 */
+	public EdgeSide[] getSides() {
+		// the number of sides of an Edge is always 2
+		EdgeSide[] sides = new EdgeSide[2];
+		
+		// If We are looking at a Left Edge
+		if(direction_edg == ModEdgeDirection.LEFT) {
+			// Left Side of Edge
+			sides[0] = new EdgeSide(
+					board.getVertex( (2 * x_coord_edg) - 2, 2 * y_coord_edg),
+					board.getEdge(x_coord_edg - 1, y_coord_edg + 1, ModEdgeDirection.UP),
+					board.getEdge(x_coord_edg - 1, y_coord_edg + 1, ModEdgeDirection.RIGHT)
+					);
+			// Right Side of Edge
+			sides[1] = new EdgeSide(
+					board.getVertex( (2 * x_coord_edg) - 1, (2 * y_coord_edg) - 1),
+					board.getEdge(x_coord_edg, y_coord_edg, ModEdgeDirection.UP),
+					board.getEdge(x_coord_edg - 1, y_coord_edg, ModEdgeDirection.RIGHT)
+					);
+		}
+		// If We are looking at an Upper Edge
+		else if(direction_edg == ModEdgeDirection.UP) {
+			// Left Side of Edge
+			sides[0] = new EdgeSide(
+					board.getVertex( (2 * x_coord_edg) - 1, (2 * y_coord_edg) - 1),
+					board.getEdge(x_coord_edg, y_coord_edg, ModEdgeDirection.LEFT),
+					board.getEdge(x_coord_edg - 1, y_coord_edg, ModEdgeDirection.RIGHT)
+					);
+			// Right Side of Edge
+			sides[1] = new EdgeSide(
+					board.getVertex( 2 * x_coord_edg, (2 * y_coord_edg) - 2),
+					board.getEdge(x_coord_edg, y_coord_edg, ModEdgeDirection.RIGHT),
+					board.getEdge(x_coord_edg + 1, y_coord_edg - 1, ModEdgeDirection.LEFT)
+					);
+		}
+		// If we are looking at a Right Edge
+		else {
+			// Left Side of Edge
+			sides[0] = new EdgeSide(
+					board.getVertex( 2 * x_coord_edg, (2 * y_coord_edg) - 2),
+					board.getEdge(x_coord_edg, y_coord_edg, ModEdgeDirection.UP),
+					board.getEdge(x_coord_edg + 1, y_coord_edg - 1, ModEdgeDirection.LEFT)
+					);
+			// Right Side of Edge
+			sides[1] = new EdgeSide(
+					board.getVertex( (2 * x_coord_edg) + 1, (2 * y_coord_edg) - 1),
+					board.getEdge(x_coord_edg + 1, y_coord_edg, ModEdgeDirection.LEFT),
+					board.getEdge(x_coord_edg + 1, y_coord_edg, ModEdgeDirection.UP)
+					);
+		}
+		return sides;
+	}
 	
 	/**
 	 * Returns whether the Edge has a road
@@ -43,12 +118,20 @@ public class Edge {
 		this.road = road;
 	}
 
-	public EdgeLocation getEdgeLocation() {
-		return edgeLocation;
+	public Road getRoad() {
+		return road;
 	}
 
-	public void setEdgeLocation(EdgeLocation edgeLocation) {
-		this.edgeLocation = edgeLocation;
+	public int getX_coord_edg() {
+		return x_coord_edg;
+	}
+
+	public int getY_coord_edg() {
+		return y_coord_edg;
+	}
+
+	public ModEdgeDirection getDirection_edg() {
+		return direction_edg;
 	}
 	
 	
