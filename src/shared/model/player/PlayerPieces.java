@@ -39,6 +39,10 @@ public class PlayerPieces {
 	 * 
 	 */
 	   public PlayerPieces(Player player){
+		   settlements = new ArrayList<Settlement>();
+		   cities = new ArrayList<City>();
+		   roads =  new ArrayList<Road>();
+		 
 		   for(int i = 0; i < maxSettlements; i++) {
 			   settlements.add(new Settlement(player));
 		   }

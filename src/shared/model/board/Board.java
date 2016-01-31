@@ -31,11 +31,11 @@ public class Board {
 
 	private Hex hexWithRobber;
 	
-	private Hex[][] mapHexes = new Hex[5][5];
-	private Edge[][] mapULEdges = new Edge[6][6];
-	private Edge[][] mapUUEdges = new Edge[6][6];
-	private Edge[][] mapUREdges = new Edge[6][6];
-	private Vertex[][] mapVertices = new Vertex[11][11];
+	private Hex[][] mapHexes = new Hex[6][6];
+	private Edge[][] mapULEdges = new Edge[7][7];
+	private Edge[][] mapUUEdges = new Edge[7][7];
+	private Edge[][] mapUREdges = new Edge[7][7];
+	private Vertex[][] mapVertices = new Vertex[12][12];
 	
 	/**
 	 * Create and instance of the Board Class, and initializes all of the Hexes,
