@@ -35,9 +35,6 @@ public class Vertex {
 	}
 	
 	/**
-	 * TODO need to figure out the math to get the edges.
-	 * 
-	 * 
 	 * Retrieves the adjacent Edges to this vertex. May have null values if where
 	 * the vertex doesn't have a valid adjacent edge. i.e a vertex on the outer edge
 	 * will only have 2 adjacent edges on the map.
@@ -53,15 +50,15 @@ public class Vertex {
 		// If x_coord_ver is odd
 		// then vertex has two roads on the left and one on the right
 		if(x_coord_ver % 2 != 0) {
-			adjacentEdges[0] = board.getEdge( x_coord_ver, y_coord_ver, ModEdgeDirection.RIGHT); // Upper Left Road
-			adjacentEdges[1] = board.getEdge( x_coord_ver, y_coord_ver, ModEdgeDirection.UP); // Right Road
-			adjacentEdges[2] = board.getEdge( x_coord_ver, y_coord_ver, ModEdgeDirection.LEFT); // Lower Left Road
+			adjacentEdges[0] = board.getEdge( (x_coord_ver - 1)/2, (y_coord_ver + 1)/2, ModEdgeDirection.RIGHT); // Upper Left Road
+			adjacentEdges[1] = board.getEdge( (x_coord_ver + 1)/2, (y_coord_ver + 1)/2, ModEdgeDirection.UP); // Right Road
+			adjacentEdges[2] = board.getEdge( (x_coord_ver + 1)/2, (y_coord_ver + 1)/2, ModEdgeDirection.LEFT); // Lower Left Road
 		}
 		// else vertex has two roads on the right and one on the left
 		else {
-			adjacentEdges[0] = board.getEdge( x_coord_ver, y_coord_ver, ModEdgeDirection.UP); // Left Road
-			adjacentEdges[1] = board.getEdge( x_coord_ver, y_coord_ver, ModEdgeDirection.LEFT); // Upper Right Road
-			adjacentEdges[2] = board.getEdge( x_coord_ver, y_coord_ver, ModEdgeDirection.RIGHT); // Lower Right Road
+			adjacentEdges[0] = board.getEdge( x_coord_ver/2, (y_coord_ver + 2)/2, ModEdgeDirection.UP); // Left Road
+			adjacentEdges[1] = board.getEdge( (x_coord_ver + 2)/2, y_coord_ver/2, ModEdgeDirection.LEFT); // Upper Right Road
+			adjacentEdges[2] = board.getEdge( x_coord_ver/2, (y_coord_ver + 2)/2, ModEdgeDirection.RIGHT); // Lower Right Road
 		}
 		
 		
