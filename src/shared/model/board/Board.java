@@ -202,7 +202,7 @@ public class Board {
 		}
 		
 		// vertex has an adjacent border that has a road owned by the player of the settlement to place
-		// TODO
+		// TODO 
 		
 		return true;
 	}

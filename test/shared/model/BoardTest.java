@@ -44,6 +44,18 @@ public class BoardTest {
 		test = board.canDoMoveRobberToHex(hexlocation);
 		assertEquals(false, test);*/
 	}
+	@Test
+	public void testplaceSettlementOnVertex() throws Exception{
+		/*getting a null pointer in resourceCardHand. Its because the player doesn't start with
+		with resource cards (so his hand is null) until he places a settlement, unfortunately yu can't place an intial
+		settlement becuase it is checking for resource cards.*/
+		Player player = new Player(1);
+		
+		HexLocation hexlocation = new HexLocation(1,1);
+		VertexDirection vertexdirection = null;
+		VertexLocation vertexLocation = new VertexLocation(hexlocation, vertexdirection.NorthWest);
+		board.placeSettlementOnVertex(player, vertexLocation);
+	}
 	
 	@Test
 	public void testCanDoPlaceRoadOnEdge(){

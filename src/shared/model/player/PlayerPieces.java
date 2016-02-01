@@ -63,6 +63,17 @@ public class PlayerPieces {
 	  * @post The Player will have collected all the resources for his pieces
 	  */
 	   public void collectResources(ResourceCardHand resourceCardHand) {
+		   for(Settlement settlement: settlements){
+			   if(settlement.getVertex() != null ){
+				   //Vertex vert = null;
+				   //vert.getAdjacentHexes();
+			   }
+		   }
+		   for(City city: cities) { 
+			   if(city.getVertex() != null){
+				   
+			   }
+		   }
 		   // TODO -- iterate through each settlement and each city drilling information from the vertex then the adjacent hexes
 	   }
 	   
