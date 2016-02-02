@@ -33,7 +33,7 @@ public class DevelopmentCardHand {
 	 * @pre A Player object exists
 	 * @post new ArrayList DevelopmentCards = 0 
 	 */
-	DevelopmentCardHand(){}
+	public DevelopmentCardHand(){}
     
     /**
 	 * adds development cards to player
@@ -43,7 +43,7 @@ public class DevelopmentCardHand {
 	 * @pre Card != null
 	 * @post cards added to ArrayList data structure
 	 */
-    void addCard(DevelopmentCard card) throws NullCardException {
+    public void addCard(DevelopmentCard card) throws NullCardException {
     	if(card == null) {
     		throw new NullCardException("The card to be added to the players Development Cards is Null");
     	} else if(card.getDevCardType() == null) {
@@ -68,7 +68,7 @@ public class DevelopmentCardHand {
      * 
      * @param bank
      */
-    void takeDevelopmentCardFromBank(Bank bank) {
+    public void takeDevelopmentCardFromBank(Bank bank) {
     	//addCard(bank.takeDevelopmentCard());
     }
     

@@ -5,7 +5,7 @@ import shared.definitions.DevCardType;
 public class DevelopmentCard {
 	
 	private DevCardType devCardType;
-	private boolean hasBeenPlayed;
+	private boolean hasBeenPlayed = false;
 
 	public DevelopmentCard(DevCardType devCardType) {
 		this.devCardType = devCardType;

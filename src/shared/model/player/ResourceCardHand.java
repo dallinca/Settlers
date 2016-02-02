@@ -77,7 +77,7 @@ public class ResourceCardHand {
 	   * 
 	   * @pre None
 	   * 
-	   * @post Return value ssays whether the player can currently pay for a road
+	   * @post Return value says whether the player can currently pay for a road
 	   */
 	  public boolean canDoPayForDevelopmentCard() {
 		   if(sheepCards.size() < 1 || wheatCards.size() < 1 || oreCards.size() < 1) {
