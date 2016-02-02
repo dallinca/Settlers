@@ -3,6 +3,7 @@ package shared.model.player;
 import java.util.*;
 
 import shared.definitions.DevCardType;
+import shared.model.Bank;
 import shared.model.items.DevelopmentCard;
 import shared.model.player.exceptions.NullCardException;
 
@@ -62,32 +63,42 @@ public class DevelopmentCardHand {
     }
     
     /**
+     * TODO interface with bank
+     * 
+     * 
+     * @param bank
+     */
+    void takeDevelopmentCardFromBank(Bank bank) {
+    	//addCard(bank.takeDevelopmentCard());
+    }
+    
+    /**
+     * TODO implement play Card
+     * 
 	 * removes resource cards from player
 	 * 
 	 * @pre None
 	 * @post deleted from ArrayList data structure
 	 */
     void playDevelopmentCard(){}
-    
-	/**
-	 * Gets the players development cards
-	 * 
-	 * @pre None
-	 * @post Returns the players development cards
-	 */
-	public ArrayList<DevelopmentCard> getDevelopmentCards(){
-		return null;
-	}
+   
 	
 	/**
-	 * Gets the number of cards in the players hand
+	 * Gets the number of soldier cards that the player has played
 	 * 
 	 * @pre none
 	 * 
-	 * @post
+	 * @post return value contains number of knights that have been played by the player
 	 */
-	public int getDevelopmentCardHandSize() {
-		return 0;
+	public int getNumberOfSoldiersPlayed() {
+		int numberPlayed = 0;
+		// Iterate through all the player owned soldier cards to check, which of these have been played
+		for(DevelopmentCard card: soldierCards) {
+			if(card.hasBeenPlayed()) {
+				numberPlayed++;
+			}
+		}
+		return numberPlayed;
 	}
 	
 }

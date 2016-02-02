@@ -1,6 +1,5 @@
 package shared.model.items;
 
-import shared.model.board.Vertex;
 import shared.model.player.Player;
 
 /**

@@ -1,6 +1,5 @@
 package shared.model.board;
 
-import shared.locations.EdgeLocation;
 import shared.model.items.Road;
 
 /**

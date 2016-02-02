@@ -1,5 +1,6 @@
 package shared.model.player;
 
+import shared.model.Bank;
 import shared.model.board.Edge;
 import shared.model.board.Vertex;
 import shared.model.player.exceptions.AllPiecesPlayedException;
@@ -59,17 +60,64 @@ public class Player {
 	 */
 	void getbuildingCostCard(){}
 	
-
+	/**
+	 * TODO
+	 * 
+	 * checks if the player can buy a development card, Should be called in tandom with the Bank to
+	 * see if there are any Developments Cards left to be bought
+	 * 
+	 * @pre bank != null 
+	 * @pre bank has at least 1 development card to be bought
+	 * 
+	 * @post Return Value contains whether the Player has resources to purchase A Development Card.
+	 */
+	public boolean canDoBuyDevelopmentCard(Bank bank) {
+		if(bank == null || resourceCardHand.canDoPayForDevelopmentCard() == false) {
+			return false;
+		}
+		// TODO Interface with bank
+		//if(bank.numbDevelopmentCards() > 0) {
+		//	return false;
+		//}
+		return true;
+	}
+	
+	/**
+	 * Buys the Development Card, retrieves that card from the bank and places it in the players
+	 * developmentCardHand
+	 * @throws CannotBuyException 
+	 * @throws InsufficientPlayerResourcesException 
+	 * 
+	 * @pre canDoBuyDevelopmentCard == true
+	 * 
+	 * @post Will have payed for the Development Card, retrieved it from the Bank and placed it in players Development Card Hand
+	 * 
+	 */
+	public void buyDevelopmentCard(Bank bank) throws CannotBuyException, InsufficientPlayerResourcesException {
+		if(canDoBuyDevelopmentCard(bank) == false) {
+			throw new CannotBuyException("Cannot Buy Development Card, possibly not enough resources");
+		}
+		resourceCardHand.payForDevelopmentCard();
+		developmentCardHand.takeDevelopmentCardFromBank(bank);
+	}
+	
+	
 	 /**
-	  * checks if a player can buy a road
+	  * checks if the player can buy a road
 	  *   
-	  * @return boolean
+	  * @pre None
+	  *   
+	  * @post Return value contains whether the player should be allowed to buy a road
 	  */
 	   public boolean canDoBuyRoad(){
+		   // If the player doesn't have resources for a road, or has already played all his roads, he can't buy another
 		   if(resourceCardHand.canDoPayForRoad() == false || playerPieces.hasAvailableRoad() == false) {
 			   return false;
 		   }
-		   // TODO -- Still need to check whether there is a place on the map where the player can place a road
+		   // If the player has no legal place to put a road on the map, he shouldn't be allowed to buy one.
+		   if(playerPieces.canPlaceARoadOnTheMap() == false) {
+			   return false;
+		   }
 		   return true;
 	   }
 	   
@@ -84,7 +132,7 @@ public class Player {
 	  * 
 	  * @post Will have payed for the Road and Placed it on the Map
 	  */
-	   public void BuyRoad(Edge edge) throws CannotBuyException, InsufficientPlayerResourcesException, AllPiecesPlayedException {
+	   public void buyRoad(Edge edge) throws CannotBuyException, InsufficientPlayerResourcesException, AllPiecesPlayedException {
 		   if(canDoBuyRoad() == false) {
 			   throw new CannotBuyException("Cannot Buy Road, possibly no edge to place a road");
 		   }
@@ -93,7 +141,7 @@ public class Player {
 	   }
 	   
 	 /**
-	  * checks if a player can buy a settlement
+	  * checks if the player can buy a settlement
 	  *   
 	  * @return boolean
 	  */
@@ -101,7 +149,10 @@ public class Player {
 		   if(resourceCardHand.canDoPayForSettlement() == false || playerPieces.hasAvailableSettlement() == false) {
 			   return false;
 		   }
-		   // TODO -- Still need to check whether there is a place on the map where the player can place a settlement
+		   // If the player does not have a valid place to put a settlement on the map, we won't let the player buy one
+		   if(playerPieces.canPlaceASettlementOnTheMap() == false) {
+			   return false;
+		   }
 		   return true;
 	   }
 
@@ -116,7 +167,7 @@ public class Player {
 	  * 
 	  * @post Will have payed for the Settlement and Placed it on the Map
 	  */
-	   public void BuySettlement(Vertex vertex) throws CannotBuyException, InsufficientPlayerResourcesException, AllPiecesPlayedException{
+	   public void buySettlement(Vertex vertex) throws CannotBuyException, InsufficientPlayerResourcesException, AllPiecesPlayedException{
 		   if(canDoBuySettlement() == false) {
 			   throw new CannotBuyException("Cannot Buy Settlement, possibly no vertex to place a settlement");
 		   }
@@ -127,7 +178,7 @@ public class Player {
 	   }
 	   
 	 /**
-	  * checks if a player can buy a city
+	  * checks if the player can buy a city
 	  *   
 	  * @return boolean
 	  */
@@ -135,7 +186,10 @@ public class Player {
 		   if(resourceCardHand.canDoPayForCity() == false || playerPieces.hasAvailableCity() == false) {
 			   return false;
 		   }
-		   // TODO -- Still need to check whether there is a place on the map where the player can place a city
+		   // If the player does not have a valid place to put a city on the map, we won't let the player buy a city
+		   if(playerPieces.canPlaceACityOnTheMap() == false) {
+			   return false;
+		   }
 		   return true;
 	   }
 
@@ -150,7 +204,7 @@ public class Player {
 	  * 
 	  * @post Will have payed for the City and Placed it on the Map
 	  */
-	   public void BuyCity(Vertex vertex) throws CannotBuyException, InsufficientPlayerResourcesException, AllPiecesPlayedException {
+	   public void buyCity(Vertex vertex) throws CannotBuyException, InsufficientPlayerResourcesException, AllPiecesPlayedException {
 		   if(canDoBuyCity() == false) {
 			   throw new CannotBuyException("Cannot Buy City, possibly no vertex to place a city");
 		   }
@@ -161,14 +215,18 @@ public class Player {
 	   }
 	   
 		/**
-		 * Checks whether the player can collect resources
+		 * Checks whether the player can collect resources (if the roll value is valid,
+		 * and if the bank object is null
 		 * 
-		 * @pre rollValue must be between 1-6 or 8-11
+		 * @pre None
 		 * 
 		 * @post returns whether the Player can collect resources(may collect nothing)
 		 */
-		public boolean canDoCollectResources(int rollValue) {
+		public boolean canDoCollectResources(int rollValue, Bank bank) {
 			if(rollValue < 1 || rollValue == 7 || rollValue > 11) {
+				return false;
+			}
+			if(bank == null) {
 				return false;
 			}
 			return true;
@@ -176,16 +234,17 @@ public class Player {
 		
 		/**
 		 * Has the Player collect the resources based off the given roll value
+		 * @throws Exception 
 		 * 
 		 * @pre canDoCollectResources() == true
 		 * 
 		 * @post The Player will have collected the resources based off the given roll value
 		 */
-		public void collectResources(int rollValue) throws CollectResourcesException {
-			if(canDoCollectResources(rollValue) == false) {
-				throw new CollectResourcesException("Player cannot currently collect resources, possibly invalid roll value");
+		public void collectResources(int rollValue, Bank bank) throws Exception {
+			if(canDoCollectResources(rollValue, bank) == false) {
+				throw new CollectResourcesException("Player cannot currently collect resources, possibly invalid roll value, or null bank object");
 			}
-			playerPieces.collectResources(resourceCardHand);
+			playerPieces.collectResources(resourceCardHand, rollValue, bank);
 		}
 
 		public int getPlayerId() {

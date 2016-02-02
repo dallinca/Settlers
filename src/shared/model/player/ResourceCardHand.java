@@ -1,7 +1,6 @@
 package shared.model.player;
 import java.util.*;
 
-import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
 import shared.model.items.ResourceCard;
 import shared.model.player.exceptions.InsufficientPlayerResourcesException;
@@ -38,11 +37,12 @@ public class ResourceCardHand {
 	 * adds resource cards to player
 	 * 
 	 * @param cards that need to be added
+	 * @throws Exception 
 	 * 
 	 * @pre Card != null
 	 * @post cards added to ArrayList data structure
 	 */
-	  public void addCard(ResourceCard card) throws NullCardException {
+	  public void addCard(ResourceCard card) throws Exception {
 		  if(card == null) {
 			  throw new NullCardException("The card to be added to the players Development Cards is Null");
 		  } else if(card.getResourceType() == null) {
@@ -58,6 +58,8 @@ public class ResourceCardHand {
 			  wheatCards.add(card);
 		  } else if(card.getResourceType() == ResourceType.WOOD) {
 			  woodCards.add(card);
+		  } else {
+			  throw new Exception("Invalid Resouce Type to add to Hand");
 		  }
 	  }
 	 
@@ -69,6 +71,42 @@ public class ResourceCardHand {
 	 */
 	  public void playResourceCard(){}
 	
+	  
+	  /**
+	   * Checks if a player has resources to buy a development card
+	   * 
+	   * @pre None
+	   * 
+	   * @post Return value ssays whether the player can currently pay for a road
+	   */
+	  public boolean canDoPayForDevelopmentCard() {
+		   if(sheepCards.size() < 1 || wheatCards.size() < 1 || oreCards.size() < 1) {
+			   return false;
+		   }
+		   return true;
+	  }
+	  
+	  
+	  /**
+	   * TODO interface with Bank
+	   * 
+	   * Resources are spent from the players hand to pay for a Development card
+	   * @throws InsufficientPlayerResourcesException
+	   * 
+	   * @pre canDoPayForDevelopmentCard == true
+	   * 
+	   * @post 1 sheep, 1 wheat, 1 ore are removed from the players Hand, and put back into the bank
+	   * 
+	   */
+	  public void payForDevelopmentCard() throws InsufficientPlayerResourcesException {
+		   if(canDoPayForDevelopmentCard() == false) {
+			   throw new InsufficientPlayerResourcesException("Player doesn't have the resources to pay for a Devlopment Card");
+		   }
+		   woodCards.remove(sheepCards.size() - 1);
+		   brickCards.remove(wheatCards.size() - 1);
+		   brickCards.remove(oreCards.size() - 1);
+	  }
+	  
 	/**
 	  * checks if a player has resources to buy a road
 	  *   
@@ -84,11 +122,13 @@ public class ResourceCardHand {
 	   }
 	   
 	   /**
+	    * TODO interface with Bank
+	    * 
 	    * Resources are spent from the players hand to pay for a Road
 	    * 
 	    * @pre canDoPayForRoad() == true
 	    * 
-	    * @post 1 brick card and 1 lumber card are removed from the players Hand
+	    * @post 1 brick card and 1 lumber card are removed from the players Hand, and put back into the bank
 	    */
 	   public void payForRoad() throws InsufficientPlayerResourcesException {
 		   if(canDoPayForRoad() == false) {
@@ -113,11 +153,13 @@ public class ResourceCardHand {
 	   }
 	   
 	   /**
+	    * TODO interface with Bank
+	    * 
 	    * Resources are spent from the players hand to pay for a Settlement
 	    * 
 	    * @pre canDoPayForSettlement() == true
 	    * 
-	    * @post 1 wheat card, 1 sheep card, 1 lumber card and 1 brick card are removed from the players Hand
+	    * @post 1 wheat card, 1 sheep card, 1 lumber card and 1 brick card are removed from the players Hand, and put back into the bank
 	    */
 	   public void payForSettlement() throws InsufficientPlayerResourcesException {
 		   if(canDoPayForRoad() == false) {
@@ -144,11 +186,13 @@ public class ResourceCardHand {
 	   }
 	   
 	   /**
+	    * TODO interface with Bank
+	    * 
 	    * Resources are spent from the players hand to pay for a City
 	    * 
 	    * @pre canDoPayForCity() == true
 	    * 
-	    * @post 2 wheat cards and 3 ore cards are removed from the players Hand
+	    * @post 2 wheat cards and 3 ore cards are removed from the players Hand, and put back into the bank
 	    */
 	   public void payForCity() throws InsufficientPlayerResourcesException {
 		   if(canDoPayForRoad() == false) {

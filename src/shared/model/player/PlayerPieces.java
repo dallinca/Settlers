@@ -1,6 +1,10 @@
 package shared.model.player;
 
+import shared.definitions.ResourceType;
+import shared.model.Bank;
 import shared.model.board.Edge;
+import shared.model.board.EdgeSide;
+import shared.model.board.Hex;
 import shared.model.board.Vertex;
 import shared.model.items.*;
 
@@ -24,6 +28,8 @@ import shared.model.player.exceptions.AllPiecesPlayedException;
 
 public class PlayerPieces {
 
+	private Player player;
+	
 	private int maxSettlements = 5;
 	private int maxCities = 4;
 	private int maxRoads = 15;
@@ -39,6 +45,8 @@ public class PlayerPieces {
 	 * 
 	 */
 	   public PlayerPieces(Player player){
+		   this.player = player;
+		   
 		   settlements = new ArrayList<Settlement>();
 		   cities = new ArrayList<City>();
 		   roads =  new ArrayList<Road>();
@@ -58,12 +66,98 @@ public class PlayerPieces {
 	  * Collects the resources for all the player's municipalities
 	  * 
 	  * @param Pass in the resourceCardHand where the cards should be added
-	  * @pre none
+	  * @throws Exception 
+	  * @pre resourceCardHand != null
+	  * @pre rollValue is a valid checked number by the Player class
 	  * 
 	  * @post The Player will have collected all the resources for his pieces
 	  */
-	   public void collectResources(ResourceCardHand resourceCardHand) {
-		   // TODO -- iterate through each settlement and each city drilling information from the vertex then the adjacent hexes
+	   public void collectResources(ResourceCardHand resourceCardHand, int rollValue, Bank bank) throws Exception {
+		   // Iterate through all of the settlements
+		   for(Settlement settlement: settlements) {
+			   Vertex vertex = settlement.getVertex();
+			   // check if the settlement has been placed on the map
+			   if( vertex != null) {
+				   // retrieve an array of all the bordering hexes and iterate through them
+				   Hex[] hexes = vertex.getAdjacentHexes();
+				   for(Hex hex: hexes) {
+					   // If the hex is a valid hex, and it does not have the robber, we can collect resources from it.
+					   if(hex != null && hex.checkIfHasRobber() == false) {
+						   ResourceType resourceType = hex.getHexResourceType();
+						   moveResourcesFromBankToPlayerHand(resourceType, 1, bank, resourceCardHand);
+					   }
+				   }
+			   }
+		   }
+		   // Iterate through all of the cities
+		   for(City city: cities) {
+			   Vertex vertex = city.getVertex();
+			   // check if the settlement has been placed on the map
+			   if( vertex != null) {
+				   // retrieve an array of all the bordering hexes and iterate through them
+				   Hex[] hexes = vertex.getAdjacentHexes();
+				   for(Hex hex: hexes) {
+					   // If the hex is a valid hex, and it does not have the robber, we can collect resources from it.
+					   if(hex != null && hex.checkIfHasRobber() == false) {
+						   ResourceType resourceType = hex.getHexResourceType();
+						   moveResourcesFromBankToPlayerHand(resourceType, 2, bank, resourceCardHand);
+					   }
+				   }
+			   }
+		   }
+	   }
+	   
+	   /**
+	    * TODO interface with Bank
+	    * 
+	    * @param resourceType
+	    * @param numberOfCards
+	    * @param bank
+	    * @param resourceCardHand
+	    */
+	   private void moveResourcesFromBankToPlayerHand(ResourceType resourceType, int numberOfCards, Bank bank, ResourceCardHand resourceCardHand) {
+		   // Ask the bank 'numberOfCards' times if it can take a card of type 'resourceType'
+		   for(int i = 0; i < numberOfCards; i++) {
+			//   if(bank.canDoTakeResource(resourceType) == true) {
+			//	  resourceCardHand.addCard(bank.takeResource(resourceType));
+			//   }
+		   }
+		   
+	   }
+	   
+	   
+	   /**
+	    * Determines whether the player has at at least one valid place on the map 
+	    * where that player can place a road.
+	    * 
+	    * @return
+	    */
+	   public boolean canPlaceARoadOnTheMap() {
+		   // Iterate through every road
+		   for(Road road: roads) {
+			   // If the road is placed on the map
+			   Edge firstEdge = road.getEdge();
+			   if(firstEdge != null) {
+				   // Look at each side of the road/edge
+				   EdgeSide[] sides = firstEdge.getSides();
+				   for(EdgeSide side: sides) {
+					   // Check to see if the side doesn't have a municipal owned by another player, cutting off this player's road building to that side
+					   Vertex vertex = side.getVertex();
+					   if(vertex.hasMunicipal() == false || vertex.getMunicipal().getPlayer().getPlayerId() == player.getPlayerId()) {
+						   // Check to see if there is an edge that doesn't have any players road on it.
+						   Edge[] edges = side.getEdges();
+						   for(Edge edge: edges) {
+							   // if there is an edge that doesn't have a road on it, then the player can place a road in least one place on the map.
+							   if(edge.hasRoad() == false) {
+								   return true;
+							   }
+						   }
+					   }
+				   }
+			   }
+		   }
+		   // There is not a single valid place for the player to place a road on the map, so we probably shouldn't let the person purchase a road.
+		   return false;
 	   }
 	   
 	 /**
@@ -99,6 +193,45 @@ public class PlayerPieces {
 			   }
 		   }
 	   }
+
+	   /**
+	    * Determines whether the player has a legal place to put a settlement on the map
+	    * 
+	    * @pre None
+	    * 
+	    * @return whether there is a valid place for the player to put a settlement on the map
+	    */
+	   public boolean canPlaceASettlementOnTheMap() {
+		   // Iterate through every road
+		   for(Road road: roads) {
+			   // If the road is placed on the map
+			   Edge firstEdge = road.getEdge();
+			   if(firstEdge != null) {
+				   // Look at each side of the road/edge
+				   EdgeSide[] sides = firstEdge.getSides();
+				   for(EdgeSide side: sides) {
+					   // Check to see if this side's vertex doesn't have a municipal
+					   Vertex vertex = side.getVertex();
+					   if(vertex.hasMunicipal() == false) {
+						   // Check to see if the surrounding vertices have municipalities
+						   boolean adjacentVertexHasMunicipal = false;
+						   Vertex[] adjacentVertices = vertex.getAdjacentVertices();
+						   for(Vertex adjacentVertex: adjacentVertices) {
+							   if(adjacentVertex.hasMunicipal() == true) {
+								   adjacentVertexHasMunicipal = true; 
+							   }
+						   }
+						   // If there wasn't a single adjacent vertex with a municipal, then this is a vertex where the player can build a settlement
+						   if(adjacentVertexHasMunicipal == false) {
+							   return true;
+						   }
+					   }
+				   }
+			   }
+		   }
+		   // There is not a single valid place for the player to place a settlement on the map, so we probably shouldn't let the person purchase a settlement.
+		   return false;
+	   }
 	   
 	 /**
 	  * checks if a player has an available settlement to purchase
@@ -133,6 +266,26 @@ public class PlayerPieces {
 			   }
 		   }
 	   }
+
+	   /**
+	    * Determines whether the player has a legal place to put a settlement on the map
+	    * 
+	    * @pre None
+	    * 
+	    * @return whether there is a valid place for the player to put a settlement on the map
+	    */
+	   public boolean canPlaceACityOnTheMap() {
+		   // Iterate through all the settlements
+		   for(Settlement settlement: settlements) {
+			   // If the settlement has been placed on the map
+			   if(settlement.getVertex() != null) {
+				   // To have a valid place to put a city on the map, all the player needs is to have a city on the map
+				   return true;
+			   }
+		   }
+		   // There is not a single valid place for the player to place a city on the map, so we probably shouldn't let the person purchase a city.
+		   return false;
+	   }
 	   
 	 /**
 	  * checks if a player has an available city to purchase
@@ -152,8 +305,13 @@ public class PlayerPieces {
 	   }
 	   
 	 /**
+	  * Places A City at the defined vertex, and removes the settlement that was there
 	  * 
-	  * @param edge
+	  * @pre Should be a verified vertex that has a settlement owned by the player
+	  * @pre hasAvailableCity == true
+	  * 
+	  * @post A City is placed on the map at the specified vertex and the settlement that was there
+	  * previous is removed from the map
 	  */
 	   public void placeCity(Vertex vertex) throws AllPiecesPlayedException {
 		   if(hasAvailableCity() == false) {
@@ -161,9 +319,12 @@ public class PlayerPieces {
 		   }
 		   for(City city: cities) { // Go through all players settlements
 			   if(city.getVertex() == null) { // Find the first city that is not on the map
-				   city.setVertex(vertex); // set the city to the vertex
+				   // Remove the settlement from the map
+				   vertex.getMunicipal().setVertex(null);
+				   // Move the city onto the map
+				   city.setVertex(vertex);
 				   vertex.buildMunicipal(city); // set the vertex to the city
-				   break; // leave for loop
+				   break;
 			   }
 		   }
 	   }

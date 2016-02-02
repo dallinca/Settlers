@@ -14,7 +14,7 @@ import shared.model.player.Player;
  *
  */
 public class Bank {
-	private ResourceCard[] wheatDeck = null; 
+	private ResourceCard[] wheatDeck = null;
 	private ResourceCard[] sheepDeck = null;
 	private ResourceCard[] lumberDeck = null;
 	private ResourceCard[] oreDeck = null;

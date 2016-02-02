@@ -1,11 +1,6 @@
 package shared.model.board;
 
-import shared.model.items.Road;
-import shared.model.items.Settlement;
 import shared.model.player.Player;
-import shared.model.player.exceptions.AllPiecesPlayedException;
-import shared.model.player.exceptions.CannotBuyException;
-import shared.model.player.exceptions.InsufficientPlayerResourcesException;
 import shared.locations.EdgeDirection;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
@@ -159,11 +154,11 @@ public class Board {
 		if(canDoPlaceRoadOnEdge(player, edgeLocation) == false) {
 			throw new PlaceRoadOnEdgeException("canDoPlaceRoadOnEdge = false");
 		}
-		// Use the edgelocation to find that Edge in our data Structure
+		// Use the edgeLocation to find that Edge in our data Structure
 		Edge edge = getEdge(edgeLocation);
 		
 		// Place the road on the edge
-		player.BuyRoad(edge);
+		player.buyRoad(edge);
 	}
 
 	/**
@@ -202,9 +197,14 @@ public class Board {
 		}
 		
 		// vertex has an adjacent border that has a road owned by the player of the settlement to place
-		// TODO
-		
-		return true;
+		Edge[] edges = vertex.getAdjacentEdges();
+		for(Edge edge: edges) {
+			// If the edge has a road, that is owned by the player in question, then the player has access to the vertex
+			if(edge.getRoad() != null && edge.getRoad().getPlayer().getPlayerId() == player.getPlayerId()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -218,22 +218,12 @@ public class Board {
 		if(canDoPlaceSettlementOnVertex(player, vertexLocation) == false) {
 			throw new PlaceSettlementOnVertexException("canDoPlaceSettlementOnVertex = false");
 		}
-		// Use the vertexlocation to find that Vertex in our data Structure
+		// Use the vertexLocation to find that Vertex in our data Structure
 		Vertex vertex = getVertex(vertexLocation);
 		
 		// Place the settlement on the vertex
-		player.BuySettlement(vertex);
+		player.buySettlement(vertex);
 	}
-	
-	/**
-	 * Removes a settlement from it's vertex 
-	 * 
-	 * @pre A vertex must contain a settlement
-	 * 
-	 * @post append settlement to ArrayList settlement 
-	 * @post settlement removed from vertex
-	 */
-	   void removeSettlement(){}
 
 	/**
 	 * Determine whether a specified player's city can be placed on a specified vertex
@@ -279,7 +269,7 @@ public class Board {
 		Vertex vertex = getVertex(vertexLocation);
 		
 		// Place the city on the vertex
-		player.BuyCity(vertex);
+		player.buyCity(vertex);
 	}
 	
 	/**

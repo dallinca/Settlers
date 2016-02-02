@@ -1,6 +1,5 @@
 package shared.model.board;
 
-import shared.locations.VertexLocation;
 import shared.model.items.Municipal;
 
 /**

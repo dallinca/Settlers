@@ -1,7 +1,7 @@
 package shared.model.board;
 
 import shared.definitions.HexType;
-import shared.locations.HexLocation;
+import shared.definitions.ResourceType;
 
 /**
  * The Hex class is used to store what kind of resource can be gained
@@ -32,6 +32,37 @@ public class Hex {
 		this.y_coord_hex = y_coord_hex;
 	}
 	
+	/**
+	 * Looks at the HexType of this hex and converts it to ResourceType, and 
+	 * return the ResourceType for collection purposes
+	 * @throws Exception 
+	 * 
+	 * @pre Hex has HexType
+	 * 
+	 * @post return value contains the Resource type that can be collected from
+	 * this Hex, returns null if there is no resource to be collected from this Hex
+	 */
+	public ResourceType getHexResourceType() throws Exception {
+		// If the Hex has no hex type, bail early
+		if(hexType == null) {
+			throw new Exception("Cannot determine the ResourceType of a hexx that does not have a HexType");
+		}
+		
+		// Check all cases for HexTypes
+		if(hexType == HexType.BRICK) {
+			return ResourceType.BRICK;
+		} else if(hexType == HexType.ORE) {
+			return ResourceType.ORE;
+		} else if(hexType == HexType.SHEEP) {
+			return ResourceType.SHEEP;
+		} else if(hexType == HexType.WHEAT) {
+			return ResourceType.WHEAT;
+		} else if(hexType == HexType.WOOD) {
+			return ResourceType.WOOD;
+		} else {
+			return null;
+		}
+	}
 	/**
 	 * Returns whether the Hex currently has the robber
 	 * 
