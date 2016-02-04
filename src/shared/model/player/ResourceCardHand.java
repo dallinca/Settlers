@@ -2,6 +2,7 @@ package shared.model.player;
 import java.util.*;
 
 import shared.definitions.ResourceType;
+import shared.model.Bank;
 import shared.model.items.ResourceCard;
 import shared.model.player.exceptions.InsufficientPlayerResourcesException;
 import shared.model.player.exceptions.NullCardException;
@@ -19,6 +20,8 @@ import shared.model.player.exceptions.NullCardException;
  */
 public class ResourceCardHand {
 
+		private Bank bank;
+	
 	  private ArrayList<ResourceCard> brickCards;
 	  private ArrayList<ResourceCard> wheatCards;
 	  private ArrayList<ResourceCard> oreCards;
@@ -31,8 +34,27 @@ public class ResourceCardHand {
 	 * @pre A Player object exists
 	 * @post new ArrayList resourceCards = 0 - 3
 	 */
-	  ResourceCardHand(){}
+	  ResourceCardHand(Bank bank){
+		  this.bank = bank;
+		  initializePreGameResources();
+	  }
 	 
+	  
+	  private void initializePreGameResources() {
+		  // TODO -- Verify this interfaces with Bank operations
+		  /*addCard(bank.takeResource(ResourceType.BRICK));
+		  addCard(bank.takeResource(ResourceType.BRICK));
+		  addCard(bank.takeResource(ResourceType.BRICK));
+		  addCard(bank.takeResource(ResourceType.BRICK));
+		  addCard(bank.takeResource(ResourceType.WOOD));
+		  addCard(bank.takeResource(ResourceType.WOOD));
+		  addCard(bank.takeResource(ResourceType.WOOD));
+		  addCard(bank.takeResource(ResourceType.WOOD));
+		  addCard(bank.takeResource(ResourceType.SHEEP));
+		  addCard(bank.takeResource(ResourceType.SHEEP));
+		  addCard(bank.takeResource(ResourceType.WHEAT));
+		  addCard(bank.takeResource(ResourceType.WHEAT));*/
+	  }
 	/**
 	 * adds resource cards to player
 	 * 
@@ -102,9 +124,13 @@ public class ResourceCardHand {
 		   if(canDoPayForDevelopmentCard() == false) {
 			   throw new InsufficientPlayerResourcesException("Player doesn't have the resources to pay for a Devlopment Card");
 		   }
-		   woodCards.remove(sheepCards.size() - 1);
-		   brickCards.remove(wheatCards.size() - 1);
-		   brickCards.remove(oreCards.size() - 1);
+		   // Transfer Cards to Bank
+		   bank.payResource(sheepCards.get(sheepCards.size() - 1));
+		   sheepCards.remove(sheepCards.size() - 1);
+		   bank.payResource(wheatCards.get(wheatCards.size() - 1));
+		   wheatCards.remove(wheatCards.size() - 1);
+		   bank.payResource(oreCards.get(oreCards.size() - 1));
+		   oreCards.remove(oreCards.size() - 1);
 	  }
 	  
 	/**
@@ -134,7 +160,10 @@ public class ResourceCardHand {
 		   if(canDoPayForRoad() == false) {
 			   throw new InsufficientPlayerResourcesException("Player doesn't have the resources to pay for a road");
 		   }
+		   // Transfer Cards to Bank
+		   bank.payResource(woodCards.get(woodCards.size() - 1));
 		   woodCards.remove(woodCards.size() - 1);
+		   bank.payResource(brickCards.get(brickCards.size() - 1));
 		   brickCards.remove(brickCards.size() - 1);
 	   }
 	   
@@ -165,10 +194,15 @@ public class ResourceCardHand {
 		   if(canDoPayForRoad() == false) {
 			   throw new InsufficientPlayerResourcesException("Player doesn't have the resources to pay for a settlement");
 		   }
-		   wheatCards.remove(wheatCards.size() - 1);
-		   sheepCards.remove(sheepCards.size() - 1);
+		   // Transfer Cards to Bank
+		   bank.payResource(woodCards.get(woodCards.size() - 1));
 		   woodCards.remove(woodCards.size() - 1);
+		   bank.payResource(brickCards.get(brickCards.size() - 1));
 		   brickCards.remove(brickCards.size() - 1);
+		   bank.payResource(wheatCards.get(wheatCards.size() - 1));
+		   wheatCards.remove(wheatCards.size() - 1);
+		   bank.payResource(sheepCards.get(sheepCards.size() - 1));
+		   sheepCards.remove(sheepCards.size() - 1);
 	   }
 	   
 	 /**
@@ -198,10 +232,16 @@ public class ResourceCardHand {
 		   if(canDoPayForRoad() == false) {
 			   throw new InsufficientPlayerResourcesException("Player doesn't have the resources to pay for a city");
 		   }
+		   // Transfer Cards to Bank
+		   bank.payResource(wheatCards.get(wheatCards.size() - 1));
 		   wheatCards.remove(wheatCards.size() - 1);
+		   bank.payResource(wheatCards.get(wheatCards.size() - 1));
 		   wheatCards.remove(wheatCards.size() - 1);
+		   bank.payResource(oreCards.get(oreCards.size() - 1));
 		   oreCards.remove(oreCards.size() - 1);
+		   bank.payResource(oreCards.get(oreCards.size() - 1));
 		   oreCards.remove(oreCards.size() - 1);
+		   bank.payResource(oreCards.get(oreCards.size() - 1));
 		   oreCards.remove(oreCards.size() - 1);
 	   }
 	   

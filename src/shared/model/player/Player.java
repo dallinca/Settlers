@@ -37,9 +37,9 @@ public class Player {
 	 * @post new DevelopmentCards()
 	 * @post new Municipal()
 	 */
-	public Player(int playerId){
+	public Player(int playerId, Bank bank){
 		this.playerId = playerId;
-		resourceCardHand = new ResourceCardHand();
+		resourceCardHand = new ResourceCardHand(bank);
 		playerPieces = new PlayerPieces(this);
 		developmentCardHand = new DevelopmentCardHand();
 	}

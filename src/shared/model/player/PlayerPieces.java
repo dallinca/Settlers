@@ -118,9 +118,9 @@ public class PlayerPieces {
 	   private void moveResourcesFromBankToPlayerHand(ResourceType resourceType, int numberOfCards, Bank bank, ResourceCardHand resourceCardHand) {
 		   // Ask the bank 'numberOfCards' times if it can take a card of type 'resourceType'
 		   for(int i = 0; i < numberOfCards; i++) {
-			//   if(bank.canDoTakeResource(resourceType) == true) {
-			//	  resourceCardHand.addCard(bank.takeResource(resourceType));
-			//   }
+			   if(bank.canDoTakeResource(resourceType) == true) {
+				   resourceCardHand.addCard(bank.takeResource(resourceType));
+			   }
 		   }
 		   
 	   }
