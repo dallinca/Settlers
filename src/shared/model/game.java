@@ -16,7 +16,7 @@ import shared.model.board.Board;
  * It also handles all transactions a player may make whether through trading or turning in cards after being robbed. 
  * It also keeps track of how many players there are, who is next, and who is the current player.
  */
-public class game {
+public class Game {
 	private Player[] players = null;
 	private Player currentPlayer;
 	//private Player nextPlayer;
@@ -42,7 +42,7 @@ public class game {
 	 * 
 	 * @param the four player objects to be added to the array.
 	 */
-	public game(Player one, Player two, Player three, Player four, Board board1) {
+	public Game(Player one, Player two, Player three, Player four, Board board1) {
 		players = new Player[numberofPlayers];
 		players[0] = one;
 		players[1] = two;
