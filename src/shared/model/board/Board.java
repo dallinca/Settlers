@@ -1,6 +1,12 @@
 package shared.model.board;
 
 import shared.model.player.Player;
+
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
+import shared.definitions.HexType;
+import shared.definitions.PortType;
 import shared.locations.EdgeDirection;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
@@ -26,11 +32,15 @@ public class Board {
 
 	private Hex hexWithRobber;
 	
-	private Hex[][] mapHexes = new Hex[6][6];
-	private Edge[][] mapULEdges = new Edge[7][7];
-	private Edge[][] mapUUEdges = new Edge[7][7];
-	private Edge[][] mapUREdges = new Edge[7][7];
-	private Vertex[][] mapVertices = new Vertex[12][12];
+	private Hex[][] 	mapHexes = new Hex[6][6];
+	private Edge[][] 	mapULEdges = new Edge[7][7];
+	private Edge[][] 	mapUUEdges = new Edge[7][7];
+	private Edge[][] 	mapUREdges = new Edge[7][7];
+	private Vertex[][] 	mapVertices = new Vertex[12][12];
+	
+	private HexType[] 	hexTypeAssignments = new HexType[19];
+	private int[]		hexRollValueAssignments = new int[19];
+	private PortType[] 	portTypeAssignments = new PortType[9];
 	
 	/**
 	 * Create and instance of the Board Class, and initializes all of the Hexes,
@@ -40,10 +50,18 @@ public class Board {
 	 * 
 	 * @post All of the instances Of Hex, Edge, and Vertex created for the map
 	 */
-	public Board() {
+	public Board(boolean randomHexType, boolean randomHexRollValues, boolean randomPorts) {
 		// Need to initialize which hex location is starting with the robber (Should be the desert)
+		// Initialize Hexes
+		initHexTypes(randomHexType);
+		initHexRollValues(randomHexRollValues);
 		initHexes();
+		
+		// Initialize Borders
 		initBorders();
+		
+		// Initialize Vertices
+		initPortTypes(randomPorts);
 		initVertices();
 	}
 	
@@ -408,8 +426,113 @@ public class Board {
 		}
 	}
 
+	private void initHexTypes(boolean randomHexType) {
+		hexTypeAssignments[0]  = HexType.ORE;
+		hexTypeAssignments[1]  = HexType.WHEAT;
+		hexTypeAssignments[2]  = HexType.WOOD;
+		hexTypeAssignments[3]  = HexType.ORE;
+		hexTypeAssignments[4]  = HexType.WHEAT;
+		hexTypeAssignments[5]  = HexType.SHEEP;
+		hexTypeAssignments[6]  = HexType.WHEAT;
+		hexTypeAssignments[7]  = HexType.SHEEP;
+		hexTypeAssignments[8]  = HexType.WOOD;
+		hexTypeAssignments[9]  = HexType.BRICK;
+		hexTypeAssignments[10] = HexType.DESERT;
+		hexTypeAssignments[11] = HexType.BRICK;
+		hexTypeAssignments[12] = HexType.SHEEP;
+		hexTypeAssignments[13] = HexType.SHEEP;
+		hexTypeAssignments[14] = HexType.WOOD;
+		hexTypeAssignments[15] = HexType.BRICK;
+		hexTypeAssignments[16] = HexType.ORE;
+		hexTypeAssignments[17] = HexType.WOOD;
+		hexTypeAssignments[18] = HexType.WHEAT;
+		if(randomHexType == true) {
+			shuffleHexTypes();
+		}
+	}
+	
+	private void shuffleHexTypes() {
+	    Random rnd = ThreadLocalRandom.current();
+	    for (int i = hexTypeAssignments.length - 1; i > 0; i--)
+	    {
+	      int index = rnd.nextInt(i + 1);
+	      // Simple swap
+	      HexType a = hexTypeAssignments[index];
+	      hexTypeAssignments[index] = hexTypeAssignments[i];
+	      hexTypeAssignments[i] = a;
+	    }
+	}
+	
+	private void initHexRollValues(boolean randomHexRollValues) {
+		hexRollValueAssignments[0] = 5;
+		hexRollValueAssignments[1] = 2;
+		hexRollValueAssignments[2] = 6;
+		hexRollValueAssignments[3] = 3;
+		hexRollValueAssignments[4] = 8;
+		hexRollValueAssignments[5] = 10;
+		hexRollValueAssignments[6] = 9;
+		hexRollValueAssignments[7] = 12;
+		hexRollValueAssignments[8] = 11;
+		hexRollValueAssignments[9] = 4;
+		hexRollValueAssignments[10] = -1;
+		hexRollValueAssignments[11] = 8;
+		hexRollValueAssignments[12] = 10;
+		hexRollValueAssignments[13] = 9;
+		hexRollValueAssignments[14] = 4;
+		hexRollValueAssignments[15] = 5;
+		hexRollValueAssignments[16] = 6;
+		hexRollValueAssignments[17] = 3;
+		hexRollValueAssignments[18] = 11;
+		if(randomHexRollValues == true) {
+			shuffleHexRollValues();
+		}
+		// Ensure that the Roll Values line up legally with the Desert Hex
+		lineUpDesertHexWithNullRollValue();
+	}
+	
+	private void shuffleHexRollValues() {
+	    Random rnd = ThreadLocalRandom.current();
+	    for (int i = hexRollValueAssignments.length - 1; i > 0; i--)
+	    {
+	      int index = rnd.nextInt(i + 1);
+	      // Simple swap
+	      int a = hexRollValueAssignments[index];
+	      hexRollValueAssignments[index] = hexRollValueAssignments[i];
+	      hexRollValueAssignments[i] = a;
+	    }
+	}
+	
+	private void lineUpDesertHexWithNullRollValue() {
+		// Find the desert Index
+		int desertIndex = -1;
+		for(int i = 0; i < hexTypeAssignments.length; i++) {
+			if(hexTypeAssignments[i] == HexType.DESERT) {
+				desertIndex = i;
+			}
+		}
+		
+		// Find the null roll value index
+		int nullRollValueIndex = -1;
+		for(int i = 0; i < hexRollValueAssignments.length; i++) {
+			if(hexRollValueAssignments[i] == -1) {
+				nullRollValueIndex = i;
+			}
+		}
+		
+		// Line up the Null roll Value with the desert hex
+		if(desertIndex != nullRollValueIndex) {
+			// Simple swap for the roll values
+			int temp = hexRollValueAssignments[desertIndex];
+			hexRollValueAssignments[desertIndex] = hexRollValueAssignments[nullRollValueIndex];
+			hexRollValueAssignments[nullRollValueIndex] = temp;
+		}
+		
+	}
+	
+
 	private void initHexes() {
 		
+		// The X's represent the valid hex locations for the board
 		//    0  1  2  3  4  5
 		// 0 [_][_][_][_][_][_]
 		// 1 [_][_][_][X][X][X]
@@ -417,6 +540,24 @@ public class Board {
 		// 3 [_][X][X][X][X][X]
 		// 4 [_][X][X][X][X][_]
 		// 5 [_][X][X][X][_][_]
+
+		// The letters represent the Hex Order the Standard Board Setup, Alphabetical with '&' representing the desert
+		//    0  1  2  3  4  5
+		// 0 [_][_][_][_][_][_]
+		// 1 [_][_][_][G][F][E]
+		// 2 [_][_][H][O][N][D]
+		// 3 [_][I][P][R][M][C]
+		// 4 [_][J][Q][L][B][_]
+		// 5 [_][&][K][A][_][_]
+		
+		//The numbers correspond to the previous Letters for array indexing, Alphabetical with '&' representing the desert
+		//    0  1   2   3   4   5
+		// 0 [_][_ ][_ ][_ ][_ ][_]
+		// 1 [_][_ ][_ ][6 ][5 ][4]
+		// 2 [_][_ ][7 ][15][14][3]
+		// 3 [_][8 ][16][18][13][2]
+		// 4 [_][9 ][17][12][1 ][_]
+		// 5 [_][10][11][0 ][_ ][_]
 		
 		mapHexes[0][0] = null;
 		mapHexes[0][1] = null;
@@ -428,35 +569,35 @@ public class Board {
 		mapHexes[1][0] = null;
 		mapHexes[1][1] = null;
 		mapHexes[1][2] = null;
-		mapHexes[1][3] = new Hex(this,1,3);
-		mapHexes[1][4] = new Hex(this,1,4);
-		mapHexes[1][5] = new Hex(this,1,5);
+		mapHexes[1][3] = new Hex(this,1,3, hexTypeAssignments[6], hexRollValueAssignments[6]);
+		mapHexes[1][4] = new Hex(this,1,4, hexTypeAssignments[5], hexRollValueAssignments[5]);
+		mapHexes[1][5] = new Hex(this,1,5, hexTypeAssignments[4], hexRollValueAssignments[4]);
 
 		mapHexes[2][0] = null;
 		mapHexes[2][1] = null;
-		mapHexes[2][2] = new Hex(this,2,2);
-		mapHexes[2][3] = new Hex(this,2,3);
-		mapHexes[2][4] = new Hex(this,2,4);
-		mapHexes[2][5] = new Hex(this,2,5);
+		mapHexes[2][2] = new Hex(this,2,2, hexTypeAssignments[7],  hexRollValueAssignments[7]);
+		mapHexes[2][3] = new Hex(this,2,3, hexTypeAssignments[15], hexRollValueAssignments[15]);
+		mapHexes[2][4] = new Hex(this,2,4, hexTypeAssignments[14], hexRollValueAssignments[14]);
+		mapHexes[2][5] = new Hex(this,2,5, hexTypeAssignments[3],  hexRollValueAssignments[3]);
 
 		mapHexes[3][0] = null;
-		mapHexes[3][1] = new Hex(this,3,1);
-		mapHexes[3][2] = new Hex(this,3,2);
-		mapHexes[3][3] = new Hex(this,3,3);
-		mapHexes[3][4] = new Hex(this,3,4);
-		mapHexes[3][5] = new Hex(this,3,5);
+		mapHexes[3][1] = new Hex(this,3,1, hexTypeAssignments[8],  hexRollValueAssignments[8]);
+		mapHexes[3][2] = new Hex(this,3,2, hexTypeAssignments[16], hexRollValueAssignments[16]);
+		mapHexes[3][3] = new Hex(this,3,3, hexTypeAssignments[18], hexRollValueAssignments[18]);
+		mapHexes[3][4] = new Hex(this,3,4, hexTypeAssignments[13], hexRollValueAssignments[13]);
+		mapHexes[3][5] = new Hex(this,3,5, hexTypeAssignments[2],  hexRollValueAssignments[2]);
 
 		mapHexes[4][0] = null;
-		mapHexes[4][1] = new Hex(this,4,1);
-		mapHexes[4][2] = new Hex(this,4,2);
-		mapHexes[4][3] = new Hex(this,4,3);
-		mapHexes[4][4] = new Hex(this,4,4);
+		mapHexes[4][1] = new Hex(this,4,1, hexTypeAssignments[9],  hexRollValueAssignments[9]);
+		mapHexes[4][2] = new Hex(this,4,2, hexTypeAssignments[17], hexRollValueAssignments[17]);
+		mapHexes[4][3] = new Hex(this,4,3, hexTypeAssignments[12], hexRollValueAssignments[12]);
+		mapHexes[4][4] = new Hex(this,4,4, hexTypeAssignments[1],  hexRollValueAssignments[1]);
 		mapHexes[4][5] = null;
 
 		mapHexes[5][0] = null;
-		mapHexes[5][1] = new Hex(this,5,1);
-		mapHexes[5][2] = new Hex(this,5,2);
-		mapHexes[5][3] = new Hex(this,5,3);
+		mapHexes[5][1] = new Hex(this,5,1, hexTypeAssignments[10], hexRollValueAssignments[10]);
+		mapHexes[5][2] = new Hex(this,5,2, hexTypeAssignments[11], hexRollValueAssignments[11]);
+		mapHexes[5][3] = new Hex(this,5,3, hexTypeAssignments[0],  hexRollValueAssignments[0]);
 		mapHexes[5][4] = null;
 		mapHexes[5][5] = null;
 	}
@@ -669,7 +810,36 @@ public class Board {
 		mapUREdges[6][6] = null;
 	}
 	
+	private void initPortTypes(boolean randomPorts) {
+		portTypeAssignments[0] = PortType.THREE;
+		portTypeAssignments[1] = PortType.WOOD;
+		portTypeAssignments[2] = PortType.BRICK;
+		portTypeAssignments[3] = PortType.THREE;
+		portTypeAssignments[4] = PortType.THREE;
+		portTypeAssignments[5] = PortType.SHEEP;
+		portTypeAssignments[6] = PortType.THREE;
+		portTypeAssignments[7] = PortType.ORE;
+		portTypeAssignments[8] = PortType.WHEAT;
+		if(randomPorts == true) {
+			shufflePortTypes();
+		}
+	}
+	
+	private void shufflePortTypes() {
+	    Random rnd = ThreadLocalRandom.current();
+	    for (int i = portTypeAssignments.length - 1; i > 0; i--)
+	    {
+	      int index = rnd.nextInt(i + 1);
+	      // Simple swap
+	      PortType a = portTypeAssignments[index];
+	      portTypeAssignments[index] = portTypeAssignments[i];
+	      portTypeAssignments[i] = a;
+	    }
+	}
+	
+	
 	private void initVertices() {
+		// this shows all the vertices
 		//    0  1  2  3  4  5  6  7  8  9 10 11
 		// 0 [_][_][_][_][_][_][X][_][X][_][X][_]
 		// 1 [_][_][_][_][_][X][_][X][_][X][_][X]
@@ -684,17 +854,32 @@ public class Board {
 		// 10[X][_][X][_][X][_][X][_][_][_][_][_]
 		// 11[_][X][_][X][_][X][_][_][_][_][_][_]
 		
+		// This shows vertices w/o ports as 'X', vertices w/ ports as a number
+		//    0  1  2  3  4  5  6  7  8  9 10 11
+		// 0 [_][_][_][_][_][_][X][_][4][_][3][_]
+		// 1 [_][_][_][_][_][X][_][4][_][X][_][3]
+		// 2 [_][_][_][_][5][_][X][_][X][_][X][_]
+		// 3 [_][_][_][5][_][X][_][X][_][X][_][2]
+		// 4 [_][_][X][_][X][_][X][_][X][_][2][_]
+		// 5 [_][6][_][X][_][X][_][X][_][X][_][X]
+		// 6 [6][_][X][_][X][_][X][_][X][_][X][_]
+		// 7 [_][X][_][X][_][X][_][X][_][1][_][_]
+		// 8 [7][_][X][_][X][_][X][_][1][_][_][_]
+		// 9 [_][7][_][X][_][X][_][X][_][_][_][_]
+		// 10[X][_][8][_][X][_][0][_][_][_][_][_]
+		// 11[_][X][_][8][_][0][_][_][_][_][_][_]
+		
 		mapVertices[0][0] = null;
 		mapVertices[0][1] = null;
 		mapVertices[0][2] = null;
 		mapVertices[0][3] = null;
 		mapVertices[0][4] = null;
 		mapVertices[0][5] = null;
-		mapVertices[0][6] = new Vertex(this,0,6);
+		mapVertices[0][6] = new Vertex(this,0,6, null);
 		mapVertices[0][7] = null;
-		mapVertices[0][8] = new Vertex(this,0,8);
+		mapVertices[0][8] = new Vertex(this,0,8, new TradePort(portTypeAssignments[4]));
 		mapVertices[0][9] = null;
-		mapVertices[0][10] = new Vertex(this,0,10);
+		mapVertices[0][10] = new Vertex(this,0,10, new TradePort(portTypeAssignments[3]));
 		mapVertices[0][11] = null;
 
 		mapVertices[1][0] = null;
@@ -702,125 +887,125 @@ public class Board {
 		mapVertices[1][2] = null;
 		mapVertices[1][3] = null;
 		mapVertices[1][4] = null;
-		mapVertices[1][5] = new Vertex(this,1,5);
+		mapVertices[1][5] = new Vertex(this,1,5, null);
 		mapVertices[1][6] = null;
-		mapVertices[1][7] = new Vertex(this,1,7);
+		mapVertices[1][7] = new Vertex(this,1,7, new TradePort(portTypeAssignments[4]));
 		mapVertices[1][8] = null;
-		mapVertices[1][9] = new Vertex(this,1,9);
+		mapVertices[1][9] = new Vertex(this,1,9, null);
 		mapVertices[1][10] = null;
-		mapVertices[1][11] = new Vertex(this,1,11);
+		mapVertices[1][11] = new Vertex(this,1,11, new TradePort(portTypeAssignments[3]));
 
 		mapVertices[2][0] = null;
 		mapVertices[2][1] = null;
 		mapVertices[2][2] = null;
 		mapVertices[2][3] = null;
-		mapVertices[2][4] = new Vertex(this,2,4);
+		mapVertices[2][4] = new Vertex(this,2,4, new TradePort(portTypeAssignments[5]));
 		mapVertices[2][5] = null;
-		mapVertices[2][6] = new Vertex(this,2,6);
+		mapVertices[2][6] = new Vertex(this,2,6, null);
 		mapVertices[2][7] = null;
-		mapVertices[2][8] = new Vertex(this,2,8);
+		mapVertices[2][8] = new Vertex(this,2,8, null);
 		mapVertices[2][9] = null;
-		mapVertices[2][10] = new Vertex(this,2,10);
+		mapVertices[2][10] = new Vertex(this,2,10, null);
 		mapVertices[2][11] = null;
 
 		mapVertices[3][0] = null;
 		mapVertices[3][1] = null;
 		mapVertices[3][2] = null;
-		mapVertices[3][3] = new Vertex(this,3,3);
+		mapVertices[3][3] = new Vertex(this,3,3, new TradePort(portTypeAssignments[5]));
 		mapVertices[3][4] = null;
-		mapVertices[3][5] = new Vertex(this,3,5);
+		mapVertices[3][5] = new Vertex(this,3,5, null);
 		mapVertices[3][6] = null;
-		mapVertices[3][7] = new Vertex(this,3,7);
+		mapVertices[3][7] = new Vertex(this,3,7, null);
 		mapVertices[3][8] = null;
-		mapVertices[3][9] = new Vertex(this,3,9);
+		mapVertices[3][9] = new Vertex(this,3,9, null);
 		mapVertices[3][10] = null;
-		mapVertices[3][11] = new Vertex(this,3,11);
+		mapVertices[3][11] = new Vertex(this,3,11, new TradePort(portTypeAssignments[2]));
 
 		mapVertices[4][0] = null;
 		mapVertices[4][1] = null;
-		mapVertices[4][2] = new Vertex(this,4,2);
+		mapVertices[4][2] = new Vertex(this,4,2, null);
 		mapVertices[4][3] = null;
-		mapVertices[4][4] = new Vertex(this,4,4);
+		mapVertices[4][4] = new Vertex(this,4,4, null);
 		mapVertices[4][5] = null;
-		mapVertices[4][6] = new Vertex(this,4,6);
+		mapVertices[4][6] = new Vertex(this,4,6, null);
 		mapVertices[4][7] = null;
-		mapVertices[4][8] = new Vertex(this,4,8);
+		mapVertices[4][8] = new Vertex(this,4,8, null);
 		mapVertices[4][9] = null;
-		mapVertices[4][10] = new Vertex(this,4,10);
+		mapVertices[4][10] = new Vertex(this,4,10, new TradePort(portTypeAssignments[2]));
 		mapVertices[4][11] = null;
 
 		mapVertices[5][0] = null;
-		mapVertices[5][1] = new Vertex(this,5,1);
+		mapVertices[5][1] = new Vertex(this,5,1, new TradePort(portTypeAssignments[6]));
 		mapVertices[5][2] = null;
-		mapVertices[5][3] = new Vertex(this,5,3);
+		mapVertices[5][3] = new Vertex(this,5,3, null);
 		mapVertices[5][4] = null;
-		mapVertices[5][5] = new Vertex(this,5,5);
+		mapVertices[5][5] = new Vertex(this,5,5, null);
 		mapVertices[5][6] = null;
-		mapVertices[5][7] = new Vertex(this,5,7);
+		mapVertices[5][7] = new Vertex(this,5,7, null);
 		mapVertices[5][8] = null;
-		mapVertices[5][9] = new Vertex(this,5,9);
+		mapVertices[5][9] = new Vertex(this,5,9, null);
 		mapVertices[5][10] = null;
-		mapVertices[5][11] = new Vertex(this,5,11);
+		mapVertices[5][11] = new Vertex(this,5,11, null);
 
-		mapVertices[6][0] = new Vertex(this,6,0);
+		mapVertices[6][0] = new Vertex(this,6,0, new TradePort(portTypeAssignments[6]));
 		mapVertices[6][1] = null;
-		mapVertices[6][2] = new Vertex(this,6,2);
+		mapVertices[6][2] = new Vertex(this,6,2, null);
 		mapVertices[6][3] = null;
-		mapVertices[6][4] = new Vertex(this,6,4);
+		mapVertices[6][4] = new Vertex(this,6,4, null);
 		mapVertices[6][5] = null;
-		mapVertices[6][6] = new Vertex(this,6,6);
+		mapVertices[6][6] = new Vertex(this,6,6, null);
 		mapVertices[6][7] = null;
-		mapVertices[6][8] = new Vertex(this,6,8);
+		mapVertices[6][8] = new Vertex(this,6,8, null);
 		mapVertices[6][9] = null;
-		mapVertices[6][10] = new Vertex(this,6,10);
+		mapVertices[6][10] = new Vertex(this,6,10, null);
 		mapVertices[6][11] = null;
 
 		mapVertices[7][0] = null;
-		mapVertices[7][1] = new Vertex(this,7,1);
+		mapVertices[7][1] = new Vertex(this,7,1, null);
 		mapVertices[7][2] = null;
-		mapVertices[7][3] = new Vertex(this,7,3);
+		mapVertices[7][3] = new Vertex(this,7,3, null);
 		mapVertices[7][4] = null;
-		mapVertices[7][5] = new Vertex(this,7,5);
+		mapVertices[7][5] = new Vertex(this,7,5, null);
 		mapVertices[7][6] = null;
-		mapVertices[7][7] = new Vertex(this,7,7);
+		mapVertices[7][7] = new Vertex(this,7,7, null);
 		mapVertices[7][8] = null;
-		mapVertices[7][9] = new Vertex(this,7,9);
+		mapVertices[7][9] = new Vertex(this,7,9, new TradePort(portTypeAssignments[1]));
 		mapVertices[7][10] = null;
 		mapVertices[7][11] = null;
 
-		mapVertices[8][0] = new Vertex(this,8,0);
+		mapVertices[8][0] = new Vertex(this,8,0, new TradePort(portTypeAssignments[7]));
 		mapVertices[8][1] = null;
-		mapVertices[8][2] = new Vertex(this,8,2);
+		mapVertices[8][2] = new Vertex(this,8,2, null);
 		mapVertices[8][3] = null;
-		mapVertices[8][4] = new Vertex(this,8,4);
+		mapVertices[8][4] = new Vertex(this,8,4, null);
 		mapVertices[8][5] = null;
-		mapVertices[8][6] = new Vertex(this,8,6);
+		mapVertices[8][6] = new Vertex(this,8,6, null);
 		mapVertices[8][7] = null;
-		mapVertices[8][8] = new Vertex(this,8,8);
+		mapVertices[8][8] = new Vertex(this,8,8, new TradePort(portTypeAssignments[1]));
 		mapVertices[8][9] = null;
 		mapVertices[8][10] = null;
 		mapVertices[8][11] = null;
 
 		mapVertices[9][0] = null;
-		mapVertices[9][1] = new Vertex(this,9,1);
+		mapVertices[9][1] = new Vertex(this,9,1, new TradePort(portTypeAssignments[7]));
 		mapVertices[9][2] = null;
-		mapVertices[9][3] = new Vertex(this,9,3);
+		mapVertices[9][3] = new Vertex(this,9,3, null);
 		mapVertices[9][4] = null;
-		mapVertices[9][5] = new Vertex(this,9,5);
+		mapVertices[9][5] = new Vertex(this,9,5, null);
 		mapVertices[9][6] = null;
-		mapVertices[9][7] = new Vertex(this,9,7);
+		mapVertices[9][7] = new Vertex(this,9,7, null);
 		mapVertices[9][8] = null;
 		mapVertices[9][9] = null;
 		mapVertices[9][10] = null;
 		mapVertices[9][11] = null;
 
-		mapVertices[10][0] = new Vertex(this,10,10);
+		mapVertices[10][0] = new Vertex(this,10,10, null);
 		mapVertices[10][1] = null;
-		mapVertices[10][2] = new Vertex(this,10,2);
+		mapVertices[10][2] = new Vertex(this,10,2, new TradePort(portTypeAssignments[8]));
 		mapVertices[10][3] = null;
-		mapVertices[10][4] = new Vertex(this,10,4);
+		mapVertices[10][4] = new Vertex(this,10,4, null);
 		mapVertices[10][5] = null;
-		mapVertices[10][6] = new Vertex(this,10,6);
+		mapVertices[10][6] = new Vertex(this,10,6, new TradePort(portTypeAssignments[0]));
 		mapVertices[10][7] = null;
 		mapVertices[10][8] = null;
 		mapVertices[10][9] = null;
@@ -828,11 +1013,11 @@ public class Board {
 		mapVertices[10][11] = null;
 
 		mapVertices[11][0] = null;
-		mapVertices[11][1] = new Vertex(this,11,1);
+		mapVertices[11][1] = new Vertex(this,11,1, null);
 		mapVertices[11][2] = null;
-		mapVertices[11][3] = new Vertex(this,11,3);
+		mapVertices[11][3] = new Vertex(this,11,3, new TradePort(portTypeAssignments[8]));
 		mapVertices[11][4] = null;
-		mapVertices[11][5] = new Vertex(this,11,5);
+		mapVertices[11][5] = new Vertex(this,11,5, new TradePort(portTypeAssignments[0]));
 		mapVertices[11][6] = null;
 		mapVertices[11][7] = null;
 		mapVertices[11][8] = null;

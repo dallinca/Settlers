@@ -13,7 +13,9 @@ public class TradePort {
 
 	private PortType portType;
 	
-	public TradePort() {}
+	public TradePort(PortType portType) {
+		this.portType = portType;
+	}
 
 	public PortType getPortType() {
 		return portType;

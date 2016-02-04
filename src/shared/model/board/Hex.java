@@ -26,10 +26,12 @@ public class Hex {
 	private int x_coord_hex;
 	private int y_coord_hex;
 
-	public Hex(Board board, int x_coord_hex, int y_coord_hex) {
+	public Hex(Board board, int x_coord_hex, int y_coord_hex, HexType hexType, int rollValue) {
 		this.board = board;
 		this.x_coord_hex = x_coord_hex;
 		this.y_coord_hex = y_coord_hex;
+		this.hexType = hexType;
+		this.rollValue = rollValue;
 	}
 	
 	/**

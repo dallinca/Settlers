@@ -27,10 +27,11 @@ public class Vertex {
 	 * @param x_coord_ver
 	 * @param y_coord_ver
 	 */
-	public Vertex(Board board, int x_coord_ver, int y_coord_ver) {
+	public Vertex(Board board, int x_coord_ver, int y_coord_ver, TradePort tradePort) {
 		this.board = board;
 		this.x_coord_ver = x_coord_ver;
 		this.y_coord_ver = y_coord_ver;
+		this.tradePort = tradePort;
 	}
 	
 	/**
