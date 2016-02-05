@@ -135,7 +135,7 @@ public class DevelopmentCardHand {
 	 * 
 	 * @return the Number of unplayed dev cards of the specified type
 	 */
-	public int numberUnplayedDevCards(int turnNumber, DevCardType devCardType) {
+	public int numberUnplayedDevCards(DevCardType devCardType) {
 		int numberAvailable = 0;
 		if(devCardType == DevCardType.SOLDIER) {
 			for(DevelopmentCard Soldier : soldierCards) {
