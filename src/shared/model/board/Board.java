@@ -114,7 +114,7 @@ public class Board {
 		hexWithRobber = hex;
 		hex.giveRobber();
 	}
-	
+
 	/**
 	 * Determines whether a specified player's road can be placed on a specified edge
 	 * This call should be happening after the player has already verified ability to purchase a road
@@ -159,6 +159,7 @@ public class Board {
 		// There was no case found allowing the player to place a road at the edgeLocation in question
 		return false;
 	}
+
 	
 	/**
 	 * Places a road on a specified edge
@@ -179,6 +180,54 @@ public class Board {
 		player.buyRoad(edge);
 	}
 
+	/**
+	 * Determines whether a specified player's INITIAL road can be placed on a specified edge
+	 * This call should be happening after the player has already verified ability to purchase a road
+	 * 
+	 * @pre player != null, edgeLocation != null
+	 * @pre player should be verified as having the resources necessary to buy a road
+	 * 
+	 * @post Return value is whether an Road can be placed on the specified edgeLocation
+	 */
+	public boolean canDoPlaceInitialRoadOnEdge(Player player, EdgeLocation edgeLocation) {
+		if(edgeLocation == null) {
+			return false;
+		}
+		// Use the edgelocation to find that Edge in our data Structure
+		Edge edge = null;
+		try {
+			edge = getEdge(edgeLocation);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		// player not null, edge not null, and does not have a road
+		if(player == null || edge == null || edge.hasRoad() == true) {
+			return false;
+		}
+		// The player should be able to initialize their first two roads on any valid 
+		return true;
+	}
+
+	/**
+	 * Places an INITIAL road on a specified edge
+	 * @throws Exception 
+	 * 
+	 * @pre canDoPlaceRoadOnEdge != false,
+	 * 
+	 * @post road is placed on the specified edge, or PlaceRoadOnEdgeException thrown
+	 */
+	public void placeInitialRoadOnEdge(Player player, EdgeLocation edgeLocation) throws Exception {
+		if(canDoPlaceInitialRoadOnEdge(player, edgeLocation) == false) {
+			throw new PlaceRoadOnEdgeException("canDoPlaceInitialRoadOnEdge = false");
+		}
+		// Use the edgeLocation to find that Edge in our data Structure
+		Edge edge = getEdge(edgeLocation);
+		
+		// Place the road on the edge
+		player.buyRoad(edge);
+	}
+	
 	/**
 	 * Determine whether a specified player's settlement can be placed on a specified vertexLocation
 	 * This call should be happening after the player has already verified ability to purchase a settlement
