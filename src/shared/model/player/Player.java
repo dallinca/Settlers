@@ -1,5 +1,6 @@
 package shared.model.player;
 
+import shared.definitions.DevCardType;
 import shared.model.Bank;
 import shared.model.board.Edge;
 import shared.model.board.Vertex;
@@ -67,6 +68,32 @@ public class Player {
 	 * @post Returns building cost card
 	 */
 	void getbuildingCostCard(){}
+	
+	
+	/**
+	 * TODO document
+	 * 
+	 * @param turnNumber
+	 * @param devCardType
+	 * @return
+	 */
+
+	public boolean canDoPlayDevelopmentCard(int turnNumber, DevCardType devCardType) {
+		return developmentCardHand.canDoPlayDevelopmentCard(turnNumber, devCardType);
+	}
+	
+
+	/**
+	 * TODO document
+	 * 
+	 * @param turnNumber
+	 * @param devCardType
+	 * @return
+	 */
+	public int numberUnplayedDevCards(int turnNumber, DevCardType devCardType) {
+		return developmentCardHand.numberUnplayedDevCards(turnNumber, devCardType);
+	}
+	
 	
 	/**
 	 * TODO

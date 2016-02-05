@@ -35,6 +35,55 @@ public class DevelopmentCardHand {
 	 */
 	public DevelopmentCardHand(){}
     
+
+	/**
+	 * TODO - implement
+	 * 
+	 * Checks to see if there is at least one card of the said type that can be played this turn
+	 * 
+	 * 
+	 */
+	public boolean canDoPlayDevelopmentCard(int turnNumber, DevCardType devCardType) {
+		if(devCardType == DevCardType.SOLDIER) {
+			
+		} else if(devCardType == DevCardType.MONUMENT) {
+			
+		} else if(devCardType == DevCardType.ROAD_BUILD) {
+			
+		} else if(devCardType == DevCardType.MONOPOLY) {
+			
+		} else if(devCardType == DevCardType.YEAR_OF_PLENTY) {
+			
+		}
+		return false;
+			
+	}
+	
+	
+	/**
+	 * TODO - implement
+	 * 
+	 * Checks to see how many unplayed cards of the said type the player owns
+	 * 
+	 * 
+	 */
+	public int numberUnplayedDevCards(int turnNumber, DevCardType devCardType) {
+		if(devCardType == DevCardType.SOLDIER) {
+			
+		} else if(devCardType == DevCardType.MONUMENT) {
+			
+		} else if(devCardType == DevCardType.ROAD_BUILD) {
+			
+		} else if(devCardType == DevCardType.MONOPOLY) {
+			
+		} else if(devCardType == DevCardType.YEAR_OF_PLENTY) {
+			
+		}
+		return 0;
+			
+	}
+	
+	
     /**
 	 * adds development cards to player
 	 * 
