@@ -27,6 +27,7 @@ public class Game {
 	private static int numberofPlayers = 4;
 	private Bank bank;
 	private int turnNumber = 0;
+	private int versionNumber = 1;
 	
 	
 	
@@ -152,6 +153,11 @@ public class Game {
 	//
 	//
 	
+	/**
+	 * @pre the edge location is not null
+	 * @param edgeLocation
+	 * @post it tells you whether or not you can build a road on that edge
+	 */
 	public boolean canDoPlaceRoadOnEdge(EdgeLocation edgeLocation) {
 		return board.canDoPlaceRoadOnEdge(currentPlayer, edgeLocation);
 	}
@@ -169,25 +175,48 @@ public class Game {
 			throw new Exception("Cannot build road on this edge, this should not have been allowed to get this far.");
 	}
 	
-	
-	
+	/**
+	 * @pre the vertex location is not null
+	 * @param vertexLocation
+	 * @post it tells you whether or not you can build a Settlement on that vertex
+	 */
 	public boolean canDoPlaceSettlementOnVertex(VertexLocation vertexLocation) {
 		return board.canDoPlaceSettlementOnVertex(currentPlayer, vertexLocation);
 	}
+	
+	/**
+	 * @pre the Can do is true
+	 * @param vertexLocation
+	 * @throws Exception
+	 * @post a settlement is placed on a vertex
+	 */
 	public void placeSettlementOnVertex(VertexLocation vertexLocation) throws Exception {
 		if(canDoPlaceSettlementOnVertex(vertexLocation))
 			board.placeSettlementOnVertex(currentPlayer, vertexLocation);
 		else
 			throw new Exception("Cannot build Settlement on this vertex, this should not have been allowed to get this far.");
 	}
+	
+	/**
+	 * @pre the vertex location is not null
+	 * @param vertexLocation
+	 * @post it tells you whether or not you can build a Settlement on that vertex
+	 */
 	public boolean canDoPlaceCityOnVertex(VertexLocation vertexLocation) {
 		return board.canDoPlaceCityOnVertex(currentPlayer, vertexLocation);
 	}
+	
+	/**
+	 * @pre the Can do is true
+	 * @param vertexLocation
+	 * @throws Exception
+	 * @post a city is placed on a vertex
+	 */
 	public void placeCityOnVertex(VertexLocation vertexLocation) throws Exception {
-		if(canDoPlaceSettlementOnVertex(vertexLocation))
-			board.placeSettlementOnVertex(currentPlayer, vertexLocation);
+		if(canDoPlaceCityOnVertex(vertexLocation))
+			board.placeCityOnVertex(currentPlayer, vertexLocation);
 		else
-			throw new Exception("Cannot build Settlement on this vertex, this should not have been allowed to get this far.");
+			throw new Exception("Cannot build City on this vertex, this should not have been allowed to get this far.");
 	}
 	
 	
@@ -211,6 +240,13 @@ public class Game {
 				return true;
 		}
 		return false;
+	}
+	
+	public void setVersionNumber(int version) {
+		versionNumber = version;
+	}
+	public int getVersionNumber() {
+		return versionNumber;
 	}
 	
 	
