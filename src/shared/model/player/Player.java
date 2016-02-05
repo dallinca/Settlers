@@ -71,24 +71,42 @@ public class Player {
 	
 	
 	/**
-	 * TODO document
+	 * Will Check is a Development Card of the specified type may be played
 	 * 
 	 * @param turnNumber
 	 * @param devCardType
-	 * @return
+	 * @return Whether a Development Card of the specified type may be played
 	 */
 
 	public boolean canDoPlayDevelopmentCard(int turnNumber, DevCardType devCardType) {
 		return developmentCardHand.canDoPlayDevelopmentCard(turnNumber, devCardType);
 	}
 	
-
 	/**
-	 * TODO document
+	 * Will mark the a Development card of the specified type as played
 	 * 
 	 * @param turnNumber
 	 * @param devCardType
-	 * @return
+	 * @throws Exception 
+	 * 
+	 * @pre canDoPlayDevelopmentCard != false
+	 * 
+	 * @post Player will have played the Development card
+	 */
+	public void playDevelopmentCard(int turnNumber, DevCardType devCardType) throws Exception {
+		if(canDoPlayDevelopmentCard(turnNumber, devCardType) == false) {
+			throw new Exception("Cannot play this card");
+		}
+		developmentCardHand.playDevelopmentCard();
+	}
+	
+
+	/**
+	 * Retrieves the number of unplayed development cards of the specified type
+	 * 
+	 * @param turnNumber
+	 * @param devCardType
+	 * @return the number of unplayed development cards of the specified type
 	 */
 	public int numberUnplayedDevCards(int turnNumber, DevCardType devCardType) {
 		return developmentCardHand.numberUnplayedDevCards(turnNumber, devCardType);
@@ -96,7 +114,7 @@ public class Player {
 	
 	
 	/**
-	 * TODO
+	 * TODO - Javadoc and implement
 	 * 
 	 * checks if the player can buy a development card, Should be called in tandom with the Bank to
 	 * see if there are any Developments Cards left to be bought
@@ -110,7 +128,6 @@ public class Player {
 		if(bank == null || resourceCardHand.canDoPayForDevelopmentCard() == false) {
 			return false;
 		}
-		// TODO Interface with bank
 		//if(bank.numbDevelopmentCards() > 0) {
 		//	return false;
 		//}
