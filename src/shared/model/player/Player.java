@@ -27,13 +27,6 @@ public class Player {
 	private DevelopmentCardHand developmentCardHand;
 	
 	
-	/* DUMb comment!
-	 * 
-	 * 
-	 * 
-	 */
-	
-	
 	/**
 	 * Initializes Player
 	 * 
@@ -59,7 +52,31 @@ public class Player {
 	 * @pre None
 	 * @post Returns an integer of players total victory points
 	 */
-	void totalVictoryPoints(int points){}
+	public int getVictoryPoints() {
+		return this.totalVictoryPoints;
+	}
+
+	/**
+	 * increments the Players total victory points by 1
+	 * 
+	 * @pre None
+	 * 
+	 * @post the player will have 1 more point than before
+	 */
+	public void incrementVictoryPoints() {
+		this.totalVictoryPoints++;
+	}
+
+	/**
+	 * decrement the Players total victory points by 1
+	 * 
+	 * @pre None
+	 * 
+	 * @post the player will have 1 less point than before
+	 */
+	public void decrementVictoryPoints() {
+		this.totalVictoryPoints++;
+	}
 	
 	/**
 	 * The color specific building cost card for the player
@@ -67,7 +84,7 @@ public class Player {
 	 * @pre None
 	 * @post Returns building cost card
 	 */
-	void getbuildingCostCard(){}
+	public void getbuildingCostCard(){}
 	
 	
 	/**
@@ -108,8 +125,8 @@ public class Player {
 	 * @param devCardType
 	 * @return the number of unplayed development cards of the specified type
 	 */
-	public int numberUnplayedDevCards(int turnNumber, DevCardType devCardType) {
-		return developmentCardHand.numberUnplayedDevCards(turnNumber, devCardType);
+	public int numberUnplayedDevCards(DevCardType devCardType) {
+		return developmentCardHand.numberUnplayedDevCards(devCardType);
 	}
 	
 	
@@ -297,6 +314,11 @@ public class Player {
 				throw new CollectResourcesException("Player cannot currently collect resources, possibly invalid roll value, or null bank object");
 			}
 			playerPieces.collectResources(resourceCardHand, rollValue, bank);
+		}
+		
+		
+		public void discardHalfResources(Bank bank) {
+			
 		}
 
 		public int getPlayerId() {
