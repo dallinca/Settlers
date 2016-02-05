@@ -2,10 +2,7 @@ package shared.model;
 
 import java.util.ArrayList;
 
-import shared.model.items.DevelopmentCard;
-import shared.model.items.Municipal;
-import shared.model.items.ResourceCard;
-import shared.model.items.Road;
+import shared.definitions.DevCardType;
 import shared.model.items.*;
 import shared.model.player.*;
 import shared.model.board.Board;
@@ -27,7 +24,7 @@ public class Game {
 	private Player longestRoad;
 	private static int numberofPlayers = 4;
 	private Bank bank;
-	
+	private int turnNumber = 0;
 	
 	
 	
@@ -59,6 +56,7 @@ public class Game {
 			if (currentPlayer == players[i]) {
 				if (i == numberofPlayers-1) {
 					setCurrentPlayer(players[0]);
+					turnNumber++;
 					return;
 				} else {
 					setCurrentPlayer(players[i+1]);
@@ -111,10 +109,17 @@ public class Game {
 		return currentPlayer.canDoBuyDevelopmentCard(bank);
 	}
 	
-	public boolean canDoCurrentPlayerUseDevelopmentCard() {
+	public boolean canDoCurrentPlayerUseDevelopmentCard(DevCardType devCardType) {
 		//We need to be able to measure how long a player has owned a card.
-		//I'm also under the impression that you cannot play monument cards.
-		return currentPlayer.ca
+		currentPlayer.canDoPlayDevelopmentCard(turnNumber, devCardType);
+		
+		return 
+		
+		
+	}
+	
+	public int numberUnplayedDevCards() {
+		
 	}
 	
 	public boolean canDoCurrentPlayerDoMeritimeTrade() {

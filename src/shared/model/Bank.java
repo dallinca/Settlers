@@ -12,8 +12,6 @@ import shared.model.player.Player;
 
 /**
  * The bank class keeps track of all transactions relating to the cards, the players, and results of the robber. 
- * 
- *
  */
 public class Bank {
 	private ArrayList<ResourceCard> wheatDeck = null; 
@@ -24,7 +22,9 @@ public class Bank {
 	private ArrayList<DevelopmentCard> developmentDeck = null;
 	private static int resourceNumber = 19;
 	
-	//Done
+	/**
+	 * Constructs a new Bank object and initializes the decks of cards
+	 */
 	public Bank() {
 		wheatDeck = new ArrayList();
 		brickDeck = new ArrayList();
@@ -37,7 +37,9 @@ public class Bank {
 		
 	}
 	
-	//Done
+	/**
+	 * Inserts the ResourceCard objects into their various decks
+	 */
 	private void initResourceCards() {
 		for (int i=0; i < resourceNumber; i++) {
 			// init wheat 
@@ -53,7 +55,9 @@ public class Bank {
 		}
 	}
 	
-	//Done
+	/**
+	 * Inserts the various development cards into the deck and shuffles them.
+	 */
 	private void initDevCards() {
 		int soldiers = 14;
 		int monopoly = 2;
@@ -81,6 +85,9 @@ public class Bank {
 	}
 	
 	//Done?
+	/**
+	 * Unless we want to stack the deck, this method is responsible for shuffling the cards so each card has pretty much an equal opportunity of being chosen. 
+	 */
 	private void shuffleDevCards() {
 		Random rgen = new Random();  // Random number generator			
 		
