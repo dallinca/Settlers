@@ -95,36 +95,64 @@ public class Game {
 		currentPlayer = setPlayer;
 	}
 	
+	/**
+	 * This method polls the player to see if the player can build a road and then returns the result to that which called it (most likely the client)
+	 * @return a true or false to if the player can build a road there.
+	 */
 	public boolean canDoCurrentPlayerBuildRoad() {
 		return currentPlayer.canDoBuyRoad();
 		
 	}
 	
+	/**
+	 * Asks the player if he or she can build a settlement and tells the client that.
+	 * @return
+	 */
 	public boolean canDoCurrentPlayerBuildSettlement() {
 		return currentPlayer.canDoBuySettlement();
 	}
 	
+	/**
+	 * Asks the player if he or she can build a city and tells the client that.
+	 * @return
+	 */
 	public boolean canDoCurrentPlayerBuildCity() {
 		return currentPlayer.canDoBuyCity();
 	}
 	
+	
+	/**
+	 * Asks the player if he or she can buy a development card and tells the client that.
+	 * @return
+	 */
 	public boolean canDoCurrentPlayerBuyDevelopmentCard() {
 		return currentPlayer.canDoBuyDevelopmentCard(bank);
 	}
 	
+	/**
+	 * This method stands to show if the player CAN use one of his/her un-used dev Cards of the type you ask it about.
+	 * @param devCardType
+	 * @return
+	 */
 	public boolean canDoCurrentPlayerUseDevelopmentCard(DevCardType devCardType) {
 		//We need to be able to measure how long a player has owned a card.
-		currentPlayer.canDoPlayDevelopmentCard(turnNumber, devCardType);
-		
-		return 
-		
+		return currentPlayer.canDoPlayDevelopmentCard(turnNumber, devCardType);		
 		
 	}
 	
-	public int numberUnplayedDevCards() {
+	/**
+	 * This method counts up and returns how many unused cards the player has
+	 * @return
+	 */
+	public int numberUnplayedDevCards(DevCardType devCardType) {
+		currentPlayer.
 		
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean canDoCurrentPlayerDoMeritimeTrade() {
 		//If a player is to meritime trade, he needs to have resources to trade. He needs to have either four of that kind, or a three for one port or a two for one, and again have the proper resources
 		if (currentPlayer.getResourceCardHandSize() == 0)
@@ -132,6 +160,7 @@ public class Game {
 		currentPlayer.
 		
 	}
+	
 	/**
 	 * @pre: the player in question who calls this method is taking his/her turn currently
 	 * @post 

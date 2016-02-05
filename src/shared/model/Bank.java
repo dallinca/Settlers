@@ -124,10 +124,8 @@ public class Bank {
 	//Done
 	/**
 	 * An overriden method that based on how many cards you are going to trade in for one card determines your function
-	 * @param one
-	 * @param two
-	 * @param three
-	 * @param resourceType
+	 * @param three resources that are hopefully of the same type
+	 * @param resourceType of the type you want back
 	 * @param tradePort
 	 * @return the card you receive
 	 * @throws Exception
