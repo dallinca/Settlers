@@ -101,7 +101,12 @@ public class Bank {
 		}
 	}
 
-	//Done
+	/**
+	 * This method checks to see if the resource cards you gave it are the same type, ie not trading a brick and wheat for a lumber.
+	 * @param theTrade
+	 * @param theType
+	 * @return
+	 */
 	private ResourceType areSameType(ResourceCard[] theTrade, ResourceType theType) {
 		if (theTrade != null) {
 			ResourceCard test = theTrade[0];
@@ -117,6 +122,16 @@ public class Bank {
 	}
 	
 	//Done
+	/**
+	 * An overriden method that based on how many cards you are going to trade in for one card determines your function
+	 * @param one
+	 * @param two
+	 * @param three
+	 * @param resourceType
+	 * @param tradePort
+	 * @return the card you receive
+	 * @throws Exception
+	 */
 	public ResourceCard playerTrade(ResourceCard one, ResourceCard two, ResourceCard three, ResourceType resourceType, TradePort tradePort) throws Exception {
 		
 		//I recognize magic number, but this function already assumes the array size will be three, that which in the event of a 3:1 port,

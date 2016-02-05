@@ -3,6 +3,8 @@ package shared.model;
 import java.util.ArrayList;
 
 import shared.definitions.DevCardType;
+import shared.locations.EdgeLocation;
+import shared.locations.VertexLocation;
 import shared.model.items.*;
 import shared.model.player.*;
 import shared.model.board.Board;
@@ -143,6 +145,50 @@ public class Game {
 	}
 	 
 	
+	//
+	//
+	//
+	//
+	//
+	//
+	
+	public boolean canDoPlaceRoadOnEdge(EdgeLocation edgeLocation) {
+		return board.canDoPlaceRoadOnEdge(currentPlayer, edgeLocation);
+	}
+	
+	/**
+	 * @pre The can do is true
+	 * @param edgeLocation
+	 * @throws Exception
+	 * @post a road is placed on an edge
+	 */
+	public void placeRoadOnEdge(EdgeLocation edgeLocation) throws Exception {
+		if(canDoPlaceRoadOnEdge(edgeLocation))
+			board.placeRoadOnEdge(currentPlayer, edgeLocation);
+		else
+			throw new Exception("Cannot build road on this edge, this should not have been allowed to get this far.");
+	}
+	
+	
+	
+	public boolean canDoPlaceSettlementOnVertex(VertexLocation vertexLocation) {
+		return board.canDoPlaceSettlementOnVertex(currentPlayer, vertexLocation);
+	}
+	public void placeSettlementOnVertex(VertexLocation vertexLocation) throws Exception {
+		if(canDoPlaceSettlementOnVertex(vertexLocation))
+			board.placeSettlementOnVertex(currentPlayer, vertexLocation);
+		else
+			throw new Exception("Cannot build Settlement on this vertex, this should not have been allowed to get this far.");
+	}
+	public boolean canDoPlaceCityOnVertex(VertexLocation vertexLocation) {
+		return board.canDoPlaceCityOnVertex(currentPlayer, vertexLocation);
+	}
+	public void placeCityOnVertex(VertexLocation vertexLocation) throws Exception {
+		if(canDoPlaceSettlementOnVertex(vertexLocation))
+			board.placeSettlementOnVertex(currentPlayer, vertexLocation);
+		else
+			throw new Exception("Cannot build Settlement on this vertex, this should not have been allowed to get this far.");
+	}
 	
 	
 		
