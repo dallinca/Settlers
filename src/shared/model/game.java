@@ -16,25 +16,19 @@ import shared.model.board.Board;
  * It also handles all transactions a player may make whether through trading or turning in cards after being robbed. 
  * It also keeps track of how many players there are, who is next, and who is the current player.
  */
-public class Game {
+public class game {
 	private Player[] players = null;
 	private Player currentPlayer;
 	//private Player nextPlayer;
-	private ResourceCard[] resourceDeck = null;
-	private DevelopmentCard[] developmentDeck = null;
+	//private ResourceCard[] resourceDeck = null;
+	//private DevelopmentCard[] developmentDeck = null;
 	private Board board;
-	private boolean largestArmy;
-	private boolean longestRoad;
-	private Road[] roads = null;
-	private Municipal[] infrastructure = null;
+	private Player largestArmy;
+	private Player longestRoad;
 	private static int numberofPlayers = 4;
-	//a rather comedic name for the Robber don't you think?
+	private Bank bank;
 	
-	/*
-	 * For now lets just say the board has the robber, right now you can query which hex
-	 * the robber is on
-	 */
-	//private Robber robbingHood;
+	
 	
 	
 	/**
@@ -42,7 +36,7 @@ public class Game {
 	 * 
 	 * @param the four player objects to be added to the array.
 	 */
-	public Game(Player one, Player two, Player three, Player four, Board board1) {
+	public game(Player one, Player two, Player three, Player four, Board board1) {
 		players = new Player[numberofPlayers];
 		players[0] = one;
 		players[1] = two;
@@ -50,6 +44,7 @@ public class Game {
 		players[3] = four;
 		
 		currentPlayer = players[0];
+		bank = new Bank();
 		board = board1;
 	}
 	
@@ -91,13 +86,58 @@ public class Game {
 	/**
 	 * Every time a turn starts, this method is called.
 	 * 
-	 * @pre a turn has started
+	 * @pre a turn has started and the game has started
 	 * @post we know who's turn it is.
 	 * 
 	 */
 	private void setCurrentPlayer(Player setPlayer) {
 		currentPlayer = setPlayer;
 	}
+	
+	public boolean canDoCurrentPlayerBuildRoad() {
+		return currentPlayer.canDoBuyRoad();
+		
+	}
+	
+	public boolean canDoCurrentPlayerBuildSettlement() {
+		return currentPlayer.canDoBuySettlement();
+	}
+	
+	public boolean canDoCurrentPlayerBuildCity() {
+		return currentPlayer.canDoBuyCity();
+	}
+	
+	public boolean canDoCurrentPlayerBuyDevelopmentCard() {
+		return currentPlayer.canDoBuyDevelopmentCard(bank);
+	}
+	
+	public boolean canDoCurrentPlayerUseDevelopmentCard() {
+		//We need to be able to measure how long a player has owned a card.
+		//I'm also under the impression that you cannot play monument cards.
+		return currentPlayer.ca
+	}
+	
+	public boolean canDoCurrentPlayerDoMeritimeTrade() {
+		//If a player is to meritime trade, he needs to have resources to trade. He needs to have either four of that kind, or a three for one port or a two for one, and again have the proper resources
+		if (currentPlayer.getResourceCardHandSize() == 0)
+			return false;
+		currentPlayer.
+		
+	}
+	/**
+	 * @pre: the player in question who calls this method is taking his/her turn currently
+	 * @post 
+	 */
+	public boolean canDoCurrentPlayerDoDomesticTrade() {
+		//Is it the Current Players turn and does he have any resources?
+		//
+		if (currentPlayer.getResourceCardHandSize() == 0)
+			return false;
+		else
+			return true;
+	}
+	 
+	
 	
 	
 		
@@ -116,7 +156,7 @@ public class Game {
 			//Player.java needs to have a method that returns victory points so this method can access them via the players to test for it.
 			//Player.java also needs to have public or private set for some of the methods, one of which being the method below, which should probably
 			//return an integer and not be void
-			//if (players[i].totalVictoryPoints() >= 10)
+			if (players[i].totalVictoryPoints(0) >= 10)
 				return true;
 		}
 		return false;

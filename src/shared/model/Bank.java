@@ -1,8 +1,10 @@
 package shared.model;
 
+import java.util.ArrayList;
 import java.util.Random;
-
+import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
+import shared.model.board.TradePort;
 import shared.model.items.DevelopmentCard;
 import shared.model.items.ResourceCard;
 import shared.model.player.Player;
@@ -14,42 +16,44 @@ import shared.model.player.Player;
  *
  */
 public class Bank {
-	private ResourceCard[] wheatDeck = null;
-	private ResourceCard[] sheepDeck = null;
-	private ResourceCard[] lumberDeck = null;
-	private ResourceCard[] oreDeck = null;
-	private ResourceCard[] brickDeck = null;
-	private DevelopmentCard[] developmentDeck = null;
-	private static int resourceNumber = 15;
+	private ArrayList<ResourceCard> wheatDeck = null; 
+	private ArrayList<ResourceCard> sheepDeck = null;
+	private ArrayList<ResourceCard> lumberDeck = null;
+	private ArrayList<ResourceCard> oreDeck = null;
+	private ArrayList<ResourceCard> brickDeck = null;
+	private ArrayList<DevelopmentCard> developmentDeck = null;
+	private static int resourceNumber = 19;
 	
+	//Done
 	public Bank() {
-		wheatDeck = new ResourceCard[resourceNumber];
-		brickDeck = new ResourceCard[resourceNumber];
-		lumberDeck = new ResourceCard[resourceNumber];
-		sheepDeck = new ResourceCard[resourceNumber];
-		oreDeck = new ResourceCard[resourceNumber];
-		
+		wheatDeck = new ArrayList();
+		brickDeck = new ArrayList();
+		lumberDeck = new ArrayList();
+		sheepDeck = new ArrayList();
+		oreDeck = new ArrayList();
+		developmentDeck = new ArrayList();
 		initDevCards();
 		initResourceCards();		
 		
 	}
 	
-	
+	//Done
 	private void initResourceCards() {
 		for (int i=0; i < resourceNumber; i++) {
 			// init wheat 
-			wheatDeck[i] = new ResourceCard(ResourceType.WHEAT);
+			wheatDeck.add(i, new ResourceCard(ResourceType.WHEAT));
 			// init brick 
-			brickDeck[i] = new ResourceCard(ResourceType.BRICK);
+			brickDeck.add(i, new ResourceCard(ResourceType.BRICK));
 			// init lumber 
-			lumberDeck[i] = new ResourceCard(ResourceType.WOOD);
+			lumberDeck.add(i, new ResourceCard(ResourceType.WOOD));
 			// init sheep
-			sheepDeck[i] = new ResourceCard(ResourceType.SHEEP);
+			sheepDeck.add(i, new ResourceCard(ResourceType.SHEEP));
 			// init ore 
-			oreDeck[i] = new ResourceCard(ResourceType.ORE);
+			oreDeck.add(i, new ResourceCard(ResourceType.ORE));
 		}
 	}
 	
+	//Done
 	private void initDevCards() {
 		int soldiers = 14;
 		int monopoly = 2;
@@ -57,76 +61,228 @@ public class Bank {
 		int roadBuilder = 2;
 		int monument = 5;
 		
-		developmentDeck = new DevelopmentCard[25];
-		//Have to create the Development card objects first..... ugh hahahaha
+		int totalDevCards = soldiers + monopoly + yearOfPlenty + roadBuilder + monument;
+		
+		for (int i = 0; i < totalDevCards; i++) {
+			if (i < soldiers) {
+				developmentDeck.add(i, new DevelopmentCard(DevCardType.SOLDIER));
+			} else if (i >= soldiers &&  i < soldiers + monopoly) {
+				developmentDeck.add(i, new DevelopmentCard(DevCardType.MONOPOLY));
+			} else if (i >= soldiers + monopoly &&  i < soldiers + monopoly + yearOfPlenty) {
+				developmentDeck.add(i, new DevelopmentCard(DevCardType.YEAR_OF_PLENTY));
+			} else if (i >= soldiers + monopoly + yearOfPlenty &&  i < soldiers + monopoly + yearOfPlenty + roadBuilder) {
+				developmentDeck.add(i, new DevelopmentCard(DevCardType.ROAD_BUILD));
+			} else if (i >= soldiers + monopoly + yearOfPlenty + roadBuilder) {
+				developmentDeck.add(i, new DevelopmentCard(DevCardType.MONUMENT));
+			}
+		}
 		
 		shuffleDevCards();
 	}
 	
+	//Done?
 	private void shuffleDevCards() {
 		Random rgen = new Random();  // Random number generator			
-		 
-		for (int i=0; i<developmentDeck.length; i++) {
-		    int randomPosition = rgen.nextInt(developmentDeck.length);
-		    DevelopmentCard temp = developmentDeck[i];
-		    developmentDeck[i] = developmentDeck[randomPosition];
-		    developmentDeck[randomPosition] = temp;
+		
+		ArrayList<DevelopmentCard> tempList = new ArrayList();
+		
+		for (int i=0; i< developmentDeck.size(); i++) {
+		    int randomPosition = rgen.nextInt(developmentDeck.size());
+		    DevelopmentCard temp = developmentDeck.get(i);
+		    developmentDeck.set(i, developmentDeck.get(randomPosition));
+		    developmentDeck.set(randomPosition, temp);
 		}
 	}
 
-	/**
-	 * 
-	 * Whenever somebody is receiving or taking resources from the bank, this method is called. 
-	 * Whether they are trading them in via a port, or paying them because of the robber, or paying for something.
-	 * This method makes the necessary adjustment to the decks, which cards are in them and how many are left.
-	 * One of these parameters could be null, for example: turning in cards that were taken by the robber.
-	 * 
-	 * @pre both of the arrays being passed in are not null, have valid entries, and that the player has the necessary cards he/she is turning in, 
-	 * and that the bank has enough cards to hand out.
-	 * @param an array of the resource cards that are to be added to the decks: toTurnIn.
-	 * @param an array of the resource cards that are to be taken away: toTake.
-	 */
-	public void resourceCardTransaction(Player bankingPlayer, ResourceCard[] toTake, ResourceCard[] toTurnIn) {
-		//does the player have a hand? That changes this all. Currently it doesn't, so I cannot proceed with this method.
-		
-		/*
-		 if (toTurnIn != null) { 
-			 for (int i = 0; i < bankingPlayer.getHand().length; i++) {
-				for (int j = 0; j < toTurnin.length(); j++) {
-					if (bankingPlayer.getHand()[i] == toTurnIn[j]) {
-						
-						Have to somehow figure this part out how to check these details out....
-						foreach loop maybe?
-						bankingPlayer.getHand()[i].type
-						
-						Then I would compare it to see which deck it belongs in.
-						
-						
-						bankingPlayer.getHand()[i].remove();
-						
-					}
+	//Done
+	private ResourceType areSameType(ResourceCard[] theTrade, ResourceType theType) {
+		if (theTrade != null) {
+			ResourceCard test = theTrade[0];
+			for (int i = 0; i < theTrade.length; i++) {
+				if (test.getResourceType() != theTrade[i].getResourceType()) {
+					return null;
 				}
 			}
+			return theType;
 		}
-		if (toTake != null) {
-			for (int k = 0; k < toTake.length(); k++) {
-				bankingPlayer.getHand().append(toTake[k]);
-			}
-		
-		*/
+		else
+			return null;
 	}
 	
+	//Done
+	public ResourceCard playerTrade(ResourceCard one, ResourceCard two, ResourceCard three, ResourceType resourceType, TradePort tradePort) throws Exception {
+		
+		//I recognize magic number, but this function already assumes the array size will be three, that which in the event of a 3:1 port,
+		ResourceCard[] tradingDeck = new ResourceCard[3];
+		tradingDeck[0] = one;
+		tradingDeck[1] = two;
+		tradingDeck[2] = three;
+		
+		//Call areSametype to verify the trade is all of the same resource
+		ResourceType check = areSameType(tradingDeck, resourceType);
+		if (check == null) {
+			throw new Exception("Your cards are not the same type.");
+		} 
+		
+		//Check the port to see if the port is the right port for the trade, whether it is 3 for one, or a two for one.
+		if (tradePort.getPortType().toString() != "THREE") {
+			throw new Exception("The port you sent is not a 3:1 port.");
+		}
+		
+		//This may only apply to domestic trade
+		if (tradingDeck[0].getResourceType() == check) {
+			throw new Exception("You are trying to trade in multiple resources cards for the same card.");
+		}
+		
+		//Does the bank have the desired resource type or is it all out?
+		boolean notBankrupt = canDoPlayerTakeResource(check);
+		
+		if (notBankrupt == true) {
+			//Move Cards to the bank
+			playerTurnInResources(tradingDeck);
+			//Remove Cards from the bank
+			playerTakeResource(check);
+			//Return the desired card they wanted.
+			ResourceCard newCard = new ResourceCard(check);
+			return newCard;
+		} else {
+			//Should this just return null?
+			throw new Exception("The bank has no more cards of that type.");
+		}
+		
+	}
 	
-	/**
-	 * This method will exchange resources between two players who have agreed to trade. This inserts the correct cards into the arraylists of each player
-	 * may return an integer signifying it was successful for testing and error handling.
-	 * 
-	 * @pre: two players that exist, two arrays of type ResourceCard that are not null.
-	 * @post
-	 * 
-	 */	
-	public void tradeTransaction(Player one, ResourceCard[] oneToTrade, Player two, ResourceCard[] twoToTrade) {
+	public ResourceCard playerTrade(ResourceCard one, ResourceCard two, ResourceCard three, ResourceCard four, ResourceType resourceType) throws Exception {
+		//I recognize magic number, but this function already assumes the array size will be four, that you are not using a port.
+		ResourceCard[] tradingDeck = new ResourceCard[4];
+		tradingDeck[0] = one;
+		tradingDeck[1] = two;
+		tradingDeck[2] = three;
+		tradingDeck[3] = four;
+			
+		//Call areSametype to verify the trade is all of the same resource
+		ResourceType check = areSameType(tradingDeck, resourceType);
+		if (check == null) {
+			throw new Exception("Your cards are not the same type.");
+		} 
+					
+		//This may only apply to domestic trade
+		if (tradingDeck[0].getResourceType() == check) {
+			throw new Exception("You are trying to trade in multiple resources cards for the same card.");
+		}
+		
+		//Does the bank have the desired resource type or is it all out?
+		boolean notBankrupt = canDoPlayerTakeResource(check);
+			
+		if (notBankrupt == true) {
+			//Move Cards to the bank
+			playerTurnInResources(tradingDeck);
+			//Remove Cards from the bank
+			playerTakeResource(check);
+			//Return the desired card they wanted.
+			ResourceCard newCard = new ResourceCard(check);
+			return newCard;
+		} else {
+			//Should this just return null?
+			throw new Exception("The bank has no more cards of that type.");
+		}
+	}
 	
+	public ResourceCard playerTrade(ResourceCard one, ResourceCard two, ResourceType resourceType, TradePort tradePort) throws Exception {
+		
+		//I recognize magic number, but this function already assumes the array size will be three, that which in the event of a 3:1 port,
+		ResourceCard[] tradingDeck = new ResourceCard[2];
+		tradingDeck[0] = one;
+		tradingDeck[1] = two;
+				
+		//Call areSametype to verify the trade is all of the same resource
+		ResourceType check = areSameType(tradingDeck, resourceType);
+		if (check == null) {
+			throw new Exception("Your cards are not the same type.");
+		} 
+			
+		//Check the port to see if the port is the right port for the trade, whether it is 3 for one, or a two for one.
+		if (tradePort.getPortType().toString() != check.toString()) {
+			throw new Exception("The port you sent is incompatible with the given resource cards.");
+		}
+				
+		//This may only apply to domestic trade
+		if (tradingDeck[0].getResourceType() == check) {
+			throw new Exception("You are trying to trade in multiple resources cards for the same card.");
+		}
+				
+			//Does the bank have the desired resource type or is it all out?
+		boolean notBankrupt = canDoPlayerTakeResource(check);
+				
+		if (notBankrupt == true) {
+			//Move Cards to the bank
+			playerTurnInResources(tradingDeck);
+			//Remove Cards from the bank
+			playerTakeResource(check);
+			//Return the desired card they wanted.
+			ResourceCard newCard = new ResourceCard(check);
+			return newCard;
+		} else {
+			//Should this just return null?
+			throw new Exception("The bank has no more cards of that type.");
+		}
+					
+	}
+		
+	private void playerTakeResource(ResourceType check) throws Exception {
+		switch (check.toString()) {
+			case "BRICK":
+				brickDeck.remove(brickDeck.size()-1);
+				return;
+			case "WHEAT":
+				wheatDeck.remove(wheatDeck.size()-1);
+				return;
+			case "LUMBER":
+				lumberDeck.remove(lumberDeck.size()-1);
+				return;
+			case "ORE":
+				oreDeck.remove(oreDeck.size()-1);
+				return;
+			case "SHEEP":
+				sheepDeck.remove(sheepDeck.size()-1);
+				return;
+		}
+		throw new Exception("Somehow you snuck by with an invalid type.");
+	}
+
+
+	private boolean canDoPlayerTakeResource(ResourceType resourceType) {
+		switch (resourceType.toString()) {
+			case "BRICK":
+				if (brickDeck.size() >=1)
+					return true;
+				else
+					return false;
+			case "WHEAT":
+				if (wheatDeck.size() >=1)
+					return true;
+				else
+					return false;
+			case "LUMBER":
+				if (lumberDeck.size() >=1)
+					return true;
+				else
+					return false;
+			case "ORE":
+				if (oreDeck.size() >=1)
+					return true;
+				else
+					return false;
+			case "SHEEP":
+				if (sheepDeck.size() >=1)
+					return true;
+				else
+					return false;
+				
+				//case anything else: throw exception?
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -137,13 +293,91 @@ public class Bank {
 	 * @param int take is a number of the development cards a player is taking
 	 * @param Player player is the player purchasing the cards
 	 */
-	public void developmentCardTransaction(int take, Player player) {
-		
+	public boolean canDoBuyDevelopmentCard(ResourceCard sheep, ResourceCard wheat, ResourceCard ore) {
+		if (sheep.getResourceType() != ResourceType.SHEEP || wheat.getResourceType() != ResourceType.WHEAT || ore.getResourceType() != ResourceType.ORE) {
+			return false;
+		}
+		if (developmentDeck.size() == 0) {
+			return false;
+		}
+		return true;
 	}
+	
+	//buyDevelopmentCard(
+	//ask if the size of the development cards is too much
+	public DevelopmentCard buyDevelopmentCard(ResourceCard sheep, ResourceCard wheat, ResourceCard ore) throws Exception {
+		if (canDoBuyDevelopmentCard(sheep, wheat, ore) == false) {
+			throw new Exception("Cannot buy Development Card, needs more specific info.");
+		}
+		DevelopmentCard shipment = developmentDeck.get(developmentDeck.size()-1);
+		developmentDeck.remove(developmentDeck.size()-1);
+		return shipment;
+	
+	}
+	
+	/**
+	 * This method supposedly can be an independent turnIn function that supports the turn in whether it is from having more than 7 cards on a 7 roll, or a trade with the bank.
+	 * It only cares that the resources are valid resources. the trade function should have already assured that they are the same type. Is this correct?
+	 * @param resources
+	 * @throws Exception 
+	 */
+	private void playerTurnInResources(ResourceCard[] resources) throws Exception {
+		for (int i = 0; i < resources.length; i++) {
+			ResourceType check = resources[i].getResourceType();
+			
+			switch (check.toString()) {
+				case "BRICK":
+					if (brickDeck.size() <= resourceNumber) {
+						brickDeck.add(resources[i]);
+						break;
+					} else {
+						throw new Exception("The bank cannot accept anymore of this type of card. Something has gone wrong.");
+					}
+				case "WHEAT":
+					if (wheatDeck.size() <= resourceNumber) {
+						wheatDeck.add(resources[i]);
+						break;
+					} else {
+						throw new Exception("The bank cannot accept anymore of this type of card. Something has gone wrong.");
+					}
+				case "LUMBER":
+					if (lumberDeck.size() <= resourceNumber) {
+						lumberDeck.add(resources[i]);
+						break;
+					} else {
+						throw new Exception("The bank cannot accept anymore of this type of card. Something has gone wrong.");
+					}
+				case "ORE":
+					if (oreDeck.size() <= resourceNumber) {
+						oreDeck.add(resources[i]);
+						break;
+					} else {
+						throw new Exception("The bank cannot accept anymore of this type of card. Something has gone wrong.");
+					}
+				case "SHEEP":
+					if (sheepDeck.size() <= resourceNumber) {
+						sheepDeck.add(resources[i]);
+						break;
+					} else {
+						throw new Exception("The bank cannot accept anymore of this type of card. Something has gone wrong.");
+					}
+				default: 
+					throw new Exception("One of your resource Cards you are trying to turn in is somehow not a valid type");
+			}
+		}
+	}
+		//playerTurnInResources(wheat);
+		//playerTurnInResources(ore);
+		
 
 	
-	
-	
+	//done canDoPlayerTakeResource(ResourceType resourceType)
+	//done playerTakeResource
+	//done playerTurnInResource
+	//done switch statement inside of turn in that looks at resource type and puts it in appropriate array and checks to see if arraylist is the maximum size to see if error must be thrown
+	//done bankExchange
+	//done canDoPlayerBuyDevelopmentCard
+	//done override the playerTrade method three times
 	
 	
 	
