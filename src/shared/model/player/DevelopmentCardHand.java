@@ -37,23 +37,43 @@ public class DevelopmentCardHand {
     
 
 	/**
-	 * TODO - implement
-	 * 
 	 * Checks to see if there is at least one card of the said type that can be played this turn
 	 * 
+	 * @pre None
 	 * 
+	 * @return Whether a development card of the specified type can be played
 	 */
 	public boolean canDoPlayDevelopmentCard(int turnNumber, DevCardType devCardType) {
 		if(devCardType == DevCardType.SOLDIER) {
-			
+			for(DevelopmentCard Soldier : soldierCards) {
+				if(Soldier.hasBeenPlayed() == false && Soldier.getTurnBought() < turnNumber) {
+					return true;
+				}
+			}
 		} else if(devCardType == DevCardType.MONUMENT) {
-			
+			for(DevelopmentCard VP : victoryPointCards) {
+				if(VP.hasBeenPlayed() == false && VP.getTurnBought() < turnNumber) {
+					return true;
+				}
+			}
 		} else if(devCardType == DevCardType.ROAD_BUILD) {
-			
+			for(DevelopmentCard RB : roadBuilderCards) {
+				if(RB.hasBeenPlayed() == false && RB.getTurnBought() < turnNumber) {
+					return true;
+				}
+			}
 		} else if(devCardType == DevCardType.MONOPOLY) {
-			
+			for(DevelopmentCard Monopoly : monopolyCards) {
+				if(Monopoly.hasBeenPlayed() == false && Monopoly.getTurnBought() < turnNumber) {
+					return true;
+				}
+			}
 		} else if(devCardType == DevCardType.YEAR_OF_PLENTY) {
-			
+			for(DevelopmentCard YOP : yearOfPlentyCards) {
+				if(YOP.hasBeenPlayed() == false && YOP.getTurnBought() < turnNumber) {
+					return true;
+				}
+			}
 		}
 		return false;
 			
@@ -61,26 +81,94 @@ public class DevelopmentCardHand {
 	
 	
 	/**
-	 * TODO - implement
+	 * Marks a devlopment card of the specified type as having been played
 	 * 
+	 * @param turnNumber
+	 * @param devCardType
+	 * 
+	 * @post a dev card will be marked as having been played
+	 */
+	public void playDevelopmentCard(int turnNumber, DevCardType devCardType) {
+		if(devCardType == DevCardType.SOLDIER) {
+			for(DevelopmentCard Soldier : soldierCards) {
+				if(Soldier.hasBeenPlayed() == false && Soldier.getTurnBought() < turnNumber) {
+					Soldier.setHasBeenPlayed(true);
+					return;
+				}
+			}
+		} else if(devCardType == DevCardType.MONUMENT) {
+			for(DevelopmentCard VP : victoryPointCards) {
+				if(VP.hasBeenPlayed() == false && VP.getTurnBought() < turnNumber) {
+					VP.setHasBeenPlayed(true);
+					return;
+				}
+			}
+		} else if(devCardType == DevCardType.ROAD_BUILD) {
+			for(DevelopmentCard RB : roadBuilderCards) {
+				if(RB.hasBeenPlayed() == false && RB.getTurnBought() < turnNumber) {
+					RB.setHasBeenPlayed(true);
+					return;
+				}
+			}
+		} else if(devCardType == DevCardType.MONOPOLY) {
+			for(DevelopmentCard Monopoly : monopolyCards) {
+				if(Monopoly.hasBeenPlayed() == false && Monopoly.getTurnBought() < turnNumber) {
+					Monopoly.setHasBeenPlayed(true);
+					return;
+				}
+			}
+		} else if(devCardType == DevCardType.YEAR_OF_PLENTY) {
+			for(DevelopmentCard YOP : yearOfPlentyCards) {
+				if(YOP.hasBeenPlayed() == false && YOP.getTurnBought() < turnNumber) {
+					YOP.setHasBeenPlayed(true);
+					return;
+				}
+			}
+		}
+	}
+	
+	
+	/**
 	 * Checks to see how many unplayed cards of the said type the player owns
 	 * 
+	 * @pre None;
 	 * 
+	 * @return the Number of unplayed dev cards of the specified type
 	 */
 	public int numberUnplayedDevCards(int turnNumber, DevCardType devCardType) {
+		int numberAvailable = 0;
 		if(devCardType == DevCardType.SOLDIER) {
-			
+			for(DevelopmentCard Soldier : soldierCards) {
+				if(Soldier.hasBeenPlayed() == false) {
+					numberAvailable++;
+				}
+			}
 		} else if(devCardType == DevCardType.MONUMENT) {
-			
+			for(DevelopmentCard VP : victoryPointCards) {
+				if(VP.hasBeenPlayed() == false) {
+					numberAvailable++;
+				}
+			}
 		} else if(devCardType == DevCardType.ROAD_BUILD) {
-			
+			for(DevelopmentCard RB : roadBuilderCards) {
+				if(RB.hasBeenPlayed() == false) {
+					numberAvailable++;
+				}
+			}
 		} else if(devCardType == DevCardType.MONOPOLY) {
-			
+			for(DevelopmentCard Monopoly : monopolyCards) {
+				if(Monopoly.hasBeenPlayed() == false) {
+					numberAvailable++;
+				}
+			}
 		} else if(devCardType == DevCardType.YEAR_OF_PLENTY) {
-			
+			for(DevelopmentCard YOP : yearOfPlentyCards) {
+				if(YOP.hasBeenPlayed() == false) {
+					numberAvailable++;
+				}
+			}
 		}
-		return 0;
-			
+		return numberAvailable;
 	}
 	
 	
