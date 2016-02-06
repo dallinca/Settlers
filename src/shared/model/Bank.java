@@ -272,7 +272,7 @@ public class Bank {
 	 * @throws Exception
 	 * @post Returns the card that the player desired
 	 */
-	private ResourceCard playerTakeResource(ResourceType check) throws Exception {
+	public ResourceCard playerTakeResource(ResourceType check) throws Exception {
 			ResourceCard thePrize = null;
 		
 		switch (check.toString()) {
@@ -376,7 +376,7 @@ public class Bank {
 	 * @param resources
 	 * @throws Exception 
 	 */
-	private void playerTurnInResources(ResourceCard[] resources) throws Exception {
+	public void playerTurnInResources(ResourceCard[] resources) throws Exception {
 		for (int i = 0; i < resources.length; i++) {
 			ResourceType check = resources[i].getResourceType();
 			

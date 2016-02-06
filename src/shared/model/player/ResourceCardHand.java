@@ -41,19 +41,23 @@ public class ResourceCardHand {
 	 
 	  
 	  private void initializePreGameResources() {
-		  // TODO -- Verify this interfaces with Bank operations
-		  /*addCard(bank.takeResource(ResourceType.BRICK));
-		  addCard(bank.takeResource(ResourceType.BRICK));
-		  addCard(bank.takeResource(ResourceType.BRICK));
-		  addCard(bank.takeResource(ResourceType.BRICK));
-		  addCard(bank.takeResource(ResourceType.WOOD));
-		  addCard(bank.takeResource(ResourceType.WOOD));
-		  addCard(bank.takeResource(ResourceType.WOOD));
-		  addCard(bank.takeResource(ResourceType.WOOD));
-		  addCard(bank.takeResource(ResourceType.SHEEP));
-		  addCard(bank.takeResource(ResourceType.SHEEP));
-		  addCard(bank.takeResource(ResourceType.WHEAT));
-		  addCard(bank.takeResource(ResourceType.WHEAT));*/
+		  try {
+			  addCard(bank.playerTakeResource(ResourceType.BRICK));
+			  addCard(bank.playerTakeResource(ResourceType.BRICK));
+			  addCard(bank.playerTakeResource(ResourceType.BRICK));
+			  addCard(bank.playerTakeResource(ResourceType.BRICK));
+			  addCard(bank.playerTakeResource(ResourceType.WOOD));
+			  addCard(bank.playerTakeResource(ResourceType.WOOD));
+			  addCard(bank.playerTakeResource(ResourceType.WOOD));
+			  addCard(bank.playerTakeResource(ResourceType.WOOD));
+			  addCard(bank.playerTakeResource(ResourceType.SHEEP));
+			  addCard(bank.playerTakeResource(ResourceType.SHEEP));
+			  addCard(bank.playerTakeResource(ResourceType.WHEAT));
+			  addCard(bank.playerTakeResource(ResourceType.WHEAT));
+		} catch (Exception e) {
+			System.out.println("YOU HAVE NOT INITIALIZED THE BANK");
+			e.printStackTrace();
+		}
 	  }
 	/**
 	 * adds resource cards to player
@@ -110,8 +114,6 @@ public class ResourceCardHand {
 	  
 	  
 	  /**
-	   * TODO interface with Bank
-	   * 
 	   * Resources are spent from the players hand to pay for a Development card
 	   * @throws InsufficientPlayerResourcesException
 	   * 
@@ -124,13 +126,22 @@ public class ResourceCardHand {
 		   if(canDoPayForDevelopmentCard() == false) {
 			   throw new InsufficientPlayerResourcesException("Player doesn't have the resources to pay for a Devlopment Card");
 		   }
+
+		   ArrayList<ResourceCard> cards = new ArrayList<ResourceCard>();
 		   // Transfer Cards to Bank
-		   bank.payResource(sheepCards.get(sheepCards.size() - 1));
+		   cards.add(sheepCards.get(sheepCards.size() - 1));
 		   sheepCards.remove(sheepCards.size() - 1);
-		   bank.payResource(wheatCards.get(wheatCards.size() - 1));
+		   cards.add(wheatCards.get(wheatCards.size() - 1));
 		   wheatCards.remove(wheatCards.size() - 1);
-		   bank.payResource(oreCards.get(oreCards.size() - 1));
+		   cards.add(oreCards.get(oreCards.size() - 1));
 		   oreCards.remove(oreCards.size() - 1);
+		   
+		   try {
+			   bank.playerTurnInResources((ResourceCard[])cards.toArray());
+			} catch (Exception e) {
+				System.out.println("Somewhere there were duplicated resources ... and stuff");
+				e.printStackTrace();
+			}
 	  }
 	  
 	/**
@@ -148,8 +159,6 @@ public class ResourceCardHand {
 	   }
 	   
 	   /**
-	    * TODO interface with Bank
-	    * 
 	    * Resources are spent from the players hand to pay for a Road
 	    * 
 	    * @pre canDoPayForRoad() == true
@@ -160,11 +169,19 @@ public class ResourceCardHand {
 		   if(canDoPayForRoad() == false) {
 			   throw new InsufficientPlayerResourcesException("Player doesn't have the resources to pay for a road");
 		   }
+		   ArrayList<ResourceCard> cards = new ArrayList<ResourceCard>();
 		   // Transfer Cards to Bank
-		   bank.payResource(woodCards.get(woodCards.size() - 1));
+		   cards.add(woodCards.get(woodCards.size() - 1));
 		   woodCards.remove(woodCards.size() - 1);
-		   bank.payResource(brickCards.get(brickCards.size() - 1));
+		   cards.add(brickCards.get(brickCards.size() - 1));
 		   brickCards.remove(brickCards.size() - 1);
+
+		   try {
+			   bank.playerTurnInResources((ResourceCard[])cards.toArray());
+			} catch (Exception e) {
+				System.out.println("Somewhere there were duplicated resources ... and stuff");
+				e.printStackTrace();
+			}
 	   }
 	   
 	 /**
@@ -182,8 +199,6 @@ public class ResourceCardHand {
 	   }
 	   
 	   /**
-	    * TODO interface with Bank
-	    * 
 	    * Resources are spent from the players hand to pay for a Settlement
 	    * 
 	    * @pre canDoPayForSettlement() == true
@@ -194,15 +209,24 @@ public class ResourceCardHand {
 		   if(canDoPayForRoad() == false) {
 			   throw new InsufficientPlayerResourcesException("Player doesn't have the resources to pay for a settlement");
 		   }
+		   ArrayList<ResourceCard> cards = new ArrayList<ResourceCard>();
 		   // Transfer Cards to Bank
-		   bank.payResource(woodCards.get(woodCards.size() - 1));
+		   cards.add(woodCards.get(woodCards.size() - 1));
 		   woodCards.remove(woodCards.size() - 1);
-		   bank.payResource(brickCards.get(brickCards.size() - 1));
+		   cards.add(brickCards.get(brickCards.size() - 1));
 		   brickCards.remove(brickCards.size() - 1);
-		   bank.payResource(wheatCards.get(wheatCards.size() - 1));
+		   cards.add(wheatCards.get(wheatCards.size() - 1));
 		   wheatCards.remove(wheatCards.size() - 1);
-		   bank.payResource(sheepCards.get(sheepCards.size() - 1));
+		   cards.add(sheepCards.get(sheepCards.size() - 1));
 		   sheepCards.remove(sheepCards.size() - 1);
+		   
+
+		   try {
+			   bank.playerTurnInResources((ResourceCard[])cards.toArray());
+			} catch (Exception e) {
+				System.out.println("Somewhere there were duplicated resources ... and stuff");
+				e.printStackTrace();
+			}
 	   }
 	   
 	 /**
@@ -220,8 +244,6 @@ public class ResourceCardHand {
 	   }
 	   
 	   /**
-	    * TODO interface with Bank
-	    * 
 	    * Resources are spent from the players hand to pay for a City
 	    * 
 	    * @pre canDoPayForCity() == true
@@ -232,18 +254,95 @@ public class ResourceCardHand {
 		   if(canDoPayForRoad() == false) {
 			   throw new InsufficientPlayerResourcesException("Player doesn't have the resources to pay for a city");
 		   }
+		   ArrayList<ResourceCard> cards = new ArrayList<ResourceCard>();
 		   // Transfer Cards to Bank
-		   bank.payResource(wheatCards.get(wheatCards.size() - 1));
+		   cards.add(wheatCards.get(wheatCards.size() - 1));
 		   wheatCards.remove(wheatCards.size() - 1);
-		   bank.payResource(wheatCards.get(wheatCards.size() - 1));
+		   cards.add(wheatCards.get(wheatCards.size() - 1));
 		   wheatCards.remove(wheatCards.size() - 1);
-		   bank.payResource(oreCards.get(oreCards.size() - 1));
+		   cards.add(oreCards.get(oreCards.size() - 1));
 		   oreCards.remove(oreCards.size() - 1);
-		   bank.payResource(oreCards.get(oreCards.size() - 1));
+		   cards.add(oreCards.get(oreCards.size() - 1));
 		   oreCards.remove(oreCards.size() - 1);
-		   bank.payResource(oreCards.get(oreCards.size() - 1));
+		   cards.add(oreCards.get(oreCards.size() - 1));
 		   oreCards.remove(oreCards.size() - 1);
+		   
+
+		   try {
+			   bank.playerTurnInResources((ResourceCard[])cards.toArray());
+			} catch (Exception e) {
+				System.out.println("Somewhere there were duplicated resources ... and stuff");
+				e.printStackTrace();
+			}
 	   }
+	   
+		/**
+		 * Has the player disacard(back to the bank) the specified number of resources of the specified resource type
+		 * @throws Exception
+		 * @param bank
+		 * 
+		 * @pre The player must have at least the number of Resources cards of the specified type to discard
+		 * 
+		 * @post the player will have discarded(back to the bank) the specified number of resources of the specified resource type
+		 */
+		public void discardResourcesOfType(ResourceType resourceType, int numberToDiscard) throws Exception {
+			if(getNumberResourcesOfType(resourceType) < numberToDiscard) {
+				throw new Exception("Player cannot discard more of a resource than they have");
+			}
+			
+			ArrayList<ResourceCard> cards = new ArrayList<ResourceCard>();
+			if(resourceType == ResourceType.BRICK) {
+				for(int i = 0; i < numberToDiscard; i++) {
+					cards.add(brickCards.get(brickCards.size() - 1));
+					brickCards.remove(brickCards.size() - 1);
+				}
+			} else if(resourceType == ResourceType.ORE) {
+				for(int i = 0; i < numberToDiscard; i++) {
+					cards.add(oreCards.get(oreCards.size() - 1));
+					oreCards.remove(oreCards.size() - 1);
+				}
+			} else if(resourceType == ResourceType.SHEEP) {
+				for(int i = 0; i < numberToDiscard; i++) {
+					cards.add(sheepCards.get(sheepCards.size() - 1));
+					sheepCards.remove(sheepCards.size() - 1);
+				}
+			} else if(resourceType == ResourceType.WHEAT) {
+				for(int i = 0; i < numberToDiscard; i++) {
+					cards.add(wheatCards.get(wheatCards.size() - 1));
+					wheatCards.remove(wheatCards.size() - 1);
+				}
+			} else if(resourceType == ResourceType.WOOD) {
+				for(int i = 0; i < numberToDiscard; i++) {
+					cards.add(woodCards.get(woodCards.size() - 1));
+					woodCards.remove(woodCards.size() - 1);
+				}
+			}
+			bank.playerTurnInResources((ResourceCard[])cards.toArray());
+		}
+
+		/**
+		 * Will return the number of the specified resource that the player currently has
+		 * 
+		 * @pre None
+		 * 
+		 * @param resourceType
+		 * @return the number of the specified resource that the player currently has
+		 */
+		public int getNumberResourcesOfType(ResourceType resourceType) {
+			int numberOfResources = 0;
+			if(resourceType == ResourceType.BRICK) {
+				numberOfResources = brickCards.size();
+			} else if(resourceType == ResourceType.ORE) {
+				numberOfResources = oreCards.size();
+			} else if(resourceType == ResourceType.SHEEP) {
+				numberOfResources = sheepCards.size();
+			} else if(resourceType == ResourceType.WHEAT) {
+				numberOfResources = wheatCards.size();
+			} else if(resourceType == ResourceType.WOOD) {
+				numberOfResources = woodCards.size();
+			}
+			return numberOfResources;
+		}
 	   
 	   /**
 	    * Retrieves the number of cards in the player's resource card hand
@@ -255,4 +354,7 @@ public class ResourceCardHand {
 	   public int getResourceCardHandSize() {
 		   return brickCards.size() + wheatCards.size() + oreCards.size() + sheepCards.size() + woodCards.size();
 	   }
+	   
+	   
+	   
 }

@@ -1,6 +1,7 @@
 package shared.model.player;
 
 import shared.definitions.DevCardType;
+import shared.definitions.ResourceType;
 import shared.model.Bank;
 import shared.model.board.Edge;
 import shared.model.board.Vertex;
@@ -316,9 +317,27 @@ public class Player {
 			playerPieces.collectResources(resourceCardHand, rollValue, bank);
 		}
 		
-		
-		public void discardHalfResources(Bank bank) {
-			
+		/**
+		 * TODO
+		 * 
+		 * @param bank
+		 * 
+		 * @post the player will have discarded the specified number of resources of the specified resource type
+		 */
+		public void discardResourcesOfType(ResourceType resourceType, int numberToDiscard) {
+			discardResourcesOfType(resourceType, numberToDiscard);
+		}
+
+		/**
+		 * Will return the number of the specified resource that the player currently has
+		 * 
+		 * @pre None
+		 * 
+		 * @param resourceType
+		 * @return the number of the specified resource that the player currently has
+		 */
+		public int getNumberResourcesOfType(ResourceType resourceType) {
+			return resourceCardHand.getNumberResourcesOfType(resourceType);
 		}
 
 		public int getPlayerId() {
