@@ -198,16 +198,6 @@ public class DevelopmentCardHand {
     		yearOfPlentyCards.add(card);
     	}
     }
-    
-    /**
-     * TODO implement play Card
-     * 
-	 * removes resource cards from player
-	 * 
-	 * @pre None
-	 * @post deleted from ArrayList data structure
-	 */
-    void playDevelopmentCard(){}
    
 	
 	/**

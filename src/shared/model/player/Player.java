@@ -83,15 +83,6 @@ public class Player {
 	}
 	
 	/**
-	 * The color specific building cost card for the player
-	 * 
-	 * @pre None
-	 * @post Returns building cost card
-	 */
-	public void getbuildingCostCard(){}
-	
-	
-	/**
 	 * Will Check is a Development Card of the specified type may be played
 	 * 
 	 * @param turnNumber
