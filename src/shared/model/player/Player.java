@@ -1,11 +1,14 @@
 package shared.model.player;
 
+import java.util.ArrayList;
+
 import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
 import shared.model.Bank;
 import shared.model.board.Edge;
 import shared.model.board.Vertex;
 import shared.model.items.DevelopmentCard;
+import shared.model.items.ResourceCard;
 import shared.model.player.exceptions.AllPiecesPlayedException;
 import shared.model.player.exceptions.CannotBuyException;
 import shared.model.player.exceptions.CollectResourcesException;
@@ -346,6 +349,10 @@ public class Player {
 		 */
 		public int getNumberOfSoldiersPlayed() {
 			return developmentCardHand.getNumberOfSoldiersPlayed();
+		}
+		
+		public ArrayList<ResourceCard> conformToMonopoly(ResourceType resourceType) {
+			return resourceCardHand.conformToMonopoly(resourceType);
 		}
 
 		public int getPlayerId() {

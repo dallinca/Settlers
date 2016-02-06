@@ -34,6 +34,9 @@ public class Hex {
 		this.rollValue = rollValue;
 	}
 	
+	public 
+	
+	
 	/**
 	 * Looks at the HexType of this hex and converts it to ResourceType, and 
 	 * return the ResourceType for collection purposes

@@ -60,6 +60,24 @@ public class ResourceCardHand {
 			e.printStackTrace();
 		}
 	  }
+	  
+	  
+
+		public ArrayList<ResourceCard> conformToMonopoly(ResourceType resourceType) {
+			if(resourceType == ResourceType.BRICK) {
+				return brickCards;
+			} else if(resourceType == ResourceType.ORE) {
+				return oreCards;
+			} else if(resourceType == ResourceType.SHEEP) {
+				return sheepCards;
+			} else if(resourceType == ResourceType.WHEAT) {
+				return wheatCards;
+			} else if(resourceType == ResourceType.WOOD) {
+				return woodCards;
+			}
+			return new ArrayList<ResourceCard>();
+		}
+	  
 	/**
 	 * adds resource cards to player
 	 * 
