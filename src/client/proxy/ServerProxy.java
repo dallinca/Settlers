@@ -1,8 +1,17 @@
 package client.proxy;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.util.List;
+import java.util.Map;
+
+import netscape.javascript.JSObject;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -33,17 +42,14 @@ public class ServerProxy implements IServerProxy {
 
 	private String userCookie;
 	private String gameCookie;
-	
-	//private java.net.CookieManager manager;
-	
-	private CloseableHttpClient httpClient; 
 
 	private static String SERVER_HOST;
 	private static int SERVER_PORT;
 	private static String URL_PREFIX;
 	private static final String HTTP_POST = "POST";
 	private String URL_SUFFIX;
-	
+
+
 	/**
 	 * 
 	 * @param serverHost Name of server
@@ -52,40 +58,31 @@ public class ServerProxy implements IServerProxy {
 	 * @pre serverPort and serverHost specify an existing server.
 	 * @post The client communicator will know how to communicate with the server.
 	 */
-	
+
 	public ServerProxy(String serverHost, int serverPort){
 		SERVER_HOST = serverHost;
 		SERVER_PORT = serverPort;				
 		URL_PREFIX = "http://" + SERVER_HOST + ":" + SERVER_PORT;
-		
-		httpClient = HttpClientBuilder.create().build();
-		
-		//manager = new java.net.CookieManager();
+
+		userCookie = "";
+		gameCookie = "";
 	}
 
 	public ServerProxy(){
 		SERVER_HOST = "localhost";
 		SERVER_PORT = 8081;				
 		URL_PREFIX = "http://" + SERVER_HOST + ":" + SERVER_PORT;
-		
-		httpClient = HttpClientBuilder.create().build();
-		//manager = new java.net.CookieManager();
+
+		userCookie = "";
+		gameCookie = "";
 	}
-	
+
 	@Override
 	public AddAI_Result addAI(AddAI_Params request) throws ClientException {
 		URL_SUFFIX = "/game/addAI";
-		
+
 		return (AddAI_Result) doPost(URL_SUFFIX, request);
 	}
-
-/*	@Override
-	public ChangeLogLevel_Result changeLogLevel(ChangeLogLevel_Params request)
-			throws ClientException {
-		URL_SUFFIX = "/util/changeLogLevel";
-		
-		return (ChangeLogLevel_Result) doPost(URL_SUFFIX, request);
-	}*/
 
 	@Override
 	public Create_Result createGame(Create_Params request)
@@ -93,13 +90,6 @@ public class ServerProxy implements IServerProxy {
 		URL_SUFFIX = "/games/create";
 		return (Create_Result) doPost(URL_SUFFIX, request);
 	}
-
-/*	@Override
-	public GetCommands_Result getCommands(GetCommands_Params request)
-			throws ClientException {
-		URL_SUFFIX = "/game/commands[get]";
-		return (GetCommands_Result) doPost(URL_SUFFIX, request);
-	}*/
 
 	@Override
 	public GetVersion_Result getVersion(GetVersion_Params request)
@@ -125,25 +115,12 @@ public class ServerProxy implements IServerProxy {
 		URL_SUFFIX = "/game/listAI";
 		return (ListAI_Result) doPost(URL_SUFFIX, request);
 	}
-/*
-	@Override
-	public Load_Result loadGame(Load_Params request) throws ClientException {
-		URL_SUFFIX = "/games/load";
-		return (Load_Result) doPost(URL_SUFFIX, request);
-	}*/
 
 	@Override
 	public Login_Result login(Login_Params request) throws ClientException {
 		URL_SUFFIX = "/user/login";
 		return (Login_Result) doPost(URL_SUFFIX, request);
 	}
-
-/*	@Override
-	public PostCommands_Result postCommands(PostCommands_Params request)
-			throws ClientException {
-		URL_SUFFIX = "/game/commands[post]";
-		return (PostCommands_Result) doPost(URL_SUFFIX, request);
-	}*/
 
 	@Override
 	public Register_Result register(Register_Params request)
@@ -152,18 +129,6 @@ public class ServerProxy implements IServerProxy {
 		return (Register_Result) doPost(URL_SUFFIX, request);
 	}
 
-/*	@Override
-	public Save_Result saveGame(Save_Params request) throws ClientException {
-		URL_SUFFIX = "/games/save";
-		return (Save_Result) doPost(URL_SUFFIX, request);
-	}*/
-	
-	/*	@Override
-	public Reset_Result resetGame(Reset_Params request) throws ClientException {
-		URL_SUFFIX = "/game/reset";
-		return (Reset_Result) doPost(URL_SUFFIX, request);
-	}*/
-	
 	//moves
 
 	@Override
@@ -284,49 +249,66 @@ public class ServerProxy implements IServerProxy {
 		URL_SUFFIX = "/moves/playYearOfPlenty";
 		return (PlayYearOfPlenty_Result) doPost(URL_SUFFIX, request);
 	}
-	
+
 	@Override
 	public Object doPost(String urlString, Object request)
 			throws ClientException {
-		
+
 		urlString = URL_SUFFIX;
-		
+
 		try {
-			Gson gson = new Gson();
 
 			URL url = new URL(URL_PREFIX + URL_SUFFIX);
-			
-			/*HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+
+			HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+
 			connection.setRequestMethod(HTTP_POST);
 			connection.setDoInput(true);
-			connection.setDoOutput(true);			
-			connection.connect();			
-			gson.toJson(request, connection.getOutputStream());			
-			connection.getOutputStream().close();*/			
+			connection.setDoOutput(true);	
 
-			HttpPost post = new HttpPost(url.toString());
-			StringEntity params = new StringEntity(gson.toJson(request));
-		//	post.addHeader("Cookie", clientCookie);
-			post.setEntity(params);
-			HttpResponse response = httpClient.execute(post);
-			
-			
-			Header[] headers = response.getHeaders("set-cookie");
-						
-			if (URL_SUFFIX.equals("/user/login") ){ //Cache cookies
-				userCookie = headers[0].toString();
+			Gson gson = new Gson();
+			String job = gson.toJson(request);		
+
+			//Append those cookies client already has--------------------
+			if (!gameCookie.equals("")){
+				connection.addRequestProperty("Cookie", userCookie+"; "+gameCookie);
+			}
+			else if (!userCookie.equals("")){
+				connection.addRequestProperty("Cookie", userCookie);
+			}
+
+			connection.connect(); // sends cookies
+
+			ObjectOutputStream out = new ObjectOutputStream(connection.getOutputStream());
+			out.writeObject(job);
+			out.close();
+
+			ObjectInputStream in = new ObjectInputStream(connection.getInputStream());
+			job = (String) in.readObject();
+			in.close();
+
+			//Cookie cacher----------------------------------
+			Map<String, List<String>> headers = connection.getHeaderFields();
+
+			if (URL_SUFFIX.equals("/user/login")){
+				userCookie = headers.get("Set-cookie").get(0);
+
+				if (userCookie.endsWith("Path=/;")) {
+					userCookie = userCookie.substring(0, userCookie.length() - 7);
+				}
 			}
 			else if (URL_SUFFIX.equals("/games/join")){
-				gameCookie = headers[0].toString();				
+				gameCookie = headers.get("Set-cookie").get(0);
+
+				if (gameCookie.endsWith("Path=/;")) {
+					gameCookie = gameCookie.substring(0, gameCookie.length() - 7);
+				}
 			}
-						
-			HttpEntity e = response.getEntity();					
-			ObjectInputStream in = new ObjectInputStream(e.getContent()); //Java			
-			JsonObject jsonResult = (JsonObject)in.readObject();			
-			Object result = gson.fromJson(jsonResult, request.getClass());
-			
-			return result;			
-			
+
+			//String decodedUserData = URLDecoder.decode(userCookie, "UTF-8");
+
+			return job;
+
 		}	 
 		catch (Exception ex) {
 			// handle exception here
@@ -336,5 +318,5 @@ public class ServerProxy implements IServerProxy {
 		return null;
 	}
 
-	
+
 }

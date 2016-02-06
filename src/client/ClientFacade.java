@@ -27,7 +27,6 @@ import shared.communication.params.nonmove.ListAI_Params;
 import shared.communication.params.nonmove.List_Params;
 import shared.communication.params.nonmove.Login_Params;
 import shared.communication.params.nonmove.Register_Params;
-import shared.communication.results.*;
 import shared.communication.results.move.AcceptTrade_Result;
 import shared.communication.results.move.BuildCity_Result;
 import shared.communication.results.move.BuildRoad_Result;
