@@ -8,6 +8,8 @@ import shared.locations.EdgeLocation;
 import shared.locations.VertexLocation;
 import shared.model.items.*;
 import shared.model.player.*;
+import shared.model.player.exceptions.CannotBuyException;
+import shared.model.player.exceptions.InsufficientPlayerResourcesException;
 import shared.model.board.Board;
 import shared.model.board.Edge;
 
@@ -156,8 +158,10 @@ public class Game {
 		return currentPlayer.canDoBuyDevelopmentCard(bank);
 	}
 	
-	public void buyDevelopmentCard() {
-		
+	public void buyDevelopmentCard() throws CannotBuyException, InsufficientPlayerResourcesException {
+		if (currentPlayer.canDoBuyDevelopmentCard(bank)) {
+			currentPlayer.buyDevelopmentCard(bank);
+		}
 	}
 	
 	/**
@@ -180,29 +184,61 @@ public class Game {
 		
 	}
 	
+	
+	public boolean useDevelopmentCard(DevCardType devCardType, ResourceType[] resourceType) throws Exception {
+		if (currentPlayer.canDoPlayDevelopmentCard(turnNumber, devCardType)) {
+			switch (devCardType) {
+				case MONOPOLY:
+					if (resourceType == null || resourceType.length > 1) {
+						throw new Exception("Trying to use monopoly on more than one resource!");
+					}
+					//Declare a Resource the player wants, and then extract it from all players who have it.
+					for (int i = 0; i < players.length; i++) {
+						if (players[i] != currentPlayer) {
+							//If not the current player, ask the player for an Array list of it's resource card of that type
+							currentPlayer.conformToMonopoly(resourceType[0]).addAll(players[i].conformToMonopoly(resourceType[0]));
+							players[i].conformToMonopoly(resourceType[0]) = new ArrayList<ResourceCard>();
+						}
+					}
+					setVersionNumber(versionNumber++);
+					return doWeHaveAWinner();
+				case YEAR_OF_PLENTY:
+					//Add two resources of the types specified to the currentPlayers hand
+					if (resourceType.length == 1) {
+						ResourceCard resource = bank.playerTakeResource(resource.getResourceType());
+						//some sneaky idea that realizes conformToMonopoly returns the arraylist of that players cards of a specified type.
+						currentPlayer.conformToMonopoly(resourceType[0]).add(resource);
+						//repeat
+						resource = bank.playerTakeResource(resource.getResourceType());
+						currentPlayer.conformToMonopoly(resourceType[0]).add(resource);
+					}
+					else if (resourceType.length == 2) {
+						for (int g = 0; g < resourceType.length; g++) {
+							ResourceCard resource = bank.playerTakeResource(resource.getResourceType());
+							//some sneaky idea that realizes conformToMonopoly returns the arraylist of that players cards of a specified type.
+							currentPlayer.conformToMonopoly(resourceType[g]).add(resource);
+						}
+					}
+					setVersionNumber(versionNumber++);
+					return doWeHaveAWinner();
+				default: throw new Exception("Wrong declaration for a development card of this type.");
+			}
+		}
+	}
+	
 	public boolean useDevelopmentCard(DevCardType devCardType) throws Exception {
+		if (currentPlayer.canDoPlayDevelopmentCard(turnNumber, devCardType)) {
 		//Marks the card as played
 		currentPlayer.playDevelopmentCard(turnNumber, devCardType);
 		
 		switch (devCardType) {
-			case MONOPOLY:
-				//Declare a Resource the player wants, and then extract it from all players who have it.... how do we get the type they want? Do we have an overridden method again? Or, do we have another object come in through the parameters but it can be null?
-				
-				
-				setVersionNumber(versionNumber++);
-				return doWeHaveAWinner();
 			case SOLDIER:
 				//Must move robber to a different hex
 				//Steal Resource from a person
 				//Do they have more than three soldiers? Do they have the most soldiers? If so, award them the Largest Army award (assuming they don't already have it) and take it from the previous title holder
-				
+				//if (currentPlayer.)
 				
 				//Did the Largest Army award win the game?!
-				setVersionNumber(versionNumber++);
-				return doWeHaveAWinner();
-				
-			case YEAR_OF_PLENTY:
-				
 				setVersionNumber(versionNumber++);
 				return doWeHaveAWinner();
 				
@@ -222,6 +258,11 @@ public class Game {
 				//Did the two extra roads with the game?!?! This may result in the longest road being awarded. 
 				return doWeHaveAWinner();
 		}
+		
+		}
+	
+		else 
+			throw new Exception("Cannot Play development card!");
 		
 	}
 	
@@ -353,9 +394,6 @@ public class Game {
 	 */
 	public boolean doWeHaveAWinner() {
 		for (int i = 0; i < numberofPlayers; i++) {
-			//Player.java needs to have a method that returns victory points so this method can access them via the players to test for it.
-			//Player.java also needs to have public or private set for some of the methods, one of which being the method below, which should probably
-			//return an integer and not be void
 			if (players[i].getVictoryPoints() >= 10)
 				return true;
 		}
