@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
 import shared.locations.EdgeLocation;
+import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 import shared.model.items.*;
 import shared.model.player.*;
@@ -32,7 +33,7 @@ public class Game {
 	private Bank bank = null;
 	private int turnNumber = 0;
 	private int versionNumber = 1;
-	
+	private int indexOfLargestArmy = -1;
 	
 	
 	public Game() {
@@ -65,7 +66,10 @@ public class Game {
 	 */
 	public void incrementPlayer() {
 		for (int i = 0; i < numberofPlayers; i++) {
-			if (currentPlayer == players[i]) {
+			if (currentPlayer.getPlayerId() == players[i].getPlayerId()) {
+				
+				players[i] = currentPlayer;
+				
 				if (i == numberofPlayers-1) {
 					setCurrentPlayer(players[0]);
 					turnNumber++;
@@ -197,7 +201,7 @@ public class Game {
 						if (players[i] != currentPlayer) {
 							//If not the current player, ask the player for an Array list of it's resource card of that type
 							currentPlayer.conformToMonopoly(resourceType[0]).addAll(players[i].conformToMonopoly(resourceType[0]));
-							players[i].conformToMonopoly(resourceType[0]) = new ArrayList<ResourceCard>();
+							players[i].conformToMonopoly(resourceType[0]).clear();
 						}
 					}
 					setVersionNumber(versionNumber++);
@@ -205,16 +209,16 @@ public class Game {
 				case YEAR_OF_PLENTY:
 					//Add two resources of the types specified to the currentPlayers hand
 					if (resourceType.length == 1) {
-						ResourceCard resource = bank.playerTakeResource(resource.getResourceType());
+						ResourceCard resource = bank.playerTakeResource(resourceType[0]);
 						//some sneaky idea that realizes conformToMonopoly returns the arraylist of that players cards of a specified type.
-						currentPlayer.conformToMonopoly(resourceType[0]).add(resource);
+						currentPlayer.conformToMonopoly(resourceType[0]);
 						//repeat
 						resource = bank.playerTakeResource(resource.getResourceType());
 						currentPlayer.conformToMonopoly(resourceType[0]).add(resource);
 					}
 					else if (resourceType.length == 2) {
 						for (int g = 0; g < resourceType.length; g++) {
-							ResourceCard resource = bank.playerTakeResource(resource.getResourceType());
+							ResourceCard resource = bank.playerTakeResource(resourceType[g]);
 							//some sneaky idea that realizes conformToMonopoly returns the arraylist of that players cards of a specified type.
 							currentPlayer.conformToMonopoly(resourceType[g]).add(resource);
 						}
@@ -224,6 +228,7 @@ public class Game {
 				default: throw new Exception("Wrong declaration for a development card of this type.");
 			}
 		}
+		return doWeHaveAWinner();
 	}
 	
 	public boolean useDevelopmentCard(DevCardType devCardType) throws Exception {
@@ -233,11 +238,44 @@ public class Game {
 		
 		switch (devCardType) {
 			case SOLDIER:
-				//Must move robber to a different hex
-				//Steal Resource from a person
 				//Do they have more than three soldiers? Do they have the most soldiers? If so, award them the Largest Army award (assuming they don't already have it) and take it from the previous title holder
-				//if (currentPlayer.)
+				//Must move robber to a different hex
+								
+				boolean firstTime = true;
 				
+				//Initial selection of LargestArmy recipient.
+				if (currentPlayer.getNumberOfSoldiersPlayed() == 3) {
+					for (int i = 0; i < players.length; i++) {
+						if (players[i].getPlayerId() != currentPlayer.getPlayerId() && players[i].getNumberOfSoldiersPlayed() >= 3) {
+								firstTime = false;
+						}
+					}
+					if (firstTime) {
+						indexOfLargestArmy = currentPlayer.getPlayerId();
+						largestArmy = currentPlayer;
+						currentPlayer.incrementVictoryPoints();
+						currentPlayer.incrementVictoryPoints();
+					}
+				}
+				int test = 0;
+				//Check for competition
+				if (currentPlayer.getNumberOfSoldiersPlayed() >= 3 && !firstTime) {
+					if (currentPlayer.getNumberOfSoldiersPlayed() > largestArmy.getNumberOfSoldiersPlayed() && currentPlayer.getPlayerId() != largestArmy.getPlayerId()) {
+						//indexOfLargestArmy = currentPlayer.getPlayerId();
+						
+						for (int i = 0; i < players.length; i++) {
+							if (largestArmy.getPlayerId() == players[i].getPlayerId()) {
+								players[i].decrementVictoryPoints();
+								players[i].decrementVictoryPoints();
+							}
+						}
+					
+						largestArmy = currentPlayer;
+						currentPlayer.incrementVictoryPoints();
+						currentPlayer.incrementVictoryPoints();
+					}
+					
+				}
 				//Did the Largest Army award win the game?!
 				setVersionNumber(versionNumber++);
 				return doWeHaveAWinner();
@@ -245,9 +283,6 @@ public class Game {
 			case MONUMENT:
 				//Give the player their due reward
 				currentPlayer.incrementVictoryPoints();
-				
-				//Mark the monument card as used
-				currentPlayer.get
 				setVersionNumber(versionNumber++);
 				return doWeHaveAWinner();
 				
@@ -263,7 +298,19 @@ public class Game {
 	
 		else 
 			throw new Exception("Cannot Play development card!");
+		return doWeHaveAWinner();
 		
+	}
+	
+	public boolean canDoMoveRobber(HexLocation hex) {
+		return board.canDoMoveRobberToHex(hex);
+	}
+	
+	public void moveRobber(HexLocation hex) throws Exception {
+		if (canDoMoveRobber(hex)) {
+			board.moveRobberToHex(hex);
+		} else
+			throw new Exception("Cannot move Robber to that Hex");
 	}
 	
 	/**
@@ -272,9 +319,10 @@ public class Game {
 	 */
 	public boolean canDoCurrentPlayerDoMeritimeTrade() {
 		//If a player is to meritime trade, he needs to have resources to trade. He needs to have either four of that kind, or a three for one port or a two for one, and again have the proper resources
-		if (currentPlayer.getResourceCardHandSize() == 0)
+		/*if (currentPlayer.getResourceCardHandSize() == 0)
 			return false;
-		currentPlayer.
+		currentPlayer.*/
+		return true;
 		
 	}
 	
@@ -287,25 +335,18 @@ public class Game {
 	 * @post 
 	 */
 	public boolean canDoCurrentPlayerDoDomesticTrade() {
+		return true;
 		//Is it the Current Players turn and does he have any resources?
 		//
-		if (currentPlayer.getResourceCardHandSize() == 0)
+		/*if (currentPlayer.getResourceCardHandSize() == 0)
 			return false;
 		else
-			return true;
+			return true;*/
 	}
 	 
 	public void doDomesticTrade() {
 		
 	}
-	
-	
-	//
-	//
-	//
-	//
-	//
-	//
 	
 	/**
 	 * @pre the edge location is not null
@@ -323,7 +364,7 @@ public class Game {
 	 * @post a road is placed on an edge
 	 */
 	public void placeRoadOnEdge(EdgeLocation edgeLocation) throws Exception {
-		if(canDoPlaceRoadOnEdge(edgeLocation) && canDoCurrentPlayerBuyRoad())
+		if(canDoPlaceRoadOnEdge(edgeLocation) && canDoCurrentPlayerBuildRoad())
 			board.placeRoadOnEdge(currentPlayer, edgeLocation);
 		else
 			throw new Exception("Cannot build road on this edge, this should not have been allowed to get this far.");
@@ -375,11 +416,13 @@ public class Game {
 	
 	public int numberOfResouceType(ResourceType resourceType) {
 		//need a hand?
-		return currentPlayer.numberOfResourceType(resourceType);
+		//return currentPlayer.numberOfResourceType(resourceType);
+		return 0;
 	}
 	
 	public void discardNumberOfResourceType(int removal, ResourceType resourceType) {
-		currentPlayer.discardNumberOfResourceType(removal, resourceType);
+		//currentPlayer.discardNumberOfResourceType(removal, resourceType);
+		
 	}
 		
 	/**
