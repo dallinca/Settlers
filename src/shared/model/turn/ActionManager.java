@@ -1,20 +1,20 @@
 package shared.model.turn;
 
+import shared.model.Game;
+
 
 /**
  * Action interface object for performing actions on one's turn while participating in a game.
  * @author jchrisw
  *
  */
-public class Action {
-		
-	/**
-	 * Specifies differing types of actions which can be performed.
-	 *
-	 */	
- 
+public class ActionManager {
 	
+	Game game;
 	
+	public ActionManager(Game g){
+		game = g;
+	}
 	
 	/**
 	 * Performs an action of given type for the player.
@@ -23,7 +23,10 @@ public class Action {
 	 * @pre None
 	 * @post action will be performed.
 	 */
-	public static void doAction(ActionType action){
+	public void doAction(ActionType action){
+		
+		int i = game.getVersionNumber();
+		game.setVersionNumber(i++);		
 		
 		if (action.getCategory() == ActionType.PURCHASE) doPurchase(action);
 		else if (action.getCategory() == ActionType.TRADE) doTrade(action);

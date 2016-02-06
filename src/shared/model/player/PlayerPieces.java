@@ -108,8 +108,6 @@ public class PlayerPieces {
 	   }
 	   
 	   /**
-	    * TODO interface with Bank
-	    * 
 	    * @param resourceType
 	    * @param numberOfCards
 	    * @param bank
@@ -118,9 +116,14 @@ public class PlayerPieces {
 	   private void moveResourcesFromBankToPlayerHand(ResourceType resourceType, int numberOfCards, Bank bank, ResourceCardHand resourceCardHand) {
 		   // Ask the bank 'numberOfCards' times if it can take a card of type 'resourceType'
 		   for(int i = 0; i < numberOfCards; i++) {
-			   if(bank.canDoTakeResource(resourceType) == true) {
-				   resourceCardHand.addCard(bank.takeResource(resourceType));
-			   }
+			   if(bank.canDoPlayerTakeResource(resourceType) == true) {
+				   try {
+					   resourceCardHand.addCard(bank.playerTakeResource(resourceType));
+					} catch (Exception e) {
+						System.out.println("Player trying to take a resource from the bank that it doesn't have");
+						e.printStackTrace();
+					}
+			   	}
 		   }
 		   
 	   }

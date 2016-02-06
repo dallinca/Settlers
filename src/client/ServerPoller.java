@@ -21,26 +21,21 @@ public class ServerPoller {
 	private IServerProxy proxy;
 	private Client client;
 	
+	/**
+	 * 
+	 * Server poller may be created with either mock server or real server in mind.
+	 * 
+	 * @param IServerProxy proxy, Client client
+	 * 
+	 * @pre None
+	 * @post Server poller is created.
+	 */
 	public ServerPoller(IServerProxy proxy, Client client){
 		this.client = client;
 		this.proxy = proxy;
 		
 		pollTimer = new Timer();
 		pollTimer.schedule(new timedPoll(), 0, 5000);	//every 5 seconds	
-	}
-	
-	/**
-	 * 
-	 * Server poller may be created with either mock server or real server in mind.
-	 * 
-	 * @param serverExists
-	 * 
-	 * @pre None
-	 * @post Server poller is created.
-	 */
-	ServerPoller(boolean serverExists){
-		
-		
 	}
 	
 	/**
@@ -76,7 +71,7 @@ public class ServerPoller {
 			
 			Game update = pollResult.getGame();
 			
-			if (update.getVersion()>client.getGame().getVersion()){
+			if (update.getVersionNumber() > client.getGame().getVersionNumber()){
 				
 				client.setGame(pollResult.getGame());				
 			}		

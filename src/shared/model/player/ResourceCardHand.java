@@ -3,6 +3,7 @@ import java.util.*;
 
 import shared.definitions.ResourceType;
 import shared.model.Bank;
+import shared.model.items.DevelopmentCard;
 import shared.model.items.ResourceCard;
 import shared.model.player.exceptions.InsufficientPlayerResourcesException;
 import shared.model.player.exceptions.NullCardException;
@@ -64,6 +65,24 @@ public class ResourceCardHand {
 			e.printStackTrace();
 		}
 	  }
+	  
+	  
+
+		public ArrayList<ResourceCard> conformToMonopoly(ResourceType resourceType) {
+			if(resourceType == ResourceType.BRICK) {
+				return brickCards;
+			} else if(resourceType == ResourceType.ORE) {
+				return oreCards;
+			} else if(resourceType == ResourceType.SHEEP) {
+				return sheepCards;
+			} else if(resourceType == ResourceType.WHEAT) {
+				return wheatCards;
+			} else if(resourceType == ResourceType.WOOD) {
+				return woodCards;
+			}
+			return new ArrayList<ResourceCard>();
+		}
+	  
 	/**
 	 * adds resource cards to player
 	 * 
@@ -93,15 +112,6 @@ public class ResourceCardHand {
 			  throw new Exception("Invalid Resouce Type to add to Hand");
 		  }
 	  }
-	 
-	/**
-	 * removes resource cards from player
-	 * 
-	 * @pre None
-	 * @post cards deleted from ArrayList data structure
-	 */
-	  public void playResourceCard(){}
-	
 	  
 	  /**
 	   * Checks if a player has resources to buy a development card
@@ -127,26 +137,25 @@ public class ResourceCardHand {
 	   * @post 1 sheep, 1 wheat, 1 ore are removed from the players Hand, and put back into the bank
 	   * 
 	   */
-	  public void payForDevelopmentCard() throws InsufficientPlayerResourcesException {
+	  public DevelopmentCard payForDevelopmentCard() throws InsufficientPlayerResourcesException {
 		   if(canDoPayForDevelopmentCard() == false) {
 			   throw new InsufficientPlayerResourcesException("Player doesn't have the resources to pay for a Devlopment Card");
 		   }
 
-		   ArrayList<ResourceCard> cards = new ArrayList<ResourceCard>();
+		   DevelopmentCard cardBought = null;
 		   // Transfer Cards to Bank
-		   cards.add(sheepCards.get(sheepCards.size() - 1));
+		   try {
+			   cardBought = bank.buyDevelopmentCard(sheepCards.get(sheepCards.size() - 1), wheatCards.get(wheatCards.size() - 1), oreCards.get(oreCards.size() - 1));
+		   } catch (Exception e) {
+			   System.out.println("Tried to buy a Development Card, but had an error");
+			   e.printStackTrace();
+		   }
 		   sheepCards.remove(sheepCards.size() - 1);
-		   cards.add(wheatCards.get(wheatCards.size() - 1));
 		   wheatCards.remove(wheatCards.size() - 1);
-		   cards.add(oreCards.get(oreCards.size() - 1));
 		   oreCards.remove(oreCards.size() - 1);
 		   
-		   try {
-			   bank.playerTurnInResources((ResourceCard[])cards.toArray());
-			} catch (Exception e) {
-				System.out.println("Somewhere there were duplicated resources ... and stuff");
-				e.printStackTrace();
-			}
+		   return cardBought;
+		   
 	  }
 	  
 	/**

@@ -1,5 +1,13 @@
 package shared.model.turn;
 
+
+
+/**
+ * Specifies differing types of actions which can be performed.
+ *
+ */	
+
+
 public enum ActionType  {
 	
 	/*

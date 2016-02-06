@@ -11,31 +11,27 @@ import shared.communication.results.nonmove.*;
 /**
  * A class which packages data from a client and sends it through the internet to the server.
  * Receives results from the server.
- * @author jchrisw
  *
  */
 
 public interface IServerProxy {
 	
-	
 	//nonmove
 	
 	public AddAI_Result addAI(AddAI_Params request) throws ClientException;
 	
-	public ChangeLogLevel_Result changeLogLevel(ChangeLogLevel_Params request) throws ClientException;
-	
 	public Create_Result createGame(Create_Params request) throws ClientException;
 	
-	public GetCommands_Result getCommands(GetCommands_Params request) throws ClientException;	
-	
 	/**
-	 * Packages a poll server request from the client.
+	 * Queries the most current version of the game from the server. If client has most recent
+	 * version, server will update. Otherwise if both are same, nothing will happen.
+	 * If client has an outdated version, client will update.
 	 * 
-	 * @return
+	 * @return GetVersion_Result
 	 * @throws ClientException
 	 * 
-	 * @pre None
-	 * @post PollServer response will be obtained from server.
+	 * @pre User must be logged into server prior to calling getVersion.
+	 * @post Newer version will be obtained from server.
 	 */
 	public GetVersion_Result getVersion(GetVersion_Params request) throws ClientException;
 	
@@ -44,17 +40,11 @@ public interface IServerProxy {
 	public List_Result listGames(List_Params request) throws ClientException;
 	
 	public ListAI_Result listAI(ListAI_Params request) throws ClientException;
-	
-	public Load_Result loadGame(Load_Params request) throws ClientException;
-	
+		
 	public Login_Result login(Login_Params request) throws ClientException;
-	
-	public PostCommands_Result postCommands(PostCommands_Params request) throws ClientException;
-	
+		
 	public Register_Result register(Register_Params request) throws ClientException;
-	
-	public Save_Result saveGame(Save_Params request) throws ClientException;
-	
+		
 	//move
 	
 	public AcceptTrade_Result acceptTrade(AcceptTrade_Params request) throws ClientException;

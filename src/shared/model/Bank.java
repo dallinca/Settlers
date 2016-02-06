@@ -306,7 +306,7 @@ public class Bank {
 	 * @param resourceType
 	 * @post
 	 */
-	private boolean canDoPlayerTakeResource(ResourceType resourceType) {
+	public boolean canDoPlayerTakeResource(ResourceType resourceType) {
 		switch (resourceType.toString()) {
 			case "BRICK":
 				if (brickDeck.size() >=1)
@@ -337,6 +337,21 @@ public class Bank {
 				//case anything else: throw exception?
 		}
 		
+		return false;
+	}
+	
+	
+	/**
+	 * checks if there are any development cards that can be purchased
+	 * 
+	 * @pre None
+	 * 
+	 * @return whether any development cards that can be purchased
+	 */
+	public boolean hasAvailableDevelopmentCards() {
+		if(developmentDeck.size() > 0) {
+			return true;
+		}
 		return false;
 	}
 	

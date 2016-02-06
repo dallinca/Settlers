@@ -198,26 +198,7 @@ public class DevelopmentCardHand {
     		yearOfPlentyCards.add(card);
     	}
     }
-    
-    /**
-     * TODO interface with bank
-     * 
-     * 
-     * @param bank
-     */
-    public void takeDevelopmentCardFromBank(Bank bank) {
-    	//addCard(bank.takeDevelopmentCard());
-    }
-    
-    /**
-     * TODO implement play Card
-     * 
-	 * removes resource cards from player
-	 * 
-	 * @pre None
-	 * @post deleted from ArrayList data structure
-	 */
-    void playDevelopmentCard(){}
+  
    
 	
 	/**

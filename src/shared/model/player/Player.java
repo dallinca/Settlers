@@ -1,14 +1,19 @@
 package shared.model.player;
 
+import java.util.ArrayList;
+
 import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
 import shared.model.Bank;
 import shared.model.board.Edge;
 import shared.model.board.Vertex;
+import shared.model.items.DevelopmentCard;
+import shared.model.items.ResourceCard;
 import shared.model.player.exceptions.AllPiecesPlayedException;
 import shared.model.player.exceptions.CannotBuyException;
 import shared.model.player.exceptions.CollectResourcesException;
 import shared.model.player.exceptions.InsufficientPlayerResourcesException;
+import shared.model.player.exceptions.NullCardException;
 
 /**
  * The Player class is used to create a player object
@@ -40,6 +45,7 @@ public class Player {
 	 * @post new DevelopmentCards()
 	 * @post new Municipal()
 	 */
+	
 	public Player(int playerId, Bank bank){
 		this.playerId = playerId;
 		resourceCardHand = new ResourceCardHand(bank);
@@ -80,15 +86,6 @@ public class Player {
 	}
 	
 	/**
-	 * The color specific building cost card for the player
-	 * 
-	 * @pre None
-	 * @post Returns building cost card
-	 */
-	public void getbuildingCostCard(){}
-	
-	
-	/**
 	 * Will Check is a Development Card of the specified type may be played
 	 * 
 	 * @param turnNumber
@@ -115,7 +112,7 @@ public class Player {
 		if(canDoPlayDevelopmentCard(turnNumber, devCardType) == false) {
 			throw new Exception("Cannot play this card");
 		}
-		developmentCardHand.playDevelopmentCard();
+		developmentCardHand.playDevelopmentCard(turnNumber, devCardType);
 	}
 	
 
@@ -132,8 +129,6 @@ public class Player {
 	
 	
 	/**
-	 * TODO - Javadoc and implement
-	 * 
 	 * checks if the player can buy a development card, Should be called in tandom with the Bank to
 	 * see if there are any Developments Cards left to be bought
 	 * 
@@ -146,9 +141,9 @@ public class Player {
 		if(bank == null || resourceCardHand.canDoPayForDevelopmentCard() == false) {
 			return false;
 		}
-		//if(bank.numbDevelopmentCards() > 0) {
-		//	return false;
-		//}
+		if(bank.hasAvailableDevelopmentCards() == false) {
+			return false;
+		}
 		return true;
 	}
 	
@@ -167,8 +162,13 @@ public class Player {
 		if(canDoBuyDevelopmentCard(bank) == false) {
 			throw new CannotBuyException("Cannot Buy Development Card, possibly not enough resources");
 		}
-		resourceCardHand.payForDevelopmentCard();
-		developmentCardHand.takeDevelopmentCardFromBank(bank);
+		DevelopmentCard cardBought = resourceCardHand.payForDevelopmentCard();
+		try {
+			developmentCardHand.addCard(cardBought);
+		} catch (NullCardException e) {
+			System.out.println("I think I just bought a null card");
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -321,7 +321,7 @@ public class Player {
 		}
 		
 		/**
-		 * TODO
+		 * has the player discard the specified number of resources of the specified resource type
 		 * 
 		 * @param bank
 		 * 
@@ -341,6 +341,21 @@ public class Player {
 		 */
 		public int getNumberResourcesOfType(ResourceType resourceType) {
 			return resourceCardHand.getNumberResourcesOfType(resourceType);
+		}
+		
+		/**
+		 * Retrieves the number of soldiers that have been played by the player
+		 * 
+		 * @pre None
+		 * 
+		 * @return the number of soldiers that have been played by the player
+		 */
+		public int getNumberOfSoldiersPlayed() {
+			return developmentCardHand.getNumberOfSoldiersPlayed();
+		}
+		
+		public ArrayList<ResourceCard> conformToMonopoly(ResourceType resourceType) {
+			return resourceCardHand.conformToMonopoly(resourceType);
 		}
 
 		public int getPlayerId() {
