@@ -10,4 +10,8 @@ public class Create_Result {
 		this.json = json;
 	}
 
+	public Create_Result() {
+		// TODO Auto-generated constructor stub
+	}
+
 }

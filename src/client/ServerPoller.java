@@ -32,10 +32,18 @@ public class ServerPoller {
 	 */
 	public ServerPoller(IServerProxy proxy, Client client){
 		this.client = client;
-		this.proxy = proxy;
-		
+		this.proxy = proxy;			
+	}
+	
+	public boolean start(){
 		pollTimer = new Timer();
-		pollTimer.schedule(new timedPoll(), 0, 5000);	//every 5 seconds	
+		pollTimer.schedule(new timedPoll(), 0, 1500);	//every 1.5 seconds
+		return true;
+	}
+	
+	public boolean stop(){
+		pollTimer.cancel();
+		return true;
 	}
 	
 	/**
@@ -71,7 +79,14 @@ public class ServerPoller {
 			
 			Game update = pollResult.getGame();
 			
-			if (update.getVersionNumber() > client.getGame().getVersionNumber()){
+			Game clientGame = client.getGame();
+			
+			if (clientGame == null){
+				
+				client.setGame(pollResult.getGame());	
+			} 
+			
+			else if (update.getVersionNumber() > client.getGame().getVersionNumber()){
 				
 				client.setGame(pollResult.getGame());				
 			}		
