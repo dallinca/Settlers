@@ -109,7 +109,7 @@ public class Player {
 		if(canDoPlayDevelopmentCard(turnNumber, devCardType) == false) {
 			throw new Exception("Cannot play this card");
 		}
-		developmentCardHand.playDevelopmentCard();
+		developmentCardHand.playDevelopmentCard(turnNumber, devCardType);
 	}
 	
 
@@ -335,6 +335,17 @@ public class Player {
 		 */
 		public int getNumberResourcesOfType(ResourceType resourceType) {
 			return resourceCardHand.getNumberResourcesOfType(resourceType);
+		}
+		
+		/**
+		 * Retrieves the number of soldiers that have been played by the player
+		 * 
+		 * @pre None
+		 * 
+		 * @return the number of soldiers that have been played by the player
+		 */
+		public int getNumberOfSoldiersPlayed() {
+			return developmentCardHand.getNumberOfSoldiersPlayed();
 		}
 
 		public int getPlayerId() {
