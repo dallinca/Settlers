@@ -9,6 +9,7 @@ import shared.locations.VertexLocation;
 import shared.model.items.*;
 import shared.model.player.*;
 import shared.model.board.Board;
+import shared.model.board.Edge;
 
 
 /**
@@ -106,9 +107,26 @@ public class Game {
 	 * @return a true or false to if the player can build a road there.
 	 */
 	public boolean canDoCurrentPlayerBuildRoad() {
-		return currentPlayer.canDoBuyRoad();
-		
+		return currentPlayer.canDoBuyRoad();	
 	}
+	
+	/*
+	 * This method is commented out for now because I believe that if it isn't, then you will have half the roads you need, because the buildRoadOnEdge function below also
+	 * eventually calls a method that commands a road to be built. If both canDos and regular methods are run you will run out of roads. So, in the buildRoadOnEdge function 
+	 * it now asks for the canDoCurrentPlayerBuildRoad() and the other verification.
+	 * 
+	 * But the canDoCurrentPlayerBuildRoad() is a good stand-a-lone to tell the client whether or not to gray it out, but when it comes to building the road we will leave it
+	 * to the professional methods below. I hope this makes sense.
+	 * @pre Player can buy road
+	 */
+	/*
+	public void buyRoad(Edge edge) throws Exception {
+		if (canDoCurrentPlayerBuildRoad()) {
+			currentPlayer.buyRoad(edge);
+		}
+		else
+			throw new Exception("Can't buy a road");
+	}*/
 	
 	/**
 	 * Asks the player if he or she can build a settlement and tells the client that.
@@ -126,6 +144,9 @@ public class Game {
 		return currentPlayer.canDoBuyCity();
 	}
 	
+	public void buildCity() {
+		
+	}
 	
 	/**
 	 * Asks the player if he or she can buy a development card and tells the client that.
@@ -133,6 +154,10 @@ public class Game {
 	 */
 	public boolean canDoCurrentPlayerBuyDevelopmentCard() {
 		return currentPlayer.canDoBuyDevelopmentCard(bank);
+	}
+	
+	public void buyDevelopmentCard() {
+		
 	}
 	
 	/**
@@ -164,7 +189,7 @@ public class Game {
 				//Declare a Resource the player wants, and then extract it from all players who have it.... how do we get the type they want? Do we have an overridden method again? Or, do we have another object come in through the parameters but it can be null?
 				
 				
-				
+				setVersionNumber(versionNumber++);
 				return doWeHaveAWinner();
 			case SOLDIER:
 				//Must move robber to a different hex
@@ -173,9 +198,12 @@ public class Game {
 				
 				
 				//Did the Largest Army award win the game?!
+				setVersionNumber(versionNumber++);
 				return doWeHaveAWinner();
 				
 			case YEAR_OF_PLENTY:
+				
+				setVersionNumber(versionNumber++);
 				return doWeHaveAWinner();
 				
 			case MONUMENT:
@@ -184,11 +212,13 @@ public class Game {
 				
 				//Mark the monument card as used
 				currentPlayer.get
+				setVersionNumber(versionNumber++);
 				return doWeHaveAWinner();
 				
 			case ROAD_BUILD:
 				//Perhaps to avoid the cost of the roads, we can have an overridden method that asserts true on the canDoBuy and asserts true and avoids the cost. Who knows
 				
+				setVersionNumber(versionNumber++);
 				//Did the two extra roads with the game?!?! This may result in the longest road being awarded. 
 				return doWeHaveAWinner();
 		}
@@ -207,6 +237,10 @@ public class Game {
 		
 	}
 	
+	public void doMeritimeTrade()  {
+		
+	}
+	
 	/**
 	 * @pre: the player in question who calls this method is taking his/her turn currently
 	 * @post 
@@ -220,6 +254,10 @@ public class Game {
 			return true;
 	}
 	 
+	public void doDomesticTrade() {
+		
+	}
+	
 	
 	//
 	//
@@ -244,7 +282,7 @@ public class Game {
 	 * @post a road is placed on an edge
 	 */
 	public void placeRoadOnEdge(EdgeLocation edgeLocation) throws Exception {
-		if(canDoPlaceRoadOnEdge(edgeLocation))
+		if(canDoPlaceRoadOnEdge(edgeLocation) && canDoCurrentPlayerBuyRoad())
 			board.placeRoadOnEdge(currentPlayer, edgeLocation);
 		else
 			throw new Exception("Cannot build road on this edge, this should not have been allowed to get this far.");
@@ -266,7 +304,7 @@ public class Game {
 	 * @post a settlement is placed on a vertex
 	 */
 	public void placeSettlementOnVertex(VertexLocation vertexLocation) throws Exception {
-		if(canDoPlaceSettlementOnVertex(vertexLocation))
+		if(canDoPlaceSettlementOnVertex(vertexLocation) && canDoCurrentPlayerBuildSettlement())
 			board.placeSettlementOnVertex(currentPlayer, vertexLocation);
 		else
 			throw new Exception("Cannot build Settlement on this vertex, this should not have been allowed to get this far.");
@@ -302,8 +340,6 @@ public class Game {
 	public void discardNumberOfResourceType(int removal, ResourceType resourceType) {
 		currentPlayer.discardNumberOfResourceType(removal, resourceType);
 	}
-	
-	public 
 		
 	/**
 	 * This method is responsible for verifying if the game has ended.
