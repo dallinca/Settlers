@@ -20,18 +20,13 @@ import shared.communication.params.move.devcard.PlayRoadBuilding_Params;
 import shared.communication.params.move.devcard.PlaySoldier_Params;
 import shared.communication.params.move.devcard.PlayYearOfPlenty_Params;
 import shared.communication.params.nonmove.AddAI_Params;
-import shared.communication.params.nonmove.ChangeLogLevel_Params;
 import shared.communication.params.nonmove.Create_Params;
-import shared.communication.params.nonmove.GetCommands_Params;
 import shared.communication.params.nonmove.GetVersion_Params;
 import shared.communication.params.nonmove.Join_Params;
 import shared.communication.params.nonmove.ListAI_Params;
 import shared.communication.params.nonmove.List_Params;
-import shared.communication.params.nonmove.Load_Params;
 import shared.communication.params.nonmove.Login_Params;
-import shared.communication.params.nonmove.PostCommands_Params;
 import shared.communication.params.nonmove.Register_Params;
-import shared.communication.params.nonmove.Save_Params;
 import shared.communication.results.*;
 import shared.communication.results.move.AcceptTrade_Result;
 import shared.communication.results.move.BuildCity_Result;
@@ -51,18 +46,13 @@ import shared.communication.results.move.devcard.PlayRoadBuilding_Result;
 import shared.communication.results.move.devcard.PlaySoldier_Result;
 import shared.communication.results.move.devcard.PlayYearOfPlenty_Result;
 import shared.communication.results.nonmove.AddAI_Result;
-import shared.communication.results.nonmove.ChangeLogLevel_Result;
 import shared.communication.results.nonmove.Create_Result;
-import shared.communication.results.nonmove.GetCommands_Result;
 import shared.communication.results.nonmove.GetVersion_Result;
 import shared.communication.results.nonmove.Join_Result;
 import shared.communication.results.nonmove.ListAI_Result;
 import shared.communication.results.nonmove.List_Result;
-import shared.communication.results.nonmove.Load_Result;
 import shared.communication.results.nonmove.Login_Result;
-import shared.communication.results.nonmove.PostCommands_Result;
 import shared.communication.results.nonmove.Register_Result;
-import shared.communication.results.nonmove.Save_Result;
 
 /**
  * Sends all to-server requests to the client communicator for packaging
@@ -92,32 +82,6 @@ public class ClientFacade {
 	}
 
 	/**
-	 * Gets the current game state from the server.
-	 * @param username
-	 * @return
-	 * 
-	 * @pre Client is validated and participating in a game.
-	 * @post Communicator will return usable PollServer_Result.
-	 */
-	public PollServer_Result pollServer(String username){
-
-		PollServer_Result result;
-
-		try {
-
-			result = cc.pollServer();
-
-		} catch (ClientException e) {
-
-			result = new PollServer_Result();
-
-			e.printStackTrace();			
-		}
-
-		return result;		
-	}
-
-	/**
 	 * Validates the given user with the server database.
 	 * @param username
 	 * @param password
@@ -128,14 +92,15 @@ public class ClientFacade {
 	 */
 	public Login_Result login(String username, String password) {		
 
-		ValidateUser_Result result; 
-
+		Login_Result result; 
+		Login_Params request = new Login_Params(username, password);		
+		
 		try {
 
-			result = cc.validateUser(username, password);
+			result = sp.login(request);
 
 		} catch (ClientException e) {			
-			result = new ValidateUser_Result();
+			result = new Login_Result();
 
 			e.printStackTrace();
 		}		
@@ -157,26 +122,17 @@ public class ClientFacade {
 		return null;
 	}
 
-	public ChangeLogLevel_Result changeLogLevel(ChangeLogLevel_Params request) throws ClientException {
-		return null;
-	}
-
 	public Create_Result createGame(Create_Params request) throws ClientException {
 		return null;
 	}
 
-	public GetCommands_Result getCommands(GetCommands_Params request) throws ClientException {
-		return null;
-	}	
-
 	/**
-	 * Packages a poll server request from the client.
-	 * 
+	 * Gets the current game state from the server.
+	 * @param username
 	 * @return
-	 * @throws ClientException
 	 * 
-	 * @pre None
-	 * @post PollServer response will be obtained from server.
+	 * @pre Client is validated and participating in a game.
+	 * @post Communicator will return usable PollServer_Result.
 	 */
 	public GetVersion_Result getVersion(GetVersion_Params request) throws ClientException {
 		return null;
@@ -194,23 +150,11 @@ public class ClientFacade {
 		return null;
 	}
 
-	public Load_Result loadGame(Load_Params request) throws ClientException {
-		return null;
-	}
-
 	public Login_Result login(Login_Params request) throws ClientException {
 		return null;
 	}
 
-	public PostCommands_Result postCommands(PostCommands_Params request) throws ClientException {
-		return null;
-	}
-
 	public Register_Result register(Register_Params request) throws ClientException {
-		return null;
-	}
-
-	public Save_Result saveGame(Save_Params request) throws ClientException {
 		return null;
 	}
 
