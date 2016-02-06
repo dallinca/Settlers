@@ -11,7 +11,6 @@ import shared.model.player.Player;
 
 public class PlayerTest {
 	
-	
 	private static Board board;
 	private static Game game;
 	private static boolean randomHexType, randomHexRollValues,  randomPorts;
@@ -38,16 +37,12 @@ public class PlayerTest {
 		
 	    game = new Game(player1, player2, player3, player4, board);
 	}
-	
+	/*
 	@Before
 	public void setup(){
 		player = new Player(3);
 	}
-	/*
-	@After
-	public void tearDown(){
-	}*/
-	
+
 	@Test
 	public void testBuyRoad(){
 		player.BuyRoad(edge);
@@ -67,5 +62,5 @@ public class PlayerTest {
 	public void testCollectResources(){
 		int rollValue = 4;
 		player.collectResources(rollValue);
-	}
+	}*/
 }

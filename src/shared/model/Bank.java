@@ -34,7 +34,6 @@ public class Bank {
 		developmentDeck = new ArrayList();
 		initDevCards();
 		initResourceCards();		
-		
 	}
 	
 	/**

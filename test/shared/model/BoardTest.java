@@ -96,7 +96,7 @@ public class BoardTest {
 		 * Board2: Test position (5,1). When the Hexes aren't randomized, they are alphabetical. 
 		 * Thus, the robber is by default placed on (5,1).
 		*/
-		hexlocation = new HexLocation(2,-2);
+		hexlocation = new HexLocation(-2,5);
 		try {
 			board2.moveRobberToHex(hexlocation);
 			fail();
