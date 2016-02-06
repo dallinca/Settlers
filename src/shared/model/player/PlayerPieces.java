@@ -177,6 +177,16 @@ public class PlayerPieces {
 		   return false;
 	   }
 	   
+	   public int getNumberOfRoads(){
+		   int count =0; 
+		   for(Road road: roads) { // Iterate through all roads in the arraylist
+			   if(road.getEdge() == null) { // Check to see if there is a road that has not been assigned to an edge on the map
+				    count++;// Null means it is still available to be placed
+			   }
+		   }
+		   return count; 
+	   }
+	   
 	 /**
 	  * 
 	  * @param edge

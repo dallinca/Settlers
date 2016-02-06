@@ -171,7 +171,11 @@ public class Board {
 	 * @post road is placed on the specified edge, or PlaceRoadOnEdgeException thrown
 	 */
 	public void placeRoadOnEdge(Player player, EdgeLocation edgeLocation) throws Exception {
-		if(canDoPlaceRoadOnEdge(player, edgeLocation) == false) {
+		if(player.getPlayerPieces().getNumberOfRoads() > 13){
+			if(canDoPlaceInitialRoadOnEdge(player, edgeLocation) == false)
+				throw new PlaceRoadOnEdgeException("canDoPlaceRoadOnEdge = false");
+		}
+		else if(canDoPlaceRoadOnEdge(player, edgeLocation) == false) {
 			throw new PlaceRoadOnEdgeException("canDoPlaceRoadOnEdge = false");
 		}
 		// Use the edgeLocation to find that Edge in our data Structure

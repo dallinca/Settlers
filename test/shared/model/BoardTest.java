@@ -21,7 +21,7 @@ public class BoardTest {
 	private Player player;
 	
 	
-	@Before
+	@Before//called before each test
 	public void setup(){
 		
 		//all true
@@ -109,7 +109,7 @@ public class BoardTest {
 		try {
 			board1.placeRoadOnEdge(player, edgeLocation);
 		} catch (Exception e) {
-			e.printStackTrace();
+			fail();
 		}
 	}
 	

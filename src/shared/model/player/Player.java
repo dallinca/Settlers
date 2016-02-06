@@ -328,5 +328,9 @@ public class Player {
 		public void setPlayerId(int playerId) {
 			this.playerId = playerId;
 		}
+		
+		public PlayerPieces getPlayerPieces(){
+			return playerPieces;
+		}
 	
 }
