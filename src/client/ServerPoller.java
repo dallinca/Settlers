@@ -1,5 +1,13 @@
 package client;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+import shared.communication.params.nonmove.GetVersion_Params;
+import shared.communication.results.nonmove.GetVersion_Result;
+import shared.model.Game;
+import client.proxy.IServerProxy;
+
 
 /**
  * Polls server every few seconds to grab new information 
@@ -8,6 +16,18 @@ package client;
  *
  */
 public class ServerPoller {
+	
+	private Timer pollTimer;
+	private IServerProxy proxy;
+	private Client client;
+	
+	public ServerPoller(IServerProxy proxy, Client client){
+		this.client = client;
+		this.proxy = proxy;
+		
+		pollTimer = new Timer();
+		pollTimer.schedule(new timedPoll(), 0, 5000);	//every 5 seconds	
+	}
 	
 	/**
 	 * 
@@ -29,9 +49,11 @@ public class ServerPoller {
 	 * @pre None
 	 * @post triggers poll at regular time intervals.
 	 */
-	private static void timer(){		
-		
-	}
+	class timedPoll extends TimerTask {
+	    public void run() {
+	       pollServer();
+	    }
+	 }	 
 	
 	/**
 	 * Posts a call to the server to find any new developments in game state.
@@ -39,7 +61,27 @@ public class ServerPoller {
 	 * @pre Must be validated and participating in game.
 	 * @post Current game state will be obtained from server.
 	 */	
-	private static void pollServer(){
+	private void pollServer(){
+		GetVersion_Params pollRequest = new GetVersion_Params();
+		GetVersion_Result pollResult = null;
+		
+		try {
+			pollResult = proxy.getVersion(pollRequest);
+		} catch (ClientException e) {
+			System.out.println("Server poll failed.");
+			e.printStackTrace();
+		}
+		
+		if (pollResult!=null){
+			
+			Game update = pollResult.getGame();
+			
+			if (update.getVersion()>client.getGame().getVersion()){
+				
+				client.setGame(pollResult.getGame());				
+			}		
+			
+		}	
 		
 	}
 	
@@ -50,9 +92,9 @@ public class ServerPoller {
 	 * @pre Client is participating in a game
 	 * @post Client's game state will be synchronized with server's.
 	 */
-	private static void synchronizeGameState(PollServer_Result result){
-				
-	}
+	//private static void synchronizeGameState(PollServer_Result result){
+	//			
+	//}
 	
 	
 }

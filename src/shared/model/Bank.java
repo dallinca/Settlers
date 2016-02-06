@@ -121,9 +121,9 @@ public class Bank {
 			return null;
 	}
 	
-	//Done
+	
 	/**
-	 * An overriden method that based on how many cards you are going to trade in for one card determines your function
+	 * An overridden method that based on how many cards you are going to trade in for one card determines your function
 	 * @param three resources that are hopefully of the same type
 	 * @param resourceType of the type you want back
 	 * @param tradePort
@@ -172,6 +172,14 @@ public class Bank {
 		
 	}
 	
+	
+	/**
+	 * An overridden method that based on how many cards you are going to trade in for one card determines your function
+	 * @param four resources that are hopefully of the same type
+	 * @param resourceType of the type you want back
+	 * @return the card you receive
+	 * @throws Exception
+	 */
 	public ResourceCard playerTrade(ResourceCard one, ResourceCard two, ResourceCard three, ResourceCard four, ResourceType resourceType) throws Exception {
 		//I recognize magic number, but this function already assumes the array size will be four, that you are not using a port.
 		ResourceCard[] tradingDeck = new ResourceCard[4];
@@ -208,6 +216,14 @@ public class Bank {
 		}
 	}
 	
+	/**
+	 * An overridden method that based on how many cards you are going to trade in for one card determines your function
+	 * @param two resources that are hopefully of the same type
+	 * @param resourceType of the type you want back
+	 * @param tradePort
+	 * @return the card you receive
+	 * @throws Exception
+	 */
 	public ResourceCard playerTrade(ResourceCard one, ResourceCard two, ResourceType resourceType, TradePort tradePort) throws Exception {
 		
 		//I recognize magic number, but this function already assumes the array size will be three, that which in the event of a 3:1 port,
@@ -237,10 +253,10 @@ public class Bank {
 		if (notBankrupt == true) {
 			//Move Cards to the bank
 			playerTurnInResources(tradingDeck);
+			
 			//Remove Cards from the bank
-			playerTakeResource(check);
 			//Return the desired card they wanted.
-			ResourceCard newCard = new ResourceCard(check);
+			ResourceCard newCard = playerTakeResource(check); 
 			return newCard;
 		} else {
 			//Should this just return null?
@@ -249,28 +265,47 @@ public class Bank {
 					
 	}
 		
-	private void playerTakeResource(ResourceType check) throws Exception {
+	/**
+	 * This method adjusts the size of the resource decks as a player takes a card.
+	 * @pre check is not null but a valid resource type, though this handles it if it is not valid
+	 * @param check
+	 * @throws Exception
+	 * @post Returns the card that the player desired
+	 */
+	private ResourceCard playerTakeResource(ResourceType check) throws Exception {
+			ResourceCard thePrize = null;
+		
 		switch (check.toString()) {
 			case "BRICK":
+				thePrize = brickDeck.get(brickDeck.size()-1);
 				brickDeck.remove(brickDeck.size()-1);
-				return;
+				return thePrize;
 			case "WHEAT":
+				thePrize = wheatDeck.get(wheatDeck.size()-1);
 				wheatDeck.remove(wheatDeck.size()-1);
-				return;
+				return thePrize;
 			case "LUMBER":
+				thePrize = lumberDeck.get(lumberDeck.size()-1);
 				lumberDeck.remove(lumberDeck.size()-1);
-				return;
+				return thePrize;
 			case "ORE":
+				thePrize = oreDeck.get(oreDeck.size()-1);
 				oreDeck.remove(oreDeck.size()-1);
-				return;
+				return thePrize;
 			case "SHEEP":
+				thePrize = sheepDeck.get(sheepDeck.size()-1);
 				sheepDeck.remove(sheepDeck.size()-1);
-				return;
+				return thePrize;
 		}
 		throw new Exception("Somehow you snuck by with an invalid type.");
 	}
 
 
+	/**
+	 * @pre Assumes the resourceType is valid and was previously typed
+	 * @param resourceType
+	 * @post
+	 */
 	private boolean canDoPlayerTakeResource(ResourceType resourceType) {
 		switch (resourceType.toString()) {
 			case "BRICK":

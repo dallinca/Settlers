@@ -1,5 +1,18 @@
 package client.proxy;
 
+import java.io.ObjectInputStream;
+import java.net.URL;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import client.ClientException;
 import shared.communication.params.move.*;
 import shared.communication.params.move.devcard.*;
@@ -15,6 +28,10 @@ import shared.communication.results.nonmove.*;
  */
 public class ServerProxy implements IServerProxy {
 
+	//private String clientCookie;
+	private HttpClient httpClient; 
+
+	
 	private static String SERVER_HOST;
 	private static int SERVER_PORT;
 	private static String URL_PREFIX;
@@ -34,23 +51,18 @@ public class ServerProxy implements IServerProxy {
 		SERVER_HOST = serverHost;
 		SERVER_PORT = serverPort;				
 		URL_PREFIX = "http://" + SERVER_HOST + ":" + SERVER_PORT;
+		
+		httpClient = HttpClientBuilder.create().build();
 	}
 
 	public ServerProxy(){
 		SERVER_HOST = "localhost";
-		SERVER_PORT = 39640;				
+		SERVER_PORT = 8081;				
 		URL_PREFIX = "http://" + SERVER_HOST + ":" + SERVER_PORT;
+		
+		httpClient = HttpClientBuilder.create().build();
 	}
 	
-	
-
-	public Object doPost(String urlString, Object request) throws ClientException
-	{
-		Object result = null;
-
-		return result;		
-	}
-
 	@Override
 	public AddAI_Result addAI(AddAI_Params request) throws ClientException {
 		// TODO Auto-generated method stub
@@ -252,5 +264,38 @@ public class ServerProxy implements IServerProxy {
 			PlayYearOfPlenty_Params result) throws ClientException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public Object doPost(String urlString, Object request)
+			throws ClientException {
+
+		try {
+			Gson gson = new Gson();
+
+			URL url = new URL(URL_PREFIX + urlString);
+			//HttpClient httpClient = HttpClientBuilder.create().build();
+
+			HttpPost post = new HttpPost(url.toString());
+			StringEntity params = new StringEntity(gson.toJson(request));
+		//	post.addHeader("Cookie", clientCookie);
+			post.setEntity(params);
+			HttpResponse response = httpClient.execute(post);
+						
+			HttpEntity e = response.getEntity();					
+			ObjectInputStream in = new ObjectInputStream(e.getContent()); //Java			
+			JsonObject jsonResult = (JsonObject)in.readObject();			
+			Object result = gson.fromJson(jsonResult, request.getClass());
+			
+			return result;			
+			
+		}	 
+		catch (Exception ex) {
+			// handle exception here
+		} finally {
+			//finally stuff
+		}
+		return null;
+
 	}
 }

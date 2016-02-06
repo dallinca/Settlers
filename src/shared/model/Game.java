@@ -3,6 +3,7 @@ package shared.model;
 import java.util.ArrayList;
 
 import shared.definitions.DevCardType;
+import shared.definitions.ResourceType;
 import shared.locations.EdgeLocation;
 import shared.locations.VertexLocation;
 import shared.model.items.*;
@@ -17,18 +18,23 @@ import shared.model.board.Board;
  */
 public class Game {
 	private Player[] players = null;
-	private Player currentPlayer;
+	private Player currentPlayer = null;
 	//private Player nextPlayer;
 	//private ResourceCard[] resourceDeck = null;
 	//private DevelopmentCard[] developmentDeck = null;
-	private Board board;
+	private Board board = null;;
 	private Player largestArmy;
 	private Player longestRoad;
 	private static int numberofPlayers = 4;
-	private Bank bank;
+	private Bank bank = null;
 	private int turnNumber = 0;
 	private int versionNumber = 1;
 	
+	
+	
+	public Game() {
+		
+	}
 	
 	
 	/**
@@ -145,7 +151,47 @@ public class Game {
 	 * @return
 	 */
 	public int numberUnplayedDevCards(DevCardType devCardType) {
-		currentPlayer.
+		return currentPlayer.numberUnplayedDevCards(devCardType);
+		
+	}
+	
+	public boolean useDevelopmentCard(DevCardType devCardType) throws Exception {
+		//Marks the card as played
+		currentPlayer.playDevelopmentCard(turnNumber, devCardType);
+		
+		switch (devCardType) {
+			case MONOPOLY:
+				//Declare a Resource the player wants, and then extract it from all players who have it.... how do we get the type they want? Do we have an overridden method again? Or, do we have another object come in through the parameters but it can be null?
+				
+				
+				
+				return doWeHaveAWinner();
+			case SOLDIER:
+				//Must move robber to a different hex
+				//Steal Resource from a person
+				//Do they have more than three soldiers? Do they have the most soldiers? If so, award them the Largest Army award (assuming they don't already have it) and take it from the previous title holder
+				
+				
+				//Did the Largest Army award win the game?!
+				return doWeHaveAWinner();
+				
+			case YEAR_OF_PLENTY:
+				return doWeHaveAWinner();
+				
+			case MONUMENT:
+				//Give the player their due reward
+				currentPlayer.incrementVictoryPoints();
+				
+				//Mark the monument card as used
+				currentPlayer.get
+				return doWeHaveAWinner();
+				
+			case ROAD_BUILD:
+				//Perhaps to avoid the cost of the roads, we can have an overridden method that asserts true on the canDoBuy and asserts true and avoids the cost. Who knows
+				
+				//Did the two extra roads with the game?!?! This may result in the longest road being awarded. 
+				return doWeHaveAWinner();
+		}
 		
 	}
 	
@@ -248,7 +294,16 @@ public class Game {
 			throw new Exception("Cannot build City on this vertex, this should not have been allowed to get this far.");
 	}
 	
+	public int numberOfResouceType(ResourceType resourceType) {
+		//need a hand?
+		return currentPlayer.numberOfResourceType(resourceType);
+	}
 	
+	public void discardNumberOfResourceType(int removal, ResourceType resourceType) {
+		currentPlayer.discardNumberOfResourceType(removal, resourceType);
+	}
+	
+	public 
 		
 	/**
 	 * This method is responsible for verifying if the game has ended.
@@ -265,7 +320,7 @@ public class Game {
 			//Player.java needs to have a method that returns victory points so this method can access them via the players to test for it.
 			//Player.java also needs to have public or private set for some of the methods, one of which being the method below, which should probably
 			//return an integer and not be void
-			if (players[i].totalVictoryPoints(0) >= 10)
+			if (players[i].getVictoryPoints() >= 10)
 				return true;
 		}
 		return false;
