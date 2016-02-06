@@ -79,7 +79,7 @@ public interface IServerProxy {
 	
 	public PlayRoadBuilding_Result playRoadBuilding(PlayRoadBuilding_Params request) throws ClientException;
 	
-	public PlaySoldier_Result playSolder(PlaySoldier_Params request) throws ClientException;
+	public PlaySoldier_Result playSoldier(PlaySoldier_Params request) throws ClientException;
 	
 	public PlayYearOfPlenty_Result playYearOfPlenty(PlayYearOfPlenty_Params result) throws ClientException;
 	

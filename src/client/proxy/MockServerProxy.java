@@ -99,6 +99,8 @@ public class MockServerProxy implements IServerProxy {
 	@Override
 	public GetVersion_Result getVersion(GetVersion_Params request)
 			throws ClientException {
+		
+		//System.out.println("Getting fake version.");
 
 		File file = new File("jsonTestGame.txt");
 		String testVersion = "";
@@ -320,7 +322,7 @@ public class MockServerProxy implements IServerProxy {
 	}
 
 	@Override
-	public PlaySoldier_Result playSolder(PlaySoldier_Params request)
+	public PlaySoldier_Result playSoldier(PlaySoldier_Params request)
 			throws ClientException {
 		// TODO Auto-generated method stub
 		return null;

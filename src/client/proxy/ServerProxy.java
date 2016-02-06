@@ -76,6 +76,13 @@ public class ServerProxy implements IServerProxy {
 		userCookie = "";
 		gameCookie = "";
 	}
+	
+	public String getUserCookie(){
+		return userCookie;
+	}
+	public String getGameCookie(){
+		return gameCookie;
+	}
 
 	@Override
 	public AddAI_Result addAI(AddAI_Params request) throws ClientException {
@@ -237,7 +244,7 @@ public class ServerProxy implements IServerProxy {
 	}
 
 	@Override
-	public PlaySoldier_Result playSolder(PlaySoldier_Params request)
+	public PlaySoldier_Result playSoldier(PlaySoldier_Params request)
 			throws ClientException {
 		URL_SUFFIX = "/moves/playSoldier";
 		return (PlaySoldier_Result) doPost(URL_SUFFIX, request);
@@ -253,8 +260,9 @@ public class ServerProxy implements IServerProxy {
 	@Override
 	public Object doPost(String urlString, Object request)
 			throws ClientException {
+		//System.out.println("Doing post!");
 
-		urlString = URL_SUFFIX;
+		URL_SUFFIX = urlString;
 
 		try {
 
@@ -277,16 +285,28 @@ public class ServerProxy implements IServerProxy {
 				connection.addRequestProperty("Cookie", userCookie);
 			}
 
+		//	System.out.println(url);
+		//	System.out.println(connection.toString());
+			//System.out.println("Job before: "+job);
+			
 			connection.connect(); // sends cookies
+
 
 			ObjectOutputStream out = new ObjectOutputStream(connection.getOutputStream());
 			out.writeObject(job);
 			out.close();
-
+			
+			//System.out.println("Receiving response from server.");
+			
+			//connection.getOutputStream().close();
+			
 			ObjectInputStream in = new ObjectInputStream(connection.getInputStream());
 			job = (String) in.readObject();
 			in.close();
+			
+			//System.out.println("Job after: "+job);
 
+			//System.out.println("Caching cookies.");
 			//Cookie cacher----------------------------------
 			Map<String, List<String>> headers = connection.getHeaderFields();
 
@@ -311,7 +331,8 @@ public class ServerProxy implements IServerProxy {
 
 		}	 
 		catch (Exception ex) {
-			// handle exception here
+			//System.out.print("An exception occurred: ");
+			//System.out.println(ex.getMessage());
 		} finally {
 			//finally stuff
 		}

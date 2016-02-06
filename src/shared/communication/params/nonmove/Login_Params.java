@@ -9,6 +9,10 @@ public class Login_Params {
 		// TODO Auto-generated constructor stub
 	}
 
+	public Login_Params() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getPassword() {
 		return password;
 	}
