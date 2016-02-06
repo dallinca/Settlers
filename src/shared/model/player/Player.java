@@ -40,6 +40,7 @@ public class Player {
 	 * @post new DevelopmentCards()
 	 * @post new Municipal()
 	 */
+	
 	public Player(int playerId, Bank bank){
 		this.playerId = playerId;
 		resourceCardHand = new ResourceCardHand(bank);
@@ -318,7 +319,7 @@ public class Player {
 		}
 		
 		/**
-		 * TODO
+		 * has the player discard the specified number of resources of the specified resource type
 		 * 
 		 * @param bank
 		 * 

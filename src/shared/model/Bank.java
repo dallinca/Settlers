@@ -306,7 +306,7 @@ public class Bank {
 	 * @param resourceType
 	 * @post
 	 */
-	private boolean canDoPlayerTakeResource(ResourceType resourceType) {
+	public boolean canDoPlayerTakeResource(ResourceType resourceType) {
 		switch (resourceType.toString()) {
 			case "BRICK":
 				if (brickDeck.size() >=1)
