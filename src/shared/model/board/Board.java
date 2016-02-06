@@ -56,6 +56,7 @@ public class Board {
 		initHexTypes(randomHexType);
 		initHexRollValues(randomHexRollValues);
 		initHexes();
+		initRobberWithHex();
 		
 		// Initialize Borders
 		initBorders();
@@ -576,6 +577,20 @@ public class Board {
 			hexRollValueAssignments[nullRollValueIndex] = temp;
 		}
 		
+	}
+	
+    //init the robber position to the desert hex
+	private void initRobberWithHex(){
+		for(int i = 0; i <mapHexes.length; i++) {
+			  for(int j=0; j < mapHexes[i].length; j++) {
+				  if(mapHexes[i][j] != null){
+					if(mapHexes[i][j].getHexType() == HexType.DESERT){
+						hexWithRobber = mapHexes[i][j];
+						break;
+					}
+				  }
+			  }
+		}
 	}
 	
 
