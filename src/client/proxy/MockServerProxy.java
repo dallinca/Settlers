@@ -44,7 +44,8 @@ public class MockServerProxy implements IServerProxy {
 	private static String SERVER_HOST = "localhost";
 	private static int SERVER_PORT = 8081;
 	private static String URL_PREFIX = "http://" + SERVER_HOST + ":" + SERVER_PORT;
-	private static String clientCookie;
+	
+	Gson gson = new Gson();
 	//private static final String HTTP_GET = "GET";
 	//private static final String HTTP_POST = "POST";
 
@@ -54,18 +55,21 @@ public class MockServerProxy implements IServerProxy {
 		return null;
 	}
 
-	@Override
+/*	@Override
 	public ChangeLogLevel_Result changeLogLevel(ChangeLogLevel_Params request)
 			throws ClientException {
 		// TODO Auto-generated method stub
 		return null;
-	}
+	}*/
 
 	@Override
 	public Create_Result createGame(Create_Params request)
 			throws ClientException {
 		// TODO Auto-generated method stub
-
+		
+		JsonElement json = gson.toJsonTree("{\n			  \"title\": \"myveryfirstgame\",\n			  \"id\": 3,\n			  \"players\": [\n			    {},\n			    {},\n			    {},\n			    {}\n			  ]\n			}");
+		
+		return new Create_Result(json);
 		//#2
 		/*
 		{
@@ -83,16 +87,14 @@ public class MockServerProxy implements IServerProxy {
 		//{"Date":"Fri, 05 Feb 2016 22:30:45 GMT",
 		//"Content-Type":"application/json",
 		//"Content-Length":"58"}
-
-		return null;
 	}
 
-	@Override
+/*	@Override
 	public GetCommands_Result getCommands(GetCommands_Params request)
 			throws ClientException {
 		// TODO Auto-generated method stub
 		return null;
-	}
+	}*/
 
 	@Override
 	public GetVersion_Result getVersion(GetVersion_Params request)
@@ -115,8 +117,6 @@ public class MockServerProxy implements IServerProxy {
 		catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-
-		Gson gson = new Gson();
 		
 		JsonElement json = gson.toJsonTree(testVersion);
 		
@@ -131,7 +131,7 @@ public class MockServerProxy implements IServerProxy {
 		//{"Date":"Fri, 05 Feb 2016 22:37:48 GMT",
 		//"Content-Type":"application/json",
 		//"Content-Length":"2489"}
-		return 
+		return result;
 	}
 
 	@Override
@@ -166,11 +166,11 @@ public class MockServerProxy implements IServerProxy {
 		return null;
 	}
 
-	@Override
-	public Load_Result loadGame(Load_Params request) throws ClientException {
+	//@Override
+/*	public Load_Result loadGame(Load_Params request) throws ClientException {
 		// TODO Auto-generated method stub
 		return null;
-	}
+	}*/
 
 	@Override
 	public Login_Result login(Login_Params request) throws ClientException {
@@ -194,12 +194,12 @@ public class MockServerProxy implements IServerProxy {
 		return null;
 	}
 
-	@Override
-	public PostCommands_Result postCommands(PostCommands_Params request)
+//	@Override
+/*	public PostCommands_Result postCommands(PostCommands_Params request)
 			throws ClientException {
 		// TODO Auto-generated method stub
 		return null;
-	}
+	}*/
 
 	@Override
 	public Register_Result register(Register_Params request)
@@ -208,11 +208,11 @@ public class MockServerProxy implements IServerProxy {
 		return null;
 	}
 
-	@Override
+/*	@Override
 	public Save_Result saveGame(Save_Params request) throws ClientException {
 		// TODO Auto-generated method stub
 		return null;
-	}
+	}*/
 
 	@Override
 	public AcceptTrade_Result acceptTrade(AcceptTrade_Params request)
@@ -332,7 +332,7 @@ public class MockServerProxy implements IServerProxy {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	/*
+	
 	@Override
 	public Object doPost(String urlString, Object request)
 			throws ClientException {
@@ -364,12 +364,7 @@ public class MockServerProxy implements IServerProxy {
 		}
 		return null;
 
-	}*/
-
-	@Override
-	public Object doPost(String urlString, Object request)
-			throws ClientException {
-		// Does nothing in the mock proxy.
-		return null;
 	}
+
+
 }

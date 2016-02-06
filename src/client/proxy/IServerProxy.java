@@ -22,11 +22,11 @@ public interface IServerProxy {
 	
 	public AddAI_Result addAI(AddAI_Params request) throws ClientException;
 	
-	public ChangeLogLevel_Result changeLogLevel(ChangeLogLevel_Params request) throws ClientException;
+//	public ChangeLogLevel_Result changeLogLevel(ChangeLogLevel_Params request) throws ClientException;
 	
 	public Create_Result createGame(Create_Params request) throws ClientException;
 	
-	public GetCommands_Result getCommands(GetCommands_Params request) throws ClientException;	
+	//public GetCommands_Result getCommands(GetCommands_Params request) throws ClientException;	
 	
 	/**
 	 * Packages a poll server request from the client.
@@ -45,15 +45,17 @@ public interface IServerProxy {
 	
 	public ListAI_Result listAI(ListAI_Params request) throws ClientException;
 	
-	public Load_Result loadGame(Load_Params request) throws ClientException;
+//	public Load_Result loadGame(Load_Params request) throws ClientException;
 	
 	public Login_Result login(Login_Params request) throws ClientException;
 	
-	public PostCommands_Result postCommands(PostCommands_Params request) throws ClientException;
+	//public PostCommands_Result postCommands(PostCommands_Params request) throws ClientException;
 	
 	public Register_Result register(Register_Params request) throws ClientException;
 	
-	public Save_Result saveGame(Save_Params request) throws ClientException;
+//	public Save_Result saveGame(Save_Params request) throws ClientException;
+	
+	//public Reset_Result resetGame(Reset_Params request) throws ClientException;
 	
 	//move
 	
