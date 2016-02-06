@@ -184,6 +184,9 @@ public class Player {
 		   if(resourceCardHand.canDoPayForRoad() == false || playerPieces.hasAvailableRoad() == false) {
 			   return false;
 		   }
+		   if(playerPieces.getNumberOfRoads() > 13){
+			   return true;
+		   }
 		   // If the player has no legal place to put a road on the map, he shouldn't be allowed to buy one.
 		   if(playerPieces.canPlaceARoadOnTheMap() == false) {
 			   return false;
@@ -350,6 +353,10 @@ public class Player {
 		
 		public PlayerPieces getPlayerPieces(){
 			return playerPieces;
+		}
+		
+		public ResourceCardHand getResourceCardHand(){
+			return resourceCardHand;
 		}
 	
 }

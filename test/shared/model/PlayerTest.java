@@ -13,14 +13,14 @@ public class PlayerTest {
 	
 	
 	private static Board board;
-	private static game game;
+	private static Game game;
 	private static boolean randomHexType, randomHexRollValues,  randomPorts;
 	
-	private Player player1, player2, player3, player4;
+	private static Player player1, player2, player3, player4;
 	private HexLocation hexlocation;
 	private VertexLocation vertexLocation;
 	
-	private Bank bank;
+	private static Bank bank;
 	
 	@BeforeClass 
 	 public static void setupBeforeClass(){
@@ -29,8 +29,14 @@ public class PlayerTest {
 		randomHexRollValues = true;
 		randomPorts = true;
 		board = new Board(randomHexType, randomHexRollValues,  randomPorts);
-		player1, player2, player3, player4;
-		 game = new game(Player one, Player two, Player three, Player four, Board board1)
+		
+		bank = new Bank();
+		player1 = new Player(1, bank);
+		player2 = new Player(2, bank);
+		player3 = new Player(3, bank);
+		player4 = new Player(4, bank);
+		
+	    game = new Game(player1, player2, player3, player4, board);
 	}
 	
 	@Before

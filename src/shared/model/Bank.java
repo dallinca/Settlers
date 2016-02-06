@@ -284,7 +284,7 @@ public class Bank {
 				thePrize = wheatDeck.get(wheatDeck.size()-1);
 				wheatDeck.remove(wheatDeck.size()-1);
 				return thePrize;
-			case "LUMBER":
+			case "WOOD":
 				thePrize = lumberDeck.get(lumberDeck.size()-1);
 				lumberDeck.remove(lumberDeck.size()-1);
 				return thePrize;
@@ -395,7 +395,7 @@ public class Bank {
 					} else {
 						throw new Exception("The bank cannot accept anymore of this type of card. Something has gone wrong.");
 					}
-				case "LUMBER":
+				case "WOOD":
 					if (lumberDeck.size() <= resourceNumber) {
 						lumberDeck.add(resources[i]);
 						break;

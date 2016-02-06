@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import shared.model.board.*;
 import shared.model.player.Player;
+import shared.definitions.ResourceType;
 import shared.locations.*;
 
 public class BoardTest {
@@ -16,6 +17,7 @@ public class BoardTest {
 	
 	private HexLocation hexlocation;
 	private VertexLocation vertexLocation;
+	private VertexDirection vertexdirection;
 	
 	private Bank bank;
 	private Player player;
@@ -41,6 +43,8 @@ public class BoardTest {
 		randomHexRollValues = false;
 		randomPorts = false;
 		board3 = new Board(randomHexType, randomHexRollValues,  randomPorts);
+		
+		bank = new Bank();
 	}
 	
 	
@@ -100,43 +104,104 @@ public class BoardTest {
 	}
 	
 	@Test
-	public void testPlaceRoadOnEdge(){
-		//Board1: test position(4,4)
+	public void testPlaceRoadOnEdge() {
+		//Board1: test position(5,1). Test placing a road on the ocean border
 		player = new Player(2, bank);
 		EdgeDirection edgedirection = null;
-		HexLocation hexlocation = new HexLocation(1,1);
-		EdgeLocation edgeLocation = new EdgeLocation(hexlocation,edgedirection.NorthWest);
+		HexLocation hexlocation = new HexLocation(2,-2);
+		EdgeLocation edgeLocation = new EdgeLocation(hexlocation, edgedirection.SouthEast);
 		try {
 			board1.placeRoadOnEdge(player, edgeLocation);
 		} catch (Exception e) {
+			fail();
+		}
+		
+		//Board1: test position(5,1). Cannot, place road on a road
+		try {
+			board1.placeRoadOnEdge(player, edgeLocation);
+			fail();
+		} catch (Exception e) {}
+		
+		/*
+		 * Board1: Test position (3,1) and place a road adjacent to it on position (3,2)
+		 */
+		hexlocation = new HexLocation(0,-2);
+		edgeLocation = new EdgeLocation(hexlocation, edgedirection.SouthEast);
+		try {
+			board1.placeRoadOnEdge(player, edgeLocation);
+		} catch (Exception e) {
+			System.out.println("Exception was thrown in testPlaceRoadOnEdge()");
+		}
+		
+		hexlocation = new HexLocation(0,-1);
+		edgeLocation = new EdgeLocation(hexlocation, edgedirection.NorthEast);
+		try {
+			board1.placeRoadOnEdge(player, edgeLocation);
+		} catch (Exception e) {
+			System.out.println("Exception was thrown in testPlaceRoadOnEdge()");
 			fail();
 		}
 	}
 	
 	@Test
 	public void testplaceSettlementOnVertex() throws Exception{
-		bank = new Bank();
+		//build a road at (3,3)
 		player = new Player(1, bank);
-		//Board1: Test position (4,4).
-		hexlocation = new HexLocation(1,1);
-		VertexDirection vertexdirection = null;
-		VertexLocation vertexLocation = new VertexLocation(hexlocation, vertexdirection.NorthWest);
-		//There is no roads, so it wont let me place settlements. We need to beable to place 2 settlements before
-		//placing any roads
+		EdgeDirection edgedirection = null;
+		hexlocation = new HexLocation(0,0);
+		EdgeLocation edgeLocation = new EdgeLocation(hexlocation, edgedirection.SouthEast);
+		try {
+			board1.placeRoadOnEdge(player, edgeLocation);
+		} catch (Exception e) {
+			fail();
+		}
+		
+		//Board1: Test position (3,3)
+		vertexdirection = null;
+		vertexLocation = new VertexLocation(hexlocation, vertexdirection.SouthEast);
 		board1.placeSettlementOnVertex(player, vertexLocation);
 	}
 	
 	@Test
 	public void testPlaceCityOnVertex(){
-		/*
+		//Setup in order to buy a City
 		player = new Player(1, bank);
+		Bank playerBank = player.getResourceCardHand().getBank();
+		try {
+			player.getResourceCardHand().addCard(playerBank.playerTakeResource(ResourceType.ORE));
+			player.getResourceCardHand().addCard(playerBank.playerTakeResource(ResourceType.ORE));
+			player.getResourceCardHand().addCard(playerBank.playerTakeResource(ResourceType.ORE));
+			player.getResourceCardHand().addCard(playerBank.playerTakeResource(ResourceType.WHEAT));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		//build a road at (4,4). Special case: builds on ocean border
+		EdgeDirection edgedirection = null;
+		hexlocation = new HexLocation(1,1);
+		EdgeLocation edgeLocation = new EdgeLocation(hexlocation, edgedirection.SouthEast);
+		try {
+			board1.placeRoadOnEdge(player, edgeLocation);
+		} catch (Exception e) {
+			fail();
+		}
+		
+		//Board1: Test position (4,4). Special case: builds on ocean border
+		vertexdirection = null;
+		vertexLocation = new VertexLocation(hexlocation, vertexdirection.SouthEast);
+		try {
+			board1.placeSettlementOnVertex(player, vertexLocation);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		
+		//Builds on (4,4). Special case: builds on ocean border
 		VertexDirection vertexdirection = null;
-		vertexLocation = new VertexLocation(hexlocation, vertexdirection.SouthWest);
+		vertexLocation = new VertexLocation(hexlocation, vertexdirection.SouthEast);
 		try {
 			board1.placeCityOnVertex(player,  vertexLocation);
 		} catch (Exception e) {
-			e.printStackTrace();
-		}*/
+			fail();
+		}
 	}
 
 }

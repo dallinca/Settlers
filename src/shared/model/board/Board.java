@@ -362,7 +362,7 @@ public class Board {
 			return null;
 		}
 		// return the Hex queried, may be null if not a valid location
-		return mapHexes[x_coord_hex][y_coord_hex];
+		return mapHexes[y_coord_hex][x_coord_hex];
 	}
 	
 	/**
@@ -402,11 +402,11 @@ public class Board {
 		}
 		// return the Vertex queried, may be null if not a valid location
 		if(direction_edg == ModEdgeDirection.LEFT) {
-			return mapULEdges[x_coord_edg][y_coord_edg];
+			return mapULEdges[y_coord_edg][x_coord_edg];
 		} else if(direction_edg == ModEdgeDirection.UP) {
-			return mapUUEdges[x_coord_edg][y_coord_edg];
+			return mapUUEdges[y_coord_edg][x_coord_edg];
 		} else {
-			return mapUREdges[x_coord_edg][y_coord_edg];
+			return mapUREdges[y_coord_edg][x_coord_edg];
 		}
 	}
 	
@@ -425,12 +425,13 @@ public class Board {
 			throw new Exception("Should not call getEdge(edgeLocation) with a null edgeLocation");
 		}
 		EdgeLocation normalizedLocation = edgeLocation.getNormalizedLocation();
+
 		if(normalizedLocation.getDir() == EdgeDirection.NorthWest) {
-			return getEdge(edgeLocation.getHexLoc().getX() + 3, edgeLocation.getHexLoc().getY() + 3, ModEdgeDirection.LEFT);
+			return getEdge(normalizedLocation.getHexLoc().getX() + 3, normalizedLocation.getHexLoc().getY() + 3, ModEdgeDirection.LEFT);
 		} else if(normalizedLocation.getDir() == EdgeDirection.North) {
-			return getEdge(edgeLocation.getHexLoc().getX() + 3, edgeLocation.getHexLoc().getY() + 3, ModEdgeDirection.UP);
+			return getEdge(normalizedLocation.getHexLoc().getX() + 3, normalizedLocation.getHexLoc().getY() + 3, ModEdgeDirection.UP);
 		} else {
-			return getEdge(edgeLocation.getHexLoc().getX() + 3, edgeLocation.getHexLoc().getY() + 3, ModEdgeDirection.RIGHT);
+			return getEdge(normalizedLocation.getHexLoc().getX() + 3, normalizedLocation.getHexLoc().getY() + 3, ModEdgeDirection.RIGHT);
 		}
 	}
 	
@@ -451,7 +452,7 @@ public class Board {
 			return null;
 		}
 		// return the Vertex queried, may be null if not a valid location
-		return mapVertices[x_coord_ver][y_coord_ver];
+		return mapVertices[y_coord_ver][x_coord_ver];
 	}
 	
 	/**
@@ -597,7 +598,6 @@ public class Board {
 		}
 	}
 	
-
 	private void initHexes() {
 		
 		// The X's represent the valid hex locations for the board
@@ -627,6 +627,7 @@ public class Board {
 		// 4 [_][9 ][17][12][1 ][_]
 		// 5 [_][10][11][0 ][_ ][_]
 		
+		//       Y, X
 		mapHexes[0][0] = null;
 		mapHexes[0][1] = null;
 		mapHexes[0][2] = null;

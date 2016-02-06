@@ -36,6 +36,11 @@ public class ResourceCardHand {
 	 */
 	  ResourceCardHand(Bank bank){
 		  this.bank = bank;
+		  brickCards = new ArrayList<ResourceCard>();
+		  wheatCards = new ArrayList<ResourceCard>();
+		  oreCards = new ArrayList<ResourceCard>();
+		  sheepCards = new ArrayList<ResourceCard>();
+		  woodCards = new ArrayList<ResourceCard>();
 		  initializePreGameResources();
 	  }
 	 
@@ -177,7 +182,8 @@ public class ResourceCardHand {
 		   brickCards.remove(brickCards.size() - 1);
 
 		   try {
-			   bank.playerTurnInResources((ResourceCard[])cards.toArray());
+			   ResourceCard[] resourcecards = new ResourceCard[cards.size()];
+			   bank.playerTurnInResources(cards.toArray(resourcecards));
 			} catch (Exception e) {
 				System.out.println("Somewhere there were duplicated resources ... and stuff");
 				e.printStackTrace();
@@ -222,7 +228,8 @@ public class ResourceCardHand {
 		   
 
 		   try {
-			   bank.playerTurnInResources((ResourceCard[])cards.toArray());
+			   ResourceCard[] resourcecards = new ResourceCard[cards.size()];
+			   bank.playerTurnInResources(cards.toArray(resourcecards));
 			} catch (Exception e) {
 				System.out.println("Somewhere there were duplicated resources ... and stuff");
 				e.printStackTrace();
@@ -269,7 +276,8 @@ public class ResourceCardHand {
 		   
 
 		   try {
-			   bank.playerTurnInResources((ResourceCard[])cards.toArray());
+			   ResourceCard[] resourcecards = new ResourceCard[cards.size()];
+			   bank.playerTurnInResources(cards.toArray(resourcecards));
 			} catch (Exception e) {
 				System.out.println("Somewhere there were duplicated resources ... and stuff");
 				e.printStackTrace();
@@ -355,6 +363,7 @@ public class ResourceCardHand {
 		   return brickCards.size() + wheatCards.size() + oreCards.size() + sheepCards.size() + woodCards.size();
 	   }
 	   
-	   
-	   
+	   public Bank getBank(){
+		   return bank;
+	   }
 }
