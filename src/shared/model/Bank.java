@@ -340,6 +340,21 @@ public class Bank {
 		return false;
 	}
 	
+	
+	/**
+	 * checks if there are any development cards that can be purchased
+	 * 
+	 * @pre None
+	 * 
+	 * @return whether any development cards that can be purchased
+	 */
+	public boolean hasAvailableDevelopmentCards() {
+		if(developmentDeck.size() > 0) {
+			return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * Whenever somebody is taking development cards from the bank, this method is called. 
 	 * This method makes the necessary adjustment to the deck, which cards are still in it, and how many total are left.

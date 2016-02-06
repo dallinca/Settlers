@@ -200,16 +200,6 @@ public class DevelopmentCardHand {
     }
     
     /**
-     * TODO interface with bank
-     * 
-     * 
-     * @param bank
-     */
-    public void takeDevelopmentCardFromBank(Bank bank) {
-    	//addCard(bank.takeDevelopmentCard());
-    }
-    
-    /**
      * TODO implement play Card
      * 
 	 * removes resource cards from player
