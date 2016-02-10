@@ -3,32 +3,20 @@
 	<!-- PROPERTIES -->
 	<!-- ********** -->
 
+      <!-- Directory containing application source code -->
+      <property name="src" location="src"/>
+      <!-- Directory containing testing source code -->
+      <property name="test" location="test"/>
+      <!-- Directory containing Java libraries -->
+      <property name="lib" location="lib"/>
+      <!-- Directory where the Java compiler puts .class files -->
+      <property name="build" location="build"/>
+
+
 	<!-- Directory paths for the java server, javascript, and dest dir for the student copy -->
     <property name="port.arg" value="8081"/>
     <property name="web.arg" value="gameplay"/>
     <property name="options.arg" value="ug"/>
-
-    <!-- Directory containing testing source code (Added by jcw)-->
-    <property name="test" location="test"/>
-
-    <!-- Directory containing application source code -->
-  	<property name="src" location="src"/>
-
-  	<!-- Directory containing testing source code -->
-  	<property name="test" location="test"/>
-
-  	<!-- Directory containing Java libraries -->
-  	<property name="lib" location="lib"/>
-
-  	<!-- Directory where the Java compiler puts .class files -->
-  	<property name="build" location="build"/>
-
-
-
-
-
-
-
 
     <!-- Input folders -->
     <property name="java.dir" value="java"/>
@@ -48,6 +36,8 @@
     <property name="server.jar.file" value="${demo.dir}/server.jar"/>
     <property name="client.jar.file" value="${demo.dir}/client.jar"/>
 
+
+
 	<!-- CLASSPATHS -->
 	<!-- ********** -->
 
@@ -58,21 +48,15 @@
 	</path>
 
   <path id="lib-classpath">
-		<fileset dir="${lib}">
-			<include name="**/*.jar" />
-		</fileset>
-	</path>
+    <fileset dir="${lib}">
+      <include name="**/*.jar" />
+    </fileset>
+  </path>
 
   <path id="all-classpath">
     <path refid="lib-classpath"/>
     <pathelement location="${build}"/>
   </path>
-
-
-
-      <!-- TASK DEFINITIONS -->
-    	<!-- **************** -->
-    	<taskdef classpathref="lib-classpath" resource="checkstyletask.properties"/>
 
 	<!-- TARGETS -->
 	<!-- ******* -->
@@ -138,9 +122,10 @@
 	</target>
 
 	<target name="compile" depends="init" description="compile the source " >
-		<javac srcdir="${java.src}" destdir="${java.build}" debug="true" includeantruntime="true">
-			<classpath refid="java.lib.classpath" />
-		</javac>
+		<javac srcdir="${src}" destdir="${build}" debug="true" includeantruntime="true"> <classpath refid="java.lib.classpath" />
+      </javac>
+  	<javac srcdir="${test}" destdir="${build}" debug="true" includeantruntime="true"> <classpath refid="java.lib.classpath" />
+      </javac>
 	</target>
 
 	<target name="package" depends="compile" description="package the jar file" >
@@ -194,9 +179,9 @@
         <zip destfile="./tester.zip" basedir="${java.dist}" />
     </target>
 
-<!-- Directory containing testing source code ??? (Added by jcw)-->
+
     <target name="test" depends="compile" description="run automated tests">
-      <java classname="server.ServerUnitTests" fork="yes">
+      <java classname="main.unitTestDriver" fork="yes">
         <classpath>
           <path refid="all-classpath"/>
         </classpath>
@@ -205,5 +190,6 @@
         </assertions>
       </java>
     </target>
+
 
 </project>
