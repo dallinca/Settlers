@@ -138,9 +138,15 @@ public class Game {
 	 * This method polls the player to see if the player can build a road and then returns the result to that which called it (most likely the client)
 	 * @return a true or false to if the player can build a road there.
 	 */
-	public boolean canDoCurrentPlayerBuildRoad() {
+	public boolean canDoCurrentPlayerBuildRoad(int UserId) {
+		// Check if the user is the current player
+		if(UserId != currentPlayer.getPlayerId()) {
+			return false;
+		}
 		return currentPlayer.canDoBuyRoad();	
 	}
+
+	
 	
 	/*
 	 * This method is commented out for now because I believe that if it isn't, then you will have half the roads you need, because the buildRoadOnEdge function below also
@@ -373,27 +379,49 @@ public class Game {
 	public void doDomesticTrade() {
 		
 	}
-	
+
 	/**
-	 * @pre the edge location is not null
+	 * TODO - Verify Completion
+	 * 
+	 * Checks to see if the given Player can place a road on the specified edge
+	 * 
+	 * @pre None
+	 * @param UserId
 	 * @param edgeLocation
-	 * @post it tells you whether or not you can build a road on that edge
+	 * @return whether the Specified player can place a road on the specified edge
 	 */
-	public boolean canDoPlaceRoadOnEdge(EdgeLocation edgeLocation) {
-		return board.canDoPlaceRoadOnEdge(currentPlayer, edgeLocation);
+	public boolean canDoPlaceRoadOnEdge(int UserId, EdgeLocation edgeLocation) {
+		// Check if the user is the current player
+		if(UserId != currentPlayer.getPlayerId()) {
+			return false;
+		}
+		// If we are in the setup phase, the rules for placing a road are slightly different
+		if(inSetUpPhase == true) {
+			return board.canDoPlaceInitialRoadOnEdge(getCurrentPlayer(), edgeLocation);
+		} else {
+			return board.canDoPlaceRoadOnEdge(getCurrentPlayer(), edgeLocation);	
+		}
 	}
 	
 	/**
-	 * @pre The can do is true
-	 * @param edgeLocation
+	 * TODO - Verify Completion
+	 * 
+	 * Places a Road for the specified player at specified edgeLocation
+	 * @pre canDoPlaceRoadOnEdge != false
+	 * @param UserId
 	 * @throws Exception
-	 * @post a road is placed on an edge
+	 * @return Void
 	 */
-	public void placeRoadOnEdge(EdgeLocation edgeLocation) throws Exception {
-		if(canDoPlaceRoadOnEdge(edgeLocation) && canDoCurrentPlayerBuildRoad())
-			board.placeRoadOnEdge(currentPlayer, edgeLocation);
-		else
-			throw new Exception("Cannot build road on this edge, this should not have been allowed to get this far.");
+	public void placeRoadOnEdge(int UserId, EdgeLocation edgeLocation) throws Exception {
+		if(canDoPlaceRoadOnEdge(UserId, edgeLocation) == false) {
+			throw new Exception("Specified Player cannot place a road on the given edgeLocation");
+		}
+		// If we are in the setup phase, the rules for placing a road are slightly different
+		if(inSetUpPhase == true) {
+			board.placeInitialRoadOnEdge(getCurrentPlayer(), edgeLocation);
+		} else {
+			board.placeRoadOnEdge(getCurrentPlayer(), edgeLocation);
+		}
 	}
 	
 	/**
