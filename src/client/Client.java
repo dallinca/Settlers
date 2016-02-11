@@ -9,6 +9,7 @@ public class Client {
 	private Game game;
 	private IServerProxy isp;
 	private ClientFacade cf;
+	private int loggedInUserId;
 	
 	public Client() {
 		

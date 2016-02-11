@@ -21,11 +21,9 @@ import shared.model.board.Edge;
  * It also keeps track of how many players there are, who is next, and who is the current player.
  */
 public class Game {
+	private boolean inSetUpPhase = true; // This is a state boolean for the first two setup rounds
 	private Player[] players = null;
 	private Player currentPlayer = null;
-	//private Player nextPlayer;
-	//private ResourceCard[] resourceDeck = null;
-	//private DevelopmentCard[] developmentDeck = null;
 	private Board board = null;;
 	private Player largestArmy;
 	private Player longestRoad;
@@ -65,18 +63,46 @@ public class Game {
 	 * @post the next player is set.
 	 */
 	public void incrementPlayer() {
+		// If we are done with the first two rounds of the Game (for setup
 		for (int i = 0; i < numberofPlayers; i++) {
 			if (currentPlayer.getPlayerId() == players[i].getPlayerId()) {
-				
-				players[i] = currentPlayer;
-				
-				if (i == numberofPlayers-1) {
-					setCurrentPlayer(players[0]);
-					turnNumber++;
-					return;
-				} else {
-					setCurrentPlayer(players[i+1]);
-					return;
+				//players[i] = currentPlayer; // This should probably be omitted
+				// If we are no longer in the setup phase
+				if(inSetUpPhase == false) {
+					if (i == numberofPlayers-1) {
+						setCurrentPlayer(players[0]);
+						turnNumber++;
+						return;
+					} else {
+						setCurrentPlayer(players[i+1]);
+						return;
+					}
+				}
+				// We must still be in the setup phase
+				else {
+					// We are still in the first round
+					if(turnNumber == 0) {
+						// If we are on the last person in the round, he/she gets to go again
+						if(i == numberofPlayers - 1) {
+							setCurrentPlayer(players[numberofPlayers - 1]); // Could probably omit this line
+							turnNumber++;
+							return;
+						} else {
+							setCurrentPlayer(players[i+1]);
+							return;
+						}
+					}
+					// We are still in the second round
+					else if(turnNumber == 1) {
+						if(i == 0) {
+							setCurrentPlayer(players[0]);
+							inSetUpPhase = false;
+							return;
+						} else {
+							setCurrentPlayer(players[i-1]);
+							return;
+						}
+					}
 				}
 			}
 		}
