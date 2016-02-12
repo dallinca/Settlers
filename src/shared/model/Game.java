@@ -105,6 +105,7 @@ public class Game {
 						if(i == 0) {
 							setCurrentPlayer(players[0]);
 							inSetUpPhase = false;
+							turnNumber++;
 							return;
 						} else {
 							setCurrentPlayer(players[i-1]);
