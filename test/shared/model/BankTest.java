@@ -12,29 +12,31 @@ import shared.model.player.Player;
 public class BankTest {
 
 	private static Bank bank;
-	private static Player player; 
+	private static Player player1,player2; 
 	
 	@BeforeClass 
 	 public static void setupBeforeClass(){
 		bank = new Bank();
-		player = new Player(1, bank);
-		Bank playerBank = player.getResourceCardHand().getBank();
+		
+		player1 = new Player(1, bank);
+		player2 = new Player(2, bank);
+		Bank player1Bank = player1.getResourceCardHand().getBank();
 		try {
-			player.getResourceCardHand().addCard(playerBank.playerTakeResource(ResourceType.ORE));
-			player.getResourceCardHand().addCard(playerBank.playerTakeResource(ResourceType.ORE));
-			player.getResourceCardHand().addCard(playerBank.playerTakeResource(ResourceType.ORE));
-			player.getResourceCardHand().addCard(playerBank.playerTakeResource(ResourceType.WHEAT));
+			player1.getResourceCardHand().addCard(player1Bank.playerTakeResource(ResourceType.ORE));
+			player1.getResourceCardHand().addCard(player1Bank.playerTakeResource(ResourceType.ORE));
+			player1.getResourceCardHand().addCard(player1Bank.playerTakeResource(ResourceType.ORE));
+			player1.getResourceCardHand().addCard(player1Bank.playerTakeResource(ResourceType.WHEAT));
 			
 			//player.getResourceCardHand().
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	/*
+	
 	@Test
 	public void testPlayerTrade(){
-		
+		player1.getResourceCardHand().;
 		ResourceCard playerTrade(ResourceCard one, ResourceCard two, ResourceCard three, ResourceType resourceType, TradePort tradePort)
 		bank.playerTrade(one, two, resourceType, tradePort);
-	}*/
+	}
 }
