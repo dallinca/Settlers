@@ -32,11 +32,11 @@ public class BankTest {
 			e.printStackTrace();
 		}
 	}
-	
+	/*
 	@Test
 	public void testPlayerTrade(){
 		player1.getResourceCardHand().;
 		ResourceCard playerTrade(ResourceCard one, ResourceCard two, ResourceCard three, ResourceType resourceType, TradePort tradePort)
 		bank.playerTrade(one, two, resourceType, tradePort);
-	}
+	}*/
 }
