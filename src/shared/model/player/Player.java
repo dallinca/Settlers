@@ -321,13 +321,34 @@ public class Player {
 		}
 		
 		/**
+		 * Checks whether the specified number of the specified ResourceType can be discarded
+		 * 
+		 * @pre None
+		 * @param resourceType
+		 * @param numberToDiscard
+		 * @return whether the specified number of the specified ResourceType can be discarded
+		 */
+		public boolean canDoDiscardResourceOfType(ResourceType resourceType, int numberToDiscard) {
+			if(resourceType == null || resourceCardHand.getNumberResourcesOfType(resourceType) < numberToDiscard) {
+				return false;
+			}
+			return true;
+		}
+		
+		/**
 		 * has the player discard the specified number of resources of the specified resource type
 		 * 
-		 * @param bank
+		 * @pre canDoDiscardResourceOfType != false
+		 * @param resourceType
+		 * @param numberToDiscard
+		 * @throws Exception 
 		 * 
 		 * @post the player will have discarded the specified number of resources of the specified resource type
 		 */
-		public void discardResourcesOfType(ResourceType resourceType, int numberToDiscard) {
+		public void discardResourcesOfType(ResourceType resourceType, int numberToDiscard) throws Exception {
+			if(canDoDiscardResourceOfType(resourceType, numberToDiscard) == false) {
+				throw new Exception("Cannot discard the specified amount of specified resource type");
+			}
 			discardResourcesOfType(resourceType, numberToDiscard);
 		}
 
@@ -354,10 +375,67 @@ public class Player {
 			return developmentCardHand.getNumberOfSoldiersPlayed();
 		}
 		
+		/**
+		 * TODO javadoc and stuff.... :)
+		 * 
+		 * @param resourceType
+		 * @return
+		 */
 		public ArrayList<ResourceCard> conformToMonopoly(ResourceType resourceType) {
 			return resourceCardHand.conformToMonopoly(resourceType);
 		}
 
+	   /**
+	    * Retrieves the number of cards in the player's resource card hand
+	    * 
+	    * @pre None
+	    * 
+	    * @post The Number of cards in the Players Resource Hand
+	    */
+	   public int getResourceCardHandSize() {
+		   return resourceCardHand.getResourceCardHandSize();
+	   }
+	   
+	   /**
+	    * Retrieves whether the player can be stolen from (For robber Movement)
+	    * 
+	    * @pre None
+	    * @param player
+	    * @return whether the player can be stolen from
+	    */
+	   public boolean canDoStealPlayerResource(Player victim) {
+		   if(victim == null || victim.getResourceCardHandSize() <= 0) {
+			   return false;
+		   }
+		   return true;
+	   }
+	   
+	   /**
+	    * Steals a random ResourceCard from the victom (For robber Movement)
+	    * 
+	    * @pre canDoStealPlayerResource != false
+	    * @param victim
+	    * @throws Exception 
+	    * @post the victim will have given up a random resource to the calling player
+	    */
+	   public void stealPlayerResource(Player victim) throws Exception {
+		   if(canDoStealPlayerResource(victim) == false) {
+			   throw new Exception("canDoStealPlayerResource() == false");
+		   }
+		   resourceCardHand.addCard(victim.giveUpResourceCard());
+	   }
+	   
+	   /**
+	    * Has the Player give up a random Resource Card (For robber Movement)
+	    * 
+	    * @pre this player should have at least 1 Resource Card
+	    * @throws Exception 
+	    * @return The Random ResourceCard chosen to give up
+	    */
+	   public ResourceCard giveUpResourceCard() throws Exception {
+		   return resourceCardHand.getRandomResourceCard();
+	   }
+	   
 		public int getPlayerId() {
 			return playerId;
 		}
