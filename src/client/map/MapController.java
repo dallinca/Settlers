@@ -4,6 +4,7 @@ import java.util.*;
 
 import shared.definitions.*;
 import shared.locations.*;
+import shared.model.*;
 import client.base.*;
 import client.data.*;
 
@@ -11,9 +12,10 @@ import client.data.*;
 /**
  * Implementation for the map controller
  */
-public class MapController extends Controller implements IMapController {
+public class MapController extends Controller implements IMapController, Observer {
 	
 	private IRobView robView;
+	private Game game;
 	
 	public MapController(IMapView view, IRobView robView) {
 		
@@ -163,6 +165,13 @@ public class MapController extends Controller implements IMapController {
 	}
 	
 	public void robPlayer(RobPlayerInfo victim) {	
+		
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		//store current Game in controller
+		this.game = (Game)arg;
 		
 	}
 	

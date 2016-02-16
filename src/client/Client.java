@@ -1,10 +1,12 @@
 package client;
+import java.util.*;
 
+import client.map.MapController;
 import client.proxy.IServerProxy;
 import client.proxy.MockServerProxy;
 import shared.model.Game;
 
-public class Client {
+public class Client extends Observable {
 	
 	private Game game;
 	private IServerProxy isp;
@@ -12,7 +14,7 @@ public class Client {
 	private int loggedInUserId;
 	
 	public Client() {
-		
+	
 	}
 	
 	public Client(IServerProxy isp){
@@ -27,7 +29,13 @@ public class Client {
 
 	public void setGame(Game game) {
 		this.game = game;
+		//update all controllers by passing each the current game object
+		notifyObservers(this.game);
 	}
 	
-	
+	public void addObservers(){
+		//A list of controllers that implement observer needs to be added
+		/*for (int i =0 ; i < controllerList.size(); i++)
+		 * this.addObserver(controllerList[i])*/
+	}
 }
