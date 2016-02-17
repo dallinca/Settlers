@@ -335,17 +335,35 @@ public class Game {
 	 * @post 
 	 */
 	public boolean canDoCurrentPlayerDoDomesticTrade() {
-		return true;
 		//Is it the Current Players turn and does he have any resources?
+		
 		//
-		/*if (currentPlayer.getResourceCardHandSize() == 0)
+		
+		//Must calculate size
+		int size = 0;
+		
+		size += currentPlayer.getResourceCardHand().getNumberResourcesOfType(ResourceType.BRICK);
+		size += currentPlayer.getResourceCardHand().getNumberResourcesOfType(ResourceType.WOOD);
+		size += currentPlayer.getResourceCardHand().getNumberResourcesOfType(ResourceType.ORE);
+		size += currentPlayer.getResourceCardHand().getNumberResourcesOfType(ResourceType.SHEEP);
+		size += currentPlayer.getResourceCardHand().getNumberResourcesOfType(ResourceType.WHEAT);
+		
+		for (int i = 0; i < size; i++) {
+			
+		}
+		
+		if (size == 0)
 			return false;
 		else
-			return true;*/
+			return true;
 	}
 	 
-	public void doDomesticTrade() {
-		
+	public void doDomesticTrade() throws Exception {
+		if (canDoCurrentPlayerDoDomesticTrade()) {
+			
+		}
+		else 
+			throw new Exception("You cannot trade!!");
 	}
 	
 	/**
