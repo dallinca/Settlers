@@ -52,6 +52,20 @@ public class Player {
 		playerPieces = new PlayerPieces(this);
 		developmentCardHand = new DevelopmentCardHand();
 	}
+
+	/**
+	 * Retrieves the cards from the players resourceCardHand that will be used to trade with another player
+	 * 
+	 * @pre amount >= 0
+	 * @pre resourceType != null
+	 * @param resourceType
+	 * @param amount
+	 * @return the cards from the players resourceCardHand that will be used to trade with another player
+	 * @throws Exception
+	 */
+	public ResourceCard[] preparePlayerTrade(ResourceType resourceType, int amount) throws Exception {
+		return resourceCardHand.prepareCardTrade(resourceType, amount);
+	}
 	
 	/**
 	 * Gets the players current trade rate for the given resource type
@@ -62,35 +76,36 @@ public class Player {
 	 * @return the players current trade rate for the given resource type
 	 */
 	public int getTradeRate(ResourceType resourceType) {
-		// TODO
-		return 0;
+		return playerPieces.getTradeRate(resourceType);
 	}
 	
 	/**
-	 * TODO
-	 * 
 	 * Retrieves the cards from the players resourceCardHand that will be used to trade with the bank
 	 * 
-	 * @pre Resourcetype != null
+	 * @pre resourceType != null
 	 * @param resourceType
 	 * @return the cards from the players resourceCardHand that will be used to trade with the bank
+	 * @post the player will have lost the number specified of the specified resourceType
 	 */
-	public ResourceCard[] prepareBankTrade(ResourceType resourceType) {
-		
-		return null;
+	public ResourceCard[] prepareBankTrade(ResourceType resourceType) throws Exception {
+		return resourceCardHand.prepareCardTrade(resourceType, getTradeRate(resourceType));
 	}
 	
 	
 	/**
-	 * TODO
+	 * Asks whether the player has sufficient resources of the specified type to trade to the bank
 	 * 
-	 * Asks the player whether it has sufficient resources of the specified type to trade to the bank
-	 * 
-	 * @return
+	 * @pre resourceType != null
+	 * @return whether the player has sufficient resources of the specified type to trade to the bank
 	 */
 	public boolean canTradeResourcesToBank(ResourceType resourceType) {
-		
-		return false;
+		int neededAmount = getTradeRate(resourceType);
+		int amountOwned = getNumberResourcesOfType(resourceType);
+		// check if we have enough to trade 
+		if(neededAmount < amountOwned) {
+			return false;
+		}
+		return true;
 	}
 	
 	/**

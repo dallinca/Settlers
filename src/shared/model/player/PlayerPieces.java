@@ -1,10 +1,12 @@
 package shared.model.player;
 
+import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.model.Bank;
 import shared.model.board.Edge;
 import shared.model.board.EdgeSide;
 import shared.model.board.Hex;
+import shared.model.board.TradePort;
 import shared.model.board.Vertex;
 import shared.model.items.*;
 
@@ -60,6 +62,75 @@ public class PlayerPieces {
 		   for(int i = 0; i < maxRoads; i++) {
 			   roads.add(new Road(player));
 		   }
+	   }
+	   
+	   /**
+	    * Get the best trade rate the player has for the specified resourceType
+	    * 
+	    * @pre resourceType != null
+	    * @param resourceType
+	    * @return the best trade rate the player has for the specified resourceType
+	    */
+	   public int getTradeRate(ResourceType resourceType) {
+		   if(resourceType == ResourceType.BRICK) {
+				return getBestPortDeal(PortType.BRICK);
+			} else if(resourceType == ResourceType.ORE) {
+				return getBestPortDeal(PortType.ORE);
+			} else if(resourceType == ResourceType.SHEEP) {
+				return getBestPortDeal(PortType.SHEEP);
+			} else if(resourceType == ResourceType.WHEAT) {
+				return getBestPortDeal(PortType.WHEAT);
+			} else if(resourceType == ResourceType.WOOD) {
+				return getBestPortDeal(PortType.WOOD);
+			}
+		   return 0;
+	   }
+	   
+	   /**
+	    * Returns the best Player trade deal for the specified PortType
+	    * 
+	    * @pre portType != null
+	    * @return the best Player trade deal for the specified PortType
+	    */
+	   private int getBestPortDeal(PortType portType) {
+		   // Worst possible deal is 4
+		   int bestDeal = 4;
+		   // Iterate through all of the settlements
+		   for(Settlement settlement: settlements) {
+			   Vertex vertex = settlement.getVertex();
+			   // check if the settlement has been placed on the map
+			   if( vertex != null) {
+				   // check if the vertex has a tradeport
+				   TradePort tradePort = vertex.getTradePort();
+				   if(tradePort != null) {
+					   // check portType
+					   if(tradePort.getPortType() == portType) {
+						   return 2;
+					   } else if(tradePort.getPortType() == PortType.THREE) {
+						   bestDeal = 3;
+					   }
+				   }
+			   }
+		   }
+		   // Iterate through all of the cities
+		   for(City city: cities) {
+			   Vertex vertex = city.getVertex();
+			   // check if the settlement has been placed on the map
+			   if( vertex != null) {
+				   // check if the vertex has a tradeport
+				   TradePort tradePort = vertex.getTradePort();
+				   if(tradePort != null) {
+					   // check portType
+					   if(tradePort.getPortType() == portType) {
+						   return 2;
+					   } else if(tradePort.getPortType() == PortType.THREE) {
+						   bestDeal = 3;
+					   }
+				   }
+			   }
+		   }
+		   
+		   return bestDeal;
 	   }
 	   
 	 /**
