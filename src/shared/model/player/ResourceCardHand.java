@@ -399,8 +399,55 @@ public class ResourceCardHand {
 					woodCards.remove(woodCards.size() - 1);
 				}
 			}
-			bank.playerTurnInResources((ResourceCard[])cards.toArray());
+			ResourceCard[] resourcecards = new ResourceCard[cards.size()];
+			bank.playerTurnInResources(cards.toArray(resourcecards));
 		}
+		
+
+		/**
+		 * Retrieves the cards from the players resourceCardHand that will be used to trade with the bank
+		 * 
+		 * @pre resourceType != null
+		 * @param resourceType
+		 * @return the cards from the players resourceCardHand that will be used to trade with the bank
+		 * @post the player will have lost the number specified of the specified resourceType
+		 */
+		public ResourceCard[] prepareCardTrade(ResourceType resourceType, int numberToPrepare) throws Exception{
+			if(getNumberResourcesOfType(resourceType) < numberToPrepare) {
+				throw new Exception("Player cannot trade more of a resource than they have");
+			}
+			
+			ArrayList<ResourceCard> cards = new ArrayList<ResourceCard>();
+			if(resourceType == ResourceType.BRICK) {
+				for(int i = 0; i < numberToPrepare; i++) {
+					cards.add(brickCards.get(brickCards.size() - 1));
+					brickCards.remove(brickCards.size() - 1);
+				}
+			} else if(resourceType == ResourceType.ORE) {
+				for(int i = 0; i < numberToPrepare; i++) {
+					cards.add(oreCards.get(oreCards.size() - 1));
+					oreCards.remove(oreCards.size() - 1);
+				}
+			} else if(resourceType == ResourceType.SHEEP) {
+				for(int i = 0; i < numberToPrepare; i++) {
+					cards.add(sheepCards.get(sheepCards.size() - 1));
+					sheepCards.remove(sheepCards.size() - 1);
+				}
+			} else if(resourceType == ResourceType.WHEAT) {
+				for(int i = 0; i < numberToPrepare; i++) {
+					cards.add(wheatCards.get(wheatCards.size() - 1));
+					wheatCards.remove(wheatCards.size() - 1);
+				}
+			} else if(resourceType == ResourceType.WOOD) {
+				for(int i = 0; i < numberToPrepare; i++) {
+					cards.add(woodCards.get(woodCards.size() - 1));
+					woodCards.remove(woodCards.size() - 1);
+				}
+			}
+			ResourceCard[] resourcecards = new ResourceCard[cards.size()];
+			return cards.toArray(resourcecards);
+		}
+		
 
 		/**
 		 * Will return the number of the specified resource that the player currently has
