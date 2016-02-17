@@ -389,7 +389,7 @@ public class Player {
 			if(canDoDiscardResourceOfType(resourceType, numberToDiscard) == false) {
 				throw new Exception("Cannot discard the specified amount of specified resource type");
 			}
-			discardResourcesOfType(resourceType, numberToDiscard);
+			resourceCardHand.discardResourcesOfType(resourceType, numberToDiscard);
 		}
 
 		/**

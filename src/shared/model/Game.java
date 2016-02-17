@@ -331,10 +331,10 @@ public class Game {
 	}
 	
 	/**
-	 * TODO Javadoc and Implement
+	 * This method Uses a development card and marks it as played
 	 * 
-	 * @param devCardType
-	 * @return
+	 * @param devCardType is valid and you own that card
+	 * @return whether or not you just won the game
 	 * @throws Exception
 	 */
 	public boolean useDevelopmentCard(DevCardType devCardType) throws Exception {
@@ -410,29 +410,79 @@ public class Game {
 	
 	
 	/**
-	 * TODO Javadoc and Implement
-	 * 
-	 * @return
+	 * This method calls two others to verify that you can do a maritime trade
+	 * @pre the resource types are valid
+	 * @post returns whether or not you can do the trade or not
 	 */
-	public boolean canDoCurrentPlayerDoMeritimeTrade() {
-		//If a player is to meritime trade, he needs to have resources to trade. He needs to have either four of that kind, or a three for one port or a two for one, and again have the proper resources
+	public boolean canDoCurrentPlayerDoMaritimeTrade(ResourceType tradeIn, ResourceType receive) {
+		
+		if (canDoPlayerTakeResource(receive) && canTradeResourcesToBank(tradeIn)) {
+			return true;
+		} else
+			return false;
+		
+		//If a player is to maritime trade, they needs to have resources to trade. They needs to have either four of that kind, or a three for one port or a two for one, and again have the proper resources
 		/*if (currentPlayer.getResourceCardHandSize() == 0)
 			return false;
-		currentPlayer.*/
-		return true;
-		
+		currentPlayer.*/	
 	}
 	
 	/**
-	 * TODO Javadoc and Implement
+	 * This method does the actual trade by interacting with the bank and the Current Player to ascertain the port type and what if they can trade or not. 
+	 * @pre the resource types it receives are valid, and that tradeIn is what the player performing the trade already has
+	 * @throws Exception 
 	 * 
 	 */
-	public void doMeritimeTrade()  {
+	public void doMaritimeTrade(ResourceType tradeIn, ResourceType receive) throws Exception  {
+		if (canDoCurrentPlayerDoMaritimeTrade(tradeIn, receive)) {
+			ResourceCard[] tradingCards = currentPlayer.prepareBankTrade(tradeIn);
+			bank.playerTurnInResources(tradingCards);
+			currentPlayer.getResourceCardHand().addCard(bank.playerTakeResource(receive));
+		} else
+			throw new Exception("Cannot do Maritime Trade");
 		
 	}
 	
 	/**
-	 * TODO Javadoc and Implement
+	 * This method returns a 3, 4, or 2 depending on the port type you have, if any.
+	 * @pre valid resource type
+	 * @return
+	 */
+	public int getTradeRate(ResourceType resourceType) {
+		return currentPlayer.getTradeRate(resourceType);	
+	}
+	
+	/**
+	 * Does the player have cards to trade?
+	 * @pre valid resource type
+	 * @param resourceType
+	 * @return yes you can trade or no you can't.
+	 */
+	public boolean canTradeResourcesToBank(ResourceType resourceType) {
+		//Does the Player have cards to trade?
+		//Does the Player have a port?
+		//Does the Player have enough cards to trade?
+		int size = currentPlayer.getResourceCardHand().getNumberResourcesOfType(resourceType);
+		int rate = getTradeRate(resourceType);
+		if (size >= rate) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Can you take a resource? It calls the bank to see if it has cards to take or not
+	 * @pre valid resource type
+	 * @param resourceType
+	 * @return whether or not the bank has cards to take
+	 */
+	public boolean canDoPlayerTakeResource(ResourceType resourceType) {
+		return bank.canDoPlayerTakeResource(resourceType);
+	}
+
+	/**
+	 * Can the player do domestic trade?
 	 * 
 	 * @pre: the player in question who calls this method is taking his/her turn currently
 	 * @post 
@@ -440,9 +490,8 @@ public class Game {
 	public boolean canDoCurrentPlayerDoDomesticTrade() {
 		//Is it the Current Players turn and does he have any resources?
 		
-		//
 		
-		//Must calculate size
+		
 		int size = 0;
 		
 		size += currentPlayer.getResourceCardHand().getNumberResourcesOfType(ResourceType.BRICK);
@@ -463,7 +512,9 @@ public class Game {
 	 
 
 	/**
-	 * TODO Javadoc and Implement
+	 * Does the actual Domestic trade
+	 * @pre
+	 * @post
 	 * 
 	 */
 	public void doDomesticTrade() throws Exception {
@@ -472,7 +523,7 @@ public class Game {
 		}
 		else 
 			throw new Exception("You cannot trade!!");
-
+	}
 	
 	
 	// MAP LOCATION PLACEMENT CALLS
@@ -523,8 +574,7 @@ public class Game {
 	}
 	
 	/**
-	 * TODO
-	 * 
+	 * Can we place a settlement on that vertex?
 	 * @pre the vertex location is not null
 	 * @param vertexLocation
 	 * @post it tells you whether or not you can build a Settlement on that vertex
@@ -538,7 +588,7 @@ public class Game {
 	}
 	
 	/**
-	 * TODO
+	 * The art of placing a settlement on the vertex.
 	 * 
 	 * @pre the Can do is true
 	 * @param vertexLocation
@@ -553,6 +603,8 @@ public class Game {
 	}
 	
 	/**
+	 * This method ensures we can place a city on the given vertex
+	 * 
 	 * @pre the vertex location is not null
 	 * @param vertexLocation
 	 * @post it tells you whether or not you can build a Settlement on that vertex
@@ -562,6 +614,8 @@ public class Game {
 	}
 	
 	/**
+	 * Places the beautiful city on it's designated spot.
+	 * 
 	 * @pre the Can do is true
 	 * @param vertexLocation
 	 * @throws Exception

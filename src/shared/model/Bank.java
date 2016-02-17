@@ -301,6 +301,8 @@ public class Bank {
 
 
 	/**
+	 * Does the bank have cards of the type you want?
+	 * 
 	 * @pre Assumes the resourceType is valid and was previously typed
 	 * @param resourceType
 	 * @post
@@ -374,6 +376,15 @@ public class Bank {
 	
 	//buyDevelopmentCard(
 	//ask if the size of the development cards is too much
+	/**
+	 * Purchases a development card with the given resources
+	 * @pre all those resources are valid cards of the specified type required to buy it (it checks the type though)
+	 * @param sheep
+	 * @param wheat
+	 * @param ore
+	 * @return
+	 * @throws Exception
+	 */
 	public DevelopmentCard buyDevelopmentCard(ResourceCard sheep, ResourceCard wheat, ResourceCard ore) throws Exception {
 		if (canDoBuyDevelopmentCard(sheep, wheat, ore) == false) {
 			throw new Exception("Cannot buy Development Card, needs more specific info.");
