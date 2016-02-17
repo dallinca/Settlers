@@ -66,8 +66,73 @@ public class ResourceCardHand {
 		}
 	  }
 	  
+	  /**
+	   * Checks if there are any resource cards in the Players hand to steal
+	   * 
+	   * @pre None
+	   * @return whether there are any resource cards in the Players hand to steal
+	   */
+	  public boolean canDoGetRandomResourceCard() {
+		  if(getResourceCardHandSize() <= 0) {
+			  return false;
+		  }
+		  return true;
+	  }
 	  
-
+	  /**
+	   * Retrieves a Random Resource card
+	   * 
+	   * @throws Exception 
+	   * @pre canDoGetRandomResourceCard() != false
+	   * @return a Random Resource card
+	   */
+	  public ResourceCard getRandomResourceCard() throws Exception {
+		  if(canDoGetRandomResourceCard() == false) {
+			  throw new Exception("canDoGetRandomResourceCard == False, no cards to steal");
+		  }
+		  ResourceCard card = null;
+		  Random ran = new Random();
+		  // Proceed to randomly choose the type of card and see if the player has any of the
+		  // chosen type to give up, if none exist, choose another random number and try again.
+		  while(card == null) {
+				int number = ran.nextInt(5);
+				if(number == 0) {
+					if(brickCards.size() > 0) {
+						card = brickCards.get(brickCards.size() - 1);
+						brickCards.remove(brickCards.size() - 1);
+					}
+				} else if(number == 1) {
+					if(wheatCards.size() > 0) {
+						card = wheatCards.get(wheatCards.size() - 1);
+						wheatCards.remove(wheatCards.size() - 1);
+					}
+				} else if(number == 2) {
+					if(oreCards.size() > 0) {
+						card = oreCards.get(oreCards.size() - 1);
+						oreCards.remove(oreCards.size() - 1);
+					}
+				} else if(number == 3) {
+					if(sheepCards.size() > 0) {
+						card = sheepCards.get(sheepCards.size() - 1);
+						sheepCards.remove(sheepCards.size() - 1);
+					}
+				} else {
+					if(woodCards.size() > 0) {
+						card = woodCards.get(woodCards.size() - 1);
+						woodCards.remove(woodCards.size() - 1);
+					}
+				}
+		  }
+		  return card;
+	  }
+	  
+	  /**
+	   * TODO
+	   * 
+	   * 
+	   * @param resourceType
+	   * @return
+	   */
 		public ArrayList<ResourceCard> conformToMonopoly(ResourceType resourceType) {
 			if(resourceType == ResourceType.BRICK) {
 				return brickCards;

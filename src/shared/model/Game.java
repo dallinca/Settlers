@@ -1,6 +1,7 @@
 package shared.model;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
@@ -11,8 +12,11 @@ import shared.model.items.*;
 import shared.model.player.*;
 import shared.model.player.exceptions.CannotBuyException;
 import shared.model.player.exceptions.InsufficientPlayerResourcesException;
+import shared.model.turn.Dice;
 import shared.model.board.Board;
 import shared.model.board.Edge;
+import shared.model.board.Hex;
+import shared.model.board.Vertex;
 
 
 /**
@@ -21,11 +25,9 @@ import shared.model.board.Edge;
  * It also keeps track of how many players there are, who is next, and who is the current player.
  */
 public class Game {
+	private boolean inSetUpPhase = true; // This is a state boolean for the first two setup rounds
 	private Player[] players = null;
 	private Player currentPlayer = null;
-	//private Player nextPlayer;
-	//private ResourceCard[] resourceDeck = null;
-	//private DevelopmentCard[] developmentDeck = null;
 	private Board board = null;;
 	private Player largestArmy;
 	private Player longestRoad;
@@ -34,8 +36,10 @@ public class Game {
 	private int turnNumber = 0;
 	private int versionNumber = 1;
 	private int indexOfLargestArmy = -1;
+	private Dice dice = new Dice();
 	
-	
+	// CONSTRUCTORS
+	//////////////////////////////////////////
 	public Game() {
 		
 	}
@@ -57,7 +61,9 @@ public class Game {
 		bank = new Bank();
 		board = board1;
 	}
-	
+
+	// CURRENT PLAYER CALLS
+	//////////////////////////////////////////
 	/**
 	 * This method will cycle through the array of players and will rotate them through the currentPlayer so the turns can proceed.
 	 * This will be helpful when the index of the player array is [3] and we need to bring it back to [0] showing that that person is next.
@@ -65,18 +71,47 @@ public class Game {
 	 * @post the next player is set.
 	 */
 	public void incrementPlayer() {
+		// If we are done with the first two rounds of the Game (for setup
 		for (int i = 0; i < numberofPlayers; i++) {
 			if (currentPlayer.getPlayerId() == players[i].getPlayerId()) {
-				
-				players[i] = currentPlayer;
-				
-				if (i == numberofPlayers-1) {
-					setCurrentPlayer(players[0]);
-					turnNumber++;
-					return;
-				} else {
-					setCurrentPlayer(players[i+1]);
-					return;
+				//players[i] = currentPlayer; // This should probably be omitted
+				// If we are no longer in the setup phase
+				if(inSetUpPhase == false) {
+					if (i == numberofPlayers-1) {
+						setCurrentPlayer(players[0]);
+						turnNumber++;
+						return;
+					} else {
+						setCurrentPlayer(players[i+1]);
+						return;
+					}
+				}
+				// We must still be in the setup phase
+				else {
+					// We are still in the first round
+					if(turnNumber == 0) {
+						// If we are on the last person in the round, he/she gets to go again
+						if(i == numberofPlayers - 1) {
+							setCurrentPlayer(players[numberofPlayers - 1]); // Could probably omit this line
+							turnNumber++;
+							return;
+						} else {
+							setCurrentPlayer(players[i+1]);
+							return;
+						}
+					}
+					// We are still in the second round
+					else if(turnNumber == 1) {
+						if(i == 0) {
+							setCurrentPlayer(players[0]);
+							inSetUpPhase = false;
+							turnNumber++;
+							return;
+						} else {
+							setCurrentPlayer(players[i-1]);
+							return;
+						}
+					}
 				}
 			}
 		}
@@ -88,12 +123,9 @@ public class Game {
 	 * 
 	 * @pre the game has started and a turn has started. 
 	 * 
-	 * 
 	 * @return the CurrentPlayer object
 	 */
 	public Player getCurrentPlayer() {
-		//return the name of the player or the player object itself?
-		//What would be the purpose of sending something a player?
 		return currentPlayer;
 	}
 	
@@ -107,38 +139,86 @@ public class Game {
 	private void setCurrentPlayer(Player setPlayer) {
 		currentPlayer = setPlayer;
 	}
+
+	// ROLL CALLS
+	//////////////////////////////////////////
+	
+	/**
+	 * Checks to see if the specified player can roll the dice
+	 * 
+	 * @pre None
+	 * @param UserId
+	 * @return whether the specified player can roll the dice
+	 */
+	public boolean canDoRollDice(int UserId) {
+		// Check if the user is the current player
+		if(UserId != currentPlayer.getPlayerId()) {
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Rolls the Dice
+	 * 
+	 * @param UserId
+	 * @throws Exception
+	 * @return the roll number
+	 */
+	public int RollDice(int UserId) throws Exception {
+		if(canDoRollDice(UserId) == false) {
+			throw new Exception("canDoRollDice == false");
+		}
+		Random ran = new Random();
+		int rollValue = ran.nextInt(6) + ran.nextInt(6) + 2;
+		// If the roll is not a 7 then we have the players all collect their resources
+		if(rollValue != 7) {
+			playersCollectResources(rollValue);
+		}
+		// If the roll is a seven, tell the client and wait for attempts to move the robber
+		return rollValue;
+	}
+	
+	/**
+	 * The players all collect resources on the specified rollValue, from the given Bank
+	 * 
+	 * @param rollValue
+	 * @throws Exception
+	 */
+	private void playersCollectResources(int rollValue) throws Exception {
+		if(players == null) {
+			throw new Exception("The players Array is null, cannot have players collect Resources");
+		}
+		for(Player player: players) {
+			player.collectResources(rollValue, bank);
+		}
+	}
+	
+	
+	// RESOURCE BAR CAN-DO CALLS
+	//////////////////////////////////////////
 	
 	/**
 	 * This method polls the player to see if the player can build a road and then returns the result to that which called it (most likely the client)
 	 * @return a true or false to if the player can build a road there.
 	 */
-	public boolean canDoCurrentPlayerBuildRoad() {
+	public boolean canDoCurrentPlayerBuildRoad(int UserId) {
+		// Check if the user is the current player
+		if(UserId != currentPlayer.getPlayerId()) {
+			return false;
+		}
 		return currentPlayer.canDoBuyRoad();	
 	}
-	
-	/*
-	 * This method is commented out for now because I believe that if it isn't, then you will have half the roads you need, because the buildRoadOnEdge function below also
-	 * eventually calls a method that commands a road to be built. If both canDos and regular methods are run you will run out of roads. So, in the buildRoadOnEdge function 
-	 * it now asks for the canDoCurrentPlayerBuildRoad() and the other verification.
-	 * 
-	 * But the canDoCurrentPlayerBuildRoad() is a good stand-a-lone to tell the client whether or not to gray it out, but when it comes to building the road we will leave it
-	 * to the professional methods below. I hope this makes sense.
-	 * @pre Player can buy road
-	 */
-	/*
-	public void buyRoad(Edge edge) throws Exception {
-		if (canDoCurrentPlayerBuildRoad()) {
-			currentPlayer.buyRoad(edge);
-		}
-		else
-			throw new Exception("Can't buy a road");
-	}*/
 	
 	/**
 	 * Asks the player if he or she can build a settlement and tells the client that.
 	 * @return
 	 */
-	public boolean canDoCurrentPlayerBuildSettlement() {
+	public boolean canDoCurrentPlayerBuildSettlement(int UserId) {
+		// Check if the user is the current player
+		if(UserId != currentPlayer.getPlayerId()) {
+			return false;
+		}
 		return currentPlayer.canDoBuySettlement();
 	}
 	
@@ -146,22 +226,35 @@ public class Game {
 	 * Asks the player if he or she can build a city and tells the client that.
 	 * @return
 	 */
-	public boolean canDoCurrentPlayerBuildCity() {
+	public boolean canDoCurrentPlayerBuildCity(int UserId) {
+		// Check if the user is the current player
+		if(UserId != currentPlayer.getPlayerId()) {
+			return false;
+		}
 		return currentPlayer.canDoBuyCity();
-	}
-	
-	public void buildCity() {
-		
 	}
 	
 	/**
 	 * Asks the player if he or she can buy a development card and tells the client that.
 	 * @return
 	 */
-	public boolean canDoCurrentPlayerBuyDevelopmentCard() {
+	public boolean canDoCurrentPlayerBuyDevelopmentCard(int UserId) {
+		// Check if the user is the current player
+		if(UserId != currentPlayer.getPlayerId()) {
+			return false;
+		}
 		return currentPlayer.canDoBuyDevelopmentCard(bank);
 	}
+
+	// DEVELOPMENT CARD ACTION CALLS
+	//////////////////////////////////////////
 	
+	/**
+	 * TODO Javadoc and Implement
+	 * 
+	 * @throws CannotBuyException
+	 * @throws InsufficientPlayerResourcesException
+	 */
 	public void buyDevelopmentCard() throws CannotBuyException, InsufficientPlayerResourcesException {
 		if (currentPlayer.canDoBuyDevelopmentCard(bank)) {
 			currentPlayer.buyDevelopmentCard(bank);
@@ -176,19 +269,25 @@ public class Game {
 	public boolean canDoCurrentPlayerUseDevelopmentCard(DevCardType devCardType) {
 		//We need to be able to measure how long a player has owned a card.
 		return currentPlayer.canDoPlayDevelopmentCard(turnNumber, devCardType);		
-		
 	}
 	
 	/**
-	 * This method counts up and returns how many unused cards the player has
-	 * @return
+	 * This method counts up and returns how many unused cards the player has of the specified devCardType
+	 * 
+	 * @return how many unused cards the player has of the specified devCardType
 	 */
 	public int numberUnplayedDevCards(DevCardType devCardType) {
 		return currentPlayer.numberUnplayedDevCards(devCardType);
-		
 	}
 	
-	
+	/**
+	 * TODO Javadoc and Implement
+	 * 
+	 * @param devCardType
+	 * @param resourceType
+	 * @return
+	 * @throws Exception
+	 */
 	public boolean useDevelopmentCard(DevCardType devCardType, ResourceType[] resourceType) throws Exception {
 		if (currentPlayer.canDoPlayDevelopmentCard(turnNumber, devCardType)) {
 			switch (devCardType) {
@@ -231,6 +330,13 @@ public class Game {
 		return doWeHaveAWinner();
 	}
 	
+	/**
+	 * TODO Javadoc and Implement
+	 * 
+	 * @param devCardType
+	 * @return
+	 * @throws Exception
+	 */
 	public boolean useDevelopmentCard(DevCardType devCardType) throws Exception {
 		if (currentPlayer.canDoPlayDevelopmentCard(turnNumber, devCardType)) {
 		//Marks the card as played
@@ -302,18 +408,9 @@ public class Game {
 		
 	}
 	
-	public boolean canDoMoveRobber(HexLocation hex) {
-		return board.canDoMoveRobberToHex(hex);
-	}
-	
-	public void moveRobber(HexLocation hex) throws Exception {
-		if (canDoMoveRobber(hex)) {
-			board.moveRobberToHex(hex);
-		} else
-			throw new Exception("Cannot move Robber to that Hex");
-	}
 	
 	/**
+	 * TODO Javadoc and Implement
 	 * 
 	 * @return
 	 */
@@ -326,11 +423,17 @@ public class Game {
 		
 	}
 	
+	/**
+	 * TODO Javadoc and Implement
+	 * 
+	 */
 	public void doMeritimeTrade()  {
 		
 	}
 	
 	/**
+	 * TODO Javadoc and Implement
+	 * 
 	 * @pre: the player in question who calls this method is taking his/her turn currently
 	 * @post 
 	 */
@@ -358,53 +461,92 @@ public class Game {
 			return true;
 	}
 	 
+
+	/**
+	 * TODO Javadoc and Implement
+	 * 
+	 */
 	public void doDomesticTrade() throws Exception {
 		if (canDoCurrentPlayerDoDomesticTrade()) {
 			
 		}
 		else 
 			throw new Exception("You cannot trade!!");
-	}
+
+	
+	
+	// MAP LOCATION PLACEMENT CALLS
+	//////////////////////////////////////////
 	
 	/**
-	 * @pre the edge location is not null
+	 * TODO - Verify Completion
+	 * 
+	 * Checks to see if the given Player can place a road on the specified edge
+	 * 
+	 * @pre None
+	 * @param UserId
 	 * @param edgeLocation
-	 * @post it tells you whether or not you can build a road on that edge
+	 * @return whether the Specified player can place a road on the specified edge
 	 */
-	public boolean canDoPlaceRoadOnEdge(EdgeLocation edgeLocation) {
-		return board.canDoPlaceRoadOnEdge(currentPlayer, edgeLocation);
+	public boolean canDoPlaceRoadOnEdge(int UserId, EdgeLocation edgeLocation) {
+		// Check if the user is the current player
+		if(UserId != currentPlayer.getPlayerId()) {
+			return false;
+		}
+		// If we are in the setup phase, the rules for placing a road are slightly different
+		if(inSetUpPhase == true) {
+			return board.canDoPlaceInitialRoadOnEdge(getCurrentPlayer(), edgeLocation);
+		} else {
+			return board.canDoPlaceRoadOnEdge(getCurrentPlayer(), edgeLocation);	
+		}
 	}
 	
 	/**
-	 * @pre The can do is true
-	 * @param edgeLocation
+	 * TODO - Verify Completion
+	 * 
+	 * Places a Road for the specified player at specified edgeLocation
+	 * @pre canDoPlaceRoadOnEdge != false
+	 * @param UserId
 	 * @throws Exception
-	 * @post a road is placed on an edge
+	 * @return Void
 	 */
-	public void placeRoadOnEdge(EdgeLocation edgeLocation) throws Exception {
-		if(canDoPlaceRoadOnEdge(edgeLocation) && canDoCurrentPlayerBuildRoad())
-			board.placeRoadOnEdge(currentPlayer, edgeLocation);
-		else
-			throw new Exception("Cannot build road on this edge, this should not have been allowed to get this far.");
+	public void placeRoadOnEdge(int UserId, EdgeLocation edgeLocation) throws Exception {
+		if(canDoPlaceRoadOnEdge(UserId, edgeLocation) == false) {
+			throw new Exception("Specified Player cannot place a road on the given edgeLocation");
+		}
+		// If we are in the setup phase, the rules for placing a road are slightly different
+		if(inSetUpPhase == true) {
+			board.placeInitialRoadOnEdge(getCurrentPlayer(), edgeLocation);
+		} else {
+			board.placeRoadOnEdge(getCurrentPlayer(), edgeLocation);
+		}
 	}
 	
 	/**
+	 * TODO
+	 * 
 	 * @pre the vertex location is not null
 	 * @param vertexLocation
 	 * @post it tells you whether or not you can build a Settlement on that vertex
 	 */
-	public boolean canDoPlaceSettlementOnVertex(VertexLocation vertexLocation) {
+	public boolean canDoPlaceSettlementOnVertex(int UserId, VertexLocation vertexLocation) {
+		// Check if the user is the current player
+		if(UserId != currentPlayer.getPlayerId()) {
+			return false;
+		}
 		return board.canDoPlaceSettlementOnVertex(currentPlayer, vertexLocation);
 	}
 	
 	/**
+	 * TODO
+	 * 
 	 * @pre the Can do is true
 	 * @param vertexLocation
 	 * @throws Exception
 	 * @post a settlement is placed on a vertex
 	 */
-	public void placeSettlementOnVertex(VertexLocation vertexLocation) throws Exception {
-		if(canDoPlaceSettlementOnVertex(vertexLocation) && canDoCurrentPlayerBuildSettlement())
+	public void placeSettlementOnVertex(int UserId, VertexLocation vertexLocation) throws Exception {
+		if(canDoPlaceSettlementOnVertex(UserId, vertexLocation) && canDoCurrentPlayerBuildSettlement(UserId))
 			board.placeSettlementOnVertex(currentPlayer, vertexLocation);
 		else
 			throw new Exception("Cannot build Settlement on this vertex, this should not have been allowed to get this far.");
@@ -431,15 +573,166 @@ public class Game {
 		else
 			throw new Exception("Cannot build City on this vertex, this should not have been allowed to get this far.");
 	}
+
+	/**
+	 * Retrieves whether the Robber can be moved to the specified hexLocation
+	 * 
+	 * @pre board != null
+	 * @param hex
+	 * @return whether the Robber can be moved to the specified hexLocation
+	 */
+	public boolean canDoMoveRobberToHex(int UserId, HexLocation hexLocation) {
+		// Check if the user is the current player
+		if(UserId != currentPlayer.getPlayerId()) {
+			return false;
+		}
+		return board.canDoMoveRobberToHex(hexLocation);
+	}
 	
-	public int numberOfResouceType(ResourceType resourceType) {
-		//need a hand?
-		//return currentPlayer.numberOfResourceType(resourceType);
+	
+	/**
+	 * Moves the robber to the specified HexLocation, and retrieves the players that own municipals
+	 * next to that hex, excluding those that don't have resources to steal and the player that moved
+	 * the robber
+	 * 
+	 * @pre canDoMoveRobberToHex != null
+	 * @param hex
+	 * @throws Exception
+	 * @return array of Players that are adjacent to the new Robber Hex, that have resources to steal.
+	 */
+	public Player[] moveRobberToHex(int UserId, HexLocation hexLocation) throws Exception {
+		if (canDoMoveRobberToHex(UserId, hexLocation) == false) {
+			throw new Exception("Cannot move Robber to that Hex");
+		}
+		board.moveRobberToHex(hexLocation);
+		Hex hex = board.getHex(hexLocation);
+		Vertex[] adjacentVertices = hex.getAdjacentVertices();
+		ArrayList<Integer> adjacentPlayerIDs = new ArrayList<Integer>();
+		ArrayList<Player> adjacentPlayers = new ArrayList<Player>();
+		for(Vertex vertex: adjacentVertices) {
+			// If the vertex has a municipal, that municipal is not owned by the player moving the robber
+			// and the Player is not already in the list, and the Player has resources to be stolen
+			int municipalID = vertex.getMunicipal().getPlayer().getPlayerId();
+			Player player = vertex.getMunicipal().getPlayer();
+			if(vertex.hasMunicipal() && UserId != municipalID && !adjacentPlayerIDs.contains(municipalID) && player.getResourceCardHandSize() > 0) {
+				adjacentPlayerIDs.add(municipalID);
+				adjacentPlayers.add(player);
+			}
+		}
+		// Convert the found players into an array to return
+		Player[] players = new Player[adjacentPlayers.size()];
+		return adjacentPlayers.toArray(players);
+	}
+
+	// OTHER
+	//////////////////////////////////////////
+	
+	/**
+	 * Checks whether the Specified User can Steal from the Specified Victim
+	 * 
+	 * @pre None
+	 * @param UserId
+	 * @param victimId
+	 * @return whether the Specified User can Steal from the Specified Victim
+	 */
+	public boolean canDoStealPlayerResource(int UserId, int victimId) {
+		// Check if the user is the current player
+		if(UserId != currentPlayer.getPlayerId()) {
+			return false;
+		}
+		if(UserId == victimId) {
+			return false;
+		}
+		Player victim = getPlayerByID(victimId);
+		if(victim == null || victim.getResourceCardHandSize() <= 0) {
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * The Specified User will Steal a Random ResourceCard from the specified Victim
+	 * 
+	 * @pre canDoStealPlayerResource != false
+	 * @param UserId
+	 * @param victimId
+	 * @throws Exception
+	 * @post the Victim will have one less Resource Card, which the User will now have in possession
+	 */
+	public void stealPlayerResource(int UserId, int victimId) throws Exception {
+		if(canDoStealPlayerResource(UserId, victimId) == false) {
+			throw new Exception("canDoStealPlayerResource == false");
+		}
+		currentPlayer.stealPlayerResource(getPlayerByID(victimId));
+	}
+	
+	/**
+	 * Retrieves the Player Object for the given playerID
+	 * 
+	 * @pre None
+	 * @param playerID
+	 * @return Player Object if in Game, or null if not found
+	 */
+	public Player getPlayerByID(int playerID) {
+		for (int i = 0; i < numberofPlayers; i++) {
+			if (playerID == players[i].getPlayerId()) {
+				return players[i];
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Will return the number of the specified resource that the player currently has
+	 * 
+	 * @pre None
+	 * 
+	 * @param resourceType
+	 * @return the number of the specified resource that the player currently has
+	 */
+	public int getNumberResourcesOfType(int UserId, ResourceType resourceType) {
+		Player player = getPlayerByID(UserId);
+		if(player != null) {
+			return player.getNumberResourcesOfType(resourceType);
+		}
 		return 0;
 	}
 	
-	public void discardNumberOfResourceType(int removal, ResourceType resourceType) {
-		//currentPlayer.discardNumberOfResourceType(removal, resourceType);
+	/**
+	 * Checks whether the Specified User can discard the specified number of resources of the specified
+	 * ResourceType
+	 * 
+	 * @param UserId
+	 * @param removal
+	 * @param resourceType
+	 * @return whether the Specified User can discard the specified number of resources of the specified
+	 * ResourceType
+	 */
+	public boolean canDoDiscardNumberOfResourceType(int UserId, int numberToDiscard, ResourceType resourceType) {
+		Player player = getPlayerByID(UserId);
+		if(player == null || resourceType == null) {
+			return false;
+		}
+		if(getPlayerByID(UserId).canDoDiscardResourceOfType(resourceType, numberToDiscard) == false) {
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * The Specified Player will discard the specified number of Resource Cards back to the bank
+	 * from his hand
+	 * 
+	 * @pre canDoDiscardNumberOfResourceType != false
+	 * @param UserId
+	 * @param numberToDiscard
+	 * @param resourceType
+	 * @throws Exception 
+	 * @post The Specified Player will have discarded the specified number of Resource Cards back to the bank
+	 * from his hand
+	 */
+	public void discardNumberOfResourceType(int UserId, int numberToDiscard, ResourceType resourceType) throws Exception {
+		getPlayerByID(UserId).discardResourcesOfType(resourceType, numberToDiscard);
 		
 	}
 		

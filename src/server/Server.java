@@ -1,14 +1,15 @@
 package server;
 
-import java.io.*;
-import java.net.*;
-import java.util.logging.*;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
-import server.handlers.*;
-import server.facade.ServerFacade;
-import client.proxy.ServerProxy;
-
-import com.sun.net.httpserver.*;
+import com.sun.net.httpserver.HttpServer;
 
 /**
  * Online server capable of receiving calls from clients, and creating a digital database which can
@@ -60,14 +61,14 @@ public class Server {
 	private void run() {
 
 		logger.info("Initializing Model");
-
+/*
 		try {
-			ServerProxy.initialize();		
+			//ServerProxy.initialize();		
 		}
 		catch (ServerException e) {
 			logger.log(Level.SEVERE, e.getMessage(), e);
 			return;
-		}
+		}*/
 
 		logger.info("Initializing HTTP Server");
 
@@ -82,7 +83,7 @@ public class Server {
 
 		server.setExecutor(null); // use the default executor
 		
-		server.createContext("/DownloadBatch", DownloadBatchHandler);
+	/*	server.createContext("/DownloadBatch", DownloadBatchHandler);
 		server.createContext("/DownloadFile", ClientDownloadFileHandler);
 		server.createContext("/GetFields", GetFieldsHandler);
 		server.createContext("/GetProjects", GetProjectsHandler);
@@ -95,13 +96,13 @@ public class Server {
 		server.createContext("/images", DownloadFileHandler); 
 		server.createContext("/Records", DownloadFileHandler);
 		server.createContext("/fieldhelp", DownloadFileHandler);
-		server.createContext("/knowndata", DownloadFileHandler);
+		server.createContext("/knowndata", DownloadFileHandler);*/
 		 
 		logger.info("Starting HTTP Server");
 
 		server.start();
 	}
-	
+	/*
 	private HttpHandler DownloadBatchHandler = new DownloadBatchHandler();
 	private HttpHandler DownloadFileHandler = new DownloadFileHandler();
 	private HttpHandler GetFieldsHandler = new GetFieldsHandler();
@@ -110,7 +111,7 @@ public class Server {
 	private HttpHandler SearchHandler = new SearchHandler();
 	private HttpHandler SubmitBatchHandler = new SubmitBatchHandler();
 	private HttpHandler ValidateUserHandler = new ValidateUserHandler();
-	private HttpHandler ClientDownloadFileHandler = new ClientDownloadFileHandler();
+	private HttpHandler ClientDownloadFileHandler = new ClientDownloadFileHandler();*/
 
 	public static void main(String[] args) {
 		if (args[0].equals("")){

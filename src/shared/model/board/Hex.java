@@ -34,8 +34,22 @@ public class Hex {
 		this.rollValue = rollValue;
 	}
 	
-	public 
-	
+	/**
+	 * Retrieve the 6 adjacent Vertices to the Hex
+	 * 
+	 * @pre Valid Hex on the Map
+	 * @return Vertex[6]
+	 */
+	public Vertex[] getAdjacentVertices() {
+		Vertex[] adjacentVertices = new Vertex[6];
+		adjacentVertices[0] = board.getVertex( (x_coord_hex * 2) - 1, 	(y_coord_hex * 2) - 1); // Top Left Vertex
+		adjacentVertices[1] = board.getVertex(  x_coord_hex * 2, 		(y_coord_hex * 2) - 2); // Top Right Vertex
+		adjacentVertices[2] = board.getVertex( (x_coord_hex * 2) + 1, 	(y_coord_hex * 2) - 1); // Right Vertex
+		adjacentVertices[3] = board.getVertex(  x_coord_hex * 2, 		y_coord_hex * 2); // Bottom Right Vertex
+		adjacentVertices[4] = board.getVertex( (x_coord_hex * 2) - 1, 	(y_coord_hex * 2) + 1); // Bottom Left Vertex
+		adjacentVertices[5] = board.getVertex( (x_coord_hex * 2) - 2, 	y_coord_hex * 2); // Left Vertex
+		return adjacentVertices;
+	}
 	
 	/**
 	 * Looks at the HexType of this hex and converts it to ResourceType, and 

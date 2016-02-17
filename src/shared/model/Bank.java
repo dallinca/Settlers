@@ -274,24 +274,24 @@ public class Bank {
 	public ResourceCard playerTakeResource(ResourceType check) throws Exception {
 			ResourceCard thePrize = null;
 		
-		switch (check.toString()) {
-			case "BRICK":
+		switch (check) {
+			case BRICK:
 				thePrize = brickDeck.get(brickDeck.size()-1);
 				brickDeck.remove(brickDeck.size()-1);
 				return thePrize;
-			case "WHEAT":
+			case WHEAT:
 				thePrize = wheatDeck.get(wheatDeck.size()-1);
 				wheatDeck.remove(wheatDeck.size()-1);
 				return thePrize;
-			case "WOOD":
+			case WOOD:
 				thePrize = lumberDeck.get(lumberDeck.size()-1);
 				lumberDeck.remove(lumberDeck.size()-1);
 				return thePrize;
-			case "ORE":
+			case ORE:
 				thePrize = oreDeck.get(oreDeck.size()-1);
 				oreDeck.remove(oreDeck.size()-1);
 				return thePrize;
-			case "SHEEP":
+			case SHEEP:
 				thePrize = sheepDeck.get(sheepDeck.size()-1);
 				sheepDeck.remove(sheepDeck.size()-1);
 				return thePrize;
@@ -306,28 +306,28 @@ public class Bank {
 	 * @post
 	 */
 	public boolean canDoPlayerTakeResource(ResourceType resourceType) {
-		switch (resourceType.toString()) {
-			case "BRICK":
+		switch (resourceType) {
+			case BRICK:
 				if (brickDeck.size() >=1)
 					return true;
 				else
 					return false;
-			case "WHEAT":
+			case WHEAT:
 				if (wheatDeck.size() >=1)
 					return true;
 				else
 					return false;
-			case "LUMBER":
+			case WOOD:
 				if (lumberDeck.size() >=1)
 					return true;
 				else
 					return false;
-			case "ORE":
+			case ORE:
 				if (oreDeck.size() >=1)
 					return true;
 				else
 					return false;
-			case "SHEEP":
+			case SHEEP:
 				if (sheepDeck.size() >=1)
 					return true;
 				else
@@ -394,36 +394,36 @@ public class Bank {
 		for (int i = 0; i < resources.length; i++) {
 			ResourceType check = resources[i].getResourceType();
 			
-			switch (check.toString()) {
-				case "BRICK":
+			switch (check) {
+				case BRICK:
 					if (brickDeck.size() <= resourceNumber) {
 						brickDeck.add(resources[i]);
 						break;
 					} else {
 						throw new Exception("The bank cannot accept anymore of this type of card. Something has gone wrong.");
 					}
-				case "WHEAT":
+				case WHEAT:
 					if (wheatDeck.size() <= resourceNumber) {
 						wheatDeck.add(resources[i]);
 						break;
 					} else {
 						throw new Exception("The bank cannot accept anymore of this type of card. Something has gone wrong.");
 					}
-				case "WOOD":
+				case WOOD:
 					if (lumberDeck.size() <= resourceNumber) {
 						lumberDeck.add(resources[i]);
 						break;
 					} else {
 						throw new Exception("The bank cannot accept anymore of this type of card. Something has gone wrong.");
 					}
-				case "ORE":
+				case ORE:
 					if (oreDeck.size() <= resourceNumber) {
 						oreDeck.add(resources[i]);
 						break;
 					} else {
 						throw new Exception("The bank cannot accept anymore of this type of card. Something has gone wrong.");
 					}
-				case "SHEEP":
+				case SHEEP:
 					if (sheepDeck.size() <= resourceNumber) {
 						sheepDeck.add(resources[i]);
 						break;

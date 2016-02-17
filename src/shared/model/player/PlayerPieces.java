@@ -83,8 +83,10 @@ public class PlayerPieces {
 				   for(Hex hex: hexes) {
 					   // If the hex is a valid hex, and it does not have the robber, we can collect resources from it.
 					   if(hex != null && hex.checkIfHasRobber() == false) {
-						   ResourceType resourceType = hex.getHexResourceType();
-						   moveResourcesFromBankToPlayerHand(resourceType, 1, bank, resourceCardHand);
+							   ResourceType resourceType = hex.getHexResourceType();
+							   if(rollValue == hex.getRollValue() && resourceType != null){
+								   moveResourcesFromBankToPlayerHand(resourceType, 1, bank, resourceCardHand);
+							   }
 					   }
 				   }
 			   }
@@ -100,7 +102,9 @@ public class PlayerPieces {
 					   // If the hex is a valid hex, and it does not have the robber, we can collect resources from it.
 					   if(hex != null && hex.checkIfHasRobber() == false) {
 						   ResourceType resourceType = hex.getHexResourceType();
-						   moveResourcesFromBankToPlayerHand(resourceType, 2, bank, resourceCardHand);
+						   if(rollValue == hex.getRollValue() && resourceType != null){
+							   moveResourcesFromBankToPlayerHand(resourceType, 2, bank, resourceCardHand);
+						   }
 					   }
 				   }
 			   }
