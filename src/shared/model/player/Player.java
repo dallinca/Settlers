@@ -54,6 +54,41 @@ public class Player {
 	}
 	
 	/**
+	 * Gets the players current trade rate for the given resource type
+	 * 
+	 * @pre ResourceType != null
+	 * 
+	 * @param resourceType
+	 * @return the players current trade rate for the given resource type
+	 */
+	public int getTradeRate(ResourceType resourceType) {
+		// TODO
+		return 0;
+	}
+	
+	/**
+	 * TODO
+	 * 
+	 * @param resourceType
+	 * @return
+	 */
+	public ResourceCard[] prepareBankTrade(ResourceType resourceType) {
+		
+		return null;
+	}
+	
+	
+	/**
+	 * TODO
+	 * 
+	 * @return
+	 */
+	public boolean canTradeResourcesToBank() {
+		
+		return false;
+	}
+	
+	/**
 	 * adds victory points and returns total victory points
 	 * 
 	 * @pre None
