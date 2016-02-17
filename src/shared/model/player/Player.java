@@ -61,6 +61,7 @@ public class Player {
 	 * @param resourceType
 	 * @param amount
 	 * @return the cards from the players resourceCardHand that will be used to trade with another player
+	 * @post the player will have lost the number specified of the specified resourceType
 	 * @throws Exception
 	 */
 	public ResourceCard[] preparePlayerTrade(ResourceType resourceType, int amount) throws Exception {
