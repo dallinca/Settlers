@@ -69,8 +69,11 @@ public class Player {
 	/**
 	 * TODO
 	 * 
+	 * Retrieves the cards from the players resourceCardHand that will be used to trade with the bank
+	 * 
+	 * @pre Resourcetype != null
 	 * @param resourceType
-	 * @return
+	 * @return the cards from the players resourceCardHand that will be used to trade with the bank
 	 */
 	public ResourceCard[] prepareBankTrade(ResourceType resourceType) {
 		
@@ -81,9 +84,11 @@ public class Player {
 	/**
 	 * TODO
 	 * 
+	 * Asks the player whether it has sufficient resources of the specified type to trade to the bank
+	 * 
 	 * @return
 	 */
-	public boolean canTradeResourcesToBank() {
+	public boolean canTradeResourcesToBank(ResourceType resourceType) {
 		
 		return false;
 	}
