@@ -310,7 +310,7 @@ public class Game {
 					if (resourceType.length == 1) {
 						ResourceCard resource = bank.playerTakeResource(resourceType[0]);
 						//some sneaky idea that realizes conformToMonopoly returns the arraylist of that players cards of a specified type.
-						currentPlayer.conformToMonopoly(resourceType[0]);
+						currentPlayer.conformToMonopoly(resourceType[0]).add(resource);;
 						//repeat
 						resource = bank.playerTakeResource(resource.getResourceType());
 						currentPlayer.conformToMonopoly(resourceType[0]).add(resource);
@@ -483,45 +483,144 @@ public class Game {
 
 	/**
 	 * Can the player do domestic trade?
+	 * In the integer arrays passed in (p1 and p2 resources) the values at the index represent how many of a specific type of resource you are wanting to trade.
+	 * Each index is represented as follows:
+	 * 0 = brick
+	 * 1 = wood
+	 * 2 = wheat
+	 * 3 = ore
+	 * 4 = sheep
 	 * 
 	 * @pre: the player in question who calls this method is taking his/her turn currently
 	 * @post 
 	 */
-	public boolean canDoCurrentPlayerDoDomesticTrade() {
-		//Is it the Current Players turn and does he have any resources?
+	public boolean canDoCurrentPlayerDoDomesticTrade(int p1id, int[] p1resources, int p2id, int[] p2resources) {
+		//Is it the Current Players turn and do they have any resources?
+		//Do they have the resources he said he would trade
 		
+		ResourceType resourceType = null;
 		
-		
-		int size = 0;
-		
-		size += currentPlayer.getResourceCardHand().getNumberResourcesOfType(ResourceType.BRICK);
-		size += currentPlayer.getResourceCardHand().getNumberResourcesOfType(ResourceType.WOOD);
-		size += currentPlayer.getResourceCardHand().getNumberResourcesOfType(ResourceType.ORE);
-		size += currentPlayer.getResourceCardHand().getNumberResourcesOfType(ResourceType.SHEEP);
-		size += currentPlayer.getResourceCardHand().getNumberResourcesOfType(ResourceType.WHEAT);
-		
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < p1resources.length; i++) {
 			
+			if (i == 0) {
+				resourceType = ResourceType.BRICK;				
+			} else if (i == 1) {
+				resourceType = ResourceType.WOOD;
+			} else if (i == 2) {
+				resourceType = ResourceType.WHEAT;
+			} else if (i == 3) {
+				resourceType = ResourceType.ORE;
+			} else if (i == 4) {
+				resourceType = ResourceType.SHEEP;
+			}
+			
+			if(players[p1id].getNumberResourcesOfType(resourceType) < p1resources[i]) {
+				return false;
+			}
 		}
 		
-		if (size == 0)
+		for (int g = 0; g < p1resources.length; g++) {
+			
+			if (g == 0) {
+				resourceType = ResourceType.BRICK;				
+			} else if (g == 1) {
+				resourceType = ResourceType.WOOD;
+			} else if (g == 2) {
+				resourceType = ResourceType.WHEAT;
+			} else if (g == 3) {
+				resourceType = ResourceType.ORE;
+			} else if (g == 4) {
+				resourceType = ResourceType.SHEEP;
+			}
+			
+			if(players[p2id].getNumberResourcesOfType(resourceType) < p2resources[g]) {
+				return false;
+			}
+		}
+		
+		
+		int p1size = 0;
+		
+		p1size += players[p1id].getNumberResourcesOfType(ResourceType.BRICK);
+		p1size += players[p1id].getNumberResourcesOfType(ResourceType.WOOD);
+		p1size += players[p1id].getNumberResourcesOfType(ResourceType.ORE);
+		p1size += players[p1id].getNumberResourcesOfType(ResourceType.SHEEP);
+		p1size += players[p1id].getNumberResourcesOfType(ResourceType.WHEAT);
+		
+		int p2size = 0;
+
+		p2size += players[p2id].getNumberResourcesOfType(ResourceType.BRICK);
+		p2size += players[p2id].getNumberResourcesOfType(ResourceType.WOOD);
+		p2size += players[p2id].getNumberResourcesOfType(ResourceType.ORE);
+		p2size += players[p2id].getNumberResourcesOfType(ResourceType.SHEEP);
+		p2size += players[p2id].getNumberResourcesOfType(ResourceType.WHEAT);
+		
+		if (p1size == 0 || p2size == 0)
 			return false;
 		else
 			return true;
+			
 	}
 	 
 
 	/**
 	 * Does the actual Domestic trade
-	 * @pre
+	 * In the integer arrays passed in (p1 and p2 resources) the values at the index represent how many of a specific type of resource you are wanting to trade.
+	 * Each index is represented as follows:
+	 * 0 = brick
+	 * 1 = wood
+	 * 2 = wheat
+	 * 3 = ore
+	 * 4 = sheep
+	 * 
+	 * @pre the players are able to trade, they have accepted the trade, and they have valid playerIDs
 	 * @post
 	 * 
 	 */
-	public void doDomesticTrade() throws Exception {
-		if (canDoCurrentPlayerDoDomesticTrade()) {
+	public void doDomesticTrade(int p1id, int[] p1resources, int p2id, int[] p2resources) throws Exception {
+		if (canDoCurrentPlayerDoDomesticTrade(p1id, p1resources, p2id, p2resources)) {
+			ResourceType resourceType = null;
+			for (int i = 0; i < p1resources.length; i++) {
+				if (p1resources[i] > 0) {
+						if (i == 0)
+							resourceType = ResourceType.BRICK;
+						else if (i == 1)
+							resourceType = ResourceType.WOOD;
+						else if (i == 2)
+							resourceType = ResourceType.WHEAT;
+						else if (i == 3)
+							resourceType = ResourceType.ORE;
+						else if (i == 4)
+							resourceType = ResourceType.SHEEP;
+						ResourceCard[] trade = players[p1id].preparePlayerTrade(resourceType, p1resources[i]);
+						
+						for (int g = 0; g < p1resources[i]; g++) {
+							players[p2id].getResourceCardHand().addCard(trade[g]);
+						}
+				}
+			}
 			
-		}
-		else 
+			for (int t = 0; t < p2resources.length; t++) {
+				if (p2resources[t] > 0) {
+						if (t == 0)
+							resourceType = ResourceType.BRICK;
+						else if (t == 1)
+							resourceType = ResourceType.WOOD;
+						else if (t == 2)
+							resourceType = ResourceType.WHEAT;
+						else if (t == 3)
+							resourceType = ResourceType.ORE;
+						else if (t == 4)
+							resourceType = ResourceType.SHEEP;
+						ResourceCard[] trade = players[p2id].preparePlayerTrade(resourceType, p2resources[t]);
+						
+						for (int g = 0; g < p1resources[t]; g++) {
+							players[p1id].getResourceCardHand().addCard(trade[g]);
+						}
+				}
+			}
+			
+		} else 
 			throw new Exception("You cannot trade!!");
 	}
 	
