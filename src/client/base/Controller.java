@@ -8,7 +8,7 @@ public abstract class Controller implements IController
 	
 	private IView view;
 	
-	protected Controller(IView view)
+	protected Controller(IView view) 
 	{
 		setView(view);
 	}

@@ -296,7 +296,7 @@ public class Player {
 		 * @post returns whether the Player can collect resources(may collect nothing)
 		 */
 		public boolean canDoCollectResources(int rollValue, Bank bank) {
-			if(rollValue < 1 || rollValue == 7 || rollValue > 11) {
+			if(rollValue < 1 || rollValue == 7 || rollValue > 12) {
 				return false;
 			}
 			if(bank == null) {

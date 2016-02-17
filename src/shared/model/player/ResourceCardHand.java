@@ -21,7 +21,7 @@ import shared.model.player.exceptions.NullCardException;
  */
 public class ResourceCardHand {
 
-		private Bank bank;
+	  private Bank bank;
 	
 	  private ArrayList<ResourceCard> brickCards;
 	  private ArrayList<ResourceCard> wheatCards;
