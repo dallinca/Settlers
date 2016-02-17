@@ -480,6 +480,17 @@ public class Game {
 	public boolean canDoPlayerTakeResource(ResourceType resourceType) {
 		return bank.canDoPlayerTakeResource(resourceType);
 	}
+	
+	/**
+	 * For Year of Plenty
+	 * Retrieves whether the player can take 2 of the specified resource from the bank
+	 * 
+	 * @param resourceType
+	 * @return whether the player can take 2 of the specified resource from the bank
+	 */
+	public boolean canDoPlayerTake2OfResource(ResourceType resourceType) {
+		return bank.canDoPlayerTake2OfResource(resourceType);
+	}
 
 	/**
 	 * Can the player do domestic trade?
