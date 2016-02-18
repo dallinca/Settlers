@@ -1,5 +1,6 @@
 package client.login;
 
+import client.ClientFacade;
 import client.base.*;
 import client.misc.*;
 
@@ -28,7 +29,7 @@ public class LoginController extends Controller implements ILoginController, Obs
 	public LoginController(ILoginView view, IMessageView messageView) {
 
 		super(view);
-		
+
 		this.messageView = messageView;
 	}
 	
@@ -38,7 +39,7 @@ public class LoginController extends Controller implements ILoginController, Obs
 	}
 	
 	public IMessageView getMessageView() {
-		
+	
 		return messageView;
 	}
 	
@@ -72,21 +73,83 @@ public class LoginController extends Controller implements ILoginController, Obs
 	public void signIn() {
 		
 		// TODO: log in user
+		ILoginView loginview = getLoginView();
+		String username = loginview.getLoginUsername();
+		String userpassword = loginview.getLoginPassword();
 		
-
+		//Am I suppose to pass the username and password to the clientfacade login or is there a client commonunicator. 
+		//ClientFacade clientfacade = new ClientFacade();
+		
 		// If log in succeeded
 		getLoginView().closeModal();
 		loginAction.execute();
 	}
-
+	
+	/**
+	 * Checks that the input conditions of registering a new name correct
+	 * @param String registername
+	 * @return boolean, weather name is valid
+	 */
+	public boolean checkName(String registername){
+		if(registername.length() < 3 || registername.length() > 7){
+			return false;
+		}
+		for(int i = 0; i < registername.length(); i++){
+			char c = registername.charAt(i);
+			if(!Character.isLetter(c) || !Character.isDigit(c)|| c != '-' || c != '_'){
+				return false; 
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Checks that the input conditions of registering a new password 
+	 * @param String registerpassword, String repeatregisterpassword
+	 * @return boolean, weather Password is valid
+	 */
+	public boolean checkPassword(String registerpassword, String repeatregisterpassword){
+		if(registerpassword.length() < 5){
+			return false;
+		}
+		for(int i = 0; i < registerpassword.length(); i++){
+			char c = registerpassword.charAt(i);
+			if(!Character.isLetter(c) || !Character.isDigit(c)|| c != '-' || c != '_'){
+				getMessageView().setMessage("The password must be five or "
+						+ "more characters: letters, digits, _ and - ");
+				return false;
+			}
+			if(registerpassword.charAt(i) != repeatregisterpassword.charAt(i)){
+				getMessageView().setMessage("The two passwords must match");
+				return false;
+			}
+		}
+		return true; 
+	}
+	
 	@Override
 	public void register() {
+		ILoginView loginview = getLoginView();
 		
-		// TODO: register new user (which, if successful, also logs them in)
+		String registername = loginview.getRegisterUsername();
+		String registerpassword = loginview.getRegisterPassword();
+		String repeatregisterpassword = loginview.getRegisterPasswordRepeat();
 		
-		// If register succeeded
-		getLoginView().closeModal();
-		loginAction.execute();
+		if(checkName(registername)){
+			if(checkPassword(registerpassword, repeatregisterpassword)){
+				// If register succeeded
+				getLoginView().closeModal();
+				loginAction.execute();
+			}
+			else{
+				return;
+			}
+		}
+		else{
+			getMessageView().setMessage("The username must be between three and "
+					+ "seven characters: letters, digits, _ and - ");
+			return;
+		}
 	}
 
 	@Override
