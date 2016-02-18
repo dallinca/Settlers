@@ -96,9 +96,9 @@ public class LoginController extends Controller implements ILoginController, Obs
 		}
 		for(int i = 0; i < registername.length(); i++){
 			char c = registername.charAt(i);
-			if(!Character.isLetter(c) || !Character.isDigit(c)|| c != '-' || c != '_'){
+			if(Character.isLetter(c) || Character.isDigit(c)|| c == '-' || c == '_'){ }
+			else
 				return false; 
-			}
 		}
 		return true;
 	}
@@ -114,7 +114,8 @@ public class LoginController extends Controller implements ILoginController, Obs
 		}
 		for(int i = 0; i < registerpassword.length(); i++){
 			char c = registerpassword.charAt(i);
-			if(!Character.isLetter(c) || !Character.isDigit(c)|| c != '-' || c != '_'){
+			if(Character.isLetter(c) || Character.isDigit(c)|| c == '-' || c == '_'){ }
+			else{
 				getMessageView().setMessage("The password must be five or "
 						+ "more characters: letters, digits, _ and - ");
 				return false;
