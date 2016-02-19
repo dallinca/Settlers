@@ -32,6 +32,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 								ISelectColorView selectColorView, IMessageView messageView) {
 
 		super(view);
+		System.out.println("JoinGameController JoinGameController");
 
 		setNewGameView(newGameView);
 		setSelectColorView(selectColorView);
@@ -39,6 +40,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	}
 	
 	public IJoinGameView getJoinGameView() {
+		System.out.println("JoinGameController getJoinGameView");
 		
 		return (IJoinGameView)super.getView();
 	}
@@ -49,7 +51,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	 * @return The action to be executed when the user joins a game
 	 */
 	public IAction getJoinAction() {
-		
+		System.out.println("JoinGameController getJoinAction");
 		return joinAction;
 	}
 
@@ -59,76 +61,90 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	 * @param value The action to be executed when the user joins a game
 	 */
 	public void setJoinAction(IAction value) {	
+		System.out.println("JoinGameController setJoinAction");
 		
 		joinAction = value;
 	}
 	
 	public INewGameView getNewGameView() {
+		System.out.println("JoinGameController getNewGameView");
 		
 		return newGameView;
 	}
 
 	public void setNewGameView(INewGameView newGameView) {
+		System.out.println("JoinGameController setNewGameView");
 		
 		this.newGameView = newGameView;
 	}
 	
 	public ISelectColorView getSelectColorView() {
+		System.out.println("JoinGameController getSelectColorView");
 		
 		return selectColorView;
 	}
 	public void setSelectColorView(ISelectColorView selectColorView) {
+		System.out.println("JoinGameController setSelectColorView");
 		
 		this.selectColorView = selectColorView;
 	}
 	
 	public IMessageView getMessageView() {
+		System.out.println("JoinGameController getMessageView");
 		
 		return messageView;
 	}
 	public void setMessageView(IMessageView messageView) {
+		System.out.println("JoinGameController setMessageView");
 		
 		this.messageView = messageView;
 	}
 
 	@Override
 	public void start() {
-		
+		System.out.println("JoinGameController start");
+
 		getJoinGameView().showModal();
 	}
 
 	@Override
 	public void startCreateNewGame() {
+		System.out.println("JoinGameController startCreateNewGame");
 		
 		getNewGameView().showModal();
 	}
 
 	@Override
 	public void cancelCreateNewGame() {
+		System.out.println("JoinGameController cancelCreateNewGame");
 		
 		getNewGameView().closeModal();
 	}
 
 	@Override
 	public void createNewGame() {
+		System.out.println("JoinGameController createNewGame");
 		
 		getNewGameView().closeModal();
 	}
 
 	@Override
 	public void startJoinGame(GameInfo game) {
+		System.out.println("JoinGameController startJoinGame");
 
 		getSelectColorView().showModal();
 	}
 
 	@Override
 	public void cancelJoinGame() {
+		System.out.println("JoinGameController cancelJoinGame");
 	
 		getJoinGameView().closeModal();
 	}
 
 	@Override
 	public void joinGame(CatanColor color) {
+		System.out.println("JoinGameController joinGame");
 		
 		// If join succeeded
 		getSelectColorView().closeModal();
@@ -138,6 +154,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 
 	@Override
 	public void update(Observable o, Object arg) {
+		System.out.println("JoinGameController update");
 		// TODO Auto-generated method stub
 		
 	}
