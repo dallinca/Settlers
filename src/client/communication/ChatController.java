@@ -20,7 +20,7 @@ public class ChatController extends Controller implements IChatController {
 
 	@Override
 	public void sendMessage(String message) {
-		
+		System.out.println("ChatController sendMessage");
 	}
 
 }

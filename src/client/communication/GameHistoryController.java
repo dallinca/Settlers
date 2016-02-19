@@ -41,6 +41,7 @@ public class GameHistoryController extends Controller implements IGameHistoryCon
 		
 		getView().setEntries(entries);
 	
+		System.out.println("GameHistoryController initFromModel");
 		//</temp>
 	}
 	
