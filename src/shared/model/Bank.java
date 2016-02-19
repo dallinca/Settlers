@@ -301,9 +301,10 @@ public class Bank {
 
 
 	/**
+	 * Does the bank have cards of the type you want?
+	 * 
 	 * @pre Assumes the resourceType is valid and was previously typed
 	 * @param resourceType
-	 * @post
 	 */
 	public boolean canDoPlayerTakeResource(ResourceType resourceType) {
 		switch (resourceType) {
@@ -329,6 +330,46 @@ public class Bank {
 					return false;
 			case SHEEP:
 				if (sheepDeck.size() >=1)
+					return true;
+				else
+					return false;
+				
+				//case anything else: throw exception?
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Does the bank have cards of the type you want?
+	 * 
+	 * @pre Assumes the resourceType is valid and was previously typed
+	 * @param resourceType
+	 */
+	public boolean canDoPlayerTake2OfResource(ResourceType resourceType) {
+		switch (resourceType) {
+			case BRICK:
+				if (brickDeck.size() >=2)
+					return true;
+				else
+					return false;
+			case WHEAT:
+				if (wheatDeck.size() >=2)
+					return true;
+				else
+					return false;
+			case WOOD:
+				if (lumberDeck.size() >=2)
+					return true;
+				else
+					return false;
+			case ORE:
+				if (oreDeck.size() >=2)
+					return true;
+				else
+					return false;
+			case SHEEP:
+				if (sheepDeck.size() >=2)
 					return true;
 				else
 					return false;
@@ -374,6 +415,15 @@ public class Bank {
 	
 	//buyDevelopmentCard(
 	//ask if the size of the development cards is too much
+	/**
+	 * Purchases a development card with the given resources
+	 * @pre all those resources are valid cards of the specified type required to buy it (it checks the type though)
+	 * @param sheep
+	 * @param wheat
+	 * @param ore
+	 * @return
+	 * @throws Exception
+	 */
 	public DevelopmentCard buyDevelopmentCard(ResourceCard sheep, ResourceCard wheat, ResourceCard ore) throws Exception {
 		if (canDoBuyDevelopmentCard(sheep, wheat, ore) == false) {
 			throw new Exception("Cannot buy Development Card, needs more specific info.");
