@@ -47,6 +47,15 @@ public class Purchase {
 	 * @post Player places road on the board, loses cost.
 	 */
 	public static void purchaseRoad(){
+		//if(client.getUserID()==client.getCurrentPlayerID()){
+	//}
+		///player.canDoPlaceRoad???
+		//Player.placeRoad
+		//ClientFacade.placeRoadRequest
+		//
+		//
+		//
+		//
 
 	}
 

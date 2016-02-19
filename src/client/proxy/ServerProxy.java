@@ -1,37 +1,66 @@
 package client.proxy;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 
-import netscape.javascript.JSObject;
-
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-//import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
+import shared.communication.params.move.AcceptTrade_Params;
+import shared.communication.params.move.BuildCity_Params;
+import shared.communication.params.move.BuildRoad_Params;
+import shared.communication.params.move.BuildSettlement_Params;
+import shared.communication.params.move.BuyDevCard_Params;
+import shared.communication.params.move.DiscardCards_Params;
+import shared.communication.params.move.FinishTurn_Params;
+import shared.communication.params.move.MaritimeTrade_Params;
+import shared.communication.params.move.OfferTrade_Params;
+import shared.communication.params.move.RobPlayer_Params;
+import shared.communication.params.move.RollNumber_Params;
+import shared.communication.params.move.SendChat_Params;
+import shared.communication.params.move.devcard.PlayMonopoly_Params;
+import shared.communication.params.move.devcard.PlayMonument_Params;
+import shared.communication.params.move.devcard.PlayRoadBuilding_Params;
+import shared.communication.params.move.devcard.PlaySoldier_Params;
+import shared.communication.params.move.devcard.PlayYearOfPlenty_Params;
+import shared.communication.params.nonmove.AddAI_Params;
+import shared.communication.params.nonmove.Create_Params;
+import shared.communication.params.nonmove.GetVersion_Params;
+import shared.communication.params.nonmove.Join_Params;
+import shared.communication.params.nonmove.ListAI_Params;
+import shared.communication.params.nonmove.List_Params;
+import shared.communication.params.nonmove.Login_Params;
+import shared.communication.params.nonmove.Register_Params;
+import shared.communication.results.move.AcceptTrade_Result;
+import shared.communication.results.move.BuildCity_Result;
+import shared.communication.results.move.BuildRoad_Result;
+import shared.communication.results.move.BuildSettlement_Result;
+import shared.communication.results.move.BuyDevCard_Result;
+import shared.communication.results.move.DiscardCards_Result;
+import shared.communication.results.move.FinishTurn_Result;
+import shared.communication.results.move.MaritimeTrade_Result;
+import shared.communication.results.move.OfferTrade_Result;
+import shared.communication.results.move.RobPlayer_Result;
+import shared.communication.results.move.RollNumber_Result;
+import shared.communication.results.move.SendChat_Result;
+import shared.communication.results.move.devcard.PlayMonopoly_Result;
+import shared.communication.results.move.devcard.PlayMonument_Result;
+import shared.communication.results.move.devcard.PlayRoadBuilding_Result;
+import shared.communication.results.move.devcard.PlaySoldier_Result;
+import shared.communication.results.move.devcard.PlayYearOfPlenty_Result;
+import shared.communication.results.nonmove.AddAI_Result;
+import shared.communication.results.nonmove.Create_Result;
+import shared.communication.results.nonmove.GetVersion_Result;
+import shared.communication.results.nonmove.Join_Result;
+import shared.communication.results.nonmove.ListAI_Result;
+import shared.communication.results.nonmove.List_Result;
+import shared.communication.results.nonmove.Login_Result;
+import shared.communication.results.nonmove.Register_Result;
+import client.ClientException;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
-import client.ClientException;
-import shared.communication.params.move.*;
-import shared.communication.params.move.devcard.*;
-import shared.communication.params.nonmove.*;
-import shared.communication.results.move.*;
-import shared.communication.results.move.devcard.*;
-import shared.communication.results.nonmove.*;
+//import org.apache.http.client.HttpClient;
 
 /**
  * 
