@@ -12,6 +12,7 @@ public class Client extends Observable {
 	private IServerProxy isp;
 	private ClientFacade cf;
 	private int loggedInUserId;
+	private int playerIndex;
 	
 	public Client() {
 	
@@ -37,5 +38,13 @@ public class Client extends Observable {
 		//A list of controllers that implement observer needs to be added
 		/*for (int i =0 ; i < controllerList.size(); i++)
 		 * this.addObserver(controllerList[i])*/
+	}
+
+	public int getPlayerIndex() {
+		return playerIndex;
+	}
+
+	public void setPlayerIndex(int playerIndex) {
+		this.playerIndex = playerIndex;
 	}
 }

@@ -75,13 +75,32 @@ public interface IServerProxy {
 	public GetVersion_Result getVersion(GetVersion_Params request) throws ClientException;
 
 	/**
-	 *Joins a game
-	 * 
-	 * 
+	 * Adds the player to the specified game and sets their catan.game cookie. (See the document
+	 * titled "How the Catan Server USes HTTP Cookies" for more details on cookies.)
+	 *  
 	 * 
 	 * @param request
 	 * @return
 	 * @throws ClientException
+	 * 
+	 * @pre 1. The user has previously logged in to the server (i.e., they have a valid catan.user HTTP
+	 * cookie).
+	 * 		2. The player may join the game because
+	 * 			2a. They are already in the game, OR
+	 * 			2b. There is space in the game to add a new player
+	 * 		3. The specified game ID is valid
+	 * 		4. The specified color is valid (red, green, blue, yellow, puce, brown, white, purple,
+	 * orange)
+	 * @post If the operation succeeds,
+	 * 			1. The server returns an HTTP 200 success reponse with "Success" in the body.
+	 * 			2. The player is in the game with the specified color (i.e. calls to /games/list method wil
+	 * 		show the player in the game with the chosen color).
+	 * 			3. The server response includes the "Set-cookie" response header setting the catan.game
+	 * 		HTTP cookie
+	 * 
+	 * 		If the operation fails,
+	 * 			1. The server returns an HTTP 400 error response, and the body contains an error
+	 * 		message.
 	 */
 	public Join_Result joinGame(Join_Params request) throws ClientException;
 
@@ -98,15 +117,10 @@ public interface IServerProxy {
 	 * 			1. The server returns an HTTP 200 success response.
 	 * 			2. The body contains a JSON array containing a list of objects that contain information
 	 * 		about the server's games.
-	 * 
-	 * 		If the operation fails,
-	 * 			1. The server returns an HTTP 200 success response.
-	 * 			2. The body contains a JSON array containing a list of objects that contain information
-	 * 		about the server's games
 	 * 	
 	 * 		If the operation fails,
 	 * 			1. The server returns an HTTP 400 response, and the body contains an error
-	 * 		mesasge.
+	 * 		message.
 	 */
 	public List_Result listGames(List_Params request) throws ClientException;
 
