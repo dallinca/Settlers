@@ -221,7 +221,7 @@ public class ClientFacade {
 		return null;
 	}
 
-	public PlaySoldier_Result playSolder(PlaySoldier_Params request) throws ClientException {
+	public PlaySoldier_Result playSoldier(PlaySoldier_Params request) throws ClientException {
 		return null;
 	}
 
