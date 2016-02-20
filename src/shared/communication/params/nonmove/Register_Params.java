@@ -5,16 +5,11 @@ public class Register_Params {
 	private String username;
 	private String password;
 
-	// CONSTRUCTORS
-	//////////////////////
 	public Register_Params(String username, String password) {
-		this.username = username;
-		this.password = password;
+		this.setUsername(username);
+		this.setPassword(password);
 	}
 
-	// GETTERS AND SETTERS
-	//////////////////////
-	
 	public String getUsername() {
 		return username;
 	}
@@ -30,7 +25,5 @@ public class Register_Params {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	
 
 }

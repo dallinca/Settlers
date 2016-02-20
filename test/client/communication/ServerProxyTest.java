@@ -37,7 +37,7 @@ public class ServerProxyTest {
 		//System.out.println("Testing connection.");
 		
 		Object result = prox.doPost("/user/login", new Login_Params("Sam", "sam"));
-		
+	
 		//System.out.println(result.toString());
 	}
 	
@@ -49,10 +49,13 @@ public class ServerProxyTest {
 		//At this stage, all commands return 400's because of their empty states.
 		
 		try{
+			
+		prox.register(new Register_Params("Tiger", "Shark"));
+		prox.login(new Login_Params("Tiger", "Shark"));
+			
 		prox.sendChat(new SendChat_Params());
 		prox.rollNumber(new RollNumber_Params());
 		prox.robPlayer(new RobPlayer_Params());
-		prox.register(new Register_Params());
 		prox.playYearOfPlenty(new PlayYearOfPlenty_Params());
 		prox.playSoldier(new PlaySoldier_Params());
 		prox.playRoadBuilding(new PlayRoadBuilding_Params());

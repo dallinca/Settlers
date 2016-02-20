@@ -16,22 +16,24 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	public TurnTrackerController(ITurnTrackerView view) {
 		
 		super(view);
+		System.out.println("TurnTrackerController TurnTrackerController()");
 		
 		initFromModel();
 	}
 	
 	@Override
 	public ITurnTrackerView getView() {
-		
+		System.out.println("TurnTrackerController getView()");
 		return (ITurnTrackerView)super.getView();
 	}
 
 	@Override
 	public void endTurn() {
-
+		System.out.println("TurnTrackerController endTurn()");
 	}
 	
 	private void initFromModel() {
+		System.out.println("TurnTrackerController initFromModel()");
 		//<temp>
 		getView().setLocalPlayerColor(CatanColor.RED);
 		//</temp>
@@ -39,6 +41,7 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 
 	@Override
 	public void update(Observable o, Object arg) {
+		System.out.println("TurnTrackerController update()");
 		// TODO Auto-generated method stub
 		
 	}

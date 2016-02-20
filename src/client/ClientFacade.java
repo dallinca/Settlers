@@ -52,6 +52,8 @@ import shared.communication.results.nonmove.ListAI_Result;
 import shared.communication.results.nonmove.List_Result;
 import shared.communication.results.nonmove.Login_Result;
 import shared.communication.results.nonmove.Register_Result;
+import shared.definitions.CatanColor;
+import shared.locations.VertexLocation;
 
 /**
  * Sends all to-server requests to the client communicator for packaging
@@ -63,6 +65,7 @@ import shared.communication.results.nonmove.Register_Result;
 public class ClientFacade {
 
 	private IServerProxy sp;
+	private Client c;
 
 	/**
 	 * Creates fascade, specifying the location of the master server.
@@ -72,8 +75,9 @@ public class ClientFacade {
 	 * @pre Server name and port number specifiy an existing server.
 	 * @post Client will be able to communicate with server.
 	 */
-	ClientFacade(IServerProxy proxy){
+	ClientFacade(IServerProxy proxy, Client client){
 		sp = proxy;
+		c = client;
 	}
 
 	public ClientFacade(){		
@@ -93,7 +97,7 @@ public class ClientFacade {
 
 		Login_Result result; 
 		Login_Params request = new Login_Params(username, password);		
-		
+
 		try {
 
 			result = sp.login(request);
@@ -117,77 +121,201 @@ public class ClientFacade {
 
 	}
 
+	/**
+	 * extra credit
+	 * @param request
+	 * @return
+	 * @throws ClientException
+	 */
 	public AddAI_Result addAI(AddAI_Params request) throws ClientException {
 		return null;
 	}
 
-	public Create_Result createGame(Create_Params request) throws ClientException {
-		return null;
+	public Create_Result createGame(String name, boolean randomTiles, boolean randomNumbers, boolean randomPorts) throws ClientException {
+		Create_Result result; 
+		Create_Params request = new Create_Params(name, randomTiles, randomNumbers, randomPorts);		
+
+		try {
+
+			result = sp.createGame(request);
+
+		} catch (ClientException e) {			
+			result = new Create_Result();
+
+			e.printStackTrace();
+		}		
+
+		return result;
 	}
 
 	/**
 	 * Gets the current game state from the server.
-	 * @param username
+	 * @param 
 	 * @return
 	 * 
 	 * @pre Client is validated and participating in a game.
 	 * @post Communicator will return usable PollServer_Result.
 	 */
-	public GetVersion_Result getVersion(GetVersion_Params request) throws ClientException {
-		return null;
+	public GetVersion_Result getVersion() throws ClientException {
+
+		GetVersion_Result result; 
+		GetVersion_Params request = new GetVersion_Params(c.getGame().getVersionNumber());		
+
+		try {
+
+			result = sp.getVersion(request);
+
+		} catch (ClientException e) {			
+			result = new GetVersion_Result();
+
+			e.printStackTrace();
+		}		
+
+		return result;
 	}
 
-	public Join_Result joinGame(Join_Params request) throws ClientException {
-		return null;
+	public Join_Result joinGame(int gameID, CatanColor color) throws ClientException {
+		Join_Result result; 
+		Join_Params request = new Join_Params(gameID, color);		
+
+		try {
+
+			result = sp.joinGame(request);
+
+		} catch (ClientException e) {			
+			result = new Join_Result();
+
+			e.printStackTrace();
+		}		
+
+		return result;
 	}
 
-	public List_Result listGames(List_Params request) throws ClientException {
-		return null;
-	}
+	public List_Result listGames() throws ClientException {
+		List_Result result; 
+		List_Params request = new List_Params();		
 
-	public ListAI_Result listAI(ListAI_Params request) throws ClientException {
-		return null;
-	}
+		try {
 
-	/**
-	 * TODO
-	 * 
-	 * @param request
-	 * @return
-	 * @throws ClientException
-	 */
-	public Login_Result login(Login_Params request) throws ClientException {
-		Login_Result result = new Login_Result();
-		if(request.getUsername().equals("mack")) {
-			result.setWasLoggedIn(true);
-		} else {
-			result.setWasLoggedIn(false);
-		}
+			result = sp.listGames(request);
+
+		} catch (ClientException e) {			
+			result = new List_Result();
+
+			e.printStackTrace();
+		}		
+
 		return result;
 	}
 
 	/**
-	 * TODO
+	 * Extra credit. Not implemented.
 	 * 
 	 * @param request
 	 * @return
 	 * @throws ClientException
 	 */
-	public Register_Result register(Register_Params request) throws ClientException {
-		Register_Result result = new Register_Result();
-		if(request.getUsername().equals("puppy")) {
-			result.setWasRegistered(true);
-		} else {
-			result.setWasRegistered(false);
-		}
+	public ListAI_Result listAI() throws ClientException {
+		return null;
+	}
+
+	public Register_Result register(String username, String password) throws ClientException {
+		Register_Result result; 
+		Register_Params request = new Register_Params(username, password);		
+
+		try {
+
+			result = sp.register(request);
+
+		} catch (ClientException e) {			
+			result = new Register_Result();
+
+			e.printStackTrace();
+		}		
+
+		return result;
+	}
+
+	//misc commands
+
+
+	public SendChat_Result sendChat(String content) throws ClientException {
+		int playerIndex = c.getPlayerIndex();
+
+		SendChat_Result result; 
+		SendChat_Params request = new SendChat_Params(playerIndex, content);		
+
+		try {
+
+			result = sp.sendChat(request);
+
+		} catch (ClientException e) {			
+			result = new SendChat_Result();
+
+			e.printStackTrace();
+		}	
+		
+		
+		return result;
+	}	
+
+	public AcceptTrade_Result acceptTrade(boolean willAccept) throws ClientException {
+		AcceptTrade_Result result; 
+		AcceptTrade_Params request = new AcceptTrade_Params(willAccept);		
+
+		try {
+
+			result = sp.acceptTrade(request);
+
+		} catch (ClientException e) {			
+			result = new AcceptTrade_Result();
+
+			e.printStackTrace();
+		}		
+
+		return result;
+	}
+
+
+	public RollNumber_Result rollNumber(int number) throws ClientException {
+		RollNumber_Result result; 
+		RollNumber_Params request = new RollNumber_Params(number);		
+
+		try {
+
+			result = sp.rollNumber(request);
+
+		} catch (ClientException e) {			
+			result = new RollNumber_Result();
+
+			e.printStackTrace();
+		}		
+
+		return result;
+	}
+
+
+	public DiscardCards_Result discardCards(int brick, int ore, int sheep, int wheat, int wood) throws ClientException {
+
+		int playerIndex = c.getPlayerIndex();
+
+		DiscardCards_Result result; 
+		DiscardCards_Params request = new DiscardCards_Params(playerIndex, brick, ore, sheep, wheat, wood);		
+
+		try {
+
+			result = sp.discardCards(request);
+
+		} catch (ClientException e) {			
+			result = new DiscardCards_Result();
+
+			e.printStackTrace();
+		}		
+
 		return result;
 	}
 
 	//move
-
-	public AcceptTrade_Result acceptTrade(AcceptTrade_Params request) throws ClientException {
-		return null;
-	}
 
 	public BuildCity_Result buildCity(BuildCity_Params request) throws ClientException {
 		return null;
@@ -197,15 +325,36 @@ public class ClientFacade {
 		return null;
 	}
 
-	public BuildSettlement_Result buildSettlement(BuildSettlement_Params request) throws ClientException {
-		return null;
+	public BuildSettlement_Result buildSettlement(VertexLocation location) throws ClientException {
+
+		int playerIndex = c.getPlayerIndex();
+		boolean free = c.getGame().isInSetupPhase();
+
+		BuildSettlement_Result result; 
+		BuildSettlement_Params request = new BuildSettlement_Params(c.getPlayerIndex(), location, free);		
+
+		try {
+
+			result = sp.buildSettlement(request);
+
+		} catch (ClientException e) {			
+			result = new BuildSettlement_Result();
+
+			e.printStackTrace();
+		}		
+
+		return result;
+		/*
+		 *   playerIndex: 2
+        vertexLocation
+            x: -1
+            y: -1
+            direction: "NE"
+        free: false
+		 */
 	}
 
 	public BuyDevCard_Result buyDevCard(BuyDevCard_Params request) throws ClientException {
-		return null;
-	}
-
-	public DiscardCards_Result discardCards(DiscardCards_Params request) throws ClientException {
 		return null;
 	}
 
@@ -225,13 +374,7 @@ public class ClientFacade {
 		return null;
 	}
 
-	public RollNumber_Result rollNumber(RollNumber_Params request) throws ClientException {
-		return null;
-	}
 
-	public SendChat_Result sendChat(SendChat_Params request) throws ClientException {
-		return null;
-	}	
 
 	//dev card play
 
@@ -247,7 +390,7 @@ public class ClientFacade {
 		return null;
 	}
 
-	public PlaySoldier_Result playSolder(PlaySoldier_Params request) throws ClientException {
+	public PlaySoldier_Result playSoldier(PlaySoldier_Params request) throws ClientException {
 		return null;
 	}
 

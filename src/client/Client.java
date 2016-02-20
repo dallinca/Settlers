@@ -15,6 +15,7 @@ public class Client extends Observable {
 	private int loggedInUserId;
 	private String name;
 	private CatanColor color;
+	private int playerIndex;
 	
 
 	// CONSTRUCTORS
@@ -64,5 +65,11 @@ public class Client extends Observable {
 		this.color = color;
 	}
 	
-	
+	public int getPlayerIndex() {
+		return playerIndex;
+	}
+
+	public void setPlayerIndex(int playerIndex) {
+		this.playerIndex = playerIndex;
+	}
 }
