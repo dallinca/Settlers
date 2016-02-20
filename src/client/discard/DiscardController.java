@@ -27,13 +27,17 @@ public class DiscardController extends Controller implements IDiscardController,
 		super(view);
 		
 		this.waitView = waitView;
+		System.out.println("DiscardController DiscardController()");
 	}
 
 	public IDiscardView getDiscardView() {
+		System.out.println("DiscardController getDiscardView()");
 		return (IDiscardView)super.getView();
+		
 	}
 	
 	public IWaitView getWaitView() {
+		System.out.println("DiscardController getWaitView()");
 		return waitView;
 	}
 

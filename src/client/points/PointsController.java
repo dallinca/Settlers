@@ -22,25 +22,28 @@ public class PointsController extends Controller implements IPointsController, O
 	public PointsController(IPointsView view, IGameFinishedView finishedView) {
 		
 		super(view);
-		
+		System.out.println("PointsController PointsController()");
 		setFinishedView(finishedView);
 		
 		initFromModel();
 	}
 	
 	public IPointsView getPointsView() {
-		
+		System.out.println("PointsController getPointsView()");
 		return (IPointsView)super.getView();
 	}
 	
 	public IGameFinishedView getFinishedView() {
+		System.out.println("PointsController getFinishedView()");
 		return finishedView;
 	}
 	public void setFinishedView(IGameFinishedView finishedView) {
+		System.out.println("PointsController setFinishedView()");
 		this.finishedView = finishedView;
 	}
 
 	private void initFromModel() {
+		System.out.println("PointsController initFromModel()");
 		//<temp>		
 		getPointsView().setPoints(5);
 		//</temp>
@@ -48,6 +51,7 @@ public class PointsController extends Controller implements IPointsController, O
 
 	@Override
 	public void update(Observable o, Object arg) {
+		System.out.println("PointsController update()");
 		// TODO Auto-generated method stub
 		
 	}

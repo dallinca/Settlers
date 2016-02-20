@@ -12,5 +12,8 @@ public interface IController
 	 * @return The controller's view
 	 */
 	IView getView();
+	
+	
+	
 }
 
