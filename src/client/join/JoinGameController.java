@@ -6,6 +6,7 @@ import shared.definitions.CatanColor;
 import java.util.Observable;
 import java.util.Observer;
 
+import client.Client;
 import client.ClientException;
 import client.ClientFacade;
 import client.MockClientFacade;
@@ -34,7 +35,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	 * @param messageView Message view (used to display error messages that occur while the user is joining a game)
 	 */
 	public JoinGameController(IJoinGameView view, INewGameView newGameView, 
-								ISelectColorView selectColorView, IMessageView messageView, MockClientFacade mockClientFacade) {
+								ISelectColorView selectColorView, IMessageView messageView, MockClientFacade mockClientFacade, Client clientInfo) {
 
 		super(view);
 		System.out.println("JoinGameController JoinGameController()");
