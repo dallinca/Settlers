@@ -254,8 +254,7 @@ public class ClientFacade {
 			result = new SendChat_Result();
 
 			e.printStackTrace();
-		}	
-		
+		}		
 		
 		return result;
 	}	
@@ -345,21 +344,30 @@ public class ClientFacade {
 		}		
 
 		return result;
-		/*
-		 *   playerIndex: 2
-        vertexLocation
-            x: -1
-            y: -1
-            direction: "NE"
-        free: false
-		 */
 	}
 
-	public BuyDevCard_Result buyDevCard(BuyDevCard_Params request) throws ClientException {
-		return null;
+	public BuyDevCard_Result buyDevCard() throws ClientException {
+		BuyDevCard_Result result; 
+		BuyDevCard_Params request = new BuyDevCard_Params(c.getPlayerIndex());		
+
+		try {
+
+			result = sp.buyDevCard(request);
+
+		} catch (ClientException e) {			
+			result = new BuyDevCard_Result();
+
+			e.printStackTrace();
+		}		
+
+		return result;
 	}
 
-	public FinishTurn_Result finishTurn(FinishTurn_Params request) throws ClientException {
+	public FinishTurn_Result finishTurn() throws ClientException {
+		
+		
+		
+		
 		return null;
 	}
 
