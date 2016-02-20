@@ -4,6 +4,7 @@ import java.util.*;
 import client.map.MapController;
 import client.proxy.IServerProxy;
 import client.proxy.MockServerProxy;
+import shared.definitions.CatanColor;
 import shared.model.Game;
 
 public class Client extends Observable {
@@ -12,7 +13,12 @@ public class Client extends Observable {
 	private IServerProxy isp;
 	private ClientFacade cf;
 	private int loggedInUserId;
+	private String name;
+	private CatanColor color;
 	
+
+	// CONSTRUCTORS
+	//////////////////////
 	public Client() {
 	
 	}
@@ -23,6 +29,9 @@ public class Client extends Observable {
 		
 	}
 
+	// GETTERS AND SETTERS
+	//////////////////////
+	
 	public Game getGame() {
 		return game;
 	}
@@ -38,4 +47,22 @@ public class Client extends Observable {
 		/*for (int i =0 ; i < controllerList.size(); i++)
 		 * this.addObserver(controllerList[i])*/
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public CatanColor getColor() {
+		return color;
+	}
+
+	public void setColor(CatanColor color) {
+		this.color = color;
+	}
+	
+	
 }

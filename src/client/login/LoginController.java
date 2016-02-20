@@ -1,7 +1,9 @@
 package client.login;
 
+import client.Client;
 import client.ClientException;
 import client.ClientFacade;
+import client.MockClientFacade;
 import client.base.*;
 import client.misc.*;
 
@@ -24,7 +26,8 @@ import com.google.gson.reflect.TypeToken;
  */
 public class LoginController extends Controller implements ILoginController, Observer {
 
-	private ClientFacade clientFacade;
+	private Client clientInfo;
+	private MockClientFacade mockClientFacade;
 	private IMessageView messageView;
 	private IAction loginAction;
 	
@@ -34,12 +37,13 @@ public class LoginController extends Controller implements ILoginController, Obs
 	 * @param view Login view
 	 * @param messageView Message view (used to display error messages that occur during the login process)
 	 */
-	public LoginController(ILoginView view, IMessageView messageView, ClientFacade clientFacade) {
+	public LoginController(ILoginView view, IMessageView messageView, MockClientFacade mockClientFacade, Client clientInfo) {
 
 		super(view);
 		System.out.println("LoginController LoginController()");
 		
-		this.clientFacade = clientFacade;
+		this.clientInfo = clientInfo;
+		this.mockClientFacade = mockClientFacade;
 		this.messageView = messageView;
 	}
 	
@@ -84,11 +88,15 @@ public class LoginController extends Controller implements ILoginController, Obs
 		getLoginView().showModal();
 	}
 
+	/**
+	 * TODO - Javadoc
+	 * 
+	 * 
+	 */
 	@Override
 	public void signIn() {
 		System.out.println("LoginController signIn()");
 		
-		// TODO: log in user
 		ILoginView loginview = getLoginView();
 		String username = loginview.getLoginUsername();
 		String userpassword = loginview.getLoginPassword();
@@ -98,7 +106,7 @@ public class LoginController extends Controller implements ILoginController, Obs
 				// call the client facade with the username and password to attempt registry 
 				Login_Result login_result = null;
 				try {
-					login_result = clientFacade.login(new Login_Params(username, userpassword));
+					login_result = mockClientFacade.login(username, userpassword);
 				} catch (ClientException e) {
 					e.printStackTrace();
 					getMessageView().setMessage("Login failed, possibly no connection to the internet, Client Exception()");
@@ -190,7 +198,12 @@ public class LoginController extends Controller implements ILoginController, Obs
 		}
 		return true; 
 	}
-	
+
+	/**
+	 * TODO - Javadoc
+	 * 
+	 * 
+	 */
 	@Override
 	public void register() {
 		System.out.println("LoginController register()");
@@ -205,7 +218,7 @@ public class LoginController extends Controller implements ILoginController, Obs
 				// call the client facade with the username and password to attempt registry 
 				Register_Result register_result = null;
 				try {
-					register_result = clientFacade.register(new Register_Params(registername, registerpassword));
+					register_result = mockClientFacade.register(registername, registerpassword);
 				} catch (ClientException e) {
 					e.printStackTrace();
 					getMessageView().setMessage("Registration failed, possibly no connection to the internet, Client Exception()");
@@ -221,6 +234,7 @@ public class LoginController extends Controller implements ILoginController, Obs
 				}
 				
 				// If register succeeded
+				clientInfo.setName(registername);
 				System.out.println("about to register");
 				getLoginView().closeModal();
 				loginAction.execute();

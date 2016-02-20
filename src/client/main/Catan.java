@@ -2,7 +2,9 @@ package client.main;
 
 import javax.swing.*;
 
+import client.Client;
 import client.ClientFacade;
+import client.MockClientFacade;
 import client.catan.*;
 import client.login.*;
 import client.join.*;
@@ -15,8 +17,9 @@ import client.base.*;
 @SuppressWarnings("serial")
 public class Catan extends JFrame
 {
-	// Set up the ClientFacade
-	private static ClientFacade clientFacade = new ClientFacade();
+	// Set up the Client
+	private static Client clientInfo = new Client();
+	private static MockClientFacade mockClientFacade = new MockClientFacade();
 	private CatanPanel catanPanel;
 	
 	public Catan()
@@ -73,7 +76,10 @@ public class Catan extends JFrame
 																				 joinView,
 																				 newGameView,
 																				 selectColorView,
-																				 joinMessageView);
+																				 joinMessageView,
+																				 mockClientFacade,
+																				 clientInfo
+																				 );
 				joinController.setJoinAction(new IAction() {
 					@Override
 					public void execute()
@@ -91,7 +97,8 @@ public class Catan extends JFrame
 				LoginController loginController = new LoginController(
 																	  loginView,
 																	  loginMessageView,
-																	  clientFacade
+																	  mockClientFacade,
+																	  clientInfo
 																	  );
 				loginController.setLoginAction(new IAction() {
 					@Override
