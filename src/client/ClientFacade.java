@@ -328,10 +328,10 @@ public class ClientFacade {
 	public BuildSettlement_Result buildSettlement(VertexLocation location) throws ClientException {
 
 		int playerIndex = c.getPlayerIndex();
-		boolean free = c.getGame().isInSetupPhase();
+		boolean free = c.getGame().isInSetUpPhase();
 
 		BuildSettlement_Result result; 
-		BuildSettlement_Params request = new BuildSettlement_Params(c.getPlayerIndex(), location, free);		
+		/*BuildSettlement_Params request = new BuildSettlement_Params(c.getPlayerIndex(), location, free);		
 
 		try {
 
@@ -341,9 +341,9 @@ public class ClientFacade {
 			result = new BuildSettlement_Result();
 
 			e.printStackTrace();
-		}		
+		}	
 
-		return result;
+		return result;*/
 		/*
 		 *   playerIndex: 2
         vertexLocation
@@ -352,6 +352,7 @@ public class ClientFacade {
             direction: "NE"
         free: false
 		 */
+		return null;
 	}
 
 	public BuyDevCard_Result buyDevCard(BuyDevCard_Params request) throws ClientException {

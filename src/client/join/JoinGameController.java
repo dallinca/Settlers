@@ -114,7 +114,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 			result = mockClientFacade.listGames();
 			GameInfo[] games = new GameInfo[result.getGames().length];
 			games = result.getGames();
-			getJoinGameView().setGames(games, localPlayer);
+			getJoinGameView().setGames(games, new PlayerInfo());
 		} catch (ClientException e) {
 			e.printStackTrace();
 		}
