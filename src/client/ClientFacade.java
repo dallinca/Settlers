@@ -76,7 +76,7 @@ public class ClientFacade {
 		sp = proxy;
 	}
 
-	ClientFacade(){		
+	public ClientFacade(){		
 		sp = new ServerProxy();				
 	}
 
@@ -153,8 +153,21 @@ public class ClientFacade {
 		return null;
 	}
 
+	/**
+	 * TODO
+	 * 
+	 * @param request
+	 * @return
+	 * @throws ClientException
+	 */
 	public Register_Result register(Register_Params request) throws ClientException {
-		return null;
+		Register_Result result = new Register_Result();
+		if(request.getUsername().equals("puppy")) {
+			result.setWasRegistered(true);
+		} else {
+			result.setWasRegistered(false);
+		}
+		return result;
 	}
 
 	//move

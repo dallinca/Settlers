@@ -2,6 +2,7 @@ package client.main;
 
 import javax.swing.*;
 
+import client.ClientFacade;
 import client.catan.*;
 import client.login.*;
 import client.join.*;
@@ -14,7 +15,8 @@ import client.base.*;
 @SuppressWarnings("serial")
 public class Catan extends JFrame
 {
-	
+	// Set up the ClientFacade
+	private static ClientFacade clientFacade = new ClientFacade();
 	private CatanPanel catanPanel;
 	
 	public Catan()
@@ -43,6 +45,7 @@ public class Catan extends JFrame
 	
 	public static void main(final String[] args)
 	{
+		
 		try
 		{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -87,7 +90,9 @@ public class Catan extends JFrame
 				MessageView loginMessageView = new MessageView();
 				LoginController loginController = new LoginController(
 																	  loginView,
-																	  loginMessageView);
+																	  loginMessageView,
+																	  clientFacade
+																	  );
 				loginController.setLoginAction(new IAction() {
 					@Override
 					public void execute()
