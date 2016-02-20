@@ -6,7 +6,7 @@ public class Login_Params {
 	private String password;
 
 	public Login_Params(String username, String password) {
-		// TODO Auto-generated constructor stub
+		this.username = username; this.password = password;
 	}
 
 	public Login_Params() {

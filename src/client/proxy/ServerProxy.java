@@ -1,11 +1,23 @@
 package client.proxy;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 import shared.communication.params.move.AcceptTrade_Params;
 import shared.communication.params.move.BuildCity_Params;
@@ -105,7 +117,7 @@ public class ServerProxy implements IServerProxy {
 		userCookie = "";
 		gameCookie = "";
 	}
-	
+
 	public String getUserCookie(){
 		return userCookie;
 	}
@@ -292,50 +304,74 @@ public class ServerProxy implements IServerProxy {
 		//System.out.println("Doing post!");
 
 		URL_SUFFIX = urlString;
+		
+		HttpURLConnection connection = null;
 
-		try {
+		try {	
 
 			URL url = new URL(URL_PREFIX + URL_SUFFIX);
+			
+			connection = (HttpURLConnection)url.openConnection();
 
-			HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+			
+
+			Gson gson = new Gson();
+			String job = gson.toJson(request);	
+
+			//Append those cookies client already has--------------------
+			if (!gameCookie.equals("")){
+				System.out.println("Adding cookies");
+				connection.addRequestProperty("Cookie", userCookie+"; "+gameCookie);
+			}
+			else if (!userCookie.equals("")){
+				System.out.println("Adding user cookie");
+				connection.addRequestProperty("Cookie", userCookie);
+			}
+
+			//System.out.println(url);
+			//System.out.println(connection.toString());
+			System.out.println("Job before: "+job);
 
 			connection.setRequestMethod(HTTP_POST);
 			connection.setDoInput(true);
 			connection.setDoOutput(true);	
-
-			Gson gson = new Gson();
-			String job = gson.toJson(request);		
-
-			//Append those cookies client already has--------------------
-			if (!gameCookie.equals("")){
-				connection.addRequestProperty("Cookie", userCookie+"; "+gameCookie);
-			}
-			else if (!userCookie.equals("")){
-				connection.addRequestProperty("Cookie", userCookie);
-			}
-
-		//	System.out.println(url);
-		//	System.out.println(connection.toString());
-			//System.out.println("Job before: "+job);
 			
 			connection.connect(); // sends cookies
 
 
+			/*	String       postUrl       = url.toString();// put in your url
+			HttpClient   httpClient    = HttpClientBuilder.create().build();
+			HttpPost     post          = new HttpPost(postUrl);
+			StringEntity postingString = new StringEntity(gson.toJson(job));//gson.tojson() converts your pojo to json
+			post.setEntity(postingString);
+			post.setHeader("Content-type", "application/json");
+			HttpResponse  response = httpClient.execute(post);
+
+			job = response.toString();*/
+
+			
 			ObjectOutputStream out = new ObjectOutputStream(connection.getOutputStream());
-			out.writeObject(job);
-			out.close();
-			
+			//out.writeObject(job);
+			out.writeChars(job);
+			//System.out.println("Input stream: " + connection.getOutputStream().toString());
+
+			out.close();connection.getOutputStream().close();
+			 
 			//System.out.println("Receiving response from server.");
-			
+
 			//connection.getOutputStream().close();
-			
+
 			ObjectInputStream in = new ObjectInputStream(connection.getInputStream());
+
+			System.out.println("Input stream received.");
 			job = (String) in.readObject();
 			in.close();
-			
+
+			//System.out.println("Stream closed.");
+
 			//System.out.println("Job after: "+job);
 
-			//System.out.println("Caching cookies.");
+			//System.out.println("Caching cookies=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=.");
 			//Cookie cacher----------------------------------
 			Map<String, List<String>> headers = connection.getHeaderFields();
 
@@ -360,8 +396,24 @@ public class ServerProxy implements IServerProxy {
 
 		}	 
 		catch (Exception ex) {
-			//System.out.print("An exception occurred: ");
-			//System.out.println(ex.getMessage());
+			System.out.print("An exception occurred: ");
+			System.out.println(ex.getMessage());
+			InputStream is = connection.getErrorStream();
+			
+			InputStreamReader error = new InputStreamReader(is);
+			BufferedReader bre = new BufferedReader(error);
+			String eline;
+			try {
+				while ((eline = bre.readLine()) != null) {
+				        System.out.println(eline);
+				    }
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println();
+			
+			
 		} finally {
 			//finally stuff
 		}
