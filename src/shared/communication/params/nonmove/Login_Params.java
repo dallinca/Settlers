@@ -5,14 +5,19 @@ public class Login_Params {
 	private String username;
 	private String password;
 
+	// CONSTRUCTORS
+	//////////////////////
 	public Login_Params(String username, String password) {
-		// TODO Auto-generated constructor stub
+		this.username = username;
+		this.password = password;
 	}
 
 	public Login_Params() {
-		// TODO Auto-generated constructor stub
 	}
 
+	// GETTERS AND SETTERS
+	//////////////////////
+	
 	public String getPassword() {
 		return password;
 	}

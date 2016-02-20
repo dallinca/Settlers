@@ -10,7 +10,9 @@ import java.io.*;
 import java.util.*;
 import java.lang.reflect.*;
 
+import shared.communication.params.nonmove.Login_Params;
 import shared.communication.params.nonmove.Register_Params;
+import shared.communication.results.nonmove.Login_Result;
 import shared.communication.results.nonmove.Register_Result;
 
 import com.google.gson.*;
@@ -90,13 +92,43 @@ public class LoginController extends Controller implements ILoginController, Obs
 		ILoginView loginview = getLoginView();
 		String username = loginview.getLoginUsername();
 		String userpassword = loginview.getLoginPassword();
-		
-		//Am I suppose to pass the username and password to the clientfacade login or is there a client commonunicator. 
-		//ClientFacade clientfacade = new ClientFacade();
-		
-		// If log in succeeded
-		getLoginView().closeModal();
-		loginAction.execute();
+
+		if(checkName(username)){
+			if(checkPassword(userpassword, userpassword)){
+				// call the client facade with the username and password to attempt registry 
+				Login_Result login_result = null;
+				try {
+					login_result = clientFacade.login(new Login_Params(username, userpassword));
+				} catch (ClientException e) {
+					e.printStackTrace();
+					getMessageView().setMessage("Login failed, possibly no connection to the internet, Client Exception()");
+					getMessageView().showModal();
+					return;
+				}
+				
+				// If a result is passed back check to see if the registry was successful
+				if( login_result == null || login_result.isWasLoggedIn() == false) {
+					getMessageView().setMessage("Login failed, possibly no connection to the internet");
+					getMessageView().showModal();
+					return;
+				}
+				
+				// If register succeeded
+				System.out.println("about to login");
+				getLoginView().closeModal();
+				loginAction.execute();
+				return;
+			}
+			else{
+				return;
+			}
+		}
+		else{
+			getMessageView().setMessage("The username must be between three and "
+					+ "seven characters: letters, digits, _ and - ");
+			getMessageView().showModal();
+			return;
+		}
 	}
 	
 	/**
@@ -189,7 +221,7 @@ public class LoginController extends Controller implements ILoginController, Obs
 				}
 				
 				// If register succeeded
-				System.out.println("about to login");
+				System.out.println("about to register");
 				getLoginView().closeModal();
 				loginAction.execute();
 				return;

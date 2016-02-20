@@ -149,8 +149,21 @@ public class ClientFacade {
 		return null;
 	}
 
+	/**
+	 * TODO
+	 * 
+	 * @param request
+	 * @return
+	 * @throws ClientException
+	 */
 	public Login_Result login(Login_Params request) throws ClientException {
-		return null;
+		Login_Result result = new Login_Result();
+		if(request.getUsername().equals("mack")) {
+			result.setWasLoggedIn(true);
+		} else {
+			result.setWasLoggedIn(false);
+		}
+		return result;
 	}
 
 	/**
