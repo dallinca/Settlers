@@ -1,6 +1,9 @@
 package client.login;
 
+import client.Client;
+import client.ClientException;
 import client.ClientFacade;
+import client.MockClientFacade;
 import client.base.*;
 import client.misc.*;
 
@@ -8,6 +11,11 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 import java.lang.reflect.*;
+
+import shared.communication.params.nonmove.Login_Params;
+import shared.communication.params.nonmove.Register_Params;
+import shared.communication.results.nonmove.Login_Result;
+import shared.communication.results.nonmove.Register_Result;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
@@ -18,6 +26,8 @@ import com.google.gson.reflect.TypeToken;
  */
 public class LoginController extends Controller implements ILoginController, Observer {
 
+	private Client clientInfo;
+	private MockClientFacade mockClientFacade;
 	private IMessageView messageView;
 	private IAction loginAction;
 	
@@ -27,11 +37,13 @@ public class LoginController extends Controller implements ILoginController, Obs
 	 * @param view Login view
 	 * @param messageView Message view (used to display error messages that occur during the login process)
 	 */
-	public LoginController(ILoginView view, IMessageView messageView) {
+	public LoginController(ILoginView view, IMessageView messageView, MockClientFacade mockClientFacade, Client clientInfo) {
 
 		super(view);
 		System.out.println("LoginController LoginController()");
-
+		
+		this.clientInfo = clientInfo;
+		this.mockClientFacade = mockClientFacade;
 		this.messageView = messageView;
 	}
 	
@@ -76,21 +88,55 @@ public class LoginController extends Controller implements ILoginController, Obs
 		getLoginView().showModal();
 	}
 
+	/**
+	 * TODO - Javadoc
+	 * 
+	 * 
+	 */
 	@Override
 	public void signIn() {
 		System.out.println("LoginController signIn()");
 		
-		// TODO: log in user
 		ILoginView loginview = getLoginView();
 		String username = loginview.getLoginUsername();
 		String userpassword = loginview.getLoginPassword();
-		
-		//Am I suppose to pass the username and password to the clientfacade login or is there a client commonunicator. 
-		//ClientFacade clientfacade = new ClientFacade();
-		
-		// If log in succeeded
-		getLoginView().closeModal();
-		loginAction.execute();
+
+		if(checkName(username)){
+			if(checkPassword(userpassword, userpassword)){
+				// call the client facade with the username and password to attempt registry 
+				Login_Result login_result = null;
+				try {
+					login_result = mockClientFacade.login(username, userpassword);
+				} catch (ClientException e) {
+					e.printStackTrace();
+					getMessageView().setMessage("Login failed, possibly no connection to the internet, Client Exception()");
+					getMessageView().showModal();
+					return;
+				}
+				
+				// If a result is passed back check to see if the registry was successful
+				if( login_result == null || login_result.isWasLoggedIn() == false) {
+					getMessageView().setMessage("Login failed, possibly no connection to the internet");
+					getMessageView().showModal();
+					return;
+				}
+				
+				// If register succeeded
+				System.out.println("about to login");
+				getLoginView().closeModal();
+				loginAction.execute();
+				return;
+			}
+			else{
+				return;
+			}
+		}
+		else{
+			getMessageView().setMessage("The username must be between three and "
+					+ "seven characters: letters, digits, _ and - ");
+			getMessageView().showModal();
+			return;
+		}
 	}
 	
 	/**
@@ -101,22 +147,18 @@ public class LoginController extends Controller implements ILoginController, Obs
 	public boolean checkName(String registername){
 		System.out.println("LoginController checkName()");
 		if(registername.length() < 3 || registername.length() > 7){
-			getMessageView().setMessage("Your username must be between 3 and 7 characters long (inclusive)");
-			getMessageView().showModal();
-			System.out.println("incorrect length");
+			System.out.println("LoginController checkName() returning false 1");
 			return false;
 		}
-		System.out.println("correct length");
 		for(int i = 0; i < registername.length(); i++){
 			char c = registername.charAt(i);
 			if(Character.isLetter(c) || Character.isDigit(c)|| c == '-' || c == '_'){ }
 			else {
-				getMessageView().setMessage("The username must be letters, digits, '_' or '-'");
-				getMessageView().showModal();
-				System.out.println("bad characters");
+				System.out.println("LoginController checkName() returning false 2");
 				return false; 
 			}
 		}
+		System.out.println("LoginController checkName() returning true");
 		return true;
 	}
 	
@@ -156,7 +198,12 @@ public class LoginController extends Controller implements ILoginController, Obs
 		}
 		return true; 
 	}
-	
+
+	/**
+	 * TODO - Javadoc
+	 * 
+	 * 
+	 */
 	@Override
 	public void register() {
 		System.out.println("LoginController register()");
@@ -168,9 +215,27 @@ public class LoginController extends Controller implements ILoginController, Obs
 		
 		if(checkName(registername)){
 			if(checkPassword(registerpassword, repeatregisterpassword)){
+				// call the client facade with the username and password to attempt registry 
+				Register_Result register_result = null;
+				try {
+					register_result = mockClientFacade.register(registername, registerpassword);
+				} catch (ClientException e) {
+					e.printStackTrace();
+					getMessageView().setMessage("Registration failed, possibly no connection to the internet, Client Exception()");
+					getMessageView().showModal();
+					return;
+				}
+				
+				// If a result is passed back check to see if the registry was successful
+				if( register_result == null || register_result.isWasRegistered() == false) {
+					getMessageView().setMessage("Registration failed, possibly no connection to the internet");
+					getMessageView().showModal();
+					return;
+				}
+				
 				// If register succeeded
-
-				System.out.println("about to login");
+				clientInfo.setName(registername);
+				System.out.println("about to register");
 				getLoginView().closeModal();
 				loginAction.execute();
 				return;

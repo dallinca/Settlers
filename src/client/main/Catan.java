@@ -2,6 +2,9 @@ package client.main;
 
 import javax.swing.*;
 
+import client.Client;
+import client.ClientFacade;
+import client.MockClientFacade;
 import client.catan.*;
 import client.login.*;
 import client.join.*;
@@ -14,7 +17,9 @@ import client.base.*;
 @SuppressWarnings("serial")
 public class Catan extends JFrame
 {
-	
+	// Set up the Client
+	private static Client clientInfo = new Client();
+	private static MockClientFacade mockClientFacade = new MockClientFacade();
 	private CatanPanel catanPanel;
 	
 	public Catan()
@@ -43,6 +48,7 @@ public class Catan extends JFrame
 	
 	public static void main(final String[] args)
 	{
+		
 		try
 		{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -70,7 +76,10 @@ public class Catan extends JFrame
 																				 joinView,
 																				 newGameView,
 																				 selectColorView,
-																				 joinMessageView);
+																				 joinMessageView,
+																				 mockClientFacade,
+																				 clientInfo
+																				 );
 				joinController.setJoinAction(new IAction() {
 					@Override
 					public void execute()
@@ -87,7 +96,10 @@ public class Catan extends JFrame
 				MessageView loginMessageView = new MessageView();
 				LoginController loginController = new LoginController(
 																	  loginView,
-																	  loginMessageView);
+																	  loginMessageView,
+																	  mockClientFacade,
+																	  clientInfo
+																	  );
 				loginController.setLoginAction(new IAction() {
 					@Override
 					public void execute()
