@@ -19,7 +19,7 @@ public class Catan extends JFrame
 {
 	// Set up the Client
 	private static Client clientInfo = new Client();
-	private static MockClientFacade mockClientFacade = new MockClientFacade();
+	private static MockClientFacade mockClientFacade = new MockClientFacade(clientInfo);
 	private CatanPanel catanPanel;
 	
 	public Catan()
@@ -66,7 +66,9 @@ public class Catan extends JFrame
 				// PLAYER WAITING - Controller
 				PlayerWaitingView playerWaitingView = new PlayerWaitingView();
 				final PlayerWaitingController playerWaitingController = new PlayerWaitingController(
-																									playerWaitingView);
+																									playerWaitingView,
+																									clientInfo
+																									);
 				playerWaitingView.setController(playerWaitingController);
 				
 				// JOIN GAME - Controller
