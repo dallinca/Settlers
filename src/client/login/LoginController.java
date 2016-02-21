@@ -122,6 +122,8 @@ public class LoginController extends Controller implements ILoginController, Obs
 				}
 				
 				// If register succeeded
+				clientInfo.setName(login_result.getName());
+				clientInfo.setUserId(login_result.getId());
 				System.out.println("about to login");
 				getLoginView().closeModal();
 				loginAction.execute();
@@ -234,7 +236,8 @@ public class LoginController extends Controller implements ILoginController, Obs
 				}
 				
 				// If register succeeded
-				clientInfo.setName(registername);
+				clientInfo.setName(register_result.getName());
+				clientInfo.setUserId(register_result.getId());
 				System.out.println("about to register");
 				getLoginView().closeModal();
 				loginAction.execute();

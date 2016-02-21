@@ -12,7 +12,7 @@ public class Client extends Observable {
 	private Game game;
 	private IServerProxy isp;
 	private ClientFacade cf;
-	private int loggedInUserId;
+	private int UserId;
 	private String name;
 	private CatanColor color;
 	private int playerIndex;
@@ -72,4 +72,14 @@ public class Client extends Observable {
 	public void setPlayerIndex(int playerIndex) {
 		this.playerIndex = playerIndex;
 	}
+
+	public int getUserId() {
+		return UserId;
+	}
+
+	public void setUserId(int userId) {
+		UserId = userId;
+	}
+	
+	
 }

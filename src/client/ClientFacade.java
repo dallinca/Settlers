@@ -257,7 +257,7 @@ public class ClientFacade {
 
 			e.printStackTrace();
 		}		
-		
+
 		return result;
 	}	
 
@@ -333,8 +333,8 @@ public class ClientFacade {
 		boolean free = c.getGame().isInSetUpPhase();
 
 		BuildSettlement_Result result; 
-		BuildSettlement_Params request = new BuildSettlement_Params(playerIndex, location, free);		
 
+		BuildSettlement_Params request = new BuildSettlement_Params(playerIndex, location, free);		
 		try {
 
 			result = sp.buildSettlement(request);
@@ -343,7 +343,7 @@ public class ClientFacade {
 			result = new BuildSettlement_Result();
 
 			e.printStackTrace();
-		}		
+		}	
 
 		return result;
 	}
@@ -384,7 +384,7 @@ public class ClientFacade {
 
 	public MaritimeTrade_Result maritimeTrade(int ratio, ResourceType inputResource, 
 			ResourceType outputResource) throws ClientException {
-		
+
 		MaritimeTrade_Result result; 
 		MaritimeTrade_Params request = new MaritimeTrade_Params(c.getPlayerIndex(), ratio, inputResource, outputResource);		
 
@@ -402,7 +402,7 @@ public class ClientFacade {
 	}
 
 	public OfferTrade_Result offerTrade(int brick, int ore, int sheep, int wheat, int wood, int receiver) throws ClientException {
-		
+
 		OfferTrade_Result result; 
 		OfferTrade_Params request = new OfferTrade_Params(c.getPlayerIndex(), receiver, brick, ore, sheep, wheat, wood);		
 
@@ -417,11 +417,11 @@ public class ClientFacade {
 		}		
 
 		return result;
-		
+
 	}
 
 	public RobPlayer_Result robPlayer(HexLocation hex, int victimIndex) throws ClientException {
-		
+
 		RobPlayer_Result result; 
 		RobPlayer_Params request = new RobPlayer_Params(c.getPlayerIndex(), hex, victimIndex);		
 
@@ -441,7 +441,7 @@ public class ClientFacade {
 	//dev card play
 
 	public PlayMonopoly_Result playMonopoly(ResourceType type) throws ClientException {
-		
+
 		PlayMonopoly_Result result; 
 		PlayMonopoly_Params request = new PlayMonopoly_Params(c.getPlayerIndex(), type);		
 
@@ -459,7 +459,7 @@ public class ClientFacade {
 	}
 
 	public PlayMonument_Result playMonument() throws ClientException {
-		
+
 		PlayMonument_Result result; 
 		PlayMonument_Params request = new PlayMonument_Params(c.getPlayerIndex());		
 
@@ -474,11 +474,11 @@ public class ClientFacade {
 		}		
 
 		return result;
-		
+
 	}
 
 	public PlayRoadBuilding_Result playRoadBuilding(EdgeLocation spot1, EdgeLocation spot2) throws ClientException {
-	
+
 		PlayRoadBuilding_Result result; 
 		PlayRoadBuilding_Params request = new PlayRoadBuilding_Params(c.getPlayerIndex(), spot1, spot2);		
 
@@ -496,7 +496,7 @@ public class ClientFacade {
 	}
 
 	public PlaySoldier_Result playSoldier(HexLocation hex, int victimIndex) throws ClientException {
-		
+
 		PlaySoldier_Result result; 
 		PlaySoldier_Params request = new PlaySoldier_Params(c.getPlayerIndex(), victimIndex, hex);		
 
@@ -514,7 +514,7 @@ public class ClientFacade {
 	}
 
 	public PlayYearOfPlenty_Result playYearOfPlenty(ResourceType type1, ResourceType type2) throws ClientException {
-		
+
 		PlayYearOfPlenty_Result result; 
 		PlayYearOfPlenty_Params request = new PlayYearOfPlenty_Params(c.getPlayerIndex(), type1, type2);		
 
