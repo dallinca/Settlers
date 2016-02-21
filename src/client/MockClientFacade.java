@@ -113,8 +113,11 @@ public class MockClientFacade {
 		return null;
 	}
 
-	public Join_Result joinGame(Join_Params request) throws ClientException {
-		return null;
+	public Join_Result joinGame(int gameID, CatanColor color) throws ClientException {
+		Join_Result result = new Join_Result();
+		result.setJoined(true);
+		System.out.println("gameID: " + gameID + "::: color: " + color);
+		return result;
 	}
 
 	/**

@@ -1,5 +1,6 @@
 package client.join;
 
+import shared.communication.results.nonmove.Join_Result;
 import shared.communication.results.nonmove.List_Result;
 import shared.definitions.CatanColor;
 
@@ -20,6 +21,8 @@ import client.misc.*;
  */
 public class JoinGameController extends Controller implements IJoinGameController, Observer {
 
+	private GameInfo game; // For storing the GameInfo for the desired game to join
+	
 	private MockClientFacade mockClientFacade;
 	private INewGameView newGameView;
 	private ISelectColorView selectColorView;
@@ -90,6 +93,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		
 		return selectColorView;
 	}
+	
 	public void setSelectColorView(ISelectColorView selectColorView) {
 		System.out.println("JoinGameController setSelectColorView()");
 		
@@ -101,12 +105,20 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		
 		return messageView;
 	}
+	
 	public void setMessageView(IMessageView messageView) {
 		System.out.println("JoinGameController setMessageView()");
 		
 		this.messageView = messageView;
 	}
 
+	/**
+	 * Asks the client Facade for the current listing of games
+	 * 
+	 * @pre None
+	 * @post the JoinGameView will be showing the listing of games that was recieved back from the client Facade
+	 * 
+	 */
 	@Override
 	public void start() {
 		System.out.println("JoinGameController start()");
@@ -123,6 +135,10 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		getJoinGameView().showModal();
 	}
 
+	/**
+	 * TODO -Javadoc and Implement
+	 * 
+	 */
 	@Override
 	public void startCreateNewGame() {
 		System.out.println("JoinGameController startCreateNewGame()");
@@ -130,6 +146,10 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		getNewGameView().showModal();
 	}
 
+	/**
+	 * TODO -Javadoc and Implement
+	 * 
+	 */
 	@Override
 	public void cancelCreateNewGame() {
 		System.out.println("JoinGameController cancelCreateNewGame()");
@@ -137,6 +157,10 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		getNewGameView().closeModal();
 	}
 
+	/**
+	 * TODO -Javadoc and Implement
+	 * 
+	 */
 	@Override
 	public void createNewGame() {
 		System.out.println("JoinGameController createNewGame()");
@@ -144,13 +168,28 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		getNewGameView().closeModal();
 	}
 
+	/**
+	 * Brings up the Select Color View with the option to cancel joining the game
+	 * 
+	 * @pre None
+	 * @post the JoinGameHub will not be visible, the color view will be visible
+	 * 
+	 */
 	@Override
 	public void startJoinGame(GameInfo game) {
 		System.out.println("JoinGameController startJoinGame()");
-
+		this.game = game; // We momentarily store the game information so that if we choose to attempt joining the game, we have access to the game id
+		
+		
 		getSelectColorView().showModal();
 	}
 
+	/**
+	 * Takes you from the Color Picker back to the game hub without adding the player to the game
+	 * 
+	 * @pre None
+	 * @post the color view will not be visible, the JoinGameHub will be visible
+	 */
 	@Override
 	public void cancelJoinGame() {
 		System.out.println("JoinGameController cancelJoinGame()");
@@ -158,16 +197,45 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		getJoinGameView().closeModal();
 	}
 
+	/**
+	 * TODO -Javadoc and Implement
+	 * 
+	 * Officially joins the game with a color
+	 * 
+	 * @pre None
+	 * @post the Color View and JoinGameHub Modals will be closed and the PlayerWait Modal opened
+	 * 
+	 */
 	@Override
 	public void joinGame(CatanColor color) {
 		System.out.println("JoinGameController joinGame()");
-		
+		Join_Result join_result = null;
+		try {
+			join_result = mockClientFacade.joinGame(game.getId(), color);
+		} catch (ClientException e) {
+			getSelectColorView().closeModal();
+			getMessageView().setMessage("Game could not be joined, threw Exception");
+			getMessageView().showModal();
+			e.printStackTrace();
+		}
+
+		// If something went wrong with joining the game
+		if(join_result == null || join_result.isJoined() == false) {
+			getSelectColorView().closeModal();
+			getMessageView().setMessage("Game could not be joined");
+			getMessageView().showModal();
+			return;
+		}
 		// If join succeeded
 		getSelectColorView().closeModal();
 		getJoinGameView().closeModal();
 		joinAction.execute();
 	}
 
+	/**
+	 * TODO -Javadoc and Implement
+	 * 
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("JoinGameController update()");
