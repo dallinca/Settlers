@@ -23,7 +23,6 @@ import shared.communication.params.nonmove.AddAI_Params;
 import shared.communication.params.nonmove.Create_Params;
 import shared.communication.params.nonmove.GetVersion_Params;
 import shared.communication.params.nonmove.Join_Params;
-import shared.communication.params.nonmove.ListAI_Params;
 import shared.communication.params.nonmove.List_Params;
 import shared.communication.params.nonmove.Login_Params;
 import shared.communication.params.nonmove.Register_Params;
@@ -319,12 +318,45 @@ public class ClientFacade {
 
 	//move
 
-	public BuildCity_Result buildCity(BuildCity_Params request) throws ClientException {
-		return null;
+	public BuildCity_Result buildCity(VertexLocation location) throws ClientException {
+		
+		int playerIndex = c.getPlayerIndex();
+
+		BuildCity_Result result; 
+
+		BuildCity_Params request = new BuildCity_Params(playerIndex, location);		
+		try {
+
+			result = sp.buildCity(request);
+
+		} catch (ClientException e) {			
+			result = new BuildCity_Result();
+
+			e.printStackTrace();
+		}	
+
+		return result;
 	}
 
-	public BuildRoad_Result buildRoad(BuildRoad_Params request) throws ClientException {
-		return null;
+	public BuildRoad_Result buildRoad(EdgeLocation roadLocation) throws ClientException {
+		
+		int playerIndex = c.getPlayerIndex();
+		boolean free = c.getGame().isInSetUpPhase();
+		
+		BuildRoad_Result result; 
+		BuildRoad_Params request = new BuildRoad_Params(playerIndex, roadLocation, free);		
+
+		try {
+
+			result = sp.buildRoad(request);
+
+		} catch (ClientException e) {			
+			result = new BuildRoad_Result();
+
+			e.printStackTrace();
+		}		
+
+		return result;	
 	}
 
 	public BuildSettlement_Result buildSettlement(VertexLocation location) throws ClientException {
@@ -477,10 +509,11 @@ public class ClientFacade {
 
 	}
 
-	public PlayRoadBuilding_Result playRoadBuilding(EdgeLocation spot1, EdgeLocation spot2) throws ClientException {
+	public PlayRoadBuilding_Result playRoadBuilding(EdgeLocation roadLocation1, 
+			EdgeLocation roadLocation2) throws ClientException {
 
 		PlayRoadBuilding_Result result; 
-		PlayRoadBuilding_Params request = new PlayRoadBuilding_Params(c.getPlayerIndex(), spot1, spot2);		
+		PlayRoadBuilding_Params request = new PlayRoadBuilding_Params(c.getPlayerIndex(), roadLocation1, roadLocation2);		
 
 		try {
 
@@ -513,10 +546,10 @@ public class ClientFacade {
 		return result;
 	}
 
-	public PlayYearOfPlenty_Result playYearOfPlenty(ResourceType type1, ResourceType type2) throws ClientException {
+	public PlayYearOfPlenty_Result playYearOfPlenty(ResourceType resource1, ResourceType resource2) throws ClientException {
 
 		PlayYearOfPlenty_Result result; 
-		PlayYearOfPlenty_Params request = new PlayYearOfPlenty_Params(c.getPlayerIndex(), type1, type2);		
+		PlayYearOfPlenty_Params request = new PlayYearOfPlenty_Params(c.getPlayerIndex(), resource1, resource2);		
 
 		try {
 
