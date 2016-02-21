@@ -6,22 +6,39 @@ public class Join_Params {
 
 	private String color;
 	private int gameID;
-	
+
 	public Join_Params(int gameID, CatanColor color) {
 		this.gameID = gameID;
-		
+
 		switch (color) {
-		
+
 		case ORANGE: this.color = "orange";
-		case YELLOW: this.color = "yellow";
-		case BLUE: this.color = "blue";
-		case GREEN: this.color = "green";
-		case PURPLE: this.color = "pruple";
-		case PUCE: this.color = "puce";
-		case WHITE: this.color = "white";
-		case BROWN: this.color = "brown";
-		default: //Do nothing, it can't be default.
+		break;
 		
+		case YELLOW: this.color = "yellow";
+		break;
+		
+		case BLUE: this.color = "blue";
+		break;
+		
+		case GREEN: this.color = "green";
+		break;
+		
+		case PURPLE: this.color = "pruple";
+		break;
+		
+		case PUCE: this.color = "puce";
+		break;
+		
+		case WHITE: this.color = "white";
+		break;
+		
+		case BROWN: this.color = "brown";
+		break;
+		
+		default: //Do nothing, it can't be default.
+			break;
+
 		}
 	}
 
@@ -40,7 +57,7 @@ public class Join_Params {
 	public void setColor(String color) {
 		this.color = color;
 	}
-	
-	
+
+
 
 }

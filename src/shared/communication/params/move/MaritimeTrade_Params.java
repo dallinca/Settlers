@@ -1,5 +1,54 @@
 package shared.communication.params.move;
 
+import shared.definitions.ResourceType;
+
 public class MaritimeTrade_Params {
+	
+	private int playerIndex;
+	private int ratio;
+	private String inputResource;
+	private String outputResource;
+	
+	
+	
+	
+	public MaritimeTrade_Params(int playerIndex, int ratio,
+			ResourceType inputResource, ResourceType outputResource) {
+		super();
+		this.playerIndex = playerIndex;
+		this.ratio = ratio;
+		this.inputResource = inputResource.toString();
+		this.outputResource = outputResource.toString();
+	}
+
+
+	public int getPlayerIndex() {
+		return playerIndex;
+	}
+	
+	
+	public void setPlayerIndex(int playerIndex) {
+		this.playerIndex = playerIndex;
+	}
+	public int getRatio() {
+		return ratio;
+	}
+	public void setRatio(int ratio) {
+		this.ratio = ratio;
+	}
+	public String getInputResource() {
+		return inputResource;
+	}
+	public void setInputResource(String inputResource) {
+		this.inputResource = inputResource;
+	}
+	public String getOutputResource() {
+		return outputResource;
+	}
+	public void setOutputResource(String outputResource) {
+		this.outputResource = outputResource;
+	}
+	
+	
 
 }

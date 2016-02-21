@@ -23,7 +23,6 @@ import shared.communication.params.nonmove.AddAI_Params;
 import shared.communication.params.nonmove.Create_Params;
 import shared.communication.params.nonmove.GetVersion_Params;
 import shared.communication.params.nonmove.Join_Params;
-import shared.communication.params.nonmove.ListAI_Params;
 import shared.communication.params.nonmove.List_Params;
 import shared.communication.params.nonmove.Login_Params;
 import shared.communication.params.nonmove.Register_Params;
@@ -53,6 +52,9 @@ import shared.communication.results.nonmove.List_Result;
 import shared.communication.results.nonmove.Login_Result;
 import shared.communication.results.nonmove.Register_Result;
 import shared.definitions.CatanColor;
+import shared.definitions.ResourceType;
+import shared.locations.EdgeLocation;
+import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
 
 /**
@@ -253,9 +255,8 @@ public class ClientFacade {
 			result = new SendChat_Result();
 
 			e.printStackTrace();
-		}	
-		
-		
+		}		
+
 		return result;
 	}	
 
@@ -317,12 +318,45 @@ public class ClientFacade {
 
 	//move
 
-	public BuildCity_Result buildCity(BuildCity_Params request) throws ClientException {
-		return null;
+	public BuildCity_Result buildCity(VertexLocation location) throws ClientException {
+		
+		int playerIndex = c.getPlayerIndex();
+
+		BuildCity_Result result; 
+
+		BuildCity_Params request = new BuildCity_Params(playerIndex, location);		
+		try {
+
+			result = sp.buildCity(request);
+
+		} catch (ClientException e) {			
+			result = new BuildCity_Result();
+
+			e.printStackTrace();
+		}	
+
+		return result;
 	}
 
-	public BuildRoad_Result buildRoad(BuildRoad_Params request) throws ClientException {
-		return null;
+	public BuildRoad_Result buildRoad(EdgeLocation roadLocation) throws ClientException {
+		
+		int playerIndex = c.getPlayerIndex();
+		boolean free = c.getGame().isInSetUpPhase();
+		
+		BuildRoad_Result result; 
+		BuildRoad_Params request = new BuildRoad_Params(playerIndex, roadLocation, free);		
+
+		try {
+
+			result = sp.buildRoad(request);
+
+		} catch (ClientException e) {			
+			result = new BuildRoad_Result();
+
+			e.printStackTrace();
+		}		
+
+		return result;	
 	}
 
 	public BuildSettlement_Result buildSettlement(VertexLocation location) throws ClientException {
@@ -331,8 +365,8 @@ public class ClientFacade {
 		boolean free = c.getGame().isInSetUpPhase();
 
 		BuildSettlement_Result result; 
-		/*BuildSettlement_Params request = new BuildSettlement_Params(c.getPlayerIndex(), location, free);		
 
+		BuildSettlement_Params request = new BuildSettlement_Params(playerIndex, location, free);		
 		try {
 
 			result = sp.buildSettlement(request);
@@ -343,60 +377,191 @@ public class ClientFacade {
 			e.printStackTrace();
 		}	
 
-		return result;*/
-		/*
-		 *   playerIndex: 2
-        vertexLocation
-            x: -1
-            y: -1
-            direction: "NE"
-        free: false
-		 */
-		return null;
+		return result;
 	}
 
-	public BuyDevCard_Result buyDevCard(BuyDevCard_Params request) throws ClientException {
-		return null;
+	public BuyDevCard_Result buyDevCard() throws ClientException {
+		BuyDevCard_Result result; 
+		BuyDevCard_Params request = new BuyDevCard_Params(c.getPlayerIndex());		
+
+		try {
+
+			result = sp.buyDevCard(request);
+
+		} catch (ClientException e) {			
+			result = new BuyDevCard_Result();
+
+			e.printStackTrace();
+		}		
+
+		return result;
 	}
 
-	public FinishTurn_Result finishTurn(FinishTurn_Params request) throws ClientException {
-		return null;
+	public FinishTurn_Result finishTurn() throws ClientException {
+		FinishTurn_Result result; 
+		FinishTurn_Params request = new FinishTurn_Params(c.getPlayerIndex());		
+
+		try {
+
+			result = sp.finishTurn(request);
+
+		} catch (ClientException e) {			
+			result = new FinishTurn_Result();
+
+			e.printStackTrace();
+		}		
+
+		return result;
 	}
 
-	public MaritimeTrade_Result maritimeTrade(MaritimeTrade_Params request) throws ClientException {
-		return null;
+	public MaritimeTrade_Result maritimeTrade(int ratio, ResourceType inputResource, 
+			ResourceType outputResource) throws ClientException {
+
+		MaritimeTrade_Result result; 
+		MaritimeTrade_Params request = new MaritimeTrade_Params(c.getPlayerIndex(), ratio, inputResource, outputResource);		
+
+		try {
+
+			result = sp.maritimeTrade(request);
+
+		} catch (ClientException e) {			
+			result = new MaritimeTrade_Result();
+
+			e.printStackTrace();
+		}		
+
+		return result;
 	}
 
-	public OfferTrade_Result offerTrade(OfferTrade_Params request) throws ClientException {
-		return null;
+	public OfferTrade_Result offerTrade(int brick, int ore, int sheep, int wheat, int wood, int receiver) throws ClientException {
+
+		OfferTrade_Result result; 
+		OfferTrade_Params request = new OfferTrade_Params(c.getPlayerIndex(), receiver, brick, ore, sheep, wheat, wood);		
+
+		try {
+
+			result = sp.offerTrade(request);
+
+		} catch (ClientException e) {			
+			result = new OfferTrade_Result();
+
+			e.printStackTrace();
+		}		
+
+		return result;
+
 	}
 
-	public RobPlayer_Result robPlayer(RobPlayer_Params request) throws ClientException {
-		return null;
+	public RobPlayer_Result robPlayer(HexLocation hex, int victimIndex) throws ClientException {
+
+		RobPlayer_Result result; 
+		RobPlayer_Params request = new RobPlayer_Params(c.getPlayerIndex(), hex, victimIndex);		
+
+		try {
+
+			result = sp.robPlayer(request);
+
+		} catch (ClientException e) {			
+			result = new RobPlayer_Result();
+
+			e.printStackTrace();
+		}		
+
+		return result;
 	}
-
-
 
 	//dev card play
 
-	public PlayMonopoly_Result playMonopoly(PlayMonopoly_Params request) throws ClientException {
-		return null;
+	public PlayMonopoly_Result playMonopoly(ResourceType type) throws ClientException {
+
+		PlayMonopoly_Result result; 
+		PlayMonopoly_Params request = new PlayMonopoly_Params(c.getPlayerIndex(), type);		
+
+		try {
+
+			result = sp.playMonopoly(request);
+
+		} catch (ClientException e) {			
+			result = new PlayMonopoly_Result();
+
+			e.printStackTrace();
+		}		
+
+		return result;
 	}
 
-	public PlayMonument_Result playMonument(PlayMonument_Params request) throws ClientException {
-		return null;
+	public PlayMonument_Result playMonument() throws ClientException {
+
+		PlayMonument_Result result; 
+		PlayMonument_Params request = new PlayMonument_Params(c.getPlayerIndex());		
+
+		try {
+
+			result = sp.playMonument(request);
+
+		} catch (ClientException e) {			
+			result = new PlayMonument_Result();
+
+			e.printStackTrace();
+		}		
+
+		return result;
+
 	}
 
-	public PlayRoadBuilding_Result playRoadBuilding(PlayRoadBuilding_Params request) throws ClientException {
-		return null;
+	public PlayRoadBuilding_Result playRoadBuilding(EdgeLocation roadLocation1, 
+			EdgeLocation roadLocation2) throws ClientException {
+
+		PlayRoadBuilding_Result result; 
+		PlayRoadBuilding_Params request = new PlayRoadBuilding_Params(c.getPlayerIndex(), roadLocation1, roadLocation2);		
+
+		try {
+
+			result = sp.playRoadBuilding(request);
+
+		} catch (ClientException e) {			
+			result = new PlayRoadBuilding_Result();
+
+			e.printStackTrace();
+		}		
+
+		return result;		
 	}
 
-	public PlaySoldier_Result playSoldier(PlaySoldier_Params request) throws ClientException {
-		return null;
+	public PlaySoldier_Result playSoldier(HexLocation hex, int victimIndex) throws ClientException {
+
+		PlaySoldier_Result result; 
+		PlaySoldier_Params request = new PlaySoldier_Params(c.getPlayerIndex(), victimIndex, hex);		
+
+		try {
+
+			result = sp.playSoldier(request);
+
+		} catch (ClientException e) {			
+			result = new PlaySoldier_Result();
+
+			e.printStackTrace();
+		}		
+
+		return result;
 	}
 
-	public PlayYearOfPlenty_Result playYearOfPlenty(PlayYearOfPlenty_Params result) throws ClientException {
-		return null;
+	public PlayYearOfPlenty_Result playYearOfPlenty(ResourceType resource1, ResourceType resource2) throws ClientException {
+
+		PlayYearOfPlenty_Result result; 
+		PlayYearOfPlenty_Params request = new PlayYearOfPlenty_Params(c.getPlayerIndex(), resource1, resource2);		
+
+		try {
+
+			result = sp.playYearOfPlenty(request);
+
+		} catch (ClientException e) {			
+			result = new PlayYearOfPlenty_Result();
+
+			e.printStackTrace();
+		}		
+
+		return result;
 	}
 
 
