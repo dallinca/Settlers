@@ -65,7 +65,7 @@ public class ServerPoller {
 	 * @post Current game state will be obtained from server.
 	 */	
 	private void pollServer(){
-		GetVersion_Params pollRequest = new GetVersion_Params();
+		GetVersion_Params pollRequest = new GetVersion_Params(client.getGame().getVersionNumber());
 		GetVersion_Result pollResult = null;
 		
 		try {

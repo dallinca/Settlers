@@ -1,5 +1,21 @@
 package shared.communication.params.move;
 
 public class FinishTurn_Params {
+	
+	private int playerIndex;
+
+	public FinishTurn_Params(int playerIndex) {
+		this.playerIndex = playerIndex;
+	}
+
+	public int getPlayerIndex() {
+		return playerIndex;
+	}
+
+	public void setPlayerIndex(int playerIndex) {
+		this.playerIndex = playerIndex;
+	}
+	
+	
 
 }
