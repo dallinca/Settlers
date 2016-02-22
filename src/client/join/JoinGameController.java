@@ -120,7 +120,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	 * Asks the client Facade for the current listing of games
 	 * 
 	 * @pre None
-	 * @post the JoinGameView will be showing the listing of games that was recieved back from the client Facade
+	 * @post the JoinGameView will be showing the listing of games that was received back from the client Facade
 	 * 
 	 */
 	@Override
@@ -131,12 +131,15 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 			result = mockClientFacade.listGames();
 			GameInfo[] games = new GameInfo[result.getGames().length];
 			games = result.getGames();
-			getJoinGameView().setGames(games, new PlayerInfo());
+			PlayerInfo localPlayer = new PlayerInfo();
+			localPlayer.setId(clientInfo.getUserId());
+			getJoinGameView().setGames(games, localPlayer);
 		} catch (ClientException e) {
 			e.printStackTrace();
 		}
-		
-		getJoinGameView().showModal();
+		if(!getJoinGameView().isModalShowing()) {
+			getJoinGameView().showModal();
+		}
 	}
 
 	/**
@@ -197,7 +200,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 			getMessageView().showModal();
 		}
 		// Continue on with the creation of the game
-		
+		start();
 
 		getNewGameView().closeModal();
 	}
@@ -217,7 +220,11 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		
 		List<PlayerInfo> players = game.getPlayers();
 		for(PlayerInfo player: players) {
-			getSelectColorView().setColorEnabled(player.getColor(), false);
+			// allow the user to select a different color
+			if(player.getId() != clientInfo.getUserId()) {
+				System.out.println(player.getId());
+				getSelectColorView().setColorEnabled(player.getColor(), false);
+			}
 		}
 		
 		getSelectColorView().showModal();
@@ -230,15 +237,9 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	 * @post Resets the buttons in the color selection to all-available
 	 */
 	private void resetColorSelection() {
-		getSelectColorView().setColorEnabled(CatanColor.BLUE, true);
-		getSelectColorView().setColorEnabled(CatanColor.BROWN, true);
-		getSelectColorView().setColorEnabled(CatanColor.GREEN, true);
-		getSelectColorView().setColorEnabled(CatanColor.ORANGE, true);
-		getSelectColorView().setColorEnabled(CatanColor.PUCE, true);
-		getSelectColorView().setColorEnabled(CatanColor.PURPLE, true);
-		getSelectColorView().setColorEnabled(CatanColor.RED, true);
-		getSelectColorView().setColorEnabled(CatanColor.WHITE, true);
-		getSelectColorView().setColorEnabled(CatanColor.YELLOW, true);
+		for(CatanColor color : CatanColor.values()) {
+			getSelectColorView().setColorEnabled(color, true);
+		}
 	}
 
 	/**
@@ -283,16 +284,26 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 			getMessageView().showModal();
 			return;
 		}
-		// If join succeeded
-		PlayerInfo joiningPlayer = new PlayerInfo();
-		joiningPlayer.setColor(color);
-		joiningPlayer.setId(clientInfo.getUserId());
-		joiningPlayer.setName(clientInfo.getName());
+		// If join succeeded, check if the player already exists in the game
+		boolean playerAlreadyInGame = false;
+		for(PlayerInfo player: gameInfo.getPlayers()) {
+			// If we find a player in the page who has the same id as the currently logged in user
+			if(player.getId() == clientInfo.getUserId()) {
+				playerAlreadyInGame = true;
+				player.setColor(color); // Change the color of the user to the new selection
+			}
+		}
+		if(playerAlreadyInGame == false) {
+			PlayerInfo joiningPlayer = new PlayerInfo();
+			joiningPlayer.setColor(color);
+			joiningPlayer.setId(clientInfo.getUserId());
+			joiningPlayer.setName(clientInfo.getName());
+			gameInfo.addPlayer(joiningPlayer);
+		}
 		// TODO check if we need to be adding our index here or not
 		// this will be influenced by when the Server is determining what index we are at
 		// Is it immediately when we join a game, even one that isn't full?
 		// Or does the server wait to assign player indexes until the games is full, and then lets everyone know their indexes?
-		gameInfo.addPlayer(joiningPlayer);
 		clientInfo.setGameInfo(gameInfo);
 		getSelectColorView().closeModal();
 		getJoinGameView().closeModal();
