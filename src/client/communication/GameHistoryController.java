@@ -49,6 +49,31 @@ public class GameHistoryController extends Controller implements IGameHistoryCon
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
 		System.out.println("GameHistoryController initFromModel()");
+		
+		List<LogEntry> entries = new ArrayList<LogEntry>();
+		List<String> history = ClientFacade.getHistory();
+		
+		for (int i = 0; i < history.size(); i++) {
+			try {  
+				//Get color or user, if user than we can call the color method in the client or something...?
+				 String user = history.get(i).getUser();
+				 String action = history.get(i).getAction(); 
+				 
+				 CatanColor color =  CatanColor.BLUE;//method in client that takes in the user and returns their color
+				 
+				 String message = user + " " + action;
+				 LogEntry entry = new LogEntry(color, action);
+				 
+				 //Then add it to our list we will set in the view:
+				 entries.add(entry); 
+			 }
+			catch {
+				
+			}
+				
+		}
+		
+		getView().setEntries(entries);
 	}
 	
 }

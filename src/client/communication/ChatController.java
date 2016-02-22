@@ -44,20 +44,20 @@ public class ChatController extends Controller implements IChatController, Obser
 		//We call the client to call the clients facade. When that happens the Client also notifies all the other observers that an update occurred
 			
 		//testing the GUI
-		/*
-		Put this in the update function, it works!!! Hooray! but we need to iterate through all the messages and write them all, so put it in a for loop
+		
+		//Put this in the update function, it works!!! Hooray! but we need to iterate through all the messages and write them all, so put it in a for loop
 		List<LogEntry> entries = new ArrayList<LogEntry>();
 		LogEntry entry = new LogEntry(CatanColor.BLUE, message); 
 		entries.add(entry);
 		this.getView().setEntries(entries);
-		*/
+		
 				
-		try {
+		/*try {
 			SendChat_Result result = ClientFacade.sendChat(message);
 		} catch (ServerException e) {
 			
 			e.printStackTrace();
-		}
+		}*/
 		
 	}
 
