@@ -1,5 +1,6 @@
 package shared.model.turn;
 
+import client.Client;
 import shared.model.Game;
 
 
@@ -11,9 +12,11 @@ import shared.model.Game;
 public class ActionManager {
 	
 	Game game;
+	Client client;
 	
-	public ActionManager(Game g){
+	public ActionManager(Game g, Client c){
 		game = g;
+		client = c;
 	}
 	
 	/**
@@ -32,6 +35,7 @@ public class ActionManager {
 		else if (action.getCategory() == ActionType.TRADE) doTrade(action);
 		else if (action.getCategory() == ActionType.PLAYCARD) playDevelopmentCard(action);	
 		
+		client.notifyAll();
 	}
 
 	

@@ -62,6 +62,7 @@ public class Game {
 		board = board1;
 	}
 
+
 	// CURRENT PLAYER CALLS
 	//////////////////////////////////////////
 	/**
@@ -921,8 +922,13 @@ public class Game {
 	public void setVersionNumber(int version) {
 		versionNumber = version;
 	}
+	
 	public int getVersionNumber() {
 		return versionNumber;
+	}
+	
+	public boolean isInSetUpPhase() {
+		return inSetUpPhase;
 	}
 	
 	
