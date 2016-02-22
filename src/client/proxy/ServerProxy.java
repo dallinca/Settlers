@@ -317,19 +317,17 @@ public class ServerProxy implements IServerProxy {
 			
 			connection = (HttpURLConnection)url.openConnection();
 
-			
-
 			Gson gson = new Gson();
 			String job = gson.toJson(request);	
 
 			//Append those cookies client already has--------------------
 			if (!gameCookie.equals("")){
 				System.out.println("Adding cookies");
-				connection.addRequestProperty("Cookie", userCookie+"; "+gameCookie);
+				connection.setRequestProperty("Cookie", userCookie+"; "+gameCookie);
 			}
 			else if (!userCookie.equals("")){
 				System.out.println("Adding user cookie");
-				connection.addRequestProperty("Cookie", userCookie);
+				connection.setRequestProperty("Cookie", userCookie);
 			}
 
 			//System.out.println(url);
@@ -341,39 +339,53 @@ public class ServerProxy implements IServerProxy {
 			connection.setDoOutput(true);	
 			
 			connection.connect(); // sends cookies
-
-
-			/*	String       postUrl       = url.toString();// put in your url
-			HttpClient   httpClient    = HttpClientBuilder.create().build();
-			HttpPost     post          = new HttpPost(postUrl);
-			StringEntity postingString = new StringEntity(gson.toJson(job));//gson.tojson() converts your pojo to json
-			post.setEntity(postingString);
-			post.setHeader("Content-type", "application/json");
-			HttpResponse  response = httpClient.execute(post);
-
-			job = response.toString();*/
-
 			
-			ObjectOutputStream out = new ObjectOutputStream(connection.getOutputStream());
+			//ObjectOutputStream out = new ObjectOutputStream(connection.getOutputStream());
+			OutputStreamWriter sw = new OutputStreamWriter(connection.getOutputStream());
 			//out.writeObject(job);
-			out.writeChars(job);
+			sw.write(job);
+			sw.flush();
 			//System.out.println("Input stream: " + connection.getOutputStream().toString());
-
-			out.close();connection.getOutputStream().close();
-			 
-			//System.out.println("Receiving response from server.");
-
+			//sw.close();			
+			
 			//connection.getOutputStream().close();
+			 
+			System.out.println("Receiving response from server.");
+			//connection.getOutputStream().close();
+			
+			System.out.println("Response code: "+connection.getResponseCode());
 
-			ObjectInputStream in = new ObjectInputStream(connection.getInputStream());
+			InputStream in = connection.getInputStream();
 
+			int len = 0;
+			
 			System.out.println("Input stream received.");
-			job = (String) in.readObject();
+			
+			byte[] buffer = new byte[1024];
+			
+			StringBuilder sb = new StringBuilder();
+			
+			while (-1 != (len = in.read(buffer))){
+				sb.append(new String(buffer, 0, len));
+			}
+			
+		/*	if (sb.length()==0){
+				return null;
+			}
+			if (sb.charAt(0)=='['){
+				sb = new StringBuilder("{\"list\":"+ sb + ")");
+			}
+			else if (sb.charAt(0) != '{'){
+				return null;
+			}*/
+			
+			job = sb.toString();
+			
 			in.close();
+			
+			System.out.println("Stream closed.");
 
-			//System.out.println("Stream closed.");
-
-			//System.out.println("Job after: "+job);
+			System.out.println("Job after: "+job);
 
 			//System.out.println("Caching cookies=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=.");
 			//Cookie cacher----------------------------------
@@ -381,21 +393,26 @@ public class ServerProxy implements IServerProxy {
 
 			if (URL_SUFFIX.equals("/user/login")){
 				userCookie = headers.get("Set-cookie").get(0);
-
+				/*
 				if (userCookie.endsWith("Path=/;")) {
-					userCookie = userCookie.substring(0, userCookie.length() - 7);
-				}
+					userCookie = userCookie.substring(0, userCookie.length() - 8);
+					userCookie = userCookie.substring(11, userCookie.length());
+				}*/
+				System.out.println("User cookie: "+ userCookie);
 			}
 			else if (URL_SUFFIX.equals("/games/join")){
 				gameCookie = headers.get("Set-cookie").get(0);
+				
+				System.out.println("Game cookie: "+ gameCookie);
 
-				if (gameCookie.endsWith("Path=/;")) {
-					gameCookie = gameCookie.substring(0, gameCookie.length() - 7);
-				}
+				/*if (gameCookie.endsWith("Path=/;")) {
+					gameCookie = gameCookie.substring(0, gameCookie.length() - 8);
+					gameCookie = gameCookie.substring(11, gameCookie.length());
+				}*/
 			}
 
 			//String decodedUserData = URLDecoder.decode(userCookie, "UTF-8");
-
+			
 			return job;
 
 		}	 
