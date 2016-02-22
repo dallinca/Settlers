@@ -29,6 +29,7 @@ public class DevCardController extends Controller implements IDevCardController,
 								IAction soldierAction, IAction roadAction) {
 
 		super(view);
+		System.out.println("DevCardController DevCardController()");
 		
 		this.buyCardView = buyCardView;
 		this.soldierAction = soldierAction;
@@ -36,72 +37,76 @@ public class DevCardController extends Controller implements IDevCardController,
 	}
 
 	public IPlayDevCardView getPlayCardView() {
+		System.out.println("DevCardController getPlayCardView()");
 		return (IPlayDevCardView)super.getView();
 	}
 
 	public IBuyDevCardView getBuyCardView() {
+		System.out.println("DevCardController getBuyCardView()");
 		return buyCardView;
 	}
 
 	@Override
 	public void startBuyCard() {
-		
+		System.out.println("DevCardController startBuyCard()");
 		getBuyCardView().showModal();
 	}
 
 	@Override
 	public void cancelBuyCard() {
-		
+		System.out.println("DevCardController cancelBuyCard()");
 		getBuyCardView().closeModal();
 	}
 
 	@Override
 	public void buyCard() {
-		
+		System.out.println("DevCardController buyCard()");
 		getBuyCardView().closeModal();
 	}
 
 	@Override
 	public void startPlayCard() {
-		
+		System.out.println("DevCardController startPlayCard()");
 		getPlayCardView().showModal();
 	}
 
 	@Override
 	public void cancelPlayCard() {
-
+		System.out.println("DevCardController cancelPlayCard()");
 		getPlayCardView().closeModal();
 	}
 
 	@Override
 	public void playMonopolyCard(ResourceType resource) {
-		
+		System.out.println("DevCardController playMonopolyCard()");
 	}
 
 	@Override
 	public void playMonumentCard() {
-		
+		System.out.println("DevCardController playMonumentCard()");
 	}
 
 	@Override
 	public void playRoadBuildCard() {
-		
+		System.out.println("DevCardController playRoadBuildCard()");
 		roadAction.execute();
 	}
 
 	@Override
 	public void playSoldierCard() {
+		System.out.println("DevCardController playSoldierCard()");
 		
 		soldierAction.execute();
 	}
 
 	@Override
 	public void playYearOfPlentyCard(ResourceType resource1, ResourceType resource2) {
-		
+		System.out.println("DevCardController playYearOfPlentyCard()");
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
+		System.out.println("DevCardController update()");
 		// TODO Auto-generated method stub
 		
 	}
