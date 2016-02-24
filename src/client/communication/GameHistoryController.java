@@ -2,6 +2,7 @@ package client.communication;
 
 import java.util.*;
 
+import client.ClientFacade;
 import client.base.*;
 import shared.definitions.*;
 
@@ -30,14 +31,10 @@ public class GameHistoryController extends Controller implements IGameHistoryCon
 		//<temp>
 		
 		List<LogEntry> entries = new ArrayList<LogEntry>();
+		entries.add(new LogEntry(CatanColor.BROWN, "Dallin Andersen was here."));
+		entries.add(new LogEntry(CatanColor.RED, "Wassup g's?"));
 		entries.add(new LogEntry(CatanColor.BROWN, "This is a brown message"));
-		entries.add(new LogEntry(CatanColor.ORANGE, "This is an orange message ss x y z w.  This is an orange message.  This is an orange message.  This is an orange message."));
-		entries.add(new LogEntry(CatanColor.BROWN, "This is a brown message"));
-		entries.add(new LogEntry(CatanColor.ORANGE, "This is an orange message ss x y z w.  This is an orange message.  This is an orange message.  This is an orange message."));
-		entries.add(new LogEntry(CatanColor.BROWN, "This is a brown message"));
-		entries.add(new LogEntry(CatanColor.ORANGE, "This is an orange message ss x y z w.  This is an orange message.  This is an orange message.  This is an orange message."));
-		entries.add(new LogEntry(CatanColor.BROWN, "This is a brown message"));
-		entries.add(new LogEntry(CatanColor.ORANGE, "This is an orange message ss x y z w.  This is an orange message.  This is an orange message.  This is an orange message."));
+		entries.add(new LogEntry(CatanColor.BLUE, "I've got the bluesssss!!"));
 		
 		getView().setEntries(entries);
 	

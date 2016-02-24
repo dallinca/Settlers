@@ -14,6 +14,8 @@ import shared.definitions.CatanColor;
 import client.Client;
 import client.ClientFacade;
 import client.base.*;
+//import javafx.scene.media.Media;
+//import javafx.scene.media.MediaPlayer;
 
 
 /**
@@ -51,6 +53,11 @@ public class ChatController extends Controller implements IChatController, Obser
 		entries.add(entry);
 		this.getView().setEntries(entries);
 		
+		
+		/*String bip = "duelOfTheFates.mp3";
+		Media hit = new Media(bip);
+		MediaPlayer mediaPlayer = new MediaPlayer(hit);
+		mediaPlayer.play();
 				
 		/*try {
 			SendChat_Result result = ClientFacade.sendChat(message);
