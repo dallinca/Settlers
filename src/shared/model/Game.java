@@ -60,10 +60,26 @@ public class Game {
 			players[i].setPlayerColor(CatanColor.values()[i]);
 		}
 		// init board to normal setup
-		board = new Board(false, false, false);
+		board = new Board(true, true, true);
 	}
-	
-	
+
+	/**
+	 * @pre the player objects passed in are not null, neither is the Board.
+	 * 
+	 * @param the four player objects to be added to the array.
+	 */
+	public Game(Bank bank, Player one, Player two, Player three, Player four, Board board) {
+		this.bank = bank;
+		players = new Player[numberofPlayers];
+		players[0] = one;
+		players[1] = two;
+		players[2] = three;
+		players[3] = four;
+		
+		currentPlayer = players[0];
+		this.board = board;
+	}
+
 	/**
 	 * @pre the player objects passed in are not null, neither is the Board.
 	 * 

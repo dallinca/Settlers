@@ -265,6 +265,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	@Override
 	public void joinGame(CatanColor color) {
 		System.out.println("JoinGameController joinGame()");
+		Client.getInstance().setGameInfo(gameInfo);
 		Join_Result join_result = null;
 		try {
 			join_result = MockClientFacade.getInstance().joinGame(gameInfo.getId(), color);
@@ -302,7 +303,6 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		// this will be influenced by when the Server is determining what index we are at
 		// Is it immediately when we join a game, even one that isn't full?
 		// Or does the server wait to assign player indexes until the games is full, and then lets everyone know their indexes?
-		Client.getInstance().setGameInfo(gameInfo);
 		getSelectColorView().closeModal();
 		getJoinGameView().closeModal();
 		joinAction.execute();

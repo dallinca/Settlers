@@ -101,7 +101,8 @@ public class MapController extends Controller implements IMapController, Observe
 				}
 			}
 		}
-		
+
+		// Init ports! and stuff :)
 		PortType[] allPorts = Client.getInstance().getGame().getMapPorts();
 		if(allPorts != null) {
 			getView().addPort(new EdgeLocation(new HexLocation(0, 3), EdgeDirection.North), allPorts[0]);
@@ -116,19 +117,8 @@ public class MapController extends Controller implements IMapController, Observe
 			
 		}
 		
-		// Init ports! and stuff :)
 		
-		Random rand = new Random();
 		
-		Game game = Client.getInstance().getGame();
-		
-		PortType portType = PortType.BRICK;
-		/*getView().addPort(new EdgeLocation(new HexLocation(0, -3), EdgeDirection.South), portType);
-		getView().addPort(new EdgeLocation(new HexLocation(-3, 3), EdgeDirection.NorthEast), portType);
-		getView().addPort(new EdgeLocation(new HexLocation(-3, 0), EdgeDirection.SouthEast), portType);
-		getView().addPort(new EdgeLocation(new HexLocation(3, -3), EdgeDirection.SouthWest), portType);
-		getView().addPort(new EdgeLocation(new HexLocation(3, 0), EdgeDirection.NorthWest), portType);
-		*/
 		
 	}
 
