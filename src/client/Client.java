@@ -19,17 +19,16 @@ public class Client extends Observable {
 	private CatanColor color;
 	private int playerIndex;
 	
-	private static Client singleton = new Client( );
+	private static Client SINGLETON = null;
 	// CONSTRUCTORS
 	//////////////////////
 	private Client(){ }
 	
 	public static Client getInstance( ) {
-	      return singleton;
-	}
-	
-	public Client(IServerProxy isp){
-		this.isp = isp;
+		if(SINGLETON == null) {
+			SINGLETON = new Client();
+		}
+	    return SINGLETON;
 	}
 
 	// GETTERS AND SETTERS
