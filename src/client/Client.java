@@ -40,6 +40,7 @@ public class Client extends Observable {
 	public void setGame(Game game) {
 		this.game = game;
 		//update all controllers by passing each the current game object
+		setChanged();
 		notifyObservers(this.game);
 	}
 
