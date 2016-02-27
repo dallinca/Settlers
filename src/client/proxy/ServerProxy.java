@@ -1,27 +1,15 @@
 package client.proxy;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
-import netscape.javascript.JSObject;
-
-//import org.apache.http.Header;
-//import org.apache.http.HttpEntity;
-//import org.apache.http.HttpResponse;
-//import org.apache.http.client.HttpClient;
-//import org.apache.http.client.methods.HttpPost;
-//import org.apache.http.entity.StringEntity;
-//import org.apache.http.impl.client.CloseableHttpClient;
-//import org.apache.http.impl.client.HttpClientBuilder;
 
 import shared.communication.params.move.AcceptTrade_Params;
 import shared.communication.params.move.BuildCity_Params;
@@ -73,10 +61,12 @@ import shared.communication.results.nonmove.ListAI_Result;
 import shared.communication.results.nonmove.List_Result;
 import shared.communication.results.nonmove.Login_Result;
 import shared.communication.results.nonmove.Register_Result;
+import client.Client;
 import client.ClientException;
 
 import com.google.gson.Gson;
-//import org.apache.http.client.HttpClient;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 /**
  * 
@@ -87,12 +77,18 @@ public class ServerProxy implements IServerProxy {
 
 	private String userCookie;
 	private String gameCookie;
+	private String unfixedUserCookie;
+	private String unfixedGameCookie;
 
 	private static String SERVER_HOST;
 	private static int SERVER_PORT;
 	private static String URL_PREFIX;
 	private static final String HTTP_POST = "POST";
 	private String URL_SUFFIX;
+	private int playerID;
+	private int gameID;
+	
+	private Client client;
 
 
 	/**
@@ -104,13 +100,15 @@ public class ServerProxy implements IServerProxy {
 	 * @post The client communicator will know how to communicate with the server.
 	 */
 
-	public ServerProxy(String serverHost, int serverPort){
+	public ServerProxy(String serverHost, int serverPort, Client c){
 		SERVER_HOST = serverHost;
 		SERVER_PORT = serverPort;				
 		URL_PREFIX = "http://" + SERVER_HOST + ":" + SERVER_PORT;
 
 		userCookie = "";
 		gameCookie = "";
+		playerID = -1;
+		client = c;
 	}
 
 	public ServerProxy(){
@@ -120,6 +118,7 @@ public class ServerProxy implements IServerProxy {
 
 		userCookie = "";
 		gameCookie = "";
+		playerID = -1;
 	}
 
 	public String getUserCookie(){
@@ -129,56 +128,109 @@ public class ServerProxy implements IServerProxy {
 		return gameCookie;
 	}
 
-	@Override
-	public AddAI_Result addAI(AddAI_Params request) throws ClientException {
-		URL_SUFFIX = "/game/addAI";
-
-		return (AddAI_Result) doPost(URL_SUFFIX, request);
+	public int getPlayerID(){
+		return playerID;
 	}
 
 	@Override
+	/**
+	 * Doesn't work, extra credit.
+	 */
+	public AddAI_Result addAI(AddAI_Params request) throws ClientException {
+		//System.out.println("Add AI.");
+		URL_SUFFIX = "/game/addAI";
+
+		return new AddAI_Result((String) doPost(URL_SUFFIX, request));
+	}
+
+	@Override
+	/**
+	 * Creates a new game on the server.
+	 * 
+	 * 
+	 * @param request Create_Params
+	 * @return result Create_Result
+	 * @throws ClientException
+	 * 
+	 * @pre name!=null
+	 * randomTiles, randomNumbers, and randomPorts contain valid boolean values. 
+	 * @post If the operation succeeds,
+	 * 			1. A new game with specified properties has been created
+	 * 			2. The server returns an HTTP 200 success response.
+	 * 			3. The body contains a JSon object describing the newly created game.
+	 * 
+	 * 		If the operation fails
+	 * 			1. The server returns and HTTP 400 error response, and the body contains an error
+	 * 		message.
+	 */
+
 	public Create_Result createGame(Create_Params request)
 			throws ClientException {
+		//System.out.println("Create game.");
 		URL_SUFFIX = "/games/create";
-		return (Create_Result) doPost(URL_SUFFIX, request);
+
+		String j = (String) doPost(URL_SUFFIX, request);
+
+		JsonObject jobj = new Gson().fromJson(j, JsonObject.class);
+
+		return new Create_Result(jobj);
 	}
 
 	@Override
 	public GetVersion_Result getVersion(GetVersion_Params request)
 			throws ClientException {
-		URL_SUFFIX = "/game/model?version=N";
-		return (GetVersion_Result) doPost(URL_SUFFIX, request);
+		//	System.out.println("Get version.");
+		StringBuilder sb = new StringBuilder();
+		sb.append("/game/model?version=");
+		sb.append(client.getGame().getVersionNumber());
+		URL_SUFFIX = sb.toString();
+				
+		return new GetVersion_Result((String) doPost(URL_SUFFIX, request));
 	}
 
 	@Override
 	public Join_Result joinGame(Join_Params request) throws ClientException {
+		System.out.println("Joining game.");
 		URL_SUFFIX = "/games/join";
-		return (Join_Result) doPost(URL_SUFFIX, request);
+		return new Join_Result((String) doPost(URL_SUFFIX, request));
 	}
 
 	@Override
 	public List_Result listGames(List_Params request) throws ClientException {
+		//System.out.println("List games.");
 		URL_SUFFIX = "/games/list";
-		return (List_Result) doPost(URL_SUFFIX, request);
+
+		String j = (String) doPost(URL_SUFFIX, request);
+
+		JsonArray jobj = new Gson().fromJson(j, JsonArray.class);
+
+		return new List_Result(jobj);
 	}
 
 	@Override
 	public ListAI_Result listAI(ListAI_Params request) throws ClientException {
+		System.out.println("List AI.");
 		URL_SUFFIX = "/game/listAI";
 		return (ListAI_Result) doPost(URL_SUFFIX, request);
 	}
 
 	@Override
+	/**
+	 * not implemented, extra credit
+	 */
 	public Login_Result login(Login_Params request) throws ClientException {
+		//System.out.println("Login.");
 		URL_SUFFIX = "/user/login";
-		return (Login_Result) doPost(URL_SUFFIX, request);
+
+		return new Login_Result((String) doPost(URL_SUFFIX, request), playerID, request.getUsername());
 	}
 
 	@Override
 	public Register_Result register(Register_Params request)
 			throws ClientException {
+		//System.out.println("Register.");
 		URL_SUFFIX = "/user/register";
-		return (Register_Result) doPost(URL_SUFFIX, request);
+		return new Register_Result((String) doPost(URL_SUFFIX, request), playerID, request.getUsername());
 	}
 
 	//moves
@@ -186,20 +238,23 @@ public class ServerProxy implements IServerProxy {
 	@Override
 	public AcceptTrade_Result acceptTrade(AcceptTrade_Params request)
 			throws ClientException {
+		//System.out.println("Accept trade.");
 		URL_SUFFIX = "/moves/acceptTrade";
-		return (AcceptTrade_Result) doPost(URL_SUFFIX, request);
+		return new AcceptTrade_Result((String) doPost(URL_SUFFIX, request));
 	}
 
 	@Override
 	public BuildCity_Result buildCity(BuildCity_Params request)
 			throws ClientException {
+		//System.out.println("Build city.");
 		URL_SUFFIX = "/moves/buildCity";
-		return (BuildCity_Result) doPost(URL_SUFFIX, request);
+		return new BuildCity_Result ((String) doPost(URL_SUFFIX, request);
 	}
 
 	@Override
 	public BuildRoad_Result buildRoad(BuildRoad_Params request)
 			throws ClientException {
+		//System.out.println("Build road.");
 		URL_SUFFIX = "/moves/buildRoad";
 		return (BuildRoad_Result) doPost(URL_SUFFIX, request);
 	}
@@ -207,6 +262,7 @@ public class ServerProxy implements IServerProxy {
 	@Override
 	public BuildSettlement_Result buildSettlement(BuildSettlement_Params request)
 			throws ClientException {
+		//System.out.println("Build settlement.");
 		URL_SUFFIX = "/moves/buildSettlement";
 		return (BuildSettlement_Result) doPost(URL_SUFFIX, request);
 	}
@@ -214,6 +270,7 @@ public class ServerProxy implements IServerProxy {
 	@Override
 	public BuyDevCard_Result buyDevCard(BuyDevCard_Params request)
 			throws ClientException {
+		//System.out.println("Buy dev card.");
 		URL_SUFFIX = "/moves/buyDevCard";
 		return (BuyDevCard_Result) doPost(URL_SUFFIX, request);
 	}
@@ -221,6 +278,7 @@ public class ServerProxy implements IServerProxy {
 	@Override
 	public DiscardCards_Result discardCards(DiscardCards_Params request)
 			throws ClientException {
+		//System.out.println("Discard cards.");
 		URL_SUFFIX = "/moves/discardCards";
 		return (DiscardCards_Result) doPost(URL_SUFFIX, request);
 	}
@@ -228,6 +286,7 @@ public class ServerProxy implements IServerProxy {
 	@Override
 	public FinishTurn_Result finishTurn(FinishTurn_Params request)
 			throws ClientException {
+		//System.out.println("Finish turn.");
 		URL_SUFFIX = "/moves/finishTurn";
 		return (FinishTurn_Result) doPost(URL_SUFFIX, request);
 	}
@@ -235,6 +294,7 @@ public class ServerProxy implements IServerProxy {
 	@Override
 	public MaritimeTrade_Result maritimeTrade(MaritimeTrade_Params request)
 			throws ClientException {
+		//System.out.println("Maritime trade.");
 		URL_SUFFIX = "/moves/maritimeTrade";
 		return (MaritimeTrade_Result) doPost(URL_SUFFIX, request);
 	}
@@ -242,6 +302,7 @@ public class ServerProxy implements IServerProxy {
 	@Override
 	public OfferTrade_Result offerTrade(OfferTrade_Params request)
 			throws ClientException {
+		//System.out.println("Offer trade.");
 		URL_SUFFIX = "/moves/offerTrade";
 		return (OfferTrade_Result) doPost(URL_SUFFIX, request);
 	}
@@ -249,6 +310,7 @@ public class ServerProxy implements IServerProxy {
 	@Override
 	public RobPlayer_Result robPlayer(RobPlayer_Params request)
 			throws ClientException {
+		//System.out.println("Rob player.");
 		URL_SUFFIX = "/moves/robPlayer";
 		return (RobPlayer_Result) doPost(URL_SUFFIX, request);
 	}
@@ -256,6 +318,7 @@ public class ServerProxy implements IServerProxy {
 	@Override
 	public RollNumber_Result rollNumber(RollNumber_Params request)
 			throws ClientException {
+		//System.out.println("Roll number.");
 		URL_SUFFIX = "/moves/rollNumber";
 		return (RollNumber_Result) doPost(URL_SUFFIX, request);
 	}
@@ -263,6 +326,7 @@ public class ServerProxy implements IServerProxy {
 	@Override
 	public SendChat_Result sendChat(SendChat_Params request)
 			throws ClientException {
+		//System.out.println("Sending chat.");
 		URL_SUFFIX = "/moves/sendChat";
 		return (SendChat_Result) doPost(URL_SUFFIX, request);
 	}
@@ -308,90 +372,97 @@ public class ServerProxy implements IServerProxy {
 		//System.out.println("Doing post!");
 
 		URL_SUFFIX = urlString;
-		
+
 		HttpURLConnection connection = null;
 
 		try {	
 
 			URL url = new URL(URL_PREFIX + URL_SUFFIX);
-			
-			connection = (HttpURLConnection)url.openConnection();
 
-			
+			connection = (HttpURLConnection)url.openConnection();
 
 			Gson gson = new Gson();
 			String job = gson.toJson(request);	
 
 			//Append those cookies client already has--------------------
-			if (!gameCookie.equals("")){
+			if (unfixedGameCookie!=null){
 				System.out.println("Adding cookies");
-				connection.addRequestProperty("Cookie", userCookie+"; "+gameCookie);
+				connection.setRequestProperty("Cookie", unfixedUserCookie+"; "+unfixedGameCookie);
 			}
-			else if (!userCookie.equals("")){
-				System.out.println("Adding user cookie");
-				connection.addRequestProperty("Cookie", userCookie);
+			else if (unfixedUserCookie!=null){
+				System.out.println("Adding user cookie: "+unfixedUserCookie);
+				connection.setRequestProperty("Cookie", unfixedUserCookie);
 			}
 
-			//System.out.println(url);
-			//System.out.println(connection.toString());
 			System.out.println("Job before: "+job);
 
 			connection.setRequestMethod(HTTP_POST);
 			connection.setDoInput(true);
 			connection.setDoOutput(true);	
-			
+
 			connection.connect(); // sends cookies
-
-
-			/*	String       postUrl       = url.toString();// put in your url
-			HttpClient   httpClient    = HttpClientBuilder.create().build();
-			HttpPost     post          = new HttpPost(postUrl);
-			StringEntity postingString = new StringEntity(gson.toJson(job));//gson.tojson() converts your pojo to json
-			post.setEntity(postingString);
-			post.setHeader("Content-type", "application/json");
-			HttpResponse  response = httpClient.execute(post);
-
-			job = response.toString();*/
-
 			
-			ObjectOutputStream out = new ObjectOutputStream(connection.getOutputStream());
-			//out.writeObject(job);
-			out.writeChars(job);
-			//System.out.println("Input stream: " + connection.getOutputStream().toString());
 
-			out.close();connection.getOutputStream().close();
-			 
-			//System.out.println("Receiving response from server.");
+			OutputStreamWriter sw = new OutputStreamWriter(connection.getOutputStream());
+			sw.write(job);
+			sw.flush();
 
-			//connection.getOutputStream().close();
+			System.out.println("Response code: "+connection.getResponseCode());
 
-			ObjectInputStream in = new ObjectInputStream(connection.getInputStream());
+			InputStream in = connection.getInputStream();
+
+			int len = 0;
 
 			System.out.println("Input stream received.");
-			job = (String) in.readObject();
+
+			byte[] buffer = new byte[1024];
+
+			StringBuilder sb = new StringBuilder();
+
+			while (-1 != (len = in.read(buffer))){
+				sb.append(new String(buffer, 0, len));
+			}
+
+			job = sb.toString();
+
 			in.close();
 
-			//System.out.println("Stream closed.");
-
-			//System.out.println("Job after: "+job);
-
-			//System.out.println("Caching cookies=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=.");
+			System.out.println("Job after: "+job);
+			
 			//Cookie cacher----------------------------------
 			Map<String, List<String>> headers = connection.getHeaderFields();
 
-			if (URL_SUFFIX.equals("/user/login")){
-				userCookie = headers.get("Set-cookie").get(0);
+			if (URL_SUFFIX.equals("/user/login") || URL_SUFFIX.equals("/user/register")){
+				unfixedUserCookie = headers.get("Set-cookie").get(0);
+				userCookie = unfixedUserCookie;
 
 				if (userCookie.endsWith("Path=/;")) {
-					userCookie = userCookie.substring(0, userCookie.length() - 7);
+					userCookie = userCookie.substring(0, userCookie.length() - 8);
+					unfixedUserCookie = userCookie;
+					userCookie = userCookie.substring(11, userCookie.length());
 				}
+
+				//	System.out.println("Amended cookie: "+ userCookie);
+				String decodedUserData = URLDecoder.decode(userCookie, "UTF-8");				
+				//System.out.println("Decoded Cookie: "+decodedUserData);				
+				JsonObject jobj = gson.fromJson(decodedUserData, JsonObject.class);
+				playerID = Integer.parseInt(jobj.get("playerID").toString());	
+
 			}
 			else if (URL_SUFFIX.equals("/games/join")){
-				gameCookie = headers.get("Set-cookie").get(0);
+				System.out.println("Getting join game cookie");
+				unfixedGameCookie = headers.get("Set-cookie").get(0);
+
+				gameCookie = unfixedGameCookie;
+				
 
 				if (gameCookie.endsWith("Path=/;")) {
-					gameCookie = gameCookie.substring(0, gameCookie.length() - 7);
+					gameCookie = gameCookie.substring(0, gameCookie.length() - 8);
+					gameCookie = gameCookie.substring(11, gameCookie.length());
 				}
+					
+				System.out.println("Game cookie: "+ gameCookie);
+				gameID = Integer.parseInt(gameCookie);
 			}
 
 			//String decodedUserData = URLDecoder.decode(userCookie, "UTF-8");
@@ -403,21 +474,21 @@ public class ServerProxy implements IServerProxy {
 			System.out.print("An exception occurred: ");
 			System.out.println(ex.getMessage());
 			InputStream is = connection.getErrorStream();
-			
+
 			InputStreamReader error = new InputStreamReader(is);
 			BufferedReader bre = new BufferedReader(error);
 			String eline;
 			try {
 				while ((eline = bre.readLine()) != null) {
-				        System.out.println(eline);
-				    }
+					System.out.println(eline);
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			System.out.println();
-			
-			
+
+
 		} finally {
 			//finally stuff
 		}
