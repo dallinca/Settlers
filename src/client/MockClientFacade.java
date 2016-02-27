@@ -153,10 +153,6 @@ public class MockClientFacade {
 		Bank bank = new Bank();
 		Board board = new Board(false, false, false);
 		// Players
-		Client.getInstance();
-		Client.getInstance().getGameInfo();
-		Client.getInstance().getGameInfo().getPlayers();
-		Client.getInstance().getGameInfo().getPlayers().get(0);
 		PlayerInfo pi0 = Client.getInstance().getGameInfo().getPlayers().get(0);
 		Player p0 = new Player(pi0.getPlayerIndex(), bank);
 		p0.setPlayerName(pi0.getName());
