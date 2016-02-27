@@ -398,7 +398,7 @@ public class DiscardView extends OverlayView implements IDiscardView
 			this._type = type;
 		}
 
-		public int getDiscardAmount()
+		public int getDiscardAmount() 
 		{
 			return this._discardAmount;
 		}
@@ -414,9 +414,9 @@ public class DiscardView extends OverlayView implements IDiscardView
 			return this._maxAmount;
 		}
 
-		public void setMaxAmount(int maxAmount)
+		public void setMaxAmount(int maxAmount) 
 		{
-			this._maxAmount = maxAmount;
+			this._maxAmount = maxAmount;  
 			this.update();
 		}
 

@@ -135,6 +135,9 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		// TODO Auto-generated method stub
 		System.out.println("DomesticTradeController update()");
 		
+		
+		
+		
 	}
 
 }
