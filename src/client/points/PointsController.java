@@ -3,6 +3,8 @@ package client.points;
 import java.util.Observable;
 import java.util.Observer;
 
+import shared.model.player.Player;
+import client.Client;
 import client.base.*;
 
 
@@ -26,6 +28,7 @@ public class PointsController extends Controller implements IPointsController, O
 		setFinishedView(finishedView);
 		
 		initFromModel();
+		Client.getInstance().addObserver(this);
 	}
 	
 	public IPointsView getPointsView() {
@@ -41,19 +44,29 @@ public class PointsController extends Controller implements IPointsController, O
 		System.out.println("PointsController setFinishedView()");
 		this.finishedView = finishedView;
 	}
-
+	
+	/***
+	 * Each players points should init to 0
+	 */
 	private void initFromModel() {
 		System.out.println("PointsController initFromModel()");
 		//<temp>		
-		getPointsView().setPoints(5);
+		getPointsView().setPoints(0);
 		//</temp>
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("PointsController update()");
-		// TODO Auto-generated method stub
-		
+
+		if(Client.getInstance().getGame().doWeHaveAWinner()){
+			Client.getInstance().getGame().getCurrentPlayer().getPlayerName();
+			//setWinner(String name, boolean isLocalPlayer);
+		}
+		Player[] players = Client.getInstance().getGame().getAllPlayers();
+		for(int i = 0; i < players.length; i++){
+			getPointsView().setPoints(players[i].getVictoryPoints());
+		}
 	}
 	
 }

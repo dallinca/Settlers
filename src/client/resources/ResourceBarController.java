@@ -12,7 +12,6 @@ import client.base.*;
 public class ResourceBarController extends Controller implements IResourceBarController, Observer {
 
 	private Map<ResourceBarElement, IAction> elementActions;
-	private Client client;
 	
 	public ResourceBarController(IResourceBarView view) {
 
@@ -20,10 +19,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 		System.out.println("ResourceBarController ResourceBarController()");
 		elementActions = new HashMap<ResourceBarElement, IAction>();
 		
-		client = Client.getInstance();
-		client.addObserver(this);
-		
-		getView().setElementEnabled(ResourceBarElement.ROAD, false);
+		Client.getInstance().addObserver(this);
 	}
 
 	@Override
@@ -46,38 +42,74 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	@Override
 	public void buildRoad() {
 		System.out.println("ResourceBarController buildRoad()");
-		//elementActions.get(ResourceBarElement.ROAD).;
-		executeElementAction(ResourceBarElement.ROAD);
+		
+		boolean canBuildRoad = Client.getInstance().getGame().canDoCurrentPlayerBuildRoad(Client.getInstance().getUserId());
+		if(canBuildRoad){
+			//elementActions.get(ResourceBarElement.ROAD).;
+			getView().setElementEnabled(ResourceBarElement.ROAD, true);
+			executeElementAction(ResourceBarElement.ROAD);
+		}else{
+			getView().setElementEnabled(ResourceBarElement.ROAD, false);
+		}
 	}
 
 	@Override
 	public void buildSettlement() {
 		System.out.println("ResourceBarController buildSettlement()");
-		executeElementAction(ResourceBarElement.SETTLEMENT);
+		
+		boolean canBuildSettlement = Client.getInstance().getGame().canDoCurrentPlayerBuildSettlement(Client.getInstance().getUserId());
+		if(canBuildSettlement){
+			getView().setElementEnabled(ResourceBarElement.SETTLEMENT, true);
+			executeElementAction(ResourceBarElement.SETTLEMENT);
+		}else{
+			getView().setElementEnabled(ResourceBarElement.SETTLEMENT, false);
+		}
 	}
 
 	@Override
 	public void buildCity() {
 		System.out.println("ResourceBarController buildCity()");
-		executeElementAction(ResourceBarElement.CITY);
+		
+		boolean canBuildCity = Client.getInstance().getGame().canDoCurrentPlayerBuildCity(Client.getInstance().getUserId());
+		if(canBuildCity){
+			getView().setElementEnabled(ResourceBarElement.CITY, true);
+			executeElementAction(ResourceBarElement.CITY);
+		}else{
+			getView().setElementEnabled(ResourceBarElement.CITY, false);
+		}
 	}
 
 	@Override
 	public void buyCard() {
 		System.out.println("ResourceBarController buyCard()");
-		executeElementAction(ResourceBarElement.BUY_CARD);
+		
+		boolean canBuyCard = Client.getInstance().getGame().canDoCurrentPlayerBuyDevelopmentCard(Client.getInstance().getUserId());
+		if(canBuyCard){
+			getView().setElementEnabled(ResourceBarElement.BUY_CARD, true);
+			executeElementAction(ResourceBarElement.BUY_CARD);
+		}else{
+			getView().setElementEnabled(ResourceBarElement.BUY_CARD, false);
+		}
 	}
 
 	@Override
 	public void playCard() {
 		System.out.println("ResourceBarController playCard()");
-		executeElementAction(ResourceBarElement.PLAY_CARD);
+	
+		boolean canPlayCard = Client.getInstance().getGame().canDoCurrentPlayerUseDevelopmentCard(devCardType) 
+		if(canPlayCard){
+			getView().setElementEnabled(ResourceBarElement.PLAY_CARD, true);
+			executeElementAction(ResourceBarElement.PLAY_CARD);
+		}else{
+			getView().setElementEnabled(ResourceBarElement.PLAY_CARD, false);
+		}
+		
 	}
 	
 	private void executeElementAction(ResourceBarElement element) {
 		System.out.println("ResourceBarController executeElementAction()");
+		
 		if (elementActions.containsKey(element)) {
-			
 			IAction action = elementActions.get(element);
 			action.execute();
 		}

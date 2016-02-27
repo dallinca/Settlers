@@ -43,12 +43,6 @@ public class Client extends Observable {
 		notifyObservers(this.game);
 	}
 
-	public void addObservers(){
-		//A list of controllers that implement observer needs to be added
-		//for (int i =0 ; i < controllerList.size(); i++)
-			//this.addObserver(controllerList[i]);
-	}
-
 	public String getName() {
 		return name;
 	}

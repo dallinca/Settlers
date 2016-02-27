@@ -1,6 +1,7 @@
 package client.turntracker;
 
 import shared.definitions.CatanColor;
+import shared.model.player.Player;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -14,7 +15,6 @@ import client.base.*;
  */
 public class TurnTrackerController extends Controller implements ITurnTrackerController, Observer {
 
-	private Client client;
 	public TurnTrackerController(ITurnTrackerView view) {
 		
 		super(view);
@@ -22,8 +22,7 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 		
 		initFromModel();
 		
-		client = Client.getInstance();
-		client.addObserver(this);
+		Client.getInstance().addObserver(this);
 	}
 	
 	@Override
@@ -39,16 +38,38 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	
 	private void initFromModel() {
 		System.out.println("TurnTrackerController initFromModel()");
-		//<temp>
-		getView().setLocalPlayerColor(CatanColor.RED);
-		//</temp>
+		
+		Player[] players = Client.getInstance().getGame().getAllPlayers();
+		for(int i = 0; i < players.length && players[i] != null; i++){
+			
+			getView().initializePlayer(players[i].getPlayerIndex(), players[i].getPlayerName(), players[i].getPlayerColor());
+			
+			System.out.println("i: "+i+ " players[i].getPlayerIndex(): "+players[i].getPlayerIndex()+ 
+					"players[i].getPlayerName(): "+ players[i].getPlayerName()+" players[i].getPlayerColor(): "+players[i].getPlayerColor());
+			
+			boolean highlight = false;
+			boolean largestArmy = false;
+			boolean longestRoad = false;
+			
+			if(players[i].isPlayersTurn()){
+				highlight = true;
+			}
+			if(players[i].isHasLargestArmy()){
+				largestArmy = true;
+			}
+			if(players[i].isHasLongestRoad()){
+				longestRoad = true;
+			}
+			getView().updatePlayer(players[i].getPlayerIndex(), players[i].getVictoryPoints(), highlight,
+					  largestArmy, longestRoad);
+			getView().setLocalPlayerColor(players[i].getPlayerColor());
+		}
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("TurnTrackerController update()");
-		// TODO Auto-generated method stub
-		
+		initFromModel();
 	}
 
 }

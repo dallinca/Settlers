@@ -13,7 +13,6 @@ import client.base.*;
 public class RollController extends Controller implements IRollController, Observer {
 
 	private IRollResultView resultView;
-	private Client client;
 
 	/**
 	 * RollController constructor
@@ -28,8 +27,7 @@ public class RollController extends Controller implements IRollController, Obser
 		
 		setResultView(resultView);
 		
-		client = Client.getInstance();
-		client.addObserver(this);
+		Client.getInstance().addObserver(this);
 	}
 	
 	public IRollResultView getResultView() {
@@ -52,7 +50,7 @@ public class RollController extends Controller implements IRollController, Obser
 		
 		int rollValue = 0;
 		try {
-			rollValue = client.getGame().RollDice(client.getUserId());
+			rollValue = Client.getInstance().getGame().RollDice(Client.getInstance().getUserId());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
