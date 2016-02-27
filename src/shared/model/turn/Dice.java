@@ -11,10 +11,10 @@ import shared.model.Game;
  */
 public class Dice {
 
-	private Client client;
+
 	
-	Dice(Client client) {
-		this.client = client;
+	Dice() {
+
 	}
 	/**
 	 * Rolls the game dice.

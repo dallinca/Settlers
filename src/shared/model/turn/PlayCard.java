@@ -10,10 +10,10 @@ import shared.model.Game;
  */
 public class PlayCard {
 
-	private Client client;
+
 	
-	PlayCard(Client client) {
-		this.client = client;
+	PlayCard() {
+
 	}
 	/**
 	 * Plays an army development card.

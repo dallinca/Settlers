@@ -13,6 +13,7 @@ import shared.communication.params.move.*;
 import shared.communication.params.nonmove.*;
 import shared.communication.params.move.devcard.*;
 import shared.communication.results.nonmove.Create_Result;
+import shared.communication.results.nonmove.GetVersion_Result;
 import shared.communication.results.nonmove.Join_Result;
 import shared.communication.results.nonmove.List_Result;
 import shared.communication.results.nonmove.List_Result.Game;
@@ -145,6 +146,51 @@ public class ServerProxyTest {
 		assertNotNull(jResult);
 		assertTrue(jResult.isValid());
 
+	}
+	
+	@Test
+	public void testGetVersion() throws ClientException {
+		
+		Login_Result lResult = prox.login(new Login_Params("Sam", "sam"));		
+		assertTrue(lResult.isValid());
+				
+		Join_Result jResult = prox.joinGame(new Join_Params(0, CatanColor.ORANGE));
+		assertTrue(jResult.isValid());
+		//assertEquals(3, createResult.getID());
+		
+		GetVersion_Result vResult = prox.getVersion(new GetVersion_Params());
+		assertTrue(vResult.isValid());
+		assertTrue(vResult.isUpToDate());
+		
+		ServerProxy prox2 = new ServerProxy();		
+		ServerProxy prox3 = new ServerProxy();
+		ServerProxy prox4 = new ServerProxy();
+		
+		prox2.login(new Login_Params("Brooke", "brooke"));
+		prox2.joinGame(new Join_Params(0, CatanColor.BLUE));
+		
+		prox3.login(new Login_Params("Pete", "pete"));
+		prox3.joinGame(new Join_Params(0, CatanColor.RED));
+		
+		prox4.login(new Login_Params("Mark", "mark"));
+		prox4.joinGame(new Join_Params(0, CatanColor.GREEN));
+		
+		vResult = prox.getVersion(new GetVersion_Params());
+		assertTrue(vResult.isValid());
+		assertTrue(vResult.isUpToDate());
+		
+		vResult = prox2.getVersion(new GetVersion_Params());
+		assertTrue(vResult.isValid());
+		assertTrue(vResult.isUpToDate());
+		
+		vResult = prox3.getVersion(new GetVersion_Params());
+		assertTrue(vResult.isValid());
+		assertTrue(vResult.isUpToDate());
+		
+		vResult = prox4.getVersion(new GetVersion_Params());
+		assertTrue(vResult.isValid());
+		assertTrue(vResult.isUpToDate());
+			
 	}
 
 	//@Test

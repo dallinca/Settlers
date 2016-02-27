@@ -25,8 +25,6 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 
 	private GameInfo gameInfo; // For storing the GameInfo for the desired game to join
 	
-	private Client clientInfo;
-	private MockClientFacade mockClientFacade;
 	private INewGameView newGameView;
 	private ISelectColorView selectColorView;
 	private IMessageView messageView;
@@ -41,7 +39,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	 * @param messageView Message view (used to display error messages that occur while the user is joining a game)
 	 */
 	public JoinGameController(IJoinGameView view, INewGameView newGameView, 
-								ISelectColorView selectColorView, IMessageView messageView, MockClientFacade mockClientFacade, Client clientInfo) {
+								ISelectColorView selectColorView, IMessageView messageView) {
 
 		super(view);
 		System.out.println("JoinGameController JoinGameController()");
@@ -49,8 +47,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		setNewGameView(newGameView);
 		setSelectColorView(selectColorView);
 		setMessageView(messageView);
-		this.mockClientFacade = mockClientFacade;
-		this.clientInfo = clientInfo;
+		
 	}
 	
 	public IJoinGameView getJoinGameView() {
@@ -128,11 +125,11 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		System.out.println("JoinGameController start()");
 		List_Result result = null;
 		try {
-			result = mockClientFacade.listGames();
+			result = MockClientFacade.getInstance().listGames();
 			GameInfo[] games = new GameInfo[result.getGames().length];
 			games = result.getGames();
 			PlayerInfo localPlayer = new PlayerInfo();
-			localPlayer.setId(clientInfo.getUserId());
+			localPlayer.setId(Client.getInstance().getUserId());
 			getJoinGameView().setGames(games, localPlayer);
 		} catch (ClientException e) {
 			e.printStackTrace();
@@ -184,7 +181,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		System.out.println("JoinGameController createNewGame()");
 		Create_Result create_result = null;
 		try {
-			create_result = mockClientFacade.createGame(getNewGameView().getTitle(), 
+			create_result = MockClientFacade.getInstance().createGame(getNewGameView().getTitle(), 
 					getNewGameView().getRandomlyPlaceHexes(), 
 					getNewGameView().getRandomlyPlaceNumbers(), 
 					getNewGameView().getUseRandomPorts());
@@ -221,7 +218,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		List<PlayerInfo> players = game.getPlayers();
 		for(PlayerInfo player: players) {
 			// allow the user to select a different color
-			if(player.getId() != clientInfo.getUserId()) {
+			if(player.getId() != Client.getInstance().getUserId()) {
 				System.out.println(player.getId());
 				getSelectColorView().setColorEnabled(player.getColor(), false);
 			}
@@ -269,7 +266,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		System.out.println("JoinGameController joinGame()");
 		Join_Result join_result = null;
 		try {
-			join_result = mockClientFacade.joinGame(gameInfo.getId(), color);
+			join_result = MockClientFacade.getInstance().joinGame(gameInfo.getId(), color);
 		} catch (ClientException e) {
 			getSelectColorView().closeModal();
 			getMessageView().setMessage("Game could not be joined, threw Exception");
@@ -288,7 +285,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		boolean playerAlreadyInGame = false;
 		for(PlayerInfo player: gameInfo.getPlayers()) {
 			// If we find a player in the page who has the same id as the currently logged in user
-			if(player.getId() == clientInfo.getUserId()) {
+			if(player.getId() == Client.getInstance().getUserId()) {
 				playerAlreadyInGame = true;
 				player.setColor(color); // Change the color of the user to the new selection
 			}
@@ -296,15 +293,15 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		if(playerAlreadyInGame == false) {
 			PlayerInfo joiningPlayer = new PlayerInfo();
 			joiningPlayer.setColor(color);
-			joiningPlayer.setId(clientInfo.getUserId());
-			joiningPlayer.setName(clientInfo.getName());
+			joiningPlayer.setId(Client.getInstance().getUserId());
+			joiningPlayer.setName(Client.getInstance().getName());
 			gameInfo.addPlayer(joiningPlayer);
 		}
 		// TODO check if we need to be adding our index here or not
 		// this will be influenced by when the Server is determining what index we are at
 		// Is it immediately when we join a game, even one that isn't full?
 		// Or does the server wait to assign player indexes until the games is full, and then lets everyone know their indexes?
-		clientInfo.setGameInfo(gameInfo);
+		Client.getInstance().setGameInfo(gameInfo);
 		getSelectColorView().closeModal();
 		getJoinGameView().closeModal();
 		joinAction.execute();
