@@ -53,6 +53,7 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 	@Override
 	public void start() {
 		System.out.println("PlayerWaitingController start");
+		clientInfo.addObserver(this);
 		// Get the players from the gameInfo to initialize the waiting screen
 		PlayerInfo[] players = new PlayerInfo[clientInfo.getGameInfo().getPlayers().size()];
 		view.setPlayers(clientInfo.getGameInfo().getPlayers().toArray(players));

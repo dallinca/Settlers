@@ -36,7 +36,7 @@ public class Game {
 	private int turnNumber = 0;
 	private int versionNumber = 1;
 	private int indexOfLargestArmy = -1;
-	private Dice dice = new Dice();
+	//private Dice dice = new Dice();
 	
 	// CONSTRUCTORS
 	//////////////////////////////////////////

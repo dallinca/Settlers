@@ -44,11 +44,11 @@ public class Client extends Observable {
 		//update all controllers by passing each the current game object
 		notifyObservers(this.game);
 	}
-	
+
 	public void addObservers(){
 		//A list of controllers that implement observer needs to be added
-		/*for (int i =0 ; i < controllerList.size(); i++)
-		 * this.addObserver(controllerList[i])*/
+		for (int i =0 ; i < controllerList.size(); i++)
+			this.addObserver(controllerList[i]);
 	}
 
 	public String getName() {
