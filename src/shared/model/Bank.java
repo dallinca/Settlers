@@ -14,7 +14,7 @@ import shared.model.player.Player;
  * The bank class keeps track of all transactions relating to the cards, the players, and results of the robber. 
  */
 public class Bank {
-	private ArrayList<ResourceCard> wheatDeck = null; 
+	private ArrayList<ResourceCard> wheatDeck = null;
 	private ArrayList<ResourceCard> sheepDeck = null;
 	private ArrayList<ResourceCard> lumberDeck = null;
 	private ArrayList<ResourceCard> oreDeck = null;
