@@ -66,6 +66,9 @@ import shared.definitions.CatanColor;
  *
  */
 public class MockClientFacade {
+	
+	private static MockClientFacade SINGLETON = null;
+	
 	// Dummy info for tab
 	private ArrayList<GameInfo> gamesList = new ArrayList<GameInfo>();
 	private int gameId = 55;
@@ -82,14 +85,16 @@ public class MockClientFacade {
 	 * @pre Server name and port number specifiy an existing server.
 	 * @post Client will be able to communicate with server.
 	 */
-	MockClientFacade(IServerProxy proxy, Client client){
-		this.sp = proxy;
-		this.c = client;
+	
+	private MockClientFacade() {
+		this.c = Client.getInstance();
 	}
-
-	public MockClientFacade(Client client){		
-		this.sp = new ServerProxy();
-		this.c = client;
+	
+	public static MockClientFacade getInstance() {
+		if(SINGLETON == null) {
+			SINGLETON = new MockClientFacade();
+		}
+		return SINGLETON;
 	}
 
 	/**
