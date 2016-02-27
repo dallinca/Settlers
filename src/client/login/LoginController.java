@@ -37,13 +37,10 @@ public class LoginController extends Controller implements ILoginController, Obs
 	 * @param view Login view
 	 * @param messageView Message view (used to display error messages that occur during the login process)
 	 */
-	public LoginController(ILoginView view, IMessageView messageView, MockClientFacade mockClientFacade, Client clientInfo) {
+	public LoginController(ILoginView view, IMessageView messageView) {
 
 		super(view);
 		System.out.println("LoginController LoginController()");
-		
-		this.clientInfo = clientInfo;
-		this.mockClientFacade = mockClientFacade;
 		this.messageView = messageView;
 	}
 	

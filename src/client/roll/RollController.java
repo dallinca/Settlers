@@ -51,6 +51,12 @@ public class RollController extends Controller implements IRollController, Obser
 		System.out.println("RollController rollDice()");
 		
 		int rollValue = 0;
+		try {
+			rollValue = client.getGame().RollDice(client.getUserId());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.resultView.setRollValue(rollValue);
 		getResultView().showModal();
 	}

@@ -57,8 +57,10 @@ public class ActionManager {
 	 * @pre action must be of 'purchase' action category.
 	 * @post action will be performed.
 	 */
-	public void canDoPurchase(ActionType action){
-		if (action == ActionType.PURCHASE_DEVELOPMENT) PURCHASE.canDoPurchaseDevelopmentCard();
+	public boolean canDoPurchase(ActionType action){
+		if (action == ActionType.PURCHASE_DEVELOPMENT) 
+			return PURCHASE.canDoPurchaseDevelopmentCard();
+		return false;
 	}	
 
 

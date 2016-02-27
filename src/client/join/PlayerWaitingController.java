@@ -17,20 +17,21 @@ import client.data.PlayerInfo;
 public class PlayerWaitingController extends Controller implements IPlayerWaitingController, Observer {
 
 	private IPlayerWaitingView view;
-	private Client clientInfo;
+	private Client client;
 	
 	/**
 	 * TODO - Javadoc and Implement
 	 * 
 	 * 
 	 */
-	public PlayerWaitingController(IPlayerWaitingView view, Client clientInfo) {
+	public PlayerWaitingController(IPlayerWaitingView view) {
 
 		super(view);
 		System.out.println("PlayerWaitingController PlayerWaitingController");
 		
 		this.view = view;
-		this.clientInfo = clientInfo;
+		client = Client.getInstance();
+		//client.addObserver(this);
 	}
 
 	/**
@@ -53,14 +54,13 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 	@Override
 	public void start() {
 		System.out.println("PlayerWaitingController start");
-		clientInfo.addObserver(this);
 		// Get the players from the gameInfo to initialize the waiting screen
-		PlayerInfo[] players = new PlayerInfo[clientInfo.getGameInfo().getPlayers().size()];
-		view.setPlayers(clientInfo.getGameInfo().getPlayers().toArray(players));
+		PlayerInfo[] players = new PlayerInfo[client.getGameInfo().getPlayers().size()];
+		view.setPlayers(client.getGameInfo().getPlayers().toArray(players));
 
 		getView().showModal();
 		
-		if(getView().isModalShowing() && clientInfo.getGameInfo().getPlayers().size() == 4) {
+		if(getView().isModalShowing() && client.getGameInfo().getPlayers().size() == 4) {
 			getView().closeModal();
 		}
 	}
@@ -87,7 +87,7 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 	public void update(Observable o, Object arg) {
 		System.out.println("PlayerWaitingController update");
 		// TODO Auto-generated method stub
-		if(getView().isModalShowing() && clientInfo.getGameInfo().getPlayers().size() == 4) {
+		if(getView().isModalShowing() && client.getGameInfo().getPlayers().size() == 4) {
 			
 			getView().closeModal();
 		}

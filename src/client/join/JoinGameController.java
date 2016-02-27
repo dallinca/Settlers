@@ -41,7 +41,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	 * @param messageView Message view (used to display error messages that occur while the user is joining a game)
 	 */
 	public JoinGameController(IJoinGameView view, INewGameView newGameView, 
-								ISelectColorView selectColorView, IMessageView messageView, MockClientFacade mockClientFacade, Client clientInfo) {
+								ISelectColorView selectColorView, IMessageView messageView) {
 
 		super(view);
 		System.out.println("JoinGameController JoinGameController()");
@@ -49,8 +49,6 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		setNewGameView(newGameView);
 		setSelectColorView(selectColorView);
 		setMessageView(messageView);
-		this.mockClientFacade = mockClientFacade;
-		this.clientInfo = clientInfo;
 	}
 	
 	public IJoinGameView getJoinGameView() {

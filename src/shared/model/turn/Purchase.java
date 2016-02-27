@@ -26,8 +26,8 @@ public class Purchase {
 
 	}
 
-	public void canDoPurchaseDevelopmentCard(){
-		client.getGame().canDoCurrentPlayerBuyDevelopmentCard(client.getUserId());
+	public boolean canDoPurchaseDevelopmentCard(){
+		return client.getGame().canDoCurrentPlayerBuyDevelopmentCard(client.getUserId());
 	}
 
 	/**

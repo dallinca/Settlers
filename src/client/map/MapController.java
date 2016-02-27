@@ -5,6 +5,8 @@ import java.util.*;
 import shared.definitions.*;
 import shared.locations.*;
 import shared.model.*;
+import shared.model.turn.ActionManager;
+import shared.model.turn.ActionType;
 import client.Client;
 import client.base.*;
 import client.data.*;
@@ -19,6 +21,7 @@ public class MapController extends Controller implements IMapController, Observe
 	private Game game;
 	
 	private Client client;
+	private ActionManager actionManger;
 	
 	public MapController(IMapView view, IRobView robView) {
 		
@@ -28,9 +31,10 @@ public class MapController extends Controller implements IMapController, Observe
 		setRobView(robView);
 		
 		initFromModel();
-		
+		actionManger = ActionManager.getInstance();
 		client = Client.getInstance();
 		client.addObserver(this);
+		
 	}
 	
 	public IMapView getView() {
@@ -122,8 +126,7 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public boolean canPlaceRoad(EdgeLocation edgeLoc) {
 		System.out.println("MapController canPlaceRoad()");
-		
-		
+		client.getGame().canDoPlaceRoadOnEdge( client.getUserId(), edgeLoc);
 		return true;
 	}
 
@@ -133,7 +136,7 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public boolean canPlaceSettlement(VertexLocation vertLoc) {
 		System.out.println("MapController canPlaceSettlement()");
-		
+		client.getGame().canDoPlaceSettlementOnVertex( client.getUserId(), vertLoc);
 		return true;
 	}
 
@@ -143,7 +146,7 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public boolean canPlaceCity(VertexLocation vertLoc) {
 		System.out.println("MapController canPlaceCity()");
-		
+		client.getGame().canDoPlaceCityOnVertex(vertLoc);
 		return true;
 	}
 
@@ -153,7 +156,7 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public boolean canPlaceRobber(HexLocation hexLoc) {
 		System.out.println("MapController canPlaceRobber()");
-		
+		client.getGame().canDoMoveRobberToHex( client.getUserId(), hexLoc);
 		return true;
 	}
 
@@ -163,8 +166,14 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public void placeRoad(EdgeLocation edgeLoc) {
 		System.out.println("MapController placeRoad()");
+		try {
+			client.getGame().placeRoadOnEdge( client.getUserId(), edgeLoc);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		getView().placeRoad(edgeLoc, CatanColor.ORANGE);
+		getView().placeRoad(edgeLoc, client.getColor());
 	}
 
 	/**
@@ -173,8 +182,13 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public void placeSettlement(VertexLocation vertLoc) {
 		System.out.println("MapController placeSettlement()");
-		
-		getView().placeSettlement(vertLoc, CatanColor.ORANGE);
+		try {
+			client.getGame().placeSettlementOnVertex(client.getUserId(), vertLoc);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		getView().placeSettlement(vertLoc, client.getColor());
 	}
 
 	/**
@@ -183,8 +197,13 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public void placeCity(VertexLocation vertLoc) {
 		System.out.println("MapController placeCity()");
-		
-		getView().placeCity(vertLoc, CatanColor.ORANGE);
+		try {
+			client.getGame().placeCityOnVertex(vertLoc);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		getView().placeCity(vertLoc, client.getColor());
 	}
 
 	/**
@@ -193,7 +212,12 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public void placeRobber(HexLocation hexLoc) {
 		System.out.println("MapController placeRobber()");
-		
+		try {
+			client.getGame().moveRobberToHex(client.getUserId(), hexLoc);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		getView().placeRobber(hexLoc);
 		
 		getRobView().showModal();
@@ -205,7 +229,7 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {	
 		System.out.println("MapController startMove()");
-		
+
 		getView().startDrop(pieceType, CatanColor.ORANGE, true);
 	}
 
@@ -224,7 +248,7 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public void playSoldierCard() {	
 		System.out.println("MapController playSoldierCard()");
-		
+		actionManger.doAction(ActionType.PLAYCARD_KNIGHT);
 	}
 
 	/**
@@ -233,7 +257,7 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public void playRoadBuildingCard() {
 		System.out.println("MapController playRoadBuildingCard()");	
-		
+		actionManger.doAction(ActionType.PLAYCARD_BUILDROADS);
 	}
 
 	/**
@@ -242,7 +266,13 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public void robPlayer(RobPlayerInfo victim) {	
 		System.out.println("MapController robPlayer()");
-		
+
+		try {
+			client.getGame().stealPlayerResource(client.getUserId(), victim.getId());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
