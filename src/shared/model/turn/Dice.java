@@ -2,19 +2,27 @@ package shared.model.turn;
 
 import java.util.Random;
 
+import client.Client;
+import shared.model.Game;
+
 /**
  * All action methods associated with dice rolls.
  *
  */
 public class Dice {
+
+	private Client client;
 	
+	Dice(Client client) {
+		this.client = client;
+	}
 	/**
 	 * Rolls the game dice.
 	 * 
 	 * @pre None.
 	 * @post Rolls dice and enables players to perform associated action.
 	 */
-	static void rollDice(){
+	public void rollDice(){
 		
 		Random ran = new Random();
 		
@@ -34,7 +42,7 @@ public class Dice {
 	 * @pre diceResult must be an integer between 2 and 12.
 	 * @post Resources will be assigned to various players if possible.
 	 */
-	static void assignResources(int diceResult){
+	public void assignResources(int diceResult){
 				
 	}
 	
@@ -45,7 +53,7 @@ public class Dice {
 	 * @post Robber will be moved to a new hex.
 	 * 
 	 */
-	static void moveRobber(){
+	public void moveRobber(){
 						
 	}	
 	
@@ -57,7 +65,7 @@ public class Dice {
 	 * @post Player steals resource from chosen player, or not.
 	 * 
 	 */
-	static void stealResource(){
+	public void stealResource(){
 		
 		
 	}	

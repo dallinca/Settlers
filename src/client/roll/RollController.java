@@ -2,7 +2,6 @@ package client.roll;
 
 import java.util.Observable;
 import java.util.Observer;
-
 import client.base.*;
 
 
@@ -44,6 +43,9 @@ public class RollController extends Controller implements IRollController, Obser
 	@Override
 	public void rollDice() {
 		System.out.println("RollController rollDice()");
+		
+		int rollValue = 0;
+		this.resultView.setRollValue(rollValue);
 		getResultView().showModal();
 	}
 

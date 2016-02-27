@@ -1,6 +1,7 @@
 package client;
 import java.util.*;
 
+import client.data.GameInfo;
 import client.map.MapController;
 import client.proxy.IServerProxy;
 import client.proxy.MockServerProxy;
@@ -9,6 +10,7 @@ import shared.model.Game;
 
 public class Client extends Observable {
 	
+	private GameInfo gameInfo; // This is a class provided to us. We are using for player waiting modal view.
 	private Game game;
 	private IServerProxy isp;
 	private ClientFacade cf;
@@ -17,11 +19,13 @@ public class Client extends Observable {
 	private CatanColor color;
 	private int playerIndex;
 	
-
+	private static Client singleton = new Client( );
 	// CONSTRUCTORS
 	//////////////////////
-	public Client() {
+	private Client(){ }
 	
+	public static Client getInstance( ) {
+	      return singleton;
 	}
 	
 	public Client(IServerProxy isp){
@@ -42,11 +46,11 @@ public class Client extends Observable {
 		//update all controllers by passing each the current game object
 		notifyObservers(this.game);
 	}
-	
+
 	public void addObservers(){
 		//A list of controllers that implement observer needs to be added
-		/*for (int i =0 ; i < controllerList.size(); i++)
-		 * this.addObserver(controllerList[i])*/
+		//for (int i =0 ; i < controllerList.size(); i++)
+			//this.addObserver(controllerList[i]);
 	}
 
 	public String getName() {
@@ -79,6 +83,14 @@ public class Client extends Observable {
 
 	public void setUserId(int userId) {
 		UserId = userId;
+	}
+
+	public GameInfo getGameInfo() {
+		return gameInfo;
+	}
+
+	public void setGameInfo(GameInfo gameInfo) {
+		this.gameInfo = gameInfo;
 	}
 	
 	

@@ -1,5 +1,8 @@
 package shared.model.turn;
 
+import client.Client;
+import shared.model.Game;
+
 
 /**
  * All action methods associated with playing development cards.
@@ -7,13 +10,18 @@ package shared.model.turn;
  */
 public class PlayCard {
 
+	private Client client;
+	
+	PlayCard(Client client) {
+		this.client = client;
+	}
 	/**
 	 * Plays an army development card.
 	 * 
 	 * @pre Player must have an army development card.
 	 * @post Player takes associated action.
 	 */
-	public static void playKnight(){
+	public void playKnight(){
 
 	}
 
@@ -23,7 +31,7 @@ public class PlayCard {
 	 * @pre Player must have year of plenty development card.
 	 * @post Player takes associated action.
 	 */
-	public static void playYearOfPlenty(){
+	public void playYearOfPlenty(){
 
 	}
 	
@@ -33,7 +41,7 @@ public class PlayCard {
 	 * @pre Player must have monopoly development card.
 	 * @post Player takes associated action.
 	 */
-	public static void playMonopoly(){
+	public void playMonopoly(){
 
 	}
 
@@ -43,7 +51,7 @@ public class PlayCard {
 	 * @pre Player must have build roads development card.
 	 * @post Player takes associated action.
 	 */
-	public static void playBuildRoads(){
+	public void playBuildRoads(){
 
 	}
 	

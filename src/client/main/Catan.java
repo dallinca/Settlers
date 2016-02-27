@@ -1,5 +1,7 @@
 package client.main;
 
+import java.util.ArrayList;
+
 import javax.swing.*;
 
 import client.Client;
@@ -8,6 +10,7 @@ import client.MockClientFacade;
 import client.catan.*;
 import client.login.*;
 import client.join.*;
+import client.map.*;
 import client.misc.*;
 import client.base.*;
 
@@ -19,7 +22,7 @@ public class Catan extends JFrame
 {
 	// Set up the Client
 	private static Client clientInfo = new Client();
-	private static MockClientFacade mockClientFacade = new MockClientFacade();
+	private static MockClientFacade mockClientFacade = new MockClientFacade(clientInfo);
 	private CatanPanel catanPanel;
 	
 	public Catan()
@@ -63,11 +66,15 @@ public class Catan extends JFrame
 			{
 				new Catan();
 				
+				// PLAYER WAITING - Controller
 				PlayerWaitingView playerWaitingView = new PlayerWaitingView();
 				final PlayerWaitingController playerWaitingController = new PlayerWaitingController(
-																									playerWaitingView);
+																									playerWaitingView,
+																									clientInfo
+																									);
 				playerWaitingView.setController(playerWaitingController);
 				
+				// JOIN GAME - Controller
 				JoinGameView joinView = new JoinGameView();
 				NewGameView newGameView = new NewGameView();
 				SelectColorView selectColorView = new SelectColorView();
@@ -91,7 +98,8 @@ public class Catan extends JFrame
 				newGameView.setController(joinController);
 				selectColorView.setController(joinController);
 				joinMessageView.setController(joinController);
-				
+			
+				// LOGIN VIEW - Controller
 				LoginView loginView = new LoginView();
 				MessageView loginMessageView = new MessageView();
 				LoginController loginController = new LoginController(
@@ -108,8 +116,6 @@ public class Catan extends JFrame
 					}
 				});
 				loginView.setController(loginController);
-				loginView.setController(loginController);
-				
 				loginController.start();
 			}
 		});

@@ -39,6 +39,8 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	@Override
 	public void buildRoad() {
 		System.out.println("ResourceBarController buildRoad()");
+		//elementActions.get(ResourceBarElement.ROAD).;
+		getView().setElementEnabled(ResourceBarElement.ROAD, false);
 		executeElementAction(ResourceBarElement.ROAD);
 	}
 

@@ -43,22 +43,23 @@ public class DiscardController extends Controller implements IDiscardController,
 
 	@Override
 	public void increaseAmount(ResourceType resource) {
-		
+		System.out.println("DiscardController increaseAmount()");
 	}
 
 	@Override
 	public void decreaseAmount(ResourceType resource) {
-		
+		System.out.println("DiscardController decreaseAmount()");
 	}
 
 	@Override
 	public void discard() {
-		
+		System.out.println("DiscardController discard()");
 		getDiscardView().closeModal();
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
+		System.out.println("DiscardController update()");
 		// TODO Auto-generated method stub
 		
 	}

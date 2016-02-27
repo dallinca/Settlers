@@ -39,4 +39,21 @@ public class Join_Result {
 		this.response = response;
 	}
 
+	boolean joined = false;
+	
+	public Join_Result(boolean joined) {
+		this.joined = joined;
+	}
+	
+	public Join_Result() {}
+
+	public boolean isJoined() {
+		return joined;
+	}
+
+	public void setJoined(boolean joined) {
+		this.joined = joined;
+	}
+	
+	
 }

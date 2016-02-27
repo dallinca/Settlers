@@ -1,8 +1,11 @@
 package client.join;
 
+import shared.communication.results.nonmove.Create_Result;
+import shared.communication.results.nonmove.Join_Result;
 import shared.communication.results.nonmove.List_Result;
 import shared.definitions.CatanColor;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -20,6 +23,9 @@ import client.misc.*;
  */
 public class JoinGameController extends Controller implements IJoinGameController, Observer {
 
+	private GameInfo gameInfo; // For storing the GameInfo for the desired game to join
+	
+	private Client clientInfo;
 	private MockClientFacade mockClientFacade;
 	private INewGameView newGameView;
 	private ISelectColorView selectColorView;
@@ -44,6 +50,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		setSelectColorView(selectColorView);
 		setMessageView(messageView);
 		this.mockClientFacade = mockClientFacade;
+		this.clientInfo = clientInfo;
 	}
 	
 	public IJoinGameView getJoinGameView() {
@@ -90,6 +97,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		
 		return selectColorView;
 	}
+	
 	public void setSelectColorView(ISelectColorView selectColorView) {
 		System.out.println("JoinGameController setSelectColorView()");
 		
@@ -101,12 +109,20 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		
 		return messageView;
 	}
+	
 	public void setMessageView(IMessageView messageView) {
 		System.out.println("JoinGameController setMessageView()");
 		
 		this.messageView = messageView;
 	}
 
+	/**
+	 * Asks the client Facade for the current listing of games
+	 * 
+	 * @pre None
+	 * @post the JoinGameView will be showing the listing of games that was received back from the client Facade
+	 * 
+	 */
 	@Override
 	public void start() {
 		System.out.println("JoinGameController start()");
@@ -115,14 +131,24 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 			result = mockClientFacade.listGames();
 			GameInfo[] games = new GameInfo[result.getGames().length];
 			games = result.getGames();
-			getJoinGameView().setGames(games, new PlayerInfo());
+			PlayerInfo localPlayer = new PlayerInfo();
+			localPlayer.setId(clientInfo.getUserId());
+			getJoinGameView().setGames(games, localPlayer);
 		} catch (ClientException e) {
 			e.printStackTrace();
 		}
-		
-		getJoinGameView().showModal();
+		if(!getJoinGameView().isModalShowing()) {
+			getJoinGameView().showModal();
+		}
 	}
 
+	/**
+	 * Makes the create game view visible, and makes the JoinGameHub view not visible
+	 * 
+	 * @pre None
+	 * @post the create game view visible. the JoinGameHub view not visible
+	 * 
+	 */
 	@Override
 	public void startCreateNewGame() {
 		System.out.println("JoinGameController startCreateNewGame()");
@@ -130,6 +156,13 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		getNewGameView().showModal();
 	}
 
+	/**
+	 * Makes the create game view not visible, and makes the JoinGameHub view visible, not creating a game
+	 * 
+	 * @pre None
+	 * @post the create game view not visible. the JoinGameHub view visible
+	 * 
+	 */
 	@Override
 	public void cancelCreateNewGame() {
 		System.out.println("JoinGameController cancelCreateNewGame()");
@@ -137,20 +170,84 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		getNewGameView().closeModal();
 	}
 
+	/**
+	 * TODO -Javadoc and Implement
+	 * 
+	 * Makes the create game view not visible, and makes the JoinGameHub view visible, creating a game
+	 * 
+	 * @pre None
+	 * @post the create game view not visible. the JoinGameHub view visible. A game will have been created
+	 * 
+	 */
 	@Override
 	public void createNewGame() {
 		System.out.println("JoinGameController createNewGame()");
-		
+		Create_Result create_result = null;
+		try {
+			create_result = mockClientFacade.createGame(getNewGameView().getTitle(), 
+					getNewGameView().getRandomlyPlaceHexes(), 
+					getNewGameView().getRandomlyPlaceNumbers(), 
+					getNewGameView().getUseRandomPorts());
+		} catch (ClientException e) {
+			getMessageView().setMessage("Game could not be created, possibly not connected to internet");
+			getMessageView().showModal();
+			e.printStackTrace();
+		}
+		// Check to see if the creation of the game failed
+		if(create_result.isValid() == false) {
+			getNewGameView().closeModal();
+			getMessageView().setMessage("Game could not be created");
+			getMessageView().showModal();
+		}
+		// Continue on with the creation of the game
+		start();
+
 		getNewGameView().closeModal();
 	}
 
+	/**
+	 * Brings up the Select Color View with the option to cancel joining the game
+	 * 
+	 * @pre None
+	 * @post the JoinGameHub will not be visible, the color view will be visible
+	 * 
+	 */
 	@Override
 	public void startJoinGame(GameInfo game) {
 		System.out.println("JoinGameController startJoinGame()");
-
+		this.gameInfo = game; // We momentarily store the game information so that if we choose to attempt joining the game, we have access to the game id
+		resetColorSelection();
+		
+		List<PlayerInfo> players = game.getPlayers();
+		for(PlayerInfo player: players) {
+			// allow the user to select a different color
+			if(player.getId() != clientInfo.getUserId()) {
+				System.out.println(player.getId());
+				getSelectColorView().setColorEnabled(player.getColor(), false);
+			}
+		}
+		
 		getSelectColorView().showModal();
 	}
+	
+	/**
+	 * Resets the buttons in the color selection to all-available
+	 * 
+	 * @pre None
+	 * @post Resets the buttons in the color selection to all-available
+	 */
+	private void resetColorSelection() {
+		for(CatanColor color : CatanColor.values()) {
+			getSelectColorView().setColorEnabled(color, true);
+		}
+	}
 
+	/**
+	 * Takes you from the Color Picker back to the game hub without adding the player to the game
+	 * 
+	 * @pre None
+	 * @post the color view will not be visible, the JoinGameHub will be visible
+	 */
 	@Override
 	public void cancelJoinGame() {
 		System.out.println("JoinGameController cancelJoinGame()");
@@ -158,22 +255,81 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		getJoinGameView().closeModal();
 	}
 
+	/**
+	 * TODO -Javadoc and Implement
+	 * 
+	 * Officially joins the game with a color
+	 * 
+	 * @pre None
+	 * @post the Color View and JoinGameHub Modals will be closed and the PlayerWait Modal opened
+	 * 
+	 */
 	@Override
 	public void joinGame(CatanColor color) {
 		System.out.println("JoinGameController joinGame()");
-		
-		// If join succeeded
+		Join_Result join_result = null;
+		try {
+			join_result = mockClientFacade.joinGame(gameInfo.getId(), color);
+		} catch (ClientException e) {
+			getSelectColorView().closeModal();
+			getMessageView().setMessage("Game could not be joined, threw Exception");
+			getMessageView().showModal();
+			e.printStackTrace();
+		}
+
+		// If something went wrong with joining the game
+		if(join_result == null || join_result.isJoined() == false) {
+			getSelectColorView().closeModal();
+			getMessageView().setMessage("Game could not be joined");
+			getMessageView().showModal();
+			return;
+		}
+		// If join succeeded, check if the player already exists in the game
+		boolean playerAlreadyInGame = false;
+		for(PlayerInfo player: gameInfo.getPlayers()) {
+			// If we find a player in the page who has the same id as the currently logged in user
+			if(player.getId() == clientInfo.getUserId()) {
+				playerAlreadyInGame = true;
+				player.setColor(color); // Change the color of the user to the new selection
+			}
+		}
+		if(playerAlreadyInGame == false) {
+			PlayerInfo joiningPlayer = new PlayerInfo();
+			joiningPlayer.setColor(color);
+			joiningPlayer.setId(clientInfo.getUserId());
+			joiningPlayer.setName(clientInfo.getName());
+			gameInfo.addPlayer(joiningPlayer);
+		}
+		// TODO check if we need to be adding our index here or not
+		// this will be influenced by when the Server is determining what index we are at
+		// Is it immediately when we join a game, even one that isn't full?
+		// Or does the server wait to assign player indexes until the games is full, and then lets everyone know their indexes?
+		clientInfo.setGameInfo(gameInfo);
 		getSelectColorView().closeModal();
 		getJoinGameView().closeModal();
 		joinAction.execute();
 	}
 
+	/**
+	 * TODO -Javadoc and Implement
+	 * 
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("JoinGameController update()");
 		// TODO Auto-generated method stub
 		
 	}
+
+	public GameInfo getGameInfo() {
+		return gameInfo;
+	}
+
+	public void setGameInfo(GameInfo gameInfo) {
+		this.gameInfo = gameInfo;
+	}
+	
+	
 
 }
 

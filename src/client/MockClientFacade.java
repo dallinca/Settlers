@@ -1,5 +1,7 @@
 package client;
 
+import java.util.ArrayList;
+
 import client.data.GameInfo;
 import client.data.PlayerInfo;
 import client.proxy.IServerProxy;
@@ -64,8 +66,13 @@ import shared.definitions.CatanColor;
  *
  */
 public class MockClientFacade {
-
+	// Dummy info for tab
+	private ArrayList<GameInfo> gamesList = new ArrayList<GameInfo>();
+	private int gameId = 55;
+	// END Dummy info
+	
 	private IServerProxy sp;
+	private Client c;
 
 	/**
 	 * Creates fascade, specifying the location of the master server.
@@ -75,12 +82,14 @@ public class MockClientFacade {
 	 * @pre Server name and port number specifiy an existing server.
 	 * @post Client will be able to communicate with server.
 	 */
-	MockClientFacade(IServerProxy proxy){
-		sp = proxy;
+	MockClientFacade(IServerProxy proxy, Client client){
+		this.sp = proxy;
+		this.c = client;
 	}
 
-	public MockClientFacade(){		
-		sp = new ServerProxy();				
+	public MockClientFacade(Client client){		
+		this.sp = new ServerProxy();
+		this.c = client;
 	}
 
 	/**
@@ -97,8 +106,25 @@ public class MockClientFacade {
 		return null;
 	}
 
-	public Create_Result createGame(Create_Params request) throws ClientException {
-		return null;
+	public Create_Result createGame(String name, boolean randomTiles, boolean randomNumbers, boolean randomPorts) throws ClientException {
+		Create_Result result = new Create_Result(); 
+		result.setValid(true);
+		GameInfo newGame = new GameInfo();
+			newGame.setId(gameId);
+			gameId++;
+			newGame.setTitle(name);
+			PlayerInfo player = new PlayerInfo();
+				player.setColor(CatanColor.WHITE);
+				if(c == null) {
+					System.out.println("c is null");
+				}
+				System.out.println(c.getUserId());
+				player.setId(c.getUserId());
+				player.setName(c.getName());
+			newGame.addPlayer(player);
+		gamesList.add(newGame);
+
+		return result;
 	}
 
 	/**
@@ -113,8 +139,11 @@ public class MockClientFacade {
 		return null;
 	}
 
-	public Join_Result joinGame(Join_Params request) throws ClientException {
-		return null;
+	public Join_Result joinGame(int gameID, CatanColor color) throws ClientException {
+		Join_Result result = new Join_Result();
+		result.setJoined(true);
+		System.out.println("gameID: " + gameID + "::: color: " + color);
+		return result;
 	}
 
 	/**
@@ -126,57 +155,22 @@ public class MockClientFacade {
 	 */
 	public List_Result listGames() throws ClientException {
 		// START -- DUMMY INFORMATION
-		PlayerInfo localPlayer = new PlayerInfo();
-		GameInfo[] games = new GameInfo[2];
-		
-		PlayerInfo p1 = new PlayerInfo();
-		p1.setColor(CatanColor.BLUE);
-		p1.setId(0);
-		p1.setName("Chewy");
-		p1.setPlayerIndex(0);
-		
-		PlayerInfo p2 = new PlayerInfo();
-		p2.setColor(CatanColor.BROWN);
-		p2.setId(44);
-		p2.setName("Dillman");
-		p2.setPlayerIndex(1);
-		
-		PlayerInfo p3 = new PlayerInfo();
-		p3.setColor(CatanColor.GREEN);
-		p3.setId(24);
-		p3.setName("Freggie");
-		p3.setPlayerIndex(2);
-		
-		PlayerInfo p4 = new PlayerInfo();
-		p4.setColor(CatanColor.PURPLE);
-		p4.setId(13);
-		p4.setName("Manndi");
-		p4.setPlayerIndex(3);
-		
-		games[0] = new GameInfo();
-		games[0].setId(1);
-		games[0].setTitle("MAASLDKF");
-		games[0].addPlayer(p1);
-		games[0].addPlayer(p2);
-		games[0].addPlayer(p3);
-		games[0].addPlayer(p4);
-		
-		
-		p3.setPlayerIndex(3);
-		p4.setPlayerIndex(2);
-		
-		games[1] = new GameInfo();
-		games[1].setId(1);
-		games[1].setTitle("MAASLDKF");
-		games[1].addPlayer(p1);
-		games[1].addPlayer(p2);
-		games[1].addPlayer(p3);
+		GameInfo[] games = getCurrentGames();
 
 		// END -- DUMMY INFORMATION
 		List_Result result = new List_Result(games);
 		return result;
 	}
 
+	/**
+	 * EXTRA CREDIT!!!! and stuff...... :)
+	 * TODO - Javadoc and Implement
+	 * 
+	 * 
+	 * @param request
+	 * @return
+	 * @throws ClientException
+	 */
 	public ListAI_Result listAI(ListAI_Params request) throws ClientException {
 		return null;
 	}
@@ -192,6 +186,16 @@ public class MockClientFacade {
 		Login_Result result = new Login_Result();
 		if(username.equals("mack")) {
 			result.setWasLoggedIn(true);
+			result.setName("mack");
+			result.setId(24);
+		} else if (username.equals("Chewy")) {
+			result.setWasLoggedIn(true);
+			result.setName("Chewy");
+			result.setId(1);
+		} else if (username.equals("bummer")) {
+			result.setWasLoggedIn(true);
+			result.setName("bummer");
+			result.setId(1111);
 		} else {
 			result.setWasLoggedIn(false);
 		}
@@ -209,6 +213,8 @@ public class MockClientFacade {
 		Register_Result result = new Register_Result();
 		if(username.equals("puppy")) {
 			result.setWasRegistered(true);
+			result.setName("puppy");
+			result.setId(44);
 		} else {
 			result.setWasRegistered(false);
 		}
@@ -287,6 +293,80 @@ public class MockClientFacade {
 		return null;
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	private void initGamesArrayList() {
+		PlayerInfo p1 = new PlayerInfo();
+		p1.setColor(CatanColor.BLUE);
+		p1.setId(1);
+		p1.setName("Chewy");
+		p1.setPlayerIndex(0);
+		
+		PlayerInfo p2 = new PlayerInfo();
+		p2.setColor(CatanColor.BROWN);
+		p2.setId(44);
+		p2.setName("puppy");
+		p2.setPlayerIndex(1);
+		
+		PlayerInfo p3 = new PlayerInfo();
+		p3.setColor(CatanColor.GREEN);
+		p3.setId(24);
+		p3.setName("mack");
+		p3.setPlayerIndex(2);
+		
+		PlayerInfo p4 = new PlayerInfo();
+		p4.setColor(CatanColor.PURPLE);
+		p4.setId(13);
+		p4.setName("Manndi");
+		p4.setPlayerIndex(3);
+		
+		gamesList.add(new GameInfo());
+		gamesList.get(0).setId(1);
+		gamesList.get(0).setTitle("MAASLDKF");
+		gamesList.get(0).addPlayer(p1);
+		gamesList.get(0).addPlayer(p2);
+		gamesList.get(0).addPlayer(p3);
+		gamesList.get(0).addPlayer(p4);
+		
+		
+		p3.setPlayerIndex(3);
+		p4.setPlayerIndex(2);
+
+		gamesList.add(new GameInfo());
+		gamesList.get(1).setId(13);
+		gamesList.get(1).setTitle("MAASsdfLDKF");
+		//gamesList.get(1).addPlayer(p1);
+		gamesList.get(1).addPlayer(p2);
+		gamesList.get(1).addPlayer(p3);
+
+	}
+	
+	
+	private GameInfo[] getCurrentGames() {
+		if(gamesList.size() == 0) {
+			initGamesArrayList();
+		}
+		GameInfo[] games = new GameInfo[gamesList.size()];
+		return gamesList.toArray(games);
+	}
+
+	public Client getC() {
+		return c;
+	}
+
+	public void setC(Client c) {
+		this.c = c;
+	}
 
 
 }

@@ -78,12 +78,13 @@ public class ClientFacade {
 	 * @post Client will be able to communicate with server.
 	 */
 	ClientFacade(IServerProxy proxy, Client client){
-		sp = proxy;
-		c = client;
+		this.sp = proxy;
+		this.c = client;
 	}
 
-	public ClientFacade(){		
-		sp = new ServerProxy();				
+	public ClientFacade(Client client){		
+		this.sp = new ServerProxy();		
+		this.c = client;		
 	}
 
 	/**
@@ -564,6 +565,14 @@ public class ClientFacade {
 		return result;
 	}
 
+	public Client getC() {
+		return c;
+	}
 
+	public void setC(Client c) {
+		this.c = c;
+	}
+
+	
 
 }
