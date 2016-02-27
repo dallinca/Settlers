@@ -57,6 +57,7 @@ public class Game {
 		for(int i = 0; i < 3; i++) {
 			players[i] = new Player(i, bank);
 			players[i].setPlayerId(24);
+			players[i].setPlayerName("bob number: " + i);;
 			players[i].setPlayerColor(CatanColor.values()[i]);
 		}
 		// init board to normal setup
@@ -78,6 +79,7 @@ public class Game {
 		
 		currentPlayer = players[0];
 		this.board = board;
+		System.out.println("Game constructore 2 was called");
 	}
 
 	/**
