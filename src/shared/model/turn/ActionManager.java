@@ -13,23 +13,22 @@ public class ActionManager {
 	
 	private static ActionManager SINGLETON = null;
 
-	Client client;
+
 	private Trade TRADE = null;
 	private Purchase PURCHASE = null;
 	private PlayCard PLAYCARD = null;
 	private Dice DICE = null;
 
-	protected ActionManager( Client c ){
-		client = c;
-		TRADE = new Trade(c);
-		PURCHASE = new Purchase(c);
-		PLAYCARD = new PlayCard(c);
-		DICE = new Dice(c);
+	protected ActionManager(){
+		TRADE = new Trade();
+		PURCHASE = new Purchase();
+		PLAYCARD = new PlayCard();
+		DICE = new Dice();
 	}
 	
 	public static ActionManager getInstance() {
 		if(SINGLETON == null) {
-			SINGLETON = new ActionManager(Client.getInstance());
+			SINGLETON = new ActionManager();
 		}
 		return SINGLETON;
 	}
@@ -47,7 +46,7 @@ public class ActionManager {
 		else if (action.getCategory() == ActionType.TRADE) doTrade(action);
 		else if (action.getCategory() == ActionType.PLAYCARD) playDevelopmentCard(action);	
 
-		client.notifyAll();
+		Client.getInstance().notifyAll();
 	}
 
 	/**
@@ -57,8 +56,10 @@ public class ActionManager {
 	 * @pre action must be of 'purchase' action category.
 	 * @post action will be performed.
 	 */
-	public void canDoPurchase(ActionType action){
-		if (action == ActionType.PURCHASE_DEVELOPMENT) PURCHASE.canDoPurchaseDevelopmentCard();
+	public boolean canDoPurchase(ActionType action){
+		if (action == ActionType.PURCHASE_DEVELOPMENT) 
+			return PURCHASE.canDoPurchaseDevelopmentCard();
+		return false;
 	}	
 
 

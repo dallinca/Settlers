@@ -182,7 +182,12 @@ public class ServerProxy implements IServerProxy {
 		//	System.out.println("Get version.");
 		StringBuilder sb = new StringBuilder();
 		sb.append("/game/model?version=");
-		sb.append(client.getGame().getVersionNumber());
+		if (client==null){
+			sb.append(0);
+		}
+		else{
+			sb.append(client.getGame().getVersionNumber());
+		}
 		URL_SUFFIX = sb.toString();
 				
 		return new GetVersion_Result((String) doPost(URL_SUFFIX, request));
@@ -458,6 +463,7 @@ public class ServerProxy implements IServerProxy {
 
 				if (gameCookie.endsWith("Path=/;")) {
 					gameCookie = gameCookie.substring(0, gameCookie.length() - 8);
+					unfixedGameCookie = gameCookie;
 					gameCookie = gameCookie.substring(11, gameCookie.length());
 				}
 					

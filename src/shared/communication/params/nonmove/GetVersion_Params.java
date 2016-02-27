@@ -7,6 +7,9 @@ public class GetVersion_Params {
 	public GetVersion_Params(int versionNumber) {
 		this.setVersionNumber(versionNumber);
 	}
+	
+	public GetVersion_Params() {
+	}
 
 	public int getVersionNumber() {
 		return versionNumber;

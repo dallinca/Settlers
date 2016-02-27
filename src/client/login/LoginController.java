@@ -27,7 +27,7 @@ import com.google.gson.reflect.TypeToken;
 public class LoginController extends Controller implements ILoginController, Observer {
 
 	private Client clientInfo;
-	private MockClientFacade mockClientFacade;
+	private MockClientFacade clientFacade;
 	private IMessageView messageView;
 	private IAction loginAction;
 	
@@ -37,14 +37,13 @@ public class LoginController extends Controller implements ILoginController, Obs
 	 * @param view Login view
 	 * @param messageView Message view (used to display error messages that occur during the login process)
 	 */
-	public LoginController(ILoginView view, IMessageView messageView, MockClientFacade mockClientFacade, Client clientInfo) {
+	public LoginController(ILoginView view, IMessageView messageView) {
 
 		super(view);
 		System.out.println("LoginController LoginController()");
-		
-		this.clientInfo = clientInfo;
-		this.mockClientFacade = mockClientFacade;
 		this.messageView = messageView;
+		this.clientInfo = Client.getInstance();
+		this.clientFacade = MockClientFacade.getInstance();
 	}
 	
 	public ILoginView getLoginView() {
@@ -106,7 +105,7 @@ public class LoginController extends Controller implements ILoginController, Obs
 				// call the client facade with the username and password to attempt registry 
 				Login_Result login_result = null;
 				try {
-					login_result = mockClientFacade.login(username, userpassword);
+					login_result = clientFacade.login(username, userpassword);
 				} catch (ClientException e) {
 					e.printStackTrace();
 					getMessageView().setMessage("Login failed, possibly no connection to the internet, Client Exception()");
@@ -220,7 +219,7 @@ public class LoginController extends Controller implements ILoginController, Obs
 				// call the client facade with the username and password to attempt registry 
 				Register_Result register_result = null;
 				try {
-					register_result = mockClientFacade.register(registername, registerpassword);
+					register_result = clientFacade.register(registername, registerpassword);
 				} catch (ClientException e) {
 					e.printStackTrace();
 					getMessageView().setMessage("Registration failed, possibly no connection to the internet, Client Exception()");
