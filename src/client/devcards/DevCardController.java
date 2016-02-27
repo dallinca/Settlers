@@ -1,6 +1,8 @@
 package client.devcards;
 
 import shared.definitions.ResourceType;
+import shared.model.turn.ActionManager;
+import shared.model.turn.ActionType;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -49,7 +51,14 @@ public class DevCardController extends Controller implements IDevCardController,
 	@Override
 	public void startBuyCard() {
 		System.out.println("DevCardController startBuyCard()");
-		getBuyCardView().showModal();
+		
+		boolean canBuy = ActionManager.getInstance().canDoPurchase(ActionType.PURCHASE_DEVELOPMENT);
+		
+		if (canBuy) {
+			getBuyCardView().showModal();
+		} else {
+			 //throw new Exception
+		}		
 	}
 
 	@Override
@@ -60,8 +69,20 @@ public class DevCardController extends Controller implements IDevCardController,
 
 	@Override
 	public void buyCard() {
-		System.out.println("DevCardController buyCard()");
-		getBuyCardView().closeModal();
+		System.out.println("DevCardController buyCard()");	
+			//How does this whole thing work in getting the player's index and identifying if the specific person can buy it
+			boolean result = ActionManager.getInstance().canDoPurchase(ActionType.PURCHASE_DEVELOPMENT);
+			 
+			 if (result) {
+				 try {	
+					 ActionManager.getInstance().doPurchase(ActionType.PURCHASE_DEVELOPMENT);
+				 } catch {
+						//throw new ClientException e;
+				 }
+				 getBuyCardView().closeModal();
+			 } else {
+				 //throw new Exception
+			 }
 	}
 
 	@Override
@@ -79,35 +100,91 @@ public class DevCardController extends Controller implements IDevCardController,
 	@Override
 	public void playMonopolyCard(ResourceType resource) {
 		System.out.println("DevCardController playMonopolyCard()");
+		
+		boolean result = ActionManager.getInstance().canDoPlay(ActionType.PLAYCARD_MONOPOLY);
+		if (result) {
+			try {
+				ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_MONOPOLY);
+			} catch {
+				
+			}
+		}
+		
+		
 	}
 
 	@Override
 	public void playMonumentCard() {
 		System.out.println("DevCardController playMonumentCard()");
+		
+		boolean result = ActionManager.getInstance().canDoPlay(ActionType.PLAYCARD_MONUMENT);
+		if (result) {
+			try {
+				ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_MONUMENT);
+			} catch {
+				
+			}
+		}
 	}
 
 	@Override
 	public void playRoadBuildCard() {
 		System.out.println("DevCardController playRoadBuildCard()");
-		roadAction.execute();
+		boolean result = ActionManager.getInstance().canDoPlay(ActionType.PLAYCARD_BUILDROADS);
+		if (result) {
+			try {
+				ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_BUILDROADS);
+				roadAction.execute();
+			} catch {
+				
+			}
+		}
+		
 	}
 
 	@Override
 	public void playSoldierCard() {
 		System.out.println("DevCardController playSoldierCard()");
 		
-		soldierAction.execute();
+		boolean result = ActionManager.getInstance().canDoPlay(ActionType.PLAYCARD_KNIGHT);
+		if (result) {
+			try {
+				ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_KNIGHT);
+				soldierAction.execute();
+			} catch {
+				
+			}
+		}
+		
+		
+		
 	}
 
 	@Override
 	public void playYearOfPlentyCard(ResourceType resource1, ResourceType resource2) {
 		System.out.println("DevCardController playYearOfPlentyCard()");
+		
+		boolean result = ActionManager.getInstance().canDoPlay(ActionType.PLAYCARD_YEAROFPLENTY);
+		if (result) {
+			try {
+				ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_YEAROFPLENTY);
+			} catch {
+				
+			}
+		}
+		
+		
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("DevCardController update()");
 		// TODO Auto-generated method stub
+		
+		
+		
+		
+		
 		
 	}
 

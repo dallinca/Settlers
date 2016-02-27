@@ -267,6 +267,7 @@ public class PlayerPieces {
 	   }
 	   
 	 /**
+	  * TODO javadoc
 	  * 
 	  * @param edge
 	  */

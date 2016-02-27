@@ -3,7 +3,9 @@ package shared.model;
 import java.util.ArrayList;
 import java.util.Random;
 
+import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
+import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
@@ -42,11 +44,44 @@ public class Game {
 	
 	// CONSTRUCTORS
 	//////////////////////////////////////////
+	
+	/**
+	 * For testing use, self initializing
+	 * 
+	 */
 	public Game() {
-		
+		// init bank
+		bank = new Bank();
+		// init players
+		players = new Player[numberofPlayers];
+		for(int i = 0; i < 3; i++) {
+			players[i] = new Player(i, bank);
+			players[i].setPlayerId(24);
+			players[i].setPlayerName("bob number: " + i);;
+			players[i].setPlayerColor(CatanColor.values()[i]);
+		}
+		// init board to normal setup
+		board = new Board(true, true, true);
 	}
-	
-	
+
+	/**
+	 * @pre the player objects passed in are not null, neither is the Board.
+	 * 
+	 * @param the four player objects to be added to the array.
+	 */
+	public Game(Bank bank, Player one, Player two, Player three, Player four, Board board) {
+		this.bank = bank;
+		players = new Player[numberofPlayers];
+		players[0] = one;
+		players[1] = two;
+		players[2] = three;
+		players[3] = four;
+		
+		currentPlayer = players[0];
+		this.board = board;
+		System.out.println("Game constructore 2 was called");
+	}
+
 	/**
 	 * @pre the player objects passed in are not null, neither is the Board.
 	 * 
@@ -210,6 +245,10 @@ public class Game {
 		if(UserId != currentPlayer.getPlayerId()) {
 			return false;
 		}
+		// If we are in the first two rounds the answer is simply "yes"
+		if(turnNumber < 2) {
+			return true;
+		}
 		return currentPlayer.canDoBuyRoad();	
 	}
 	
@@ -221,6 +260,10 @@ public class Game {
 		// Check if the user is the current player
 		if(UserId != currentPlayer.getPlayerId()) {
 			return false;
+		}
+		// If we are in the first two rounds we check possibility to build initial settlement
+		if(turnNumber < 2) {
+			return currentPlayer.canDoBuildInitialSettlement();
 		}
 		return currentPlayer.canDoBuySettlement();
 	}
@@ -658,7 +701,7 @@ public class Game {
 			return false;
 		}
 		// If we are in the setup phase, the rules for placing a road are slightly different
-		if(turnNumber > 1) {
+		if(turnNumber < 2) {
 			return board.canDoPlaceInitialRoadOnEdge(getCurrentPlayer(), edgeLocation);
 		} else {
 			return board.canDoPlaceRoadOnEdge(getCurrentPlayer(), edgeLocation);	
@@ -679,7 +722,7 @@ public class Game {
 			throw new Exception("Specified Player cannot place a road on the given edgeLocation");
 		}
 		// If we are in the setup phase, the rules for placing a road are slightly different
-		if(turnNumber > 1) {
+		if(turnNumber < 2) {
 			board.placeInitialRoadOnEdge(getCurrentPlayer(), edgeLocation);
 		} else {
 			board.placeRoadOnEdge(getCurrentPlayer(), edgeLocation);
@@ -709,10 +752,16 @@ public class Game {
 	 * @post a settlement is placed on a vertex
 	 */
 	public void placeSettlementOnVertex(int UserId, VertexLocation vertexLocation) throws Exception {
-		if(canDoPlaceSettlementOnVertex(UserId, vertexLocation) && canDoCurrentPlayerBuildSettlement(UserId))
-			board.placeSettlementOnVertex(currentPlayer, vertexLocation);
-		else
+		if(canDoPlaceSettlementOnVertex(UserId, vertexLocation) == false) {
 			throw new Exception("Cannot build Settlement on this vertex, this should not have been allowed to get this far.");
+		}
+		// If we are in the first two rounds of the game
+		if(turnNumber < 2) {
+			board.placeInitialSettlementOnVertex(currentPlayer, vertexLocation);
+		} else {
+			board.placeSettlementOnVertex(currentPlayer, vertexLocation);
+			
+		}
 	}
 	
 	/**
@@ -919,6 +968,35 @@ public class Game {
 				return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * This is only intended for extracting information from the hexes for the map initialization
+	 * 
+	 * @pre None
+	 * @return Hex[][]
+	 */
+	public Hex[][] getMapHexes() {
+		return board.getMapHexes();
+	}
+
+	/**
+	 * This is only intended for extracting information from the hexes for the map initialization
+	 * 
+	 * @pre None
+	 * @return PortType[][]
+	 */
+	public PortType[] getMapPorts() {
+		return board.getMapPorts();
+	}
+	
+	/**
+	 * This is only inteded for extracting information from the players.
+	 * 
+	 * @return
+	 */
+	public Player[] getAllPlayers() {
+		return players;
 	}
 	
 	public void setVersionNumber(int version) {

@@ -66,6 +66,26 @@ public class Board {
 		initVertices();
 	}
 	
+
+	/**
+	 * This is only intended for extracting information from the hexes for the map initialization
+	 * 
+	 * @pre None
+	 * @return PortType[][]
+	 */
+	public PortType[] getMapPorts() {
+		return this.portTypeAssignments;
+	}
+
+	/**
+	 * This is only intended for extracting information from the ports for the map initialization
+	 * 
+	 * @pre None
+	 * @return Hex[][]
+	 */
+	public Hex[][] getMapHexes() {
+		return this.mapHexes;
+	}
 	
 	/**
 	 * Determines Whether the Robber can be moved to the given hexLocation
@@ -171,11 +191,7 @@ public class Board {
 	 * @post road is placed on the specified edge, or PlaceRoadOnEdgeException thrown
 	 */
 	public void placeRoadOnEdge(Player player, EdgeLocation edgeLocation) throws Exception {
-		if(player.getPlayerPieces().getNumberOfRoads() > 13){
-			if(canDoPlaceInitialRoadOnEdge(player, edgeLocation) == false)
-				throw new PlaceRoadOnEdgeException("canDoPlaceRoadOnEdge = false");
-		}
-		else if(canDoPlaceRoadOnEdge(player, edgeLocation) == false) {
+		if(canDoPlaceRoadOnEdge(player, edgeLocation) == false) {
 			throw new PlaceRoadOnEdgeException("canDoPlaceRoadOnEdge = false");
 		}
 		// Use the edgeLocation to find that Edge in our data Structure
@@ -207,10 +223,11 @@ public class Board {
 		}
 		
 		// player not null, edge not null, and does not have a road
-		if(player == null || edge == null || edge.hasRoad() == true) {
+		if(player == null || player.canDoBuildInitialRoad() == false || edge == null || edge.hasRoad() == true) {
 			return false;
 		}
-		// The player should be able to initialize their first two roads on any valid 
+
+		// The player should be able to initialize their first two roads on any valid non-taken edge location
 		return true;
 	}
 
@@ -229,8 +246,8 @@ public class Board {
 		// Use the edgeLocation to find that Edge in our data Structure
 		Edge edge = getEdge(edgeLocation);
 		
-		// Place the road on the edge
-		player.buyRoad(edge);
+		// Place the INITIAL road on the edge
+		player.buildInitialRoad(edge);
 	}
 	
 	/**
@@ -298,6 +315,24 @@ public class Board {
 	}
 
 	/**
+	 * TODO - javadoc
+	 * 
+	 * @param player
+	 * @param vertexLocation
+	 * @throws Exception
+	 */
+	public void placeInitialSettlementOnVertex(Player player, VertexLocation vertexLocation) throws Exception {
+		if(canDoPlaceSettlementOnVertex(player, vertexLocation) == false) {
+			throw new PlaceSettlementOnVertexException("canDoPlaceSettlementOnVertex = false");
+		}
+		// Use the vertexLocation to find that Vertex in our data Structure
+		Vertex vertex = getVertex(vertexLocation);
+		
+		// Place the settlement on the vertex
+		player.buildInitialSettlement(vertex);
+	}
+
+	/**
 	 * Determine whether a specified player's city can be placed on a specified vertex
 	 * This call should be happening after the player has already verified ability to purchase a city
 	 * 
@@ -325,7 +360,7 @@ public class Board {
 		}
 		return true;
 	}
-
+	
 	/**
 	 * Places a city on a specified vertex
 	 * @throws Exception 

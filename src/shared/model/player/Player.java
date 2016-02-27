@@ -2,6 +2,7 @@ package shared.model.player;
 
 import java.util.ArrayList;
 
+import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
 import shared.model.Bank;
@@ -32,7 +33,12 @@ public class Player {
 	private ResourceCardHand resourceCardHand;
 	private PlayerPieces playerPieces;
 	private DevelopmentCardHand developmentCardHand;
-	
+	private String playerName = "";
+	private CatanColor playerColor;
+	// TODO add updates for these duders in the Game class
+	private boolean hasLargestArmy = false;
+	private boolean hasLongestRoad = false;
+	private boolean isPlayersTurn = false;
 	
 	/**
 	 * Initializes Player
@@ -269,6 +275,34 @@ public class Player {
 		   resourceCardHand.payForRoad();
 		   playerPieces.placeRoad(edge);
 	   }
+
+	   /**
+	    * TODO javadoc and verify
+	    * 
+	    * @return
+	    */
+	   public boolean canDoBuildInitialRoad(){
+		   // If the player already has two roads on the board then he has already placed the initial roads
+		   if(playerPieces.getNumberOfRoads() < 14){
+			   return false;
+		   }
+		   return true;
+	   }
+	   
+	   /**
+	    * TODO javadoc and verify
+	    * 
+	    * @param edge
+	    * @throws CannotBuyException
+	    * @throws InsufficientPlayerResourcesException
+	    * @throws AllPiecesPlayedException
+	    */
+	   public void buildInitialRoad(Edge edge) throws CannotBuyException, InsufficientPlayerResourcesException, AllPiecesPlayedException {
+		   if(canDoBuildInitialRoad() == false) {
+			   throw new CannotBuyException("Cannot Buy Road, possibly no edge to place a road");
+		   }
+		   playerPieces.placeRoad(edge);
+	   }
 	   
 	 /**
 	  * checks if the player can buy a settlement
@@ -302,6 +336,44 @@ public class Player {
 			   throw new CannotBuyException("Cannot Buy Settlement, possibly no vertex to place a settlement");
 		   }
 		   resourceCardHand.payForSettlement();
+		   playerPieces.placeSettlement(vertex);
+		   // increment victory points
+		   totalVictoryPoints++;
+	   }
+
+	   /**
+	    * TODO javadoc
+	    * 
+	    * 
+	    * @return
+	    */
+	   public boolean canDoBuildInitialSettlement(){
+		   if( playerPieces.hasAvailableSettlement() == false) {
+			   return false;
+		   }
+		   // If the player does not have a valid place to put a settlement on the map, we won't let the player buy one
+		   if(playerPieces.canPlaceASettlementOnTheMap() == false) {
+			   return false;
+		   }
+		   return true;
+	   }
+
+	   /**
+	    * TODO javadoc
+	    * 
+	    * @pre this function should only be called during the first two rounds of the game
+	    * @pre canDoBuyInitialSettlement != false
+	    * @post the player will have built the Settlement on the specified Vertex free of charge
+	    * 
+	    * @param vertex
+	    * @throws CannotBuyException
+	    * @throws InsufficientPlayerResourcesException
+	    * @throws AllPiecesPlayedException
+	    */
+	   public void buildInitialSettlement(Vertex vertex) throws CannotBuyException, InsufficientPlayerResourcesException, AllPiecesPlayedException{
+		   if(canDoBuildInitialSettlement() == false) {
+			   throw new CannotBuyException("Cannot Buy Settlement, possibly no vertex to place a settlement");
+		   }
 		   playerPieces.placeSettlement(vertex);
 		   // increment victory points
 		   totalVictoryPoints++;
@@ -516,6 +588,48 @@ public class Player {
 		public void setPlayerId(int playerId) {
 			this.playerId = playerId;
 		}
+
+		public String getPlayerName() {
+			return playerName;
+		}
+
+		public void setPlayerName(String playerName) {
+			this.playerName = playerName;
+		}
+
+		public CatanColor getPlayerColor() {
+			return playerColor;
+		}
+
+		public void setPlayerColor(CatanColor playerColor) {
+			this.playerColor = playerColor;
+		}
+
+		public boolean isHasLargestArmy() {
+			return hasLargestArmy;
+		}
+
+		public void setHasLargestArmy(boolean hasLargestArmy) {
+			this.hasLargestArmy = hasLargestArmy;
+		}
+
+		public boolean isHasLongestRoad() {
+			return hasLongestRoad;
+		}
+
+		public void setHasLongestRoad(boolean hasLongestRoad) {
+			this.hasLongestRoad = hasLongestRoad;
+		}
+
+		public boolean isPlayersTurn() {
+			return isPlayersTurn;
+		}
+
+		public void setPlayersTurn(boolean isPlayersTurn) {
+			this.isPlayersTurn = isPlayersTurn;
+		}
 	
+		
+		
 		
 }

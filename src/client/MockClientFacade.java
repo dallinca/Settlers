@@ -57,6 +57,10 @@ import shared.communication.results.nonmove.List_Result;
 import shared.communication.results.nonmove.Login_Result;
 import shared.communication.results.nonmove.Register_Result;
 import shared.definitions.CatanColor;
+import shared.model.Bank;
+import shared.model.Game;
+import shared.model.board.Board;
+import shared.model.player.Player;
 
 /**
  * Sends all to-server requests to the client communicator for packaging
@@ -146,6 +150,43 @@ public class MockClientFacade {
 	public Join_Result joinGame(int gameID, CatanColor color) throws ClientException {
 		Join_Result result = new Join_Result();
 		result.setJoined(true);
+		Bank bank = new Bank();
+		Board board = new Board(false, false, false);
+		// Players
+		Client.getInstance();
+		Client.getInstance().getGameInfo();
+		Client.getInstance().getGameInfo().getPlayers();
+		Client.getInstance().getGameInfo().getPlayers().get(0);
+		PlayerInfo pi0 = Client.getInstance().getGameInfo().getPlayers().get(0);
+		Player p0 = new Player(pi0.getPlayerIndex(), bank);
+		p0.setPlayerName(pi0.getName());
+		p0.setPlayerColor(pi0.getColor());
+		p0.setPlayerId(pi0.getId());
+
+		PlayerInfo pi1 = Client.getInstance().getGameInfo().getPlayers().get(1);
+		Player p1 = new Player(pi1.getPlayerIndex(), bank);
+		p1.setPlayerName(pi1.getName());
+		p1.setPlayerColor(pi1.getColor());
+		p1.setPlayerId(pi1.getId());
+
+		PlayerInfo pi2 = Client.getInstance().getGameInfo().getPlayers().get(2);
+		Player p2 = new Player(pi2.getPlayerIndex(), bank);
+		p2.setPlayerName(pi2.getName());
+		p2.setPlayerColor(pi2.getColor());
+		p2.setPlayerId(pi2.getId());
+
+		PlayerInfo pi3 = Client.getInstance().getGameInfo().getPlayers().get(3);
+		Player p3 = new Player(pi3.getPlayerIndex(), bank);
+		p3.setPlayerName(pi3.getName());
+		p3.setPlayerColor(pi3.getColor());
+		p3.setPlayerId(pi3.getId());
+		
+		
+		Game game = new Game(bank, p0, p1, p2, p3, board);
+		Client.getInstance().setGame(game);
+		
+		
+		
 		System.out.println("gameID: " + gameID + "::: color: " + color);
 		return result;
 	}
