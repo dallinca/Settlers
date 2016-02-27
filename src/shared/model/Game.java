@@ -5,6 +5,7 @@ import java.util.Random;
 
 import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
+import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
@@ -959,6 +960,16 @@ public class Game {
 	 */
 	public Hex[][] getMapHexes() {
 		return board.getMapHexes();
+	}
+
+	/**
+	 * This is only intended for extracting information from the hexes for the map initialization
+	 * 
+	 * @pre None
+	 * @return PortType[][]
+	 */
+	public PortType[] getMapPorts() {
+		return board.getMapPorts();
 	}
 	
 	/**

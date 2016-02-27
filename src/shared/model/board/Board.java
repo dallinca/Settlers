@@ -71,6 +71,16 @@ public class Board {
 	 * This is only intended for extracting information from the hexes for the map initialization
 	 * 
 	 * @pre None
+	 * @return PortType[][]
+	 */
+	public PortType[] getMapPorts() {
+		return this.portTypeAssignments;
+	}
+
+	/**
+	 * This is only intended for extracting information from the ports for the map initialization
+	 * 
+	 * @pre None
 	 * @return Hex[][]
 	 */
 	public Hex[][] getMapHexes() {

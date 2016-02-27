@@ -102,6 +102,20 @@ public class MapController extends Controller implements IMapController, Observe
 			}
 		}
 		
+		PortType[] allPorts = Client.getInstance().getGame().getMapPorts();
+		if(allPorts != null) {
+			getView().addPort(new EdgeLocation(new HexLocation(0, 3), EdgeDirection.North), allPorts[0]);
+			getView().addPort(new EdgeLocation(new HexLocation(2, 1), EdgeDirection.NorthWest), allPorts[1]);
+			getView().addPort(new EdgeLocation(new HexLocation(3, -1), EdgeDirection.NorthWest), allPorts[2]);
+			getView().addPort(new EdgeLocation(new HexLocation(3, -3), EdgeDirection.SouthWest), allPorts[3]);
+			getView().addPort(new EdgeLocation(new HexLocation(1, -3), EdgeDirection.South), allPorts[4]);
+			getView().addPort(new EdgeLocation(new HexLocation(-1, -2), EdgeDirection.South), allPorts[5]);
+			getView().addPort(new EdgeLocation(new HexLocation(-3, 0), EdgeDirection.SouthEast), allPorts[6]);
+			getView().addPort(new EdgeLocation(new HexLocation(-3, 2), EdgeDirection.NorthEast), allPorts[7]);
+			getView().addPort(new EdgeLocation(new HexLocation(-2, 3), EdgeDirection.NorthEast), allPorts[8]);
+			
+		}
+		
 		// Init ports! and stuff :)
 		
 		Random rand = new Random();
@@ -109,13 +123,12 @@ public class MapController extends Controller implements IMapController, Observe
 		Game game = Client.getInstance().getGame();
 		
 		PortType portType = PortType.BRICK;
-		getView().addPort(new EdgeLocation(new HexLocation(0, 3), EdgeDirection.North), portType);
-		getView().addPort(new EdgeLocation(new HexLocation(0, -3), EdgeDirection.South), portType);
+		/*getView().addPort(new EdgeLocation(new HexLocation(0, -3), EdgeDirection.South), portType);
 		getView().addPort(new EdgeLocation(new HexLocation(-3, 3), EdgeDirection.NorthEast), portType);
 		getView().addPort(new EdgeLocation(new HexLocation(-3, 0), EdgeDirection.SouthEast), portType);
 		getView().addPort(new EdgeLocation(new HexLocation(3, -3), EdgeDirection.SouthWest), portType);
 		getView().addPort(new EdgeLocation(new HexLocation(3, 0), EdgeDirection.NorthWest), portType);
-		
+		*/
 		
 	}
 
