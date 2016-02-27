@@ -10,6 +10,8 @@ import shared.model.Game;
  *
  */
 public class ActionManager {
+	
+	private static ActionManager SINGLETON = null;
 
 	Client client;
 	private Trade TRADE = null;
@@ -17,12 +19,19 @@ public class ActionManager {
 	private PlayCard PLAYCARD = null;
 	private Dice DICE = null;
 
-	public ActionManager( Client c ){
+	protected ActionManager( Client c ){
 		client = c;
 		TRADE = new Trade(c);
 		PURCHASE = new Purchase(c);
 		PLAYCARD = new PlayCard(c);
 		DICE = new Dice(c);
+	}
+	
+	public static ActionManager getInstance() {
+		if(SINGLETON == null) {
+			SINGLETON = new ActionManager(Client.getInstance());
+		}
+		return SINGLETON;
 	}
 
 	/**

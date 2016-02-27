@@ -70,7 +70,7 @@ public class ClientFacade {
 	private Client c;
 
 	/**
-	 * Creates fascade, specifying the location of the master server.
+	 * Creates facade, specifying the location of the master server.
 	 * @param serverName
 	 * @param portNumber
 	 * 

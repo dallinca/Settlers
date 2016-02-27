@@ -7,6 +7,13 @@ public class Create_Params {
 	private boolean randomNumbers;
 	private boolean randomPorts;
 
+	/**
+	 * 
+	 * @param name
+	 * @param randomTiles t/f
+	 * @param randomNumbers t/f
+	 * @param randomPorts t/f
+	 */
 	public Create_Params(String name, boolean randomTiles,
 			boolean randomNumbers, boolean randomPorts) {
 		this.name = name;

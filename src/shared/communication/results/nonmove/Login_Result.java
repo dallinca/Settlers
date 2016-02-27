@@ -2,31 +2,52 @@ package shared.communication.results.nonmove;
 
 public class Login_Result {
 
-	private boolean wasLoggedIn = false;
-	private int id = -1;
+	private boolean valid;
+	private int playerID = -1;
 	private String name = "";
 	
 	// CONSTRUCTORS
 	//////////////////////
-	public Login_Result() {}
+	public Login_Result() {
+		valid=false;		
+	}
 
+
+	public Login_Result(String doPost, int playerID, String name) {
+		if (doPost == null){
+			valid = false;
+			return;
+		}
+		if (doPost.equals("Success")){
+			this.valid=true;
+			this.playerID=playerID;
+			this.name = name;
+		}
+		else {
+			this.valid=false;
+		}
+	}
+	
+	public boolean isValid(){
+		return valid;
+	}
 
 	// GETTERS AND SETTERS
 	//////////////////////
 	public boolean isWasLoggedIn() {
-		return wasLoggedIn;
+		return valid;
 	}
 
 	public void setWasLoggedIn(boolean wasLoggedIn) {
-		this.wasLoggedIn = wasLoggedIn;
+		this.valid = wasLoggedIn;
 	}
 
 	public int getId() {
-		return id;
+		return playerID;
 	}
 
 	public void setId(int id) {
-		this.id = id;
+		this.playerID = id;
 	}
 
 	public String getName() {

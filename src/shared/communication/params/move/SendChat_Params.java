@@ -2,6 +2,7 @@ package shared.communication.params.move;
 
 public class SendChat_Params {
 
+	private final String type = "sendChat";
 	private int playerIndex;
 	private String content;
 	
@@ -24,6 +25,10 @@ public class SendChat_Params {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public String getType() {
+		return type;
 	}
 	
 }
