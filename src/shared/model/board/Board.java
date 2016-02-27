@@ -295,6 +295,24 @@ public class Board {
 	}
 
 	/**
+	 * TODO - javadoc
+	 * 
+	 * @param player
+	 * @param vertexLocation
+	 * @throws Exception
+	 */
+	public void placeInitialSettlementOnVertex(Player player, VertexLocation vertexLocation) throws Exception {
+		if(canDoPlaceSettlementOnVertex(player, vertexLocation) == false) {
+			throw new PlaceSettlementOnVertexException("canDoPlaceSettlementOnVertex = false");
+		}
+		// Use the vertexLocation to find that Vertex in our data Structure
+		Vertex vertex = getVertex(vertexLocation);
+		
+		// Place the settlement on the vertex
+		player.buildInitialSettlement(vertex);
+	}
+
+	/**
 	 * Determine whether a specified player's city can be placed on a specified vertex
 	 * This call should be happening after the player has already verified ability to purchase a city
 	 * 
@@ -322,7 +340,7 @@ public class Board {
 		}
 		return true;
 	}
-
+	
 	/**
 	 * Places a city on a specified vertex
 	 * @throws Exception 

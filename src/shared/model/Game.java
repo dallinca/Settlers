@@ -226,9 +226,9 @@ public class Game {
 		if(UserId != currentPlayer.getPlayerId()) {
 			return false;
 		}
-		// If we are in the first two rounds the answer is simply "yes"
+		// If we are in the first two rounds we check possibility to build initial settlement
 		if(turnNumber < 2) {
-			return true;
+			return currentPlayer.canDoBuildInitialSettlement();
 		}
 		return currentPlayer.canDoBuySettlement();
 	}
@@ -717,10 +717,16 @@ public class Game {
 	 * @post a settlement is placed on a vertex
 	 */
 	public void placeSettlementOnVertex(int UserId, VertexLocation vertexLocation) throws Exception {
-		if(canDoPlaceSettlementOnVertex(UserId, vertexLocation) && canDoCurrentPlayerBuildSettlement(UserId))
-			board.placeSettlementOnVertex(currentPlayer, vertexLocation);
-		else
+		if(canDoPlaceSettlementOnVertex(UserId, vertexLocation) == false) {
 			throw new Exception("Cannot build Settlement on this vertex, this should not have been allowed to get this far.");
+		}
+		// If we are in the first two rounds of the game
+		if(turnNumber < 2) {
+			board.placeInitialSettlementOnVertex(currentPlayer, vertexLocation);
+		} else {
+			board.placeSettlementOnVertex(currentPlayer, vertexLocation);
+			
+		}
 	}
 	
 	/**

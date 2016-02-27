@@ -334,6 +334,44 @@ public class Player {
 		   // increment victory points
 		   totalVictoryPoints++;
 	   }
+
+	   /**
+	    * TODO javadoc
+	    * 
+	    * 
+	    * @return
+	    */
+	   public boolean canDoBuildInitialSettlement(){
+		   if( playerPieces.hasAvailableSettlement() == false) {
+			   return false;
+		   }
+		   // If the player does not have a valid place to put a settlement on the map, we won't let the player buy one
+		   if(playerPieces.canPlaceASettlementOnTheMap() == false) {
+			   return false;
+		   }
+		   return true;
+	   }
+
+	   /**
+	    * TODO javadoc
+	    * 
+	    * @pre this function should only be called during the first two rounds of the game
+	    * @pre canDoBuyInitialSettlement != false
+	    * @post the player will have built the Settlement on the specified Vertex free of charge
+	    * 
+	    * @param vertex
+	    * @throws CannotBuyException
+	    * @throws InsufficientPlayerResourcesException
+	    * @throws AllPiecesPlayedException
+	    */
+	   public void buildInitialSettlement(Vertex vertex) throws CannotBuyException, InsufficientPlayerResourcesException, AllPiecesPlayedException{
+		   if(canDoBuildInitialSettlement() == false) {
+			   throw new CannotBuyException("Cannot Buy Settlement, possibly no vertex to place a settlement");
+		   }
+		   playerPieces.placeSettlement(vertex);
+		   // increment victory points
+		   totalVictoryPoints++;
+	   }
 	   
 	 /**
 	  * checks if the player can buy a city
