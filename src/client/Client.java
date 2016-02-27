@@ -19,11 +19,13 @@ public class Client extends Observable {
 	private CatanColor color;
 	private int playerIndex;
 	
-
+	private static Client singleton = new Client( );
 	// CONSTRUCTORS
 	//////////////////////
-	public Client() {
+	private Client(){ }
 	
+	public static Client getInstance( ) {
+	      return singleton;
 	}
 	
 	public Client(IServerProxy isp){
@@ -47,8 +49,8 @@ public class Client extends Observable {
 
 	public void addObservers(){
 		//A list of controllers that implement observer needs to be added
-		for (int i =0 ; i < controllerList.size(); i++)
-			this.addObserver(controllerList[i]);
+		//for (int i =0 ; i < controllerList.size(); i++)
+			//this.addObserver(controllerList[i]);
 	}
 
 	public String getName() {

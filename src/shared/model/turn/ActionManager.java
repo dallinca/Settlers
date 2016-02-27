@@ -34,9 +34,6 @@ public class ActionManager {
 	 */
 	public void doAction(ActionType action){
 
-		int i = client.getGame().getVersionNumber();
-		client.getGame().setVersionNumber(i++);		
-
 		if (action.getCategory() == ActionType.PURCHASE) doPurchase(action);
 		else if (action.getCategory() == ActionType.TRADE) doTrade(action);
 		else if (action.getCategory() == ActionType.PLAYCARD) playDevelopmentCard(action);	
