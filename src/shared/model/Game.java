@@ -3,6 +3,7 @@ package shared.model;
 import java.util.ArrayList;
 import java.util.Random;
 
+import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
 import shared.locations.EdgeLocation;
@@ -54,6 +55,8 @@ public class Game {
 		players = new Player[numberofPlayers];
 		for(int i = 0; i < 3; i++) {
 			players[i] = new Player(i, bank);
+			players[i].setPlayerId(24);
+			players[i].setPlayerColor(CatanColor.values()[i]);
 		}
 		// init board to normal setup
 		board = new Board(false, false, false);
