@@ -35,9 +35,10 @@ public class Player {
 	private DevelopmentCardHand developmentCardHand;
 	private String playerName = "";
 	private CatanColor playerColor;
-	// TODO add updates for these duders
+	// TODO add updates for these duders in the Game class
 	private boolean hasLargestArmy = false;
 	private boolean hasLongestRoad = false;
+	private boolean isPlayersTurn = false;
 	
 	/**
 	 * Initializes Player
@@ -618,6 +619,14 @@ public class Player {
 
 		public void setHasLongestRoad(boolean hasLongestRoad) {
 			this.hasLongestRoad = hasLongestRoad;
+		}
+
+		public boolean isPlayersTurn() {
+			return isPlayersTurn;
+		}
+
+		public void setPlayersTurn(boolean isPlayersTurn) {
+			this.isPlayersTurn = isPlayersTurn;
 		}
 	
 		
