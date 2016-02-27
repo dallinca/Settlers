@@ -45,10 +45,13 @@ public class ResourceCardHand {
 		  initializePreGameResources();
 	  }
 	 
-	  
+	  /**
+	   * @deprecated
+	   * 
+	   */
 	  private void initializePreGameResources() {
 		  try {
-			  addCard(bank.playerTakeResource(ResourceType.BRICK));
+			  /*addCard(bank.playerTakeResource(ResourceType.BRICK));
 			  addCard(bank.playerTakeResource(ResourceType.BRICK));
 			  addCard(bank.playerTakeResource(ResourceType.BRICK));
 			  addCard(bank.playerTakeResource(ResourceType.BRICK));
@@ -59,7 +62,7 @@ public class ResourceCardHand {
 			  addCard(bank.playerTakeResource(ResourceType.SHEEP));
 			  addCard(bank.playerTakeResource(ResourceType.SHEEP));
 			  addCard(bank.playerTakeResource(ResourceType.WHEAT));
-			  addCard(bank.playerTakeResource(ResourceType.WHEAT));
+			  addCard(bank.playerTakeResource(ResourceType.WHEAT));*/
 		} catch (Exception e) {
 			System.out.println("YOU HAVE NOT INITIALIZED THE BANK");
 			e.printStackTrace();

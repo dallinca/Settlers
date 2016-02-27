@@ -42,8 +42,21 @@ public class Game {
 	
 	// CONSTRUCTORS
 	//////////////////////////////////////////
+	
+	/**
+	 * For testing use, self initializing
+	 * 
+	 */
 	public Game() {
-		
+		// init bank
+		bank = new Bank();
+		// init players
+		players = new Player[numberofPlayers];
+		for(int i = 0; i < 3; i++) {
+			players[i] = new Player(i, bank);
+		}
+		// init board to normal setup
+		board = new Board(false, false, false);
 	}
 	
 	
@@ -933,6 +946,25 @@ public class Game {
 				return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * This is only intended for extracting information from the hexes for the map initialization
+	 * 
+	 * @pre None
+	 * @return Hex[][]
+	 */
+	public Hex[][] getMapHexes() {
+		return board.getMapHexes();
+	}
+	
+	/**
+	 * This is only inteded for extracting information from the players.
+	 * 
+	 * @return
+	 */
+	public Player[] getAllPlayers() {
+		return players;
 	}
 	
 	public void setVersionNumber(int version) {

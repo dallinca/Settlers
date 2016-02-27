@@ -146,6 +146,26 @@ public class Hex {
 		return y_coord_hex;
 	}
 	
+	/**
+	 * For use when retrieving the coordinate in the Gui
+	 * 
+	 * @pre none
+	 * @return
+	 */
+	public int getTheirX_coord_hex() {
+		return x_coord_hex - 3;
+	}
+
+	/**
+	 * For use when retrieving the coordinate in the Gui
+	 * 
+	 * @pre none
+	 * @return
+	 */
+	public int getTheirY_coord_hex() {
+		return y_coord_hex - 3;
+	}
+	
 	
 	
 }

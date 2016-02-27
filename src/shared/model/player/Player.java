@@ -2,6 +2,7 @@ package shared.model.player;
 
 import java.util.ArrayList;
 
+import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
 import shared.model.Bank;
@@ -32,7 +33,8 @@ public class Player {
 	private ResourceCardHand resourceCardHand;
 	private PlayerPieces playerPieces;
 	private DevelopmentCardHand developmentCardHand;
-	
+	private String playerName = "";
+	private CatanColor playerColor;
 	
 	/**
 	 * Initializes Player
@@ -582,6 +584,23 @@ public class Player {
 		public void setPlayerId(int playerId) {
 			this.playerId = playerId;
 		}
+
+		public String getPlayerName() {
+			return playerName;
+		}
+
+		public void setPlayerName(String playerName) {
+			this.playerName = playerName;
+		}
+
+		public CatanColor getPlayerColor() {
+			return playerColor;
+		}
+
+		public void setPlayerColor(CatanColor playerColor) {
+			this.playerColor = playerColor;
+		}
 	
+		
 		
 }
