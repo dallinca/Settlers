@@ -10,10 +10,9 @@ import shared.model.Game;
  */
 public class Trade {
 
-	private Client client;
+
 	
-	Trade(Client client) {
-		this.client = client;
+	Trade() {
 	}
 	/**
 	 * Trades selected cards from player's hand for requested resources from another player's hand. 

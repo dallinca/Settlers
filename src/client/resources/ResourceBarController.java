@@ -2,6 +2,7 @@ package client.resources;
 
 import java.util.*;
 
+import client.Client;
 import client.base.*;
 
 
@@ -11,12 +12,18 @@ import client.base.*;
 public class ResourceBarController extends Controller implements IResourceBarController, Observer {
 
 	private Map<ResourceBarElement, IAction> elementActions;
+	private Client client;
 	
 	public ResourceBarController(IResourceBarView view) {
 
 		super(view);
 		System.out.println("ResourceBarController ResourceBarController()");
 		elementActions = new HashMap<ResourceBarElement, IAction>();
+		
+		client = Client.getInstance();
+		client.addObserver(this);
+		
+		getView().setElementEnabled(ResourceBarElement.ROAD, false);
 	}
 
 	@Override
@@ -40,7 +47,6 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	public void buildRoad() {
 		System.out.println("ResourceBarController buildRoad()");
 		//elementActions.get(ResourceBarElement.ROAD).;
-		getView().setElementEnabled(ResourceBarElement.ROAD, false);
 		executeElementAction(ResourceBarElement.ROAD);
 	}
 

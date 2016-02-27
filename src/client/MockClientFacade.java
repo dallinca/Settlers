@@ -66,13 +66,15 @@ import shared.definitions.CatanColor;
  *
  */
 public class MockClientFacade {
+	
+	private static MockClientFacade SINGLETON;
+	
 	// Dummy info for tab
 	private ArrayList<GameInfo> gamesList = new ArrayList<GameInfo>();
 	private int gameId = 55;
 	// END Dummy info
 	
 	private IServerProxy sp;
-	private Client c;
 
 	/**
 	 * Creates fascade, specifying the location of the master server.
@@ -82,14 +84,16 @@ public class MockClientFacade {
 	 * @pre Server name and port number specifiy an existing server.
 	 * @post Client will be able to communicate with server.
 	 */
-	MockClientFacade(IServerProxy proxy, Client client){
-		this.sp = proxy;
-		this.c = client;
+	
+	private MockClientFacade() {
+		//this.c = Client.getInstance();
 	}
-
-	public MockClientFacade(Client client){		
-		this.sp = new ServerProxy();
-		this.c = client;
+	
+	public static MockClientFacade getInstance() {
+		if(SINGLETON == null) {
+			SINGLETON = new MockClientFacade();
+		}
+		return SINGLETON;
 	}
 
 	/**
@@ -115,12 +119,12 @@ public class MockClientFacade {
 			newGame.setTitle(name);
 			PlayerInfo player = new PlayerInfo();
 				player.setColor(CatanColor.WHITE);
-				if(c == null) {
+				if(Client.getInstance() == null) {
 					System.out.println("c is null");
 				}
-				System.out.println(c.getUserId());
-				player.setId(c.getUserId());
-				player.setName(c.getName());
+				System.out.println(Client.getInstance().getUserId());
+				player.setId(Client.getInstance().getUserId());
+				player.setName(Client.getInstance().getName());
 			newGame.addPlayer(player);
 		gamesList.add(newGame);
 
@@ -360,13 +364,6 @@ public class MockClientFacade {
 		return gamesList.toArray(games);
 	}
 
-	public Client getC() {
-		return c;
-	}
-
-	public void setC(Client c) {
-		this.c = c;
-	}
 
 
 }

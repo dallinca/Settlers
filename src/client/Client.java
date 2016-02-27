@@ -2,9 +2,9 @@ package client;
 import java.util.*;
 
 import client.data.GameInfo;
-import client.map.MapController;
+
 import client.proxy.IServerProxy;
-import client.proxy.MockServerProxy;
+
 import shared.definitions.CatanColor;
 import shared.model.Game;
 
@@ -13,25 +13,21 @@ public class Client extends Observable {
 	private GameInfo gameInfo; // This is a class provided to us. We are using for player waiting modal view.
 	private Game game;
 	private IServerProxy isp;
-	private ClientFacade cf;
 	private int UserId;
 	private String name;
 	private CatanColor color;
 	private int playerIndex;
 	
-	private static Client singleton = new Client( );
+	private static Client SINGLETON = null;
 	// CONSTRUCTORS
 	//////////////////////
 	private Client(){ }
 	
 	public static Client getInstance( ) {
-	      return singleton;
-	}
-	
-	public Client(IServerProxy isp){
-		
-		this.isp = isp;
-		
+		if(SINGLETON == null) {
+			SINGLETON = new Client();
+		}
+	    return SINGLETON;
 	}
 
 	// GETTERS AND SETTERS
