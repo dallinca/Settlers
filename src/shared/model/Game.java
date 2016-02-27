@@ -935,6 +935,16 @@ public class Game {
 		return false;
 	}
 	
+	/**
+	 * This is only intended for extracting information from the hexes for the map initialization
+	 * 
+	 * @pre None
+	 * @return Hex[][]
+	 */
+	public Hex[][] getMapHexes() {
+		return board.getMapHexes();
+	}
+	
 	public void setVersionNumber(int version) {
 		versionNumber = version;
 	}

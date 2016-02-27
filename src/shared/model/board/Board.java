@@ -66,6 +66,16 @@ public class Board {
 		initVertices();
 	}
 	
+
+	/**
+	 * This is only intended for extracting information from the hexes for the map initialization
+	 * 
+	 * @pre None
+	 * @return 
+	 */
+	public Hex[][] getMapHexes() {
+		return this.mapHexes;
+	}
 	
 	/**
 	 * Determines Whether the Robber can be moved to the given hexLocation

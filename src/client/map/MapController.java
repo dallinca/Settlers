@@ -58,11 +58,31 @@ public class MapController extends Controller implements IMapController, Observe
 		//<temp>
 		
 		Random rand = new Random();
+		
+		// Init the water Hexes
+		getView().addHex(new HexLocation(0, -3), HexType.WATER);
+		getView().addHex(new HexLocation(1, -3), HexType.WATER);
+		getView().addHex(new HexLocation(2, -3), HexType.WATER);
+		getView().addHex(new HexLocation(3, -3), HexType.WATER);
+		getView().addHex(new HexLocation(3, -2), HexType.WATER);
+		getView().addHex(new HexLocation(3, -1), HexType.WATER);
+		getView().addHex(new HexLocation(3, -0), HexType.WATER);
+		getView().addHex(new HexLocation(2, 1), HexType.WATER);
+		getView().addHex(new HexLocation(1, 2), HexType.WATER);
+		getView().addHex(new HexLocation(0, 3), HexType.WATER);
+		getView().addHex(new HexLocation(-1, 3), HexType.WATER);
+		getView().addHex(new HexLocation(-2, 3), HexType.WATER);
+		getView().addHex(new HexLocation(-3, 3), HexType.WATER);
+		getView().addHex(new HexLocation(-3, 2), HexType.WATER);
+		getView().addHex(new HexLocation(-3, 1), HexType.WATER);
+		getView().addHex(new HexLocation(-3, 0), HexType.WATER);
+		getView().addHex(new HexLocation(-2, -1), HexType.WATER);
+		getView().addHex(new HexLocation(-1, -2), HexType.WATER);
 
 		for (int x = 0; x <= 3; ++x) {
 			
 			int maxY = 3 - x;			
-			for (int y = -3; y <= maxY; ++y) {				
+			/*for (int y = -3; y <= maxY; ++y) {				
 				int r = rand.nextInt(HexType.values().length);
 				HexType hexType = HexType.values()[r];
 				HexLocation hexLoc = new HexLocation(x, y);
@@ -75,9 +95,9 @@ public class MapController extends Controller implements IMapController, Observe
 						CatanColor.ORANGE);
 				getView().placeSettlement(new VertexLocation(hexLoc,  VertexDirection.NorthWest), CatanColor.GREEN);
 				getView().placeCity(new VertexLocation(hexLoc,  VertexDirection.NorthEast), CatanColor.PURPLE);
-			}
+			}*/
 			
-			if (x != 0) {
+			/*if (x != 0) {
 				int minY = x - 3;
 				for (int y = minY; y <= 3; ++y) {
 					int r = rand.nextInt(HexType.values().length);
@@ -93,7 +113,7 @@ public class MapController extends Controller implements IMapController, Observe
 					getView().placeSettlement(new VertexLocation(hexLoc,  VertexDirection.NorthWest), CatanColor.GREEN);
 					getView().placeCity(new VertexLocation(hexLoc,  VertexDirection.NorthEast), CatanColor.PURPLE);
 				}
-			}
+			}*/
 		}
 		
 		PortType portType = PortType.BRICK;
