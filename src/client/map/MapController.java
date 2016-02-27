@@ -5,6 +5,7 @@ import java.util.*;
 import shared.definitions.*;
 import shared.locations.*;
 import shared.model.*;
+import client.Client;
 import client.base.*;
 import client.data.*;
 
@@ -17,6 +18,8 @@ public class MapController extends Controller implements IMapController, Observe
 	private IRobView robView;
 	private Game game;
 	
+	private Client client;
+	
 	public MapController(IMapView view, IRobView robView) {
 		
 		super(view);
@@ -25,6 +28,9 @@ public class MapController extends Controller implements IMapController, Observe
 		setRobView(robView);
 		
 		initFromModel();
+		
+		client = Client.getInstance();
+		client.addObserver(this);
 	}
 	
 	public IMapView getView() {

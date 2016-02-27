@@ -2,6 +2,8 @@ package client.roll;
 
 import java.util.Observable;
 import java.util.Observer;
+
+import client.Client;
 import client.base.*;
 
 
@@ -11,6 +13,7 @@ import client.base.*;
 public class RollController extends Controller implements IRollController, Observer {
 
 	private IRollResultView resultView;
+	private Client client;
 
 	/**
 	 * RollController constructor
@@ -24,6 +27,9 @@ public class RollController extends Controller implements IRollController, Obser
 		System.out.println("RollController RollController()");
 		
 		setResultView(resultView);
+		
+		client = Client.getInstance();
+		client.addObserver(this);
 	}
 	
 	public IRollResultView getResultView() {

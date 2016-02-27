@@ -29,9 +29,7 @@ public class Client extends Observable {
 	}
 	
 	public Client(IServerProxy isp){
-		
 		this.isp = isp;
-		
 	}
 
 	// GETTERS AND SETTERS
