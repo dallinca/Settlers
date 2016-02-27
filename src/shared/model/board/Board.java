@@ -171,11 +171,7 @@ public class Board {
 	 * @post road is placed on the specified edge, or PlaceRoadOnEdgeException thrown
 	 */
 	public void placeRoadOnEdge(Player player, EdgeLocation edgeLocation) throws Exception {
-		if(player.getPlayerPieces().getNumberOfRoads() > 13){
-			if(canDoPlaceInitialRoadOnEdge(player, edgeLocation) == false)
-				throw new PlaceRoadOnEdgeException("canDoPlaceRoadOnEdge = false");
-		}
-		else if(canDoPlaceRoadOnEdge(player, edgeLocation) == false) {
+		if(canDoPlaceRoadOnEdge(player, edgeLocation) == false) {
 			throw new PlaceRoadOnEdgeException("canDoPlaceRoadOnEdge = false");
 		}
 		// Use the edgeLocation to find that Edge in our data Structure
@@ -207,10 +203,11 @@ public class Board {
 		}
 		
 		// player not null, edge not null, and does not have a road
-		if(player == null || edge == null || edge.hasRoad() == true) {
+		if(player == null || player.canDoBuildInitialRoad() == false || edge == null || edge.hasRoad() == true) {
 			return false;
 		}
-		// The player should be able to initialize their first two roads on any valid 
+
+		// The player should be able to initialize their first two roads on any valid non-taken edge location
 		return true;
 	}
 
@@ -229,8 +226,8 @@ public class Board {
 		// Use the edgeLocation to find that Edge in our data Structure
 		Edge edge = getEdge(edgeLocation);
 		
-		// Place the road on the edge
-		player.buyRoad(edge);
+		// Place the INITIAL road on the edge
+		player.buildInitialRoad(edge);
 	}
 	
 	/**

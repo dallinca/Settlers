@@ -210,6 +210,10 @@ public class Game {
 		if(UserId != currentPlayer.getPlayerId()) {
 			return false;
 		}
+		// If we are in the first two rounds the answer is simply "yes"
+		if(turnNumber < 2) {
+			return true;
+		}
 		return currentPlayer.canDoBuyRoad();	
 	}
 	
@@ -221,6 +225,10 @@ public class Game {
 		// Check if the user is the current player
 		if(UserId != currentPlayer.getPlayerId()) {
 			return false;
+		}
+		// If we are in the first two rounds the answer is simply "yes"
+		if(turnNumber < 2) {
+			return true;
 		}
 		return currentPlayer.canDoBuySettlement();
 	}
@@ -658,7 +666,7 @@ public class Game {
 			return false;
 		}
 		// If we are in the setup phase, the rules for placing a road are slightly different
-		if(turnNumber > 1) {
+		if(turnNumber < 2) {
 			return board.canDoPlaceInitialRoadOnEdge(getCurrentPlayer(), edgeLocation);
 		} else {
 			return board.canDoPlaceRoadOnEdge(getCurrentPlayer(), edgeLocation);	
@@ -679,7 +687,7 @@ public class Game {
 			throw new Exception("Specified Player cannot place a road on the given edgeLocation");
 		}
 		// If we are in the setup phase, the rules for placing a road are slightly different
-		if(turnNumber > 1) {
+		if(turnNumber < 2) {
 			board.placeInitialRoadOnEdge(getCurrentPlayer(), edgeLocation);
 		} else {
 			board.placeRoadOnEdge(getCurrentPlayer(), edgeLocation);

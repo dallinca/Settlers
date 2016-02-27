@@ -269,6 +269,34 @@ public class Player {
 		   resourceCardHand.payForRoad();
 		   playerPieces.placeRoad(edge);
 	   }
+
+	   /**
+	    * TODO javadoc and verify
+	    * 
+	    * @return
+	    */
+	   public boolean canDoBuildInitialRoad(){
+		   // If the player already has two roads on the board then he has already placed the initial roads
+		   if(playerPieces.getNumberOfRoads() < 14){
+			   return false;
+		   }
+		   return true;
+	   }
+	   
+	   /**
+	    * TODO javadoc and verify
+	    * 
+	    * @param edge
+	    * @throws CannotBuyException
+	    * @throws InsufficientPlayerResourcesException
+	    * @throws AllPiecesPlayedException
+	    */
+	   public void buildInitialRoad(Edge edge) throws CannotBuyException, InsufficientPlayerResourcesException, AllPiecesPlayedException {
+		   if(canDoBuildInitialRoad() == false) {
+			   throw new CannotBuyException("Cannot Buy Road, possibly no edge to place a road");
+		   }
+		   playerPieces.placeRoad(edge);
+	   }
 	   
 	 /**
 	  * checks if the player can buy a settlement
