@@ -58,8 +58,8 @@ public class MapController extends Controller implements IMapController, Observe
 		
 		// Check if there is a game to initialize from
 		if(Client.getInstance().getGame() == null) {
-			//return;
-			Client.getInstance().setGame(new Game());
+			return;
+			//Client.getInstance().setGame(new Game());
 		}
 
 		// Init the water Hexes

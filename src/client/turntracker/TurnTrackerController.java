@@ -15,11 +15,12 @@ import client.base.*;
  */
 public class TurnTrackerController extends Controller implements ITurnTrackerController, Observer {
 
+	private boolean init;
 	public TurnTrackerController(ITurnTrackerView view) {
 		
 		super(view);
 		System.out.println("TurnTrackerController TurnTrackerController()");
-		
+		init = true;
 		initFromModel();
 		
 		Client.getInstance().addObserver(this);
@@ -39,29 +40,16 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	private void initFromModel() {
 		System.out.println("TurnTrackerController initFromModel()");
 		
+		if(Client.getInstance().getGame() == null) {
+			return;
+		}
 		Player[] players = Client.getInstance().getGame().getAllPlayers();
 		for(int i = 0; i < players.length && players[i] != null; i++){
-			
+		
 			getView().initializePlayer(players[i].getPlayerIndex(), players[i].getPlayerName(), players[i].getPlayerColor());
-			
 			System.out.println("i: "+i+ " players[i].getPlayerIndex(): "+players[i].getPlayerIndex()+ 
 					"players[i].getPlayerName(): "+ players[i].getPlayerName()+" players[i].getPlayerColor(): "+players[i].getPlayerColor());
-			
-			boolean highlight = false;
-			boolean largestArmy = false;
-			boolean longestRoad = false;
-			
-			if(players[i].isPlayersTurn()){
-				highlight = true;
-			}
-			if(players[i].isHasLargestArmy()){
-				largestArmy = true;
-			}
-			if(players[i].isHasLongestRoad()){
-				longestRoad = true;
-			}
-			getView().updatePlayer(players[i].getPlayerIndex(), players[i].getVictoryPoints(), highlight,
-					  largestArmy, longestRoad);
+
 			getView().setLocalPlayerColor(players[i].getPlayerColor());
 		}
 	}
@@ -69,7 +57,32 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("TurnTrackerController update()");
-		initFromModel();
+		if(init){
+			initFromModel();
+		}
+		else{
+			Player[] players = Client.getInstance().getGame().getAllPlayers();
+			for(int i = 0; i < players.length && players[i] != null; i++){
+
+				boolean highlight = false;
+				boolean largestArmy = false;
+				boolean longestRoad = false;
+				
+				if(players[i].isPlayersTurn()){
+					highlight = true;
+				}
+				if(players[i].isHasLargestArmy()){
+					largestArmy = true;
+				}
+				if(players[i].isHasLongestRoad()){
+					longestRoad = true;
+				}
+		
+				getView().updatePlayer(players[i].getPlayerIndex(), players[i].getVictoryPoints(), highlight,
+						  largestArmy, longestRoad);
+			}
+		}
+		init = false;
 	}
 
 }
