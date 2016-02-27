@@ -26,8 +26,9 @@ import shared.model.player.exceptions.NullCardException;
  */
 public class Player {
 	
-	int playerId;
-	int totalVictoryPoints = 0;
+	private int playerIndex;
+	private int playerId;
+	private int totalVictoryPoints = 0;
 	private ResourceCardHand resourceCardHand;
 	private PlayerPieces playerPieces;
 	private DevelopmentCardHand developmentCardHand;
@@ -46,8 +47,8 @@ public class Player {
 	 * @post new Municipal()
 	 */
 	
-	public Player(int playerId, Bank bank){
-		this.playerId = playerId;
+	public Player(int playerIndex, Bank bank){
+		this.playerIndex = playerIndex;
 		resourceCardHand = new ResourceCardHand(bank);
 		playerPieces = new PlayerPieces(this);
 		developmentCardHand = new DevelopmentCardHand();
@@ -492,12 +493,12 @@ public class Player {
 		   return resourceCardHand.getRandomResourceCard();
 	   }
 	   
-		public int getPlayerId() {
-			return playerId;
+		public int getPlayerIndex() {
+			return playerIndex;
 		}
 
-		public void setPlayerId(int playerId) {
-			this.playerId = playerId;
+		public void setPlayerIndex(int playerIndex) {
+			this.playerIndex = playerIndex;
 		}
 		
 		public PlayerPieces getPlayerPieces(){
@@ -507,5 +508,14 @@ public class Player {
 		public ResourceCardHand getResourceCardHand(){
 			return resourceCardHand;
 		}
+
+		public int getPlayerId() {
+			return playerId;
+		}
+
+		public void setPlayerId(int playerId) {
+			this.playerId = playerId;
+		}
 	
+		
 }

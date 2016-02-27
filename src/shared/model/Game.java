@@ -25,7 +25,8 @@ import shared.model.board.Vertex;
  * It also keeps track of how many players there are, who is next, and who is the current player.
  */
 public class Game {
-	private boolean inSetUpPhase = true; // This is a state boolean for the first two setup rounds
+	
+	//private boolean inSetUpPhase = true; // This is a state boolean for the first two setup rounds
 	private Player[] players = null;
 	private Player currentPlayer = null;
 	private Board board = null;;
@@ -36,6 +37,7 @@ public class Game {
 	private int turnNumber = 0;
 	private int versionNumber = 1;
 	private int indexOfLargestArmy = -1;
+	private String status = "";
 	//private Dice dice = new Dice();
 	
 	// CONSTRUCTORS
@@ -74,10 +76,10 @@ public class Game {
 	public void incrementPlayer() {
 		// If we are done with the first two rounds of the Game (for setup
 		for (int i = 0; i < numberofPlayers; i++) {
-			if (currentPlayer.getPlayerId() == players[i].getPlayerId()) {
+			if (currentPlayer.getPlayerIndex() == players[i].getPlayerIndex()) {
 				//players[i] = currentPlayer; // This should probably be omitted
 				// If we are no longer in the setup phase
-				if(inSetUpPhase == false) {
+				if(turnNumber > 1) {
 					if (i == numberofPlayers-1) {
 						setCurrentPlayer(players[0]);
 						turnNumber++;
@@ -105,7 +107,7 @@ public class Game {
 					else if(turnNumber == 1) {
 						if(i == 0) {
 							setCurrentPlayer(players[0]);
-							inSetUpPhase = false;
+							//inSetUpPhase = false;
 							turnNumber++;
 							return;
 						} else {
@@ -358,7 +360,7 @@ public class Game {
 						}
 					}
 					if (firstTime) {
-						indexOfLargestArmy = currentPlayer.getPlayerId();
+						indexOfLargestArmy = currentPlayer.getPlayerIndex();
 						largestArmy = currentPlayer;
 						currentPlayer.incrementVictoryPoints();
 						currentPlayer.incrementVictoryPoints();
@@ -656,7 +658,7 @@ public class Game {
 			return false;
 		}
 		// If we are in the setup phase, the rules for placing a road are slightly different
-		if(inSetUpPhase == true) {
+		if(turnNumber > 1) {
 			return board.canDoPlaceInitialRoadOnEdge(getCurrentPlayer(), edgeLocation);
 		} else {
 			return board.canDoPlaceRoadOnEdge(getCurrentPlayer(), edgeLocation);	
@@ -677,7 +679,7 @@ public class Game {
 			throw new Exception("Specified Player cannot place a road on the given edgeLocation");
 		}
 		// If we are in the setup phase, the rules for placing a road are slightly different
-		if(inSetUpPhase == true) {
+		if(turnNumber > 1) {
 			board.placeInitialRoadOnEdge(getCurrentPlayer(), edgeLocation);
 		} else {
 			board.placeRoadOnEdge(getCurrentPlayer(), edgeLocation);
@@ -777,7 +779,7 @@ public class Game {
 		for(Vertex vertex: adjacentVertices) {
 			// If the vertex has a municipal, that municipal is not owned by the player moving the robber
 			// and the Player is not already in the list, and the Player has resources to be stolen
-			int municipalID = vertex.getMunicipal().getPlayer().getPlayerId();
+			int municipalID = vertex.getMunicipal().getPlayer().getPlayerIndex();
 			Player player = vertex.getMunicipal().getPlayer();
 			if(vertex.hasMunicipal() && UserId != municipalID && !adjacentPlayerIDs.contains(municipalID) && player.getResourceCardHandSize() > 0) {
 				adjacentPlayerIDs.add(municipalID);
@@ -928,7 +930,10 @@ public class Game {
 	}
 	
 	public boolean isInSetUpPhase() {
-		return inSetUpPhase;
+		if(turnNumber > 1) {
+			return false;
+		}
+		return true;
 	}
 	
 	
