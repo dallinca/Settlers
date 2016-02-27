@@ -35,6 +35,9 @@ public class Player {
 	private DevelopmentCardHand developmentCardHand;
 	private String playerName = "";
 	private CatanColor playerColor;
+	// TODO add updates for these duders
+	private boolean hasLargestArmy = false;
+	private boolean hasLongestRoad = false;
 	
 	/**
 	 * Initializes Player
@@ -600,7 +603,24 @@ public class Player {
 		public void setPlayerColor(CatanColor playerColor) {
 			this.playerColor = playerColor;
 		}
+
+		public boolean isHasLargestArmy() {
+			return hasLargestArmy;
+		}
+
+		public void setHasLargestArmy(boolean hasLargestArmy) {
+			this.hasLargestArmy = hasLargestArmy;
+		}
+
+		public boolean isHasLongestRoad() {
+			return hasLongestRoad;
+		}
+
+		public void setHasLongestRoad(boolean hasLongestRoad) {
+			this.hasLongestRoad = hasLongestRoad;
+		}
 	
+		
 		
 		
 }
