@@ -958,6 +958,15 @@ public class Game {
 		return board.getMapHexes();
 	}
 	
+	/**
+	 * This is only inteded for extracting information from the players.
+	 * 
+	 * @return
+	 */
+	public Player[] getAllPlayers() {
+		return players;
+	}
+	
 	public void setVersionNumber(int version) {
 		versionNumber = version;
 	}
