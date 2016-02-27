@@ -183,7 +183,7 @@ public class ServerProxy implements IServerProxy {
 		StringBuilder sb = new StringBuilder();
 		sb.append("/game/model?version=");
 		if (client==null){
-			sb.append(0);
+			sb.append(-1);
 		}
 		else{
 			sb.append(client.getGame().getVersionNumber());
@@ -195,7 +195,7 @@ public class ServerProxy implements IServerProxy {
 
 	@Override
 	public Join_Result joinGame(Join_Params request) throws ClientException {
-		System.out.println("Joining game.");
+		//System.out.println("Joining game.");
 		URL_SUFFIX = "/games/join";
 		return new Join_Result((String) doPost(URL_SUFFIX, request));
 	}
@@ -391,15 +391,15 @@ public class ServerProxy implements IServerProxy {
 
 			//Append those cookies client already has--------------------
 			if (unfixedGameCookie!=null){
-				System.out.println("Adding cookies");
+				//System.out.println("Adding cookies");
 				connection.setRequestProperty("Cookie", unfixedUserCookie+"; "+unfixedGameCookie);
 			}
 			else if (unfixedUserCookie!=null){
-				System.out.println("Adding user cookie: "+unfixedUserCookie);
+				//System.out.println("Adding user cookie: "+unfixedUserCookie);
 				connection.setRequestProperty("Cookie", unfixedUserCookie);
 			}
 
-			System.out.println("Job before: "+job);
+			System.out.print("Call: "+job);
 
 			connection.setRequestMethod(HTTP_POST);
 			connection.setDoInput(true);
@@ -412,13 +412,13 @@ public class ServerProxy implements IServerProxy {
 			sw.write(job);
 			sw.flush();
 
-			System.out.println("Response code: "+connection.getResponseCode());
+			System.out.println(" |||| Response code: "+connection.getResponseCode());
 
 			InputStream in = connection.getInputStream();
 
 			int len = 0;
 
-			System.out.println("Input stream received.");
+			//System.out.println("Input stream received.");
 
 			byte[] buffer = new byte[1024];
 
@@ -432,7 +432,7 @@ public class ServerProxy implements IServerProxy {
 
 			in.close();
 
-			System.out.println("Job after: "+job);
+			System.out.println("Response: "+job+'\n');
 			
 			//Cookie cacher----------------------------------
 			Map<String, List<String>> headers = connection.getHeaderFields();
@@ -455,7 +455,7 @@ public class ServerProxy implements IServerProxy {
 
 			}
 			else if (URL_SUFFIX.equals("/games/join")){
-				System.out.println("Getting join game cookie");
+				//System.out.println("Getting join game cookie");
 				unfixedGameCookie = headers.get("Set-cookie").get(0);
 
 				gameCookie = unfixedGameCookie;
@@ -467,7 +467,7 @@ public class ServerProxy implements IServerProxy {
 					gameCookie = gameCookie.substring(11, gameCookie.length());
 				}
 					
-				System.out.println("Game cookie: "+ gameCookie);
+				//System.out.println("Game cookie: "+ gameCookie);
 				gameID = Integer.parseInt(gameCookie);
 			}
 
