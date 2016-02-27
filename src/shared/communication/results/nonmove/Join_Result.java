@@ -5,11 +5,6 @@ public class Join_Result {
 	private boolean valid;
 	private String response;
 	
-	public Join_Result(){
-		
-		valid = false;
-		
-	}
 	
 	public Join_Result(String doPost){
 		System.out.println("Join game result string: "+doPost);
@@ -21,6 +16,12 @@ public class Join_Result {
 			setResponse(doPost);
 			valid = true;
 		}		
+	}
+	
+	public Join_Result(){
+		
+		valid = false;
+		
 	}
 	
 	public void setValid(boolean valid){
@@ -44,8 +45,6 @@ public class Join_Result {
 	public Join_Result(boolean joined) {
 		this.joined = joined;
 	}
-	
-	public Join_Result() {}
 
 	public boolean isJoined() {
 		return joined;
