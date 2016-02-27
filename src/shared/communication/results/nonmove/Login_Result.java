@@ -14,6 +14,10 @@ public class Login_Result {
 
 
 	public Login_Result(String doPost, int playerID, String name) {
+		if (doPost == null){
+			valid = false;
+			return;
+		}
 		if (doPost.equals("Success")){
 			this.valid=true;
 			this.playerID=playerID;

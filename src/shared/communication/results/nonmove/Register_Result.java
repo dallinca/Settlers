@@ -21,6 +21,10 @@ public class Register_Result {
 	}
 
 	public Register_Result(String doPost, int playerID, String username) {
+		if (doPost==null){
+			valid = false;
+			return;
+		}
 		if (doPost.equals("Success")){
 			valid = true;
 			id = playerID;
