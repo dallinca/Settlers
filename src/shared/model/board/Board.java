@@ -71,7 +71,7 @@ public class Board {
 	 * This is only intended for extracting information from the hexes for the map initialization
 	 * 
 	 * @pre None
-	 * @return 
+	 * @return Hex[][]
 	 */
 	public Hex[][] getMapHexes() {
 		return this.mapHexes;

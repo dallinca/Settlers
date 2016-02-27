@@ -42,8 +42,21 @@ public class Game {
 	
 	// CONSTRUCTORS
 	//////////////////////////////////////////
+	
+	/**
+	 * For testing use, self initializing
+	 * 
+	 */
 	public Game() {
-		
+		// init bank
+		bank = new Bank();
+		// init players
+		players = new Player[numberofPlayers];
+		for(int i = 0; i < 3; i++) {
+			players[i] = new Player(i, bank);
+		}
+		// init board to normal setup
+		board = new Board(false, false, false);
 	}
 	
 	
