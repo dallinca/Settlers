@@ -11,10 +11,10 @@ import shared.model.Game;
  */
 public class Purchase {
 
-	private Client client;
+
 	
-	Purchase(Client client) {
-		this.client = client;
+	Purchase() {
+
 	}
 	/**
 	 * Purchases a development card for the player.
@@ -27,7 +27,7 @@ public class Purchase {
 	}
 
 	public boolean canDoPurchaseDevelopmentCard(){
-		return client.getGame().canDoCurrentPlayerBuyDevelopmentCard(client.getUserId());
+		return Client.getInstance().getGame().canDoCurrentPlayerBuyDevelopmentCard(Client.getInstance().getUserId());
 	}
 
 	/**
