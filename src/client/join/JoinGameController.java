@@ -24,7 +24,6 @@ import client.misc.*;
 public class JoinGameController extends Controller implements IJoinGameController, Observer {
 
 	private GameInfo gameInfo; // For storing the GameInfo for the desired game to join
-	
 	private Client clientInfo;
 	private MockClientFacade mockClientFacade;
 	private INewGameView newGameView;
@@ -68,7 +67,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		System.out.println("JoinGameController getJoinAction()");
 		return joinAction;
 	}
-
+	
 	/**
 	 * Sets the action to be executed when the user joins a game
 	 * 
@@ -319,13 +318,17 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		System.out.println("JoinGameController update()");
 		// TODO Auto-generated method stub
 		
+		
+		
 	}
 
 	public GameInfo getGameInfo() {
+		System.out.println("JoinGameController getGameInfo()");
 		return gameInfo;
 	}
 
 	public void setGameInfo(GameInfo gameInfo) {
+		System.out.println("JoinGameController setGameInfo()");
 		this.gameInfo = gameInfo;
 	}
 	

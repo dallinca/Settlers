@@ -31,7 +31,7 @@ public class ChatController extends Controller implements IChatController, Obser
 		System.out.println("ChatController ChatController()");
 		//messageBox = new PlaceholderTextField();
 	}
-
+	
 	@Override
 	public IChatView getView() {
 		System.out.println("ChatController getView()");
