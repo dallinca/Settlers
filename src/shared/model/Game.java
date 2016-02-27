@@ -50,6 +50,7 @@ public class Game {
 	 * 
 	 */
 	public Game() {
+		System.out.println("WHERE THE HECK AM I BEING CALLED FROM???????????????");
 		// init bank
 		bank = new Bank();
 		// init players

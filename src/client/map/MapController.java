@@ -18,6 +18,7 @@ import client.data.*;
  */
 public class MapController extends Controller implements IMapController, Observer {
 	
+	private boolean init = true;
 	private IRobView robView;
 	private Game game;
 	
@@ -286,6 +287,11 @@ public class MapController extends Controller implements IMapController, Observe
 		System.out.println("MapController update()");
 		//store current Game in controller
 		this.game = (Game)arg;
+		if(init) {
+			initFromModel();
+			init = false;
+			return;
+		}
 		
 	}
 	

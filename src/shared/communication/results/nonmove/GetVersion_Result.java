@@ -34,7 +34,7 @@ public class GetVersion_Result {
 		else if (post.equals("\"true\"")){
 			setUpToDate(true);
 			valid = true;
-			
+
 		}
 		else{
 			//model = new ClientModel();
@@ -47,6 +47,9 @@ public class GetVersion_Result {
 	}
 
 	public Game getGame() {
+		
+		Game game = new Game();		
+		
 		return currentVersion;
 	}
 
@@ -56,82 +59,15 @@ public class GetVersion_Result {
 	 */
 
 	private void parseJson(String post){
-		System.out.println("Entering gauntlet.");
+		//System.out.println("Entering gauntlet.");
 		Gson gson = new Gson();
 
-		model = gson.fromJson(post, ClientModel.class);
+		setModel(gson.fromJson(post, ClientModel.class));
 
 		valid = true;
 		upToDate = false;
 
-		System.out.println("Gauntlet passed.");
-
-		/*
-		JsonObject clientModel;
-		JsonObject bank;
-		JsonObject chat;
-		JsonObject log;
-		JsonObject map;
-		JsonArray players;
-		JsonObject tradeOffer = null;
-		JsonObject turnTracker;
-		JsonObject version;
-		JsonObject winner;		
-
-		clientModel = gson.fromJson(post, JsonObject.class);
-
-		bank = clientModel.getAsJsonObject("bank");
-		chat = clientModel.getAsJsonObject("chat");
-		log = clientModel.getAsJsonObject("log");
-		map = clientModel.getAsJsonObject("map");		
-		players = clientModel.getAsJsonArray("players");
-		if (clientModel.has("tradeOffer"))tradeOffer = clientModel.getAsJsonObject("tradeOffer");
-		turnTracker = clientModel.getAsJsonObject("turnTracker");
-		version = clientModel.getAsJsonObject("version");
-		winner = clientModel.getAsJsonObject("winner");
-
-		//Read all bank stuff in.
-		JsonObject rList = bank.getAsJsonObject("ResourceList");
-		model.bank.resourceList.brick = rList.get("brick").getAsInt();
-		model.bank.resourceList.ore = rList.get("ore").getAsInt();
-		model.bank.resourceList.sheep = rList.get("sheep").getAsInt();
-		model.bank.resourceList.wheat = rList.get("wheat").getAsInt();
-		model.bank.resourceList.wood = rList.get("wood").getAsInt();
-
-		JsonArray messages =  chat.getAsJsonObject("MessageList").get("MessageLine").getAsJsonArray();
-
-		//Read all messages in.
-		for (JsonElement m : messages){		
-
-			ClientModel.Chat.MessageList.MessageLine msg = model.chat.list.new MessageLine();
-			msg.message = m.getAsJsonObject().get("message").getAsString();
-			msg.source = m.getAsJsonObject().get("source").getAsString();
-			model.chat.list.lines.add(msg); //Add to model.
-		}
-
-		JsonArray logs =  log.getAsJsonObject("MessageList").get("MessageLine").getAsJsonArray();
-
-		//Read all logs in.
-		for (JsonElement l : logs){	
-
-			ClientModel.Chat.MessageList.MessageLine msg = model.chat.list.new MessageLine();
-			msg.message = l.getAsJsonObject().get("message").getAsString();
-			msg.source = l.getAsJsonObject().get("source").getAsString();
-			model.log.list.lines.add(msg); //Add to model.				
-		}
-
-		//Build map.
-
-		JsonArray hexes = map.getAsJsonObject("hexes").getAsJsonArray();
-
-		for (JsonElement h : hexes){
-
-			ClientModel.Map.Hex hex = model.map.new Hex();
-			hex.location.x = h.getAsJsonObject().get("location").get("x").getAsInt();
-			hex.location.y = h.getAsJsonObject().get("location").get("y").getAsInt();
-			hex.resource.type = h.getAsJsonObject().
-
-		}*/
+		//System.out.println("Gauntlet passed.");
 	}
 
 
@@ -144,17 +80,28 @@ public class GetVersion_Result {
 	}
 
 
-	private class ClientModel{
+	public ClientModel getModel() {
+		return model;
+	}
 
-		Bank bank;
-		Chat chat;
-		Log log;
-		Map map;
-		Player[] players;
-		TradeOffer tradeOffer;
-		TurnTracker turnTracker;
-		int version;
-		int winner;
+	public void setModel(ClientModel model) {
+		this.model = model;
+	}
+
+
+	public class ClientModel{
+
+		private DevCardList deck;
+		private Bank bank;
+		private Chat chat;
+		private Log log;
+		private Map map;
+		private Player[] players;
+		private TradeOffer tradeOffer;
+		private TurnTracker turnTracker;
+		private int version;
+		private int winner;
+
 
 		/*public ClientModel(){
 
@@ -180,8 +127,85 @@ public class GetVersion_Result {
 		}
 		 */
 
+
+		@Override
+		public String toString() {
+			return "ClientModel [deck=" + deck + ", \nbank=" + bank + ", \nchat="
+					+ chat + ", \nlog=" + log + ", \nmap=" + map + ", \nplayers="
+					+ Arrays.toString(players) + ", \ntradeOffer=" + tradeOffer
+					+ ", \nturnTracker=" + turnTracker + ", \nversion=" + version
+					+ ", \nwinner=" + winner + "]";
+		}
+
+
+		public DevCardList getDeck() {
+			return deck;
+		}
+
+
+		public Bank getBank() {
+			return bank;
+		}
+
+		public Chat getChat() {
+			return chat;
+		}
+
+		public Log getLog() {
+			return log;
+		}
+
+		public Map getMap() {
+			return map;
+		}
+
+		public Player[] getPlayers() {
+			return players;
+		}
+
+		public TradeOffer getTradeOffer() {
+			return tradeOffer;
+		}
+
+		public TurnTracker getTurnTracker() {
+			return turnTracker;
+		}
+
+		public int getVersion() {
+			return version;
+		}
+
+		public int getWinner() {
+			return winner;
+		}
+
 		public class Bank{
-			ResourceList resourceList;
+			int brick;
+			int ore;
+			int sheep;
+			int wheat;
+			int wood;
+			public int getBrick() {
+				return brick;
+			}
+			public int getOre() {
+				return ore;
+			}
+			public int getSheep() {
+				return sheep;
+			}
+			public int getWheat() {
+				return wheat;
+			}
+			public int getWood() {
+				return wood;
+			}
+			@Override
+			public String toString() {
+				return "Bank [brick=" + brick + ", ore=" + ore + ", sheep="
+						+ sheep + ", wheat=" + wheat + ", wood=" + wood + "]";
+			}
+
 
 			/*public Bank(ResourceList resourceList){
 				this.resourceList = resourceList;
@@ -199,84 +223,110 @@ public class GetVersion_Result {
 			wood (integer)
 		}
 			 */
-			public class ResourceList{		
 
-				int brick;
-				int ore;
-				int sheep;
-				int wheat;
-				int wood;
-
-				/*	public ResourceList(){
-
-				}
-				public ResourceList(int brick, int ore, int sheep,
-						int wheat, int wood) {
-					super();
-					this.brick = brick;
-					this.ore = ore;
-					this.sheep = sheep;
-					this.wheat = wheat;
-					this.wood = wood;
-				}				
-			}*/
-			}	
 		}
 
-		private class Chat{
-			MessageList list;
+		public class Chat{
+			private MessageLine[] lines;
+
+
+			@Override
+			public String toString() {
+
+				StringBuilder sb = new StringBuilder();
+
+				for (int i = 0 ; i < lines.length; i++){					
+					sb.append(lines[i].toString());
+					if (i!=lines.length){
+						sb.append(", ");
+					}
+				}
+
+
+				return "Chat [list=" + sb.toString() + "]";
+			}
+
+			public MessageLine[] getLines() {
+				return lines;
+			}
 
 			/*public Chat(){
 				list = new MessageList();
 			}*/
-			/*
-	MessageList {
-		lines (array[MessageLine])
-	}
 
-	MessageLine {message (string),
-	source (string)
-	}
-			 */
-			public class MessageList{
-				MessageLine[] lines;
+		}
 
-				/*public MessageList(){
-					lines = new LinkedList<MessageLine>();
+		public class Log{
+			private MessageLine[] lines;
+
+			@Override
+			public String toString() {
+				StringBuilder sb = new StringBuilder();
+
+				for (int i = 0 ; i < lines.length; i++){					
+					sb.append(lines[i].toString());
+					if (i!=lines.length){
+						sb.append(", ");
+					}
 				}
 
-				public MessageList(MessageLine[] messages){
-
-					lines = new LinkedList<MessageLine>();
-					lines.addAll(Arrays.asList(messages));
-				}*/
+				return "Log [list=" + sb.toString() + "]";
 			}
 
-			public class MessageLine{
-				String message;
-				String source;			
-				/*public MessageLine(){						
-				}
-				public MessageLine(String message, String source){
-					this.message = message;
-					this.source = source;
-
-				}*/
+			public MessageLine[] getLines() {
+				return lines;
 			}
 		}
 
-		private class Log{
-			ClientModel.Chat.MessageList list;
+		public class MessageList{
+			private MessageLine[] lines;
+
+			@Override
+			public String toString() {
+				return "MessageList [lines=" + Arrays.toString(lines) + "]";
+			}
+
+			public MessageLine[] getLines() {
+				return lines;
+			}
 		}
 
-		private class Map{
-			Hex[] hexes;
-			Port[] ports;
-			EdgeValue[] roads;
-			VertexObject[] settlements;
-			VertexObject[] cities;
-			int radius;
-			HexLocation robber;
+		public class MessageLine{
+			private String message;
+			private String source;			
+			/*public MessageLine(){						
+			}
+			public MessageLine(String message, String source){
+				this.message = message;
+				this.source = source;
+
+			}*/
+
+			public String getMessage() {
+				return message;
+			}
+
+			public String getSource() {
+				return source;
+			}
+
+			@Override
+			public String toString() {
+				return "MessageLine [message=" + message + ", source="
+						+ source + "]";
+			}
+		}
+
+		public class Map{
+			private Hex[] hexes;
+			private Port[] ports;
+			private EdgeValue[] roads;
+			private VertexObject[] settlements;
+			private VertexObject[] cities;
+			private int radius;
+			private HexLocation robber;
+
+
 			/*
 			Map {
 			hexes (array[Hex]): A list of all the hexes on the grid - it's only land tiles,
@@ -311,9 +361,53 @@ public class GetVersion_Result {
 				String direction;
 			}*/
 
-			private class VertexObject{
-				int owner;
-				VertexLocation location;
+			@Override
+			public String toString() {
+				return "Map [hexes=" + Arrays.toString(hexes) + ", ports="
+						+ Arrays.toString(ports) + ", roads="
+						+ Arrays.toString(roads) + ", settlements="
+						+ Arrays.toString(settlements) + ", cities="
+						+ Arrays.toString(cities) + ", radius=" + radius
+						+ ", robber=" + robber + "]";
+			}
+			public Hex[] getHexes() {
+				return hexes;
+			}
+			public Port[] getPorts() {
+				return ports;
+			}
+			public EdgeValue[] getRoads() {
+				return roads;
+			}
+			public VertexObject[] getSettlements() {
+				return settlements;
+			}
+			public VertexObject[] getCities() {
+				return cities;
+			}
+			public int getRadius() {
+				return radius;
+			}
+			public HexLocation getRobber() {
+				return robber;
+			}
+			public class VertexObject{
+				private int owner;
+				private VertexLocation location;
+
+
+				@Override
+				public String toString() {
+					return "VertexObject [owner=" + owner + ", location="
+							+ location + "]";
+				}
+				public int getOwner() {
+					return owner;
+				}
+				public VertexLocation getLocation() {
+					return location;
+				}
+
 			}
 
 			/*private class Road{
@@ -322,38 +416,107 @@ public class GetVersion_Result {
 				int y;
 				String direction;
 			}*/
-			private class VertexLocation{
-				int x;
-				int y;
-				String direction;				
+			public class VertexLocation{
+				private int x;
+				private int y;
+				private String direction;
+
+
+				@Override
+				public String toString() {
+					return "VertexLocation [x=" + x + ", y=" + y
+							+ ", direction=" + direction + "]";
+				}
+
+				public int getX() {
+					return x;
+				}
+
+				public int getY() {
+					return y;
+				}
+
+				public String getDirection() {
+					return direction;
+				}
+
 			}
 
 			private class EdgeValue{
-				int owner;
-				EdgeLocation location;
+				private int owner;
+				private EdgeLocation location;
 				/*EdgeValue {
 				owner (index): The index (not id) of the player who owns this piece (0-3),
 					location (EdgeLocation): The location of this road.
 			}*/
+				public int getOwner() {
+					return owner;
+				}
+				public EdgeLocation getLocation() {
+					return location;
+				}
+				@Override
+				public String toString() {
+					return "EdgeValue [owner=" + owner + ", location="
+							+ location + "]";
+				}
+
+
 			}
 
 			private class EdgeLocation{
-				int x;
-				int y;
-				String direction;
+				private int x;
+				private int y;
+				private String direction;
+				public int getX() {
+					return x;
+				}
+				public int getY() {
+					return y;
+				}
+				public String getDirection() {
+					return direction;
+				}
+				@Override
+				public String toString() {
+					return "EdgeLocation [x=" + x + ", y=" + y + ", direction="
+							+ direction + "]";
+				}
+
 
 				/*EdgeLocation {
 						x (integer),
 						y (integer),
 						direction (string) = ['NW' or 'N' or 'NE' or 'SW' or 'S' or 'SE']
 					}*/
+
 			}
 
 			private class Port{
-				String resource;
-				HexLocation location;				
-				String direction;
-				int ratio;
+				private String resource;
+				private HexLocation location;				
+				private String direction;
+				private int ratio;
+
+
+				@Override
+				public String toString() {
+					return "Port [resource=" + resource + ", location="
+							+ location + ", direction=" + direction
+							+ ", ratio=" + ratio + "]";
+				}
+				public String getResource() {
+					return resource;
+				}
+				public HexLocation getLocation() {
+					return location;
+				}
+				public String getDirection() {
+					return direction;
+				}
+				public int getRatio() {
+					return ratio;
+				}
 
 				/*Port {
 				resource(string, optional) = ['Wood' or 'Brick' or 'Sheep' or 'Wheat' or 'Ore']: What type 
@@ -363,12 +526,13 @@ public class GetVersion_Result {
 				direction (string) = ['NW' or 'N' or 'NE' or 'E' or 'SE' or 'SW']: Which edge this port is on.,
 				ratio (integer): The ratio for trade in (ie, if this is 2, then it's a 2:1 port.
 			}*/
+
 			}
 
-			private class Hex{
-				HexLocation location;
-				String resource;
-				int number;
+			public class Hex{
+				private HexLocation location;
+				private String resource;
+				private int number;
 				/*
 				Hex {
 				location (HexLocation),
@@ -376,33 +540,138 @@ public class GetVersion_Result {
 					this tile gives - it's only here if the tile is not desert., 
 				number(integer, optional): What number is on this tile. It's omitted if this is a desert hex.
 				}*/
+				public HexLocation getLocation() {
+					return location;
+				}
+				public String getResource() {
+					return resource;
+				}
+				public int getNumber() {
+					return number;
+				}
+				@Override
+				public String toString() {
+					return "Hex [location=" + location + ", resource="
+							+ resource + ", number=" + number + "]";
+				}
+
+
 			}
-			private class HexLocation{
-				int x;
-				int y;
+			public class HexLocation{
+				private int x;
+				private int y;
 				/*HexLocation {
 				x (integer),
 				y (integer)
 				}*/
+				public int getX() {
+					return x;
+				}
+				public int getY() {
+					return y;
+				}
+				@Override
+				public String toString() {
+					return "HexLocation [x=" + x + ", y=" + y + "]";
+				}
+
+
+
 			}
 		}
 
-		private class Player{
-			int cities;
-			String color;
-			boolean discarded;
-			int monuments;
-			String name;
-			DevCardList newDevCards;
-			DevCardList oldDevCards;
-			int playerIndex;
-			boolean playedDevCard;
-			int playerID;
-			Bank.ResourceList resources;
-			int roads;
-			int settlements;
-			int soldiers;
-			int victoryPoints;
+
+
+		public class Player{
+			private int cities;
+			private String color;
+			private boolean discarded;
+			private int monuments;
+			private String name;
+			private DevCardList newDevCards;
+			private DevCardList oldDevCards;
+			private int playerIndex;
+			private boolean playedDevCard;
+			private int playerID;
+			private ResourceList resources;
+			private int roads;
+			private int settlements;
+			private int soldiers;
+			private int victoryPoints;
+
+			public int getCities() {
+				return cities;
+			}
+
+			public String getColor() {
+				return color;
+			}
+
+			public boolean isDiscarded() {
+				return discarded;
+			}
+
+			public int getMonuments() {
+				return monuments;
+			}
+
+			public String getName() {
+				return name;
+			}
+
+			public DevCardList getNewDevCards() {
+				return newDevCards;
+			}
+
+			public DevCardList getOldDevCards() {
+				return oldDevCards;
+			}
+
+			public int getPlayerIndex() {
+				return playerIndex;
+			}
+
+			public boolean isPlayedDevCard() {
+				return playedDevCard;
+			}
+
+			public int getPlayerID() {
+				return playerID;
+			}
+
+			public ResourceList getResources() {
+				return resources;
+			}
+
+			public int getRoads() {
+				return roads;
+			}
+
+			public int getSettlements() {
+				return settlements;
+			}
+
+			public int getSoldiers() {
+				return soldiers;
+			}
+
+			public int getVictoryPoints() {
+				return victoryPoints;
+			}
+
+			@Override
+			public String toString() {
+				return "Player [cities=" + cities + ", color=" + color
+						+ ", discarded=" + discarded + ", monuments="
+						+ monuments + ", name=" + name + ", newDevCards="
+						+ newDevCards + ", oldDevCards=" + oldDevCards
+						+ ", playerIndex=" + playerIndex + ", playedDevCard="
+						+ playedDevCard + ", playerID=" + playerID
+						+ ", resources=" + resources + ", roads=" + roads
+						+ ", settlements=" + settlements + ", soldiers="
+						+ soldiers + ", victoryPoints=" + victoryPoints + "]";
+			}
+
 
 			/*Player {
 		cities (number): How many cities this player has left to play,
@@ -423,30 +692,27 @@ public class GetVersion_Result {
 		soldiers (integer),
 		victoryPoints (integer)
 	}*/
-			private class DevCardList{
 
-				int monopoly;
-				int monument;
-				int roadBuilding;
-				int soldier;
-				int yearOfPlenty;				
-
-				/*
-				DevCardList {
-					monopoly (number),
-					monument (number),
-					roadBuilding (number),
-					soldier (number),
-					yearOfPlenty (number)
-				}
-				 */
-			}
 		}
 
-		private class TradeOffer{
-			int sender;
-			int receiver;
-			Bank.ResourceList offer;
+		public class TradeOffer{
+			private int sender;
+			private int receiver;
+			private ResourceList offer;
+			public int getSender() {
+				return sender;
+			}
+			public int getReceiver() {
+				return receiver;
+			}
+			public ResourceList getOffer() {
+				return offer;
+			}
+			@Override
+			public String toString() {
+				return "TradeOffer [sender=" + sender + ", receiver="
+						+ receiver + ", offer=" + offer + "]";
+			}
 
 			/*
 			TradeOffer {
@@ -458,11 +724,30 @@ public class GetVersion_Result {
 
 		}
 
-		private class TurnTracker{
-			int currentTurn;
-			String status;
-			int longestRoad;
-			int largestArmy;
+		public class TurnTracker{
+			private int currentTurn;
+			private String status;
+			private int longestRoad;
+			private int largestArmy;
+
+			public int getCurrentTurn() {
+				return currentTurn;
+			}
+			public String getStatus() {
+				return status;
+			}
+			public int getLongestRoad() {
+				return longestRoad;
+			}
+			public int getLargestArmy() {
+				return largestArmy;
+			}
+			@Override
+			public String toString() {
+				return "TurnTracker [currentTurn=" + currentTurn + ", status="
+						+ status + ", longestRoad=" + longestRoad
+						+ ", largestArmy=" + largestArmy + "]";
+			}
 
 			/*
 		TurnTracker {
@@ -475,8 +760,95 @@ public class GetVersion_Result {
 
 		}
 
+		public class DevCardList{
+
+			private int monopoly;
+			private int monument;
+			private int roadBuilding;
+			private int soldier;
+			private int yearOfPlenty;
+			public int getMonopoly() {
+				return monopoly;
+			}
+			public int getMonument() {
+				return monument;
+			}
+			public int getRoadBuilding() {
+				return roadBuilding;
+			}
+			public int getSoldier() {
+				return soldier;
+			}
+			public int getYearOfPlenty() {
+				return yearOfPlenty;
+			}
+			@Override
+			public String toString() {
+				return "DevCardList [monopoly=" + monopoly + ", monument="
+						+ monument + ", roadBuilding=" + roadBuilding
+						+ ", soldier=" + soldier + ", yearOfPlenty="
+						+ yearOfPlenty + "]";
+			}				
+
+			/*
+			DevCardList {
+				monopoly (number),
+				monument (number),
+				roadBuilding (number),
+				soldier (number),
+				yearOfPlenty (number)
+			}
+			 */
+
+		}
+
+		public class ResourceList{		
+
+			private int brick;
+			private int ore;
+			private int sheep;
+			private int wheat;
+			private int wood;
+			public int getBrick() {
+				return brick;
+			}
+			public int getOre() {
+				return ore;
+			}
+			public int getSheep() {
+				return sheep;
+			}
+			public int getWheat() {
+				return wheat;
+			}
+			public int getWood() {
+				return wood;
+			}
+			@Override
+			public String toString() {
+				return "ResourceList [brick=" + brick + ", ore=" + ore
+						+ ", sheep=" + sheep + ", wheat=" + wheat
+						+ ", wood=" + wood + "]";
+			}
+
+			/*	public ResourceList(){
+
+			}
+			public ResourceList(int brick, int ore, int sheep,
+					int wheat, int wood) {
+				super();
+				this.brick = brick;
+				this.ore = ore;
+				this.sheep = sheep;
+				this.wheat = wheat;
+				this.wood = wood;
+			}				
+		}*/
+
+		}	
+
 	}
 
 
-	
+
 }
