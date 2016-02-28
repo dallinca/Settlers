@@ -8,6 +8,21 @@ public class AddAI_Result {
 		if (doPost.equals("Success")){
 			valid = true;
 		}
+		else{
+			valid = false;
+		}
+	}
+
+	public AddAI_Result(){
+		valid = false;
+	}
+
+	public boolean isValid() {
+		return valid;
+	}
+
+	public void setValid(boolean valid) {
+		this.valid = valid;
 	}
 
 }

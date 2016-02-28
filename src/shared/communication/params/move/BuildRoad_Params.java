@@ -5,6 +5,7 @@ import shared.locations.EdgeLocation;
 
 public class BuildRoad_Params {
 
+	private final String type = "buildRoad";
 	private int playerIndex;
 	private BorderSpot roadLocation;
 	private boolean free;

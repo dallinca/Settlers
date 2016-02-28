@@ -4,6 +4,7 @@ import shared.communication.params.move.data.DiscardedCards;
 
 public class DiscardCards_Params {
 	
+	private final String type = "discardCards";
 	private int playerIndex;
 	private DiscardedCards discardedCards;
 	
