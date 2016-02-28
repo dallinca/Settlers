@@ -3,8 +3,10 @@ package shared.model.player;
 import java.util.*;
 
 import shared.definitions.DevCardType;
+import shared.definitions.ResourceType;
 import shared.model.Bank;
 import shared.model.items.DevelopmentCard;
+import shared.model.items.ResourceCard;
 import shared.model.player.exceptions.NullCardException;
 
 /**
@@ -26,15 +28,37 @@ public class DevelopmentCardHand {
 	private ArrayList<DevelopmentCard> roadBuilderCards;
 	private ArrayList<DevelopmentCard> monopolyCards;
 	private ArrayList<DevelopmentCard> yearOfPlentyCards;
-     
+
     /**
 	 * Initializes DevelopmentCards
 	 * 
 	 * @pre A Player object exists
 	 * @post new ArrayList DevelopmentCards = 0 
 	 */
-	public DevelopmentCardHand(){}
+	public DevelopmentCardHand(){
+		this.soldierCards = new ArrayList<DevelopmentCard>();
+		this.victoryPointCards = new ArrayList<DevelopmentCard>();
+		this.roadBuilderCards = new ArrayList<DevelopmentCard>();
+		this.monopolyCards = new ArrayList<DevelopmentCard>();
+		this.yearOfPlentyCards = new ArrayList<DevelopmentCard>();
+	}
     
+    /**
+	 * Initializes DevelopmentCards
+	 * 
+	 * @pre A Player object exists
+	 * @post new ArrayList DevelopmentCards = 0 
+	 */
+	public DevelopmentCardHand( ArrayList<DevelopmentCard> soldiers, ArrayList<DevelopmentCard> monopoly, ArrayList<DevelopmentCard> yearOfPlenty,
+			ArrayList<DevelopmentCard> roadBuilder, ArrayList<DevelopmentCard> monument)
+	{
+		this.soldierCards = soldiers;
+		this.victoryPointCards = monopoly;
+		this.roadBuilderCards = yearOfPlenty;
+		this.monopolyCards = roadBuilder;
+		this.yearOfPlentyCards = monument;
+
+	}
 
 	/**
 	 * Checks to see if there is at least one card of the said type that can be played this turn

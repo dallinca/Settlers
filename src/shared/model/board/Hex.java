@@ -34,6 +34,16 @@ public class Hex {
 		this.rollValue = rollValue;
 	}
 	
+
+	public Hex(int x_coord_hex, int y_coord_hex, HexType hexType, int rollValue, boolean hasRobber) {
+		this.board = board;
+		this.x_coord_hex = x_coord_hex;
+		this.y_coord_hex = y_coord_hex;
+		this.hexType = hexType;
+		this.rollValue = rollValue;
+		this.hasRobber = hasRobber;
+	}
+	
 	/**
 	 * Retrieve the 6 adjacent Vertices to the Hex
 	 * 
@@ -165,6 +175,18 @@ public class Hex {
 	public int getTheirY_coord_hex() {
 		return y_coord_hex - 3;
 	}
+
+
+	public Board getBoard() {
+		return board;
+	}
+
+
+	public void setBoard(Board board) {
+		this.board = board;
+	}
+	
+	
 	
 	
 	

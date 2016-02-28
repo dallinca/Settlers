@@ -21,13 +21,13 @@ import shared.model.player.exceptions.NullCardException;
  */
 public class ResourceCardHand {
 
-	  private Bank bank;
+	private Bank bank;
 	
-	  private ArrayList<ResourceCard> brickCards;
-	  private ArrayList<ResourceCard> wheatCards;
-	  private ArrayList<ResourceCard> oreCards;
-	  private ArrayList<ResourceCard> sheepCards;
-	  private ArrayList<ResourceCard> woodCards;
+	private ArrayList<ResourceCard> brickCards;
+	private ArrayList<ResourceCard> wheatCards;
+	private ArrayList<ResourceCard> oreCards;
+	private ArrayList<ResourceCard> sheepCards;
+	private ArrayList<ResourceCard> woodCards;
 	 
 	/**
 	 * Initializes ResourceCards
@@ -35,52 +35,83 @@ public class ResourceCardHand {
 	 * @pre A Player object exists
 	 * @post new ArrayList resourceCards = 0 - 3
 	 */
-	  ResourceCardHand(Bank bank){
-		  this.bank = bank;
-		  brickCards = new ArrayList<ResourceCard>();
-		  wheatCards = new ArrayList<ResourceCard>();
-		  oreCards = new ArrayList<ResourceCard>();
-		  sheepCards = new ArrayList<ResourceCard>();
-		  woodCards = new ArrayList<ResourceCard>();
-		  initializePreGameResources();
-	  }
-	 
-	  /**
-	   * @deprecated
-	   * 
-	   */
-	  private void initializePreGameResources() {
-		  try {
-			  /*addCard(bank.playerTakeResource(ResourceType.BRICK));
-			  addCard(bank.playerTakeResource(ResourceType.BRICK));
-			  addCard(bank.playerTakeResource(ResourceType.BRICK));
-			  addCard(bank.playerTakeResource(ResourceType.BRICK));
-			  addCard(bank.playerTakeResource(ResourceType.WOOD));
-			  addCard(bank.playerTakeResource(ResourceType.WOOD));
-			  addCard(bank.playerTakeResource(ResourceType.WOOD));
-			  addCard(bank.playerTakeResource(ResourceType.WOOD));
-			  addCard(bank.playerTakeResource(ResourceType.SHEEP));
-			  addCard(bank.playerTakeResource(ResourceType.SHEEP));
-			  addCard(bank.playerTakeResource(ResourceType.WHEAT));
-			  addCard(bank.playerTakeResource(ResourceType.WHEAT));*/
+	ResourceCardHand(Bank bank){
+		this.bank = bank;
+		brickCards = new ArrayList<ResourceCard>();
+		wheatCards = new ArrayList<ResourceCard>();
+		oreCards = new ArrayList<ResourceCard>();
+		sheepCards = new ArrayList<ResourceCard>();
+		woodCards = new ArrayList<ResourceCard>();
+		initializePreGameResources();
+	}
+		 
+	/**
+	 * Initializes ResourceCards from the Server Model
+	 * 
+	 * @pre A Player object exists
+	 * @post the ResourcesCardHand will create the specified numbers of
+	 * the resource Card Objects and keep them
+	 * @post new ArrayList resourceCards = 0 - 3
+	 */
+	ResourceCardHand(Bank bank, int brick, int wheat, int ore, int sheep, int wood){
+		this.bank = bank;
+			brickCards = new ArrayList<ResourceCard>();
+			wheatCards = new ArrayList<ResourceCard>();
+			oreCards = new ArrayList<ResourceCard>();
+			sheepCards = new ArrayList<ResourceCard>();
+			woodCards = new ArrayList<ResourceCard>();
+			for(int i = 0; i < brick; i++) {
+				brickCards.add(i, new ResourceCard(ResourceType.BRICK));
+			}
+			for(int i = 0; i < wheat; i++) {
+				wheatCards.add(i, new ResourceCard(ResourceType.WHEAT));
+			}
+			for(int i = 0; i < ore; i++) {
+				oreCards.add(i, new ResourceCard(ResourceType.ORE));
+			}
+			for(int i = 0; i < sheep; i++) {
+				sheepCards.add(i, new ResourceCard(ResourceType.SHEEP));
+			}
+			for(int i = 0; i < wood; i++) {
+				woodCards.add(i, new ResourceCard(ResourceType.WOOD));
+			}
+	}	 
+	/**
+	 * @deprecated
+	 * 
+	 */
+	private void initializePreGameResources() {
+		try {
+			/*addCard(bank.playerTakeResource(ResourceType.BRICK));
+			addCard(bank.playerTakeResource(ResourceType.BRICK));
+			addCard(bank.playerTakeResource(ResourceType.BRICK));
+			addCard(bank.playerTakeResource(ResourceType.BRICK));
+			addCard(bank.playerTakeResource(ResourceType.WOOD));
+			addCard(bank.playerTakeResource(ResourceType.WOOD));
+			addCard(bank.playerTakeResource(ResourceType.WOOD));
+			addCard(bank.playerTakeResource(ResourceType.WOOD));
+			addCard(bank.playerTakeResource(ResourceType.SHEEP));
+			addCard(bank.playerTakeResource(ResourceType.SHEEP));
+			addCard(bank.playerTakeResource(ResourceType.WHEAT));
+			addCard(bank.playerTakeResource(ResourceType.WHEAT));*/
 		} catch (Exception e) {
 			System.out.println("YOU HAVE NOT INITIALIZED THE BANK");
 			e.printStackTrace();
 		}
-	  }
+	}
 	  
-	  /**
-	   * Checks if there are any resource cards in the Players hand to steal
-	   * 
-	   * @pre None
-	   * @return whether there are any resource cards in the Players hand to steal
-	   */
-	  public boolean canDoGetRandomResourceCard() {
-		  if(getResourceCardHandSize() <= 0) {
-			  return false;
-		  }
-		  return true;
-	  }
+	/**
+	 * Checks if there are any resource cards in the Players hand to steal
+	 * 
+	 * @pre None
+	 * @return whether there are any resource cards in the Players hand to steal
+	 */
+	public boolean canDoGetRandomResourceCard() {
+		if(getResourceCardHandSize() <= 0) {
+			return false;
+		}
+		return true;
+	}
 	  
 	  /**
 	   * Retrieves a Random Resource card
