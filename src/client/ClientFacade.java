@@ -56,6 +56,7 @@ import shared.definitions.ResourceType;
 import shared.locations.EdgeLocation;
 import shared.locations.HexLocation;
 import shared.locations.VertexLocation;
+import shared.model.Game;
 
 /**
  * Sends all to-server requests to the client communicator for packaging
@@ -65,6 +66,19 @@ import shared.locations.VertexLocation;
  *
  */
 public class ClientFacade {
+	
+	private static ClientFacade SINGLETON = null;
+	
+	protected ClientFacade(){
+		this.sp = new ServerProxy();
+	}
+	
+	public static ClientFacade getInstanceOf(){
+		if (SINGLETON == null){
+			SINGLETON = new ClientFacade();
+		}
+		return SINGLETON;
+	}
 
 	private IServerProxy sp;
 
@@ -81,9 +95,9 @@ public class ClientFacade {
 		this.sp = proxy;
 	}
 
-	public ClientFacade(){		
+	/*public ClientFacade(){		
 		this.sp = new ServerProxy();				
-	}
+	}*/
 
 	/**
 	 * Validates the given user with the server database.
@@ -102,6 +116,7 @@ public class ClientFacade {
 		try {
 
 			result = sp.login(request);
+			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new Login_Result();
@@ -139,6 +154,7 @@ public class ClientFacade {
 		try {
 
 			result = sp.createGame(request);
+			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new Create_Result();
@@ -165,6 +181,7 @@ public class ClientFacade {
 		try {
 
 			result = sp.getVersion(request);
+			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new GetVersion_Result();
@@ -182,6 +199,7 @@ public class ClientFacade {
 		try {
 
 			result = sp.joinGame(request);
+			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new Join_Result();
@@ -199,6 +217,7 @@ public class ClientFacade {
 		try {
 
 			result = sp.listGames(request);
+			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new List_Result();
@@ -227,6 +246,7 @@ public class ClientFacade {
 		try {
 
 			result = sp.register(request);
+			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new Register_Result();
@@ -249,6 +269,7 @@ public class ClientFacade {
 		try {
 
 			result = sp.sendChat(request);
+			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new SendChat_Result();
@@ -266,6 +287,7 @@ public class ClientFacade {
 		try {
 
 			result = sp.acceptTrade(request);
+			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new AcceptTrade_Result();
@@ -286,6 +308,7 @@ public class ClientFacade {
 		try {
 
 			result = sp.rollNumber(request);
+			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new RollNumber_Result();
@@ -306,6 +329,7 @@ public class ClientFacade {
 		try {
 
 			result = sp.discardCards(request);
+			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new DiscardCards_Result();
@@ -328,6 +352,7 @@ public class ClientFacade {
 		try {
 
 			result = sp.buildCity(request);
+			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new BuildCity_Result();
@@ -349,6 +374,7 @@ public class ClientFacade {
 		try {
 
 			result = sp.buildRoad(request);
+			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new BuildRoad_Result();
@@ -370,6 +396,7 @@ public class ClientFacade {
 		try {
 
 			result = sp.buildSettlement(request);
+			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new BuildSettlement_Result();
@@ -388,6 +415,7 @@ public class ClientFacade {
 		try {
 
 			result = sp.buyDevCard(request);
+			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new BuyDevCard_Result();
@@ -406,6 +434,7 @@ public class ClientFacade {
 		try {
 
 			result = sp.finishTurn(request);
+			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new FinishTurn_Result();
@@ -426,6 +455,7 @@ public class ClientFacade {
 		try {
 
 			result = sp.maritimeTrade(request);
+			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new MaritimeTrade_Result();
@@ -445,6 +475,7 @@ public class ClientFacade {
 		try {
 
 			result = sp.offerTrade(request);
+			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new OfferTrade_Result();
@@ -465,6 +496,7 @@ public class ClientFacade {
 		try {
 
 			result = sp.robPlayer(request);
+			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new RobPlayer_Result();
@@ -486,6 +518,7 @@ public class ClientFacade {
 		try {
 
 			result = sp.playMonopoly(request);
+			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new PlayMonopoly_Result();
@@ -505,6 +538,7 @@ public class ClientFacade {
 		try {
 
 			result = sp.playMonument(request);
+			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new PlayMonument_Result();
@@ -526,6 +560,7 @@ public class ClientFacade {
 		try {
 
 			result = sp.playRoadBuilding(request);
+			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new PlayRoadBuilding_Result();
@@ -545,6 +580,7 @@ public class ClientFacade {
 		try {
 
 			result = sp.playSoldier(request);
+			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new PlaySoldier_Result();
@@ -564,13 +600,20 @@ public class ClientFacade {
 		try {
 
 			result = sp.playYearOfPlenty(request);
-
+			updateGame(result.getGame());
+			
 		} catch (ClientException e) {			
 			result = new PlayYearOfPlenty_Result();
 
 			e.printStackTrace();
 		}		
-
+		
 		return result;
+	}
+	
+	private void updateGame(Game game){
+		
+		Client.getInstance().setGame(game);
+		return;
 	}
 }
