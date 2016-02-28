@@ -1,5 +1,7 @@
 package shared.communication.results.move;
 
+import shared.model.Game;
+
 public class RobPlayer_Result {
 	private boolean valid;
 
@@ -22,5 +24,10 @@ public class RobPlayer_Result {
 
 	public void setValid(boolean valid) {
 		this.valid = valid;
+	}
+
+	public Game getGame() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
