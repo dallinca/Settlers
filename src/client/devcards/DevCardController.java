@@ -109,6 +109,10 @@ public class DevCardController extends Controller implements IDevCardController,
 	@Override
 	public void startPlayCard() {
 		System.out.println("DevCardController startPlayCard()");
+		
+		
+		
+		
 		getPlayCardView().showModal();
 	}
 

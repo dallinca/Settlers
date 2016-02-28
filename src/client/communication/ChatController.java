@@ -1,22 +1,16 @@
 package client.communication;
 
-import java.awt.event.ActionEvent;
-import java.rmi.ServerException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-
-import shared.communication.params.move.SendChat_Params;
-import shared.communication.results.move.SendChat_Result;
 import shared.definitions.CatanColor;
+import shared.model.Game;
 
 import client.Client;
+import client.ClientException;
 import client.ClientFacade;
 import client.base.*;
-//import javafx.scene.media.Media;
-//import javafx.scene.media.MediaPlayer;
-
 
 /**
  * Chat controller implementation
@@ -61,9 +55,9 @@ public class ChatController extends Controller implements IChatController, Obser
 		*/
 		
 		try {
-			SendChat_Result result = ClientFacade.getInstance().sendChat(message);
-		} catch (ServerException e) {
-			
+			ClientFacade.getInstanceOf().sendChat(message);
+		} catch (ClientException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -76,25 +70,25 @@ public class ChatController extends Controller implements IChatController, Obser
 		System.out.println("ChatController update()");
 		
 		List<LogEntry> entries = new ArrayList<LogEntry>();
+		
 		//We need  a list of messages, and who they came from. Who they came from is important so we can ascertain the color of the player.
-		 
-		 //These next two will actually have a definition they acquire from the client, not a brand new list, for obvious reasons
-		 
-		//We will have one method that returns the log that I can parse for the source and the message rather than the arrayLists given here
-		//We need a new public class Message within game that has a string source and a string message
-		List<String> listOfMessages = new ArrayList<String>();
-		 List<String> listOfSenders = new ArrayList<String>();
+		Game.Line[] chat = Client.getInstance().getGame().getChat();
 		 
 		 //Client.getInstance().getGame().getMessages();
 		 
-		 for (int i = 0; i < listOfMessages.size(); i++) {
+		 for (int i = 0; i < chat.length; i++) {
 		  
-			 String message = listOfMessages.get(i);
-			 String sender = listOfSenders.get(i);
-			  
+			 
+			 String message = chat[i].getMessage();
+			 String source = chat[i].getSource();
+			 CatanColor color = null;
+			 
 			 //Now we have to acertain the color of the player based on the sender:
-			 //CatanColor color = "Call a method in the client that takes in the sender and returns the color they are"; 
-			  
+			 for (int g = 0; g < Client.getInstance().getGame().getAllPlayers().length; g++) {
+				 if (Client.getInstance().getGame().getAllPlayers()[g].getPlayerName() == source) {
+					 color = Client.getInstance().getGame().getAllPlayers()[g].getPlayerColor();
+				 }
+			 }
 			 //Compile the two together and send them off to the client!
 			  
 			 //edit: I had the message and color reversed in the constructor. Whoops.

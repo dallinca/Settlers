@@ -40,6 +40,8 @@ public class Game {
 	private int versionNumber = 1;
 	private int indexOfLargestArmy = -1;
 	private String status = "";
+	private Line[] chat;
+	private Line[] history;
 	//private Dice dice = new Dice();
 	
 	// CONSTRUCTORS
@@ -63,6 +65,10 @@ public class Game {
 		}
 		// init board to normal setup
 		board = new Board(true, true, true);
+		
+		history = new Line[];
+		chat = new Line[];
+		
 	}
 
 	/**
@@ -1047,13 +1053,57 @@ public class Game {
 	public int getVersionNumber() {
 		return versionNumber;
 	}
-	
+
 	public boolean isInSetUpPhase() {
 		if(turnNumber > 1) {
 			return false;
 		}
 		return true;
 	}
+	
+	
+	public void setChat(Line[] lines) {
+		chat = lines;
+	}
+	public Line[] getChat() {
+		return chat;
+	}
+	
+	public void setHistory(Line[] lines) {
+		history = lines;
+	}
+	public Line[] getHistory() {
+		return history;
+	}
+	
+	/**
+	 * Hear ye, hear ye! We have a class line that is designated for the functionality of the ChatController and the GameHistoryController
+	 * its purpose is to keep track of all the message type objects we get from the server so it can be accessed and printed by the two controllers mentioned above.
+	 *
+	 */
+	public class Line {
+		private String message;
+		private String source;
+		
+		public Line() {
+			message = "";
+			source = "";
+		}
+		
+		public void setMessage(String chatterbox) {
+			message = chatterbox;
+		}
+		public String getMessage() {
+			return message;
+		}
+		public void setSource(String name) {
+			message = name;
+		}
+		public String getSource() {
+			return source;
+		}
+	}
+	
 	
 	
 }
