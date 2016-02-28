@@ -1,11 +1,16 @@
 package shared.communication.results.move;
 
+import shared.model.Game;
+
 public class OfferTrade_Result {
 	
 	private boolean valid;
 	
 	public OfferTrade_Result(String doPost) {
-		if (doPost.equals("Success")){
+		if (doPost==null){
+			valid = false;
+		}
+		else if (doPost.equals("Success")){
 			valid = true;
 		}
 		else{
@@ -23,5 +28,10 @@ public class OfferTrade_Result {
 
 	public void setValid(boolean valid) {
 		this.valid = valid;
+	}
+
+	public Game getGame() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

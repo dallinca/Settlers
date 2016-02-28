@@ -7,7 +7,7 @@ public class Join_Result {
 	
 	
 	public Join_Result(String doPost){
-		System.out.println("Join game result string: "+doPost);
+		//System.out.println("Join game result string: "+doPost);
 		if (doPost == null){
 			setResponse(doPost);
 			valid = false;

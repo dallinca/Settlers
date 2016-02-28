@@ -13,6 +13,13 @@ public class DevelopmentCard {
 		this.turnBought = 0;
 	}
 
+	public DevelopmentCard(DevCardType devCardType, int turnBought, boolean hasBeenPlayed) {
+		this.devCardType = devCardType;
+		this.turnBought = 0;
+		this.turnBought = turnBought;
+		this.hasBeenPlayed = hasBeenPlayed;
+	}
+
 	public DevCardType getDevCardType() {
 		return devCardType;
 	}

@@ -6,6 +6,10 @@ import shared.definitions.*;
 import shared.locations.*;
 import shared.model.*;
 import shared.model.board.Hex;
+import shared.model.items.City;
+import shared.model.items.Road;
+import shared.model.items.Settlement;
+import shared.model.player.Player;
 import shared.model.turn.ActionManager;
 import shared.model.turn.ActionType;
 import client.Client;
@@ -115,10 +119,25 @@ public class MapController extends Controller implements IMapController, Observe
 			getView().addPort(new EdgeLocation(new HexLocation(-3, 0), EdgeDirection.SouthEast), allPorts[6]);
 			getView().addPort(new EdgeLocation(new HexLocation(-3, 2), EdgeDirection.NorthEast), allPorts[7]);
 			getView().addPort(new EdgeLocation(new HexLocation(-2, 3), EdgeDirection.NorthEast), allPorts[8]);
-			
 		}
 		
-		
+		// Init all the roads, settlements, and cities!
+		for(Player player: Client.getInstance().getGame().getAllPlayers()) {
+			for(Road road: player.getPlayerPieces().getRoads()) {
+				HexLocation hx = new HexLocation(road.getEdge().getTheirX_coord(), road.getEdge().getTheirY_coord());
+				EdgeLocation el = new EdgeLocation(hx, road.getEdge().getTheirEdgeDirection());
+				getView().placeRoad(el, road.getPlayer().getPlayerColor());
+			}
+			for(Settlement settlement: player.getPlayerPieces().getSettlements()) {
+				//HexLocation hx = new HexLocation(settlement.getVertex());
+				//VertexLocation vl = new VertexLocation();
+				//getView().placeSettlement(vertLoc, color);
+				
+			}
+			for(City city: player.getPlayerPieces().getCities()) {
+				
+			}
+		}
 		
 		
 	}

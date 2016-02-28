@@ -21,26 +21,66 @@ public class Bank {
 	private ArrayList<ResourceCard> brickDeck = null;
 	private ArrayList<DevelopmentCard> developmentDeck = null;
 	private static int resourceNumber = 19;
-	
+
 	/**
 	 * Constructs a new Bank object and initializes the decks of cards
 	 */
 	public Bank() {
-		wheatDeck = new ArrayList();
-		brickDeck = new ArrayList();
-		lumberDeck = new ArrayList();
-		sheepDeck = new ArrayList();
-		oreDeck = new ArrayList();
-		developmentDeck = new ArrayList();
+		wheatDeck = new ArrayList<ResourceCard>();
+		brickDeck = new ArrayList<ResourceCard>();
+		lumberDeck = new ArrayList<ResourceCard>();
+		sheepDeck = new ArrayList<ResourceCard>();
+		oreDeck = new ArrayList<ResourceCard>();
+		developmentDeck = new ArrayList<DevelopmentCard>();
 		initDevCards();
 		initResourceCards();		
+	}
+
+	/**
+	 * Constructs a new Bank object and initializes the decks of cards.<br>
+	 * Intended for initialization from the server Model
+	 */
+	public Bank(int wheat, int brick, int wood, int sheep, int ore, int soldiers, int monopoly, int yearOfPlenty, int roadBuilder, int monument) {
+		wheatDeck = new ArrayList<ResourceCard>();
+		brickDeck = new ArrayList<ResourceCard>();
+		lumberDeck = new ArrayList<ResourceCard>();
+		sheepDeck = new ArrayList<ResourceCard>();
+		oreDeck = new ArrayList<ResourceCard>();
+		developmentDeck = new ArrayList<DevelopmentCard>();
+		initFromServerDevCards(soldiers, monopoly, yearOfPlenty, roadBuilder, monument);
+		initFromServerResourcesCards(wheat, brick, wood, sheep, ore);		
+	}
+	
+	/**
+	 * TODO javadoc - implement
+	 * 
+	 * @pre these must be valid amounts according to the game rules
+	 * @post the bank will 
+	 * 
+	 */
+	public void initFromServerResourcesCards(int wheat, int brick, int wood, int sheep, int ore) {
+		for(int i = 0; i < wheat; i++) {
+			wheatDeck.add(i, new ResourceCard(ResourceType.WHEAT));
+		}
+		for(int i = 0; i < brick; i++) {
+			brickDeck.add(i, new ResourceCard(ResourceType.BRICK));
+		}
+		for(int i = 0; i < wood; i++) {
+			lumberDeck.add(i, new ResourceCard(ResourceType.WOOD));
+		}
+		for(int i = 0; i < sheep; i++) {
+			sheepDeck.add(i, new ResourceCard(ResourceType.SHEEP));
+		}
+		for(int i = 0; i < ore; i++) {
+			oreDeck.add(i, new ResourceCard(ResourceType.ORE));
+		}
 	}
 	
 	/**
 	 * Inserts the ResourceCard objects into their various decks
 	 */
 	private void initResourceCards() {
-		for (int i=0; i < resourceNumber; i++) {
+		for (int i = 0; i < resourceNumber; i++) {
 			// init wheat 
 			wheatDeck.add(i, new ResourceCard(ResourceType.WHEAT));
 			// init brick 
@@ -52,6 +92,30 @@ public class Bank {
 			// init ore 
 			oreDeck.add(i, new ResourceCard(ResourceType.ORE));
 		}
+	}
+
+	/**
+	 * Inserts the various development cards into the deck and shuffles them.
+	 */
+	private void initFromServerDevCards(int soldiers, int monopoly, int yearOfPlenty, int roadBuilder, int monument) {
+		
+		int totalDevCards = soldiers + monopoly + yearOfPlenty + roadBuilder + monument;
+		
+		for (int i = 0; i < totalDevCards; i++) {
+			if (i < soldiers) {
+				developmentDeck.add(i, new DevelopmentCard(DevCardType.SOLDIER));
+			} else if (i >= soldiers &&  i < soldiers + monopoly) {
+				developmentDeck.add(i, new DevelopmentCard(DevCardType.MONOPOLY));
+			} else if (i >= soldiers + monopoly &&  i < soldiers + monopoly + yearOfPlenty) {
+				developmentDeck.add(i, new DevelopmentCard(DevCardType.YEAR_OF_PLENTY));
+			} else if (i >= soldiers + monopoly + yearOfPlenty &&  i < soldiers + monopoly + yearOfPlenty + roadBuilder) {
+				developmentDeck.add(i, new DevelopmentCard(DevCardType.ROAD_BUILD));
+			} else if (i >= soldiers + monopoly + yearOfPlenty + roadBuilder) {
+				developmentDeck.add(i, new DevelopmentCard(DevCardType.MONUMENT));
+			}
+		}
+		
+		shuffleDevCards();
 	}
 	
 	/**

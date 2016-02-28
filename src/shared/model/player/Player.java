@@ -39,6 +39,8 @@ public class Player {
 	private boolean hasLargestArmy = false;
 	private boolean hasLongestRoad = false;
 	private boolean isPlayersTurn = false;
+	private boolean hasPlayedDevCardThisTurn = false;
+	private boolean hasDiscarded = false;
 	
 	/**
 	 * Initializes Player
@@ -52,12 +54,30 @@ public class Player {
 	 * @post new DevelopmentCards()
 	 * @post new Municipal()
 	 */
-	
+
 	public Player(int playerIndex, Bank bank){
 		this.playerIndex = playerIndex;
 		resourceCardHand = new ResourceCardHand(bank);
 		playerPieces = new PlayerPieces(this);
 		developmentCardHand = new DevelopmentCardHand();
+	}
+	
+/**
+ * TODO -
+ * 
+ * Fore initialization from the Server Model
+ * 
+ * @param playerIndex
+ * @param bank
+ */
+	public Player(int playerIndex, Bank bank, int brick, int wheat, int ore, int sheep, int wood,
+			ArrayList<DevelopmentCard> soldiers, ArrayList<DevelopmentCard> monopoly, ArrayList<DevelopmentCard> yearOfPlenty,
+			ArrayList<DevelopmentCard> roadBuilder, ArrayList<DevelopmentCard> monument)
+	{
+		this.playerIndex = playerIndex;
+		resourceCardHand = new ResourceCardHand(bank, brick, wheat, ore, sheep, wood);
+		playerPieces = new PlayerPieces(this);
+		developmentCardHand = new DevelopmentCardHand(soldiers, monopoly, yearOfPlenty, roadBuilder, monument);
 	}
 
 	/**
@@ -627,6 +647,30 @@ public class Player {
 
 		public void setPlayersTurn(boolean isPlayersTurn) {
 			this.isPlayersTurn = isPlayersTurn;
+		}
+
+		public boolean isHasPlayedDevCardThisTurn() {
+			return hasPlayedDevCardThisTurn;
+		}
+
+		public void setHasPlayedDevCardThisTurn(boolean hasPlayedDevCardThisTurn) {
+			this.hasPlayedDevCardThisTurn = hasPlayedDevCardThisTurn;
+		}
+
+		public boolean isHasDiscarded() {
+			return hasDiscarded;
+		}
+
+		public void setHasDiscarded(boolean hasDiscarded) {
+			this.hasDiscarded = hasDiscarded;
+		}
+
+		public int getTotalVictoryPoints() {
+			return totalVictoryPoints;
+		}
+
+		public void setTotalVictoryPoints(int totalVictoryPoints) {
+			this.totalVictoryPoints = totalVictoryPoints;
 		}
 	
 		
