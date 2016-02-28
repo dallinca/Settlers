@@ -12,6 +12,11 @@ import org.junit.Test;
 import shared.communication.params.move.*;
 import shared.communication.params.nonmove.*;
 import shared.communication.params.move.devcard.*;
+import shared.communication.results.move.AcceptTrade_Result;
+import shared.communication.results.move.FinishTurn_Result;
+import shared.communication.results.move.OfferTrade_Result;
+import shared.communication.results.move.RollNumber_Result;
+import shared.communication.results.move.SendChat_Result;
 import shared.communication.results.nonmove.Create_Result;
 import shared.communication.results.nonmove.GetVersion_Result;
 import shared.communication.results.nonmove.Join_Result;
@@ -43,7 +48,7 @@ public class ServerProxyTest {
 
 	}
 
-	//@Test
+	@Test
 	public void testLogin() throws ClientException {		
 		Login_Result result = prox.login(new Login_Params("Sam", "sam"));
 
@@ -64,7 +69,7 @@ public class ServerProxyTest {
 		assertFalse(result.isValid());
 	}
 
-	//@Test
+	@Test
 	public void testRegister() throws ClientException {
 
 		Register_Result regResult = prox.register(new Register_Params("Tiger", "Shark"));
@@ -84,7 +89,7 @@ public class ServerProxyTest {
 		assertEquals(13, result.getId());
 	}
 
-	//@Test
+	@Test
 	public void testCreate() throws ClientException {
 
 		@SuppressWarnings("unused")//It is used.
@@ -115,7 +120,7 @@ public class ServerProxyTest {
 	}
 	
 
-	//@Test
+	@Test
 	public void testJoin() throws ClientException {
 		
 		Register_Result rResult = prox.register(new Register_Params("Tiger0", "Shark0"));
@@ -182,7 +187,10 @@ public class ServerProxyTest {
 		
 		
 		
+		//System.out.println(model.toString());
 		
+		//GetVersion_Result.ClientModel.Bank bank = model.getBank();
+				
 		
 		ServerProxy prox2 = new ServerProxy();		
 		ServerProxy prox3 = new ServerProxy();
@@ -211,13 +219,48 @@ public class ServerProxyTest {
 		
 		vResult = prox4.getVersion(new GetVersion_Params());
 		assertTrue(vResult.isValid());
-		assertFalse(vResult.isUpToDate());
+		assertFalse(vResult.isUpToDate());		
+	}
+	
+	@Test
+	public void basicCommands() throws ClientException {
+		
+		ServerProxy prox2 = new ServerProxy();		
+		ServerProxy prox3 = new ServerProxy();
+		ServerProxy prox4 = new ServerProxy();		
+		
+		Login_Result lResult = prox.login(new Login_Params("Sam", "sam"));		
+		assertTrue(lResult.isValid());				
+		Join_Result jResult = prox.joinGame(new Join_Params(0, CatanColor.ORANGE));
+		assertTrue(jResult.isValid());		
+		
+		prox2.login(new Login_Params("Brooke", "brooke"));
+		prox2.joinGame(new Join_Params(0, CatanColor.BLUE));		
+		prox3.login(new Login_Params("Pete", "pete"));
+		prox3.joinGame(new Join_Params(0, CatanColor.RED));		
+		prox4.login(new Login_Params("Mark", "mark"));
+		prox4.joinGame(new Join_Params(0, CatanColor.GREEN));
+		
+		RollNumber_Result rnResult = prox.rollNumber(new RollNumber_Params(0, 10));
+		SendChat_Result scResult = prox.sendChat(new SendChat_Params(0, "Yo bro how's it going???"));
+		
+		FinishTurn_Result ftResult = prox.finishTurn(new FinishTurn_Params(0));
+		
+		OfferTrade_Result otResult = prox.offerTrade(new OfferTrade_Params(0, 1, 0, 0, -1, 0, 0));
+		AcceptTrade_Result atResult = prox2.acceptTrade(new AcceptTrade_Params(false));
+				
+		assertTrue(scResult.isValid());
+		assertTrue(rnResult.isValid());
+		assertTrue(ftResult.isValid());
+		assertTrue(otResult.isValid());
+		assertTrue(atResult.isValid());
 		
 		
-			
+		
+	
 	}
 
-	//@Test
+	@Test
 	public void testCommands() throws ClientException {
 		//Ensure ant server is running before this test goes.
 
@@ -229,21 +272,8 @@ public class ServerProxyTest {
 		ServerProxy prox4 = new ServerProxy();
 
 		try{
-			/*//Sam, Brooke, Pete, Mark
-			System.out.println("Testing commands.");
+			/*
 
-			prox1.login(new Login_Params("Sam", "sam"));
-			prox2.login(new Login_Params("Brooke", "brooke"));
-			prox3.login(new Login_Params("Pete", "pete"));
-			prox4.login(new Login_Params("Mark", "mark"));
-
-
-
-
-			prox.joinGame(new Join_Params());
-
-			prox.sendChat(new SendChat_Params(0, "Yo bro how's it going???"));
-			prox.rollNumber(new RollNumber_Params(8));
 			prox.robPlayer(new RobPlayer_Params());
 			prox.playYearOfPlenty(new PlayYearOfPlenty_Params());
 			prox.playSoldier(new PlaySoldier_Params());
@@ -256,7 +286,6 @@ public class ServerProxyTest {
 			prox.listGames(new List_Params());
 			//prox.listAI(new ListAI_Params());
 
-			prox.getVersion(new GetVersion_Params());
 			prox.finishTurn(new FinishTurn_Params());
 			prox.discardCards(new DiscardCards_Params());
 			prox.createGame(new Create_Params());
@@ -264,7 +293,6 @@ public class ServerProxyTest {
 			prox.buildSettlement(new BuildSettlement_Params());
 			prox.buildRoad(new BuildRoad_Params());
 			prox.buildCity(new BuildCity_Params());
-			//prox.addAI(new AddAI_Params());
 			prox.acceptTrade(new AcceptTrade_Params());*/
 		}
 

@@ -1,11 +1,17 @@
 package client.devcards;
 
+import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
 import shared.model.turn.ActionManager;
 import shared.model.turn.ActionType;
 
+import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 import client.base.*;
 
@@ -32,6 +38,8 @@ public class DevCardController extends Controller implements IDevCardController,
 
 		super(view);
 		System.out.println("DevCardController DevCardController()");
+	
+			//This is probably the place to first start out everything at 0, and then initialize them as we pull them from the model.
 		
 		this.buyCardView = buyCardView;
 		this.soldierAction = soldierAction;
@@ -76,7 +84,20 @@ public class DevCardController extends Controller implements IDevCardController,
 			 if (result) {
 				 try {	
 					 ActionManager.getInstance().doPurchase(ActionType.PURCHASE_DEVELOPMENT);
-				 } catch {
+					 
+					 try {
+						 	//This means you bought a card and it worked ;)
+					        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Purchased.wav").getAbsoluteFile());
+					        Clip clip = AudioSystem.getClip();
+					        clip.open(audioInputStream);
+					        clip.start();
+					    } catch(Exception ex) {
+					        System.out.println("Error with playing sound.");
+					        ex.printStackTrace();
+					    }
+				 } catch(Exception ex) {
+				        System.out.println("Error with Buying a Card.");
+				        ex.printStackTrace();
 						//throw new ClientException e;
 				 }
 				 getBuyCardView().closeModal();
@@ -88,6 +109,9 @@ public class DevCardController extends Controller implements IDevCardController,
 	@Override
 	public void startPlayCard() {
 		System.out.println("DevCardController startPlayCard()");
+		
+		
+		
 		getPlayCardView().showModal();
 	}
 
@@ -100,18 +124,22 @@ public class DevCardController extends Controller implements IDevCardController,
 	@Override
 	public void playMonopolyCard(ResourceType resource) {
 		System.out.println("DevCardController playMonopolyCard()");
+		ResourceType toPassIn[] = new ResourceType[1];
+		toPassIn[0] = resource;
 		
-		boolean result = ActionManager.getInstance().canDoPlay(ActionType.PLAYCARD_MONOPOLY);
+		boolean result = ActionManager.getInstance().canDoPlay(ActionType.PLAYCARD_MONOPOLY, toPassIn);
 		if (result) {
 			try {
-				ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_MONOPOLY);
+				ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_MONOPOLY, toPassIn);
 			} catch {
 				
 			}
 		}
 		
-		
+	
 	}
+	
+	
 
 	@Override
 	public void playMonumentCard() {
@@ -148,12 +176,8 @@ public class DevCardController extends Controller implements IDevCardController,
 		
 		boolean result = ActionManager.getInstance().canDoPlay(ActionType.PLAYCARD_KNIGHT);
 		if (result) {
-			try {
-				ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_KNIGHT);
-				soldierAction.execute();
-			} catch {
-				
-			}
+			ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_KNIGHT);
+			soldierAction.execute();			
 		}
 		
 		
@@ -164,13 +188,20 @@ public class DevCardController extends Controller implements IDevCardController,
 	public void playYearOfPlentyCard(ResourceType resource1, ResourceType resource2) {
 		System.out.println("DevCardController playYearOfPlentyCard()");
 		
-		boolean result = ActionManager.getInstance().canDoPlay(ActionType.PLAYCARD_YEAROFPLENTY);
+		ResourceType toPassIn[] = null;
+		
+		if (resource1 == resource2) {
+			toPassIn = new ResourceType[1];
+			toPassIn[0] = resource1;			
+		} else {
+			toPassIn = new ResourceType[2];
+			toPassIn[0] = resource1;
+			toPassIn[1] = resource2;
+		}
+		
+		boolean result = ActionManager.getInstance().canDoPlay(ActionType.PLAYCARD_YEAROFPLENTY, toPassIn);
 		if (result) {
-			try {
-				ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_YEAROFPLENTY);
-			} catch {
-				
-			}
+			ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_YEAROFPLENTY, toPassIn);
 		}
 		
 		
@@ -181,7 +212,14 @@ public class DevCardController extends Controller implements IDevCardController,
 		System.out.println("DevCardController update()");
 		// TODO Auto-generated method stub
 		
+		//This method needs to figure out how many cards the current player has, how many are playable, and what types they are. We need to get those three things from the server.
+		//So it would appear that it would follow that we should create three lists that have this information in them, or check and see if the Facade has the functionality to send them to us at this point
 		
+		
+		//And as we check to see if any are playable, if we find at least one that is, we pass the view that information and the type it is. So we have to iterate through all of these cards.
+		//If we find none, then our boolean in the method call will be false: setCardEnabled(DevCardType cardType, boolean enabled)
+		//And if we find any at all, regardless of playable or not, we will call this method setCardAmount(DevCardType cardType, int amount)
+		//
 		
 		
 		

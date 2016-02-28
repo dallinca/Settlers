@@ -2,6 +2,7 @@ package shared.communication.params.move;
 
 public class AcceptTrade_Params {
 	
+	private final String type = "acceptTrade";
 	private boolean willAccept;
 
 	public AcceptTrade_Params(boolean willAccept) {

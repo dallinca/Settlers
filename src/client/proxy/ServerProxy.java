@@ -131,17 +131,10 @@ public class ServerProxy implements IServerProxy {
 	public int getPlayerID(){
 		return playerID;
 	}
-
-	@Override
-	/**
-	 * Doesn't work, extra credit.
-	 */
-	public AddAI_Result addAI(AddAI_Params request) throws ClientException {
-		//System.out.println("Add AI.");
-		URL_SUFFIX = "/game/addAI";
-
-		return new AddAI_Result((String) doPost(URL_SUFFIX, request));
-	}
+	
+	public int getGameID(){
+		return gameID;
+	}	
 
 	@Override
 	/**
@@ -289,12 +282,7 @@ public class ServerProxy implements IServerProxy {
 		return new List_Result(jobj);
 	}
 
-	@Override
-	public ListAI_Result listAI(ListAI_Params request) throws ClientException {
-		System.out.println("List AI.");
-		URL_SUFFIX = "/game/listAI";
-		return (ListAI_Result) doPost(URL_SUFFIX, request);
-	}
+
 
 	/**
 	 * Logs the caller in to the server, and sets their catan.user HTTP cookie.
@@ -395,7 +383,7 @@ public class ServerProxy implements IServerProxy {
 	 * @throws ClientException
 	 * 
 	 * @pre It is your turn. The client model's status is 'Playing'
-	 * The c ity location is where you currently have a settlement
+	 * The city location is where you currently have a settlement
 	 * You have the required resources (2 wheat, 3 ore; 1 city)
 	 * 
 	 * @post You lost the resources required to build a city (2 wheat, 3 ore; 1 city)
@@ -408,7 +396,7 @@ public class ServerProxy implements IServerProxy {
 			throws ClientException {
 		//System.out.println("Build city.");
 		URL_SUFFIX = "/moves/buildCity";
-		return new BuildCity_Result ((String) doPost(URL_SUFFIX, request);
+		return new BuildCity_Result ((String) doPost(URL_SUFFIX, request));
 	}
 
 	/**
@@ -436,7 +424,7 @@ public class ServerProxy implements IServerProxy {
 			throws ClientException {
 		//System.out.println("Build road.");
 		URL_SUFFIX = "/moves/buildRoad";
-		return (BuildRoad_Result) doPost(URL_SUFFIX, request);
+		return new BuildRoad_Result ((String) doPost(URL_SUFFIX, request));
 	}
 
 	/**
@@ -464,7 +452,7 @@ public class ServerProxy implements IServerProxy {
 			throws ClientException {
 		//System.out.println("Build settlement.");
 		URL_SUFFIX = "/moves/buildSettlement";
-		return (BuildSettlement_Result) doPost(URL_SUFFIX, request);
+		return new BuildSettlement_Result ((String) doPost(URL_SUFFIX, request));
 	}
 
 	/**
@@ -488,7 +476,7 @@ public class ServerProxy implements IServerProxy {
 			throws ClientException {
 		//System.out.println("Buy dev card.");
 		URL_SUFFIX = "/moves/buyDevCard";
-		return (BuyDevCard_Result) doPost(URL_SUFFIX, request);
+		return new BuyDevCard_Result ((String) doPost(URL_SUFFIX, request));
 	}
 
 	/**
@@ -510,7 +498,7 @@ public class ServerProxy implements IServerProxy {
 			throws ClientException {
 		//System.out.println("Discard cards.");
 		URL_SUFFIX = "/moves/discardCards";
-		return (DiscardCards_Result) doPost(URL_SUFFIX, request);
+		return new DiscardCards_Result ((String) doPost(URL_SUFFIX, request));
 	}
 
 	/**
@@ -532,7 +520,7 @@ public class ServerProxy implements IServerProxy {
 			throws ClientException {
 		//System.out.println("Finish turn.");
 		URL_SUFFIX = "/moves/finishTurn";
-		return (FinishTurn_Result) doPost(URL_SUFFIX, request);
+		return new FinishTurn_Result ((String) doPost(URL_SUFFIX, request));
 	}
 
 	/**
@@ -557,7 +545,7 @@ public class ServerProxy implements IServerProxy {
 			throws ClientException {
 		//System.out.println("Maritime trade.");
 		URL_SUFFIX = "/moves/maritimeTrade";
-		return (MaritimeTrade_Result) doPost(URL_SUFFIX, request);
+		return new MaritimeTrade_Result ((String) doPost(URL_SUFFIX, request));
 	}
 
 	/**
@@ -580,7 +568,7 @@ public class ServerProxy implements IServerProxy {
 			throws ClientException {
 		//System.out.println("Offer trade.");
 		URL_SUFFIX = "/moves/offerTrade";
-		return (OfferTrade_Result) doPost(URL_SUFFIX, request);
+		return new OfferTrade_Result((String) doPost(URL_SUFFIX, request));
 	}
 
 	/**
@@ -605,7 +593,7 @@ public class ServerProxy implements IServerProxy {
 			throws ClientException {
 		//System.out.println("Rob player.");
 		URL_SUFFIX = "/moves/robPlayer";
-		return (RobPlayer_Result) doPost(URL_SUFFIX, request);
+		return new RobPlayer_Result ((String) doPost(URL_SUFFIX, request));
 	}
 	
 	/**
@@ -627,7 +615,7 @@ public class ServerProxy implements IServerProxy {
 			throws ClientException {
 		//System.out.println("Roll number.");
 		URL_SUFFIX = "/moves/rollNumber";
-		return (RollNumber_Result) doPost(URL_SUFFIX, request);
+		return new RollNumber_Result ((String) doPost(URL_SUFFIX, request));
 	}
 
 	/**
@@ -645,7 +633,7 @@ public class ServerProxy implements IServerProxy {
 			throws ClientException {
 		//System.out.println("Sending chat.");
 		URL_SUFFIX = "/moves/sendChat";
-		return (SendChat_Result) doPost(URL_SUFFIX, request);
+		return new SendChat_Result ((String) doPost(URL_SUFFIX, request));
 	}
 
 	/**
@@ -666,7 +654,7 @@ public class ServerProxy implements IServerProxy {
 	public PlayMonopoly_Result playMonopoly(PlayMonopoly_Params request)
 			throws ClientException {
 		URL_SUFFIX = "/moves/playMonopoly";
-		return (PlayMonopoly_Result) doPost(URL_SUFFIX, request);
+		return new PlayMonopoly_Result ((String) doPost(URL_SUFFIX, request));
 	}
 
 	/**
@@ -689,7 +677,7 @@ public class ServerProxy implements IServerProxy {
 	public PlayMonument_Result playMonument(PlayMonument_Params request)
 			throws ClientException {
 		URL_SUFFIX = "/moves/playMonument";
-		return (PlayMonument_Result) doPost(URL_SUFFIX, request);
+		return new PlayMonument_Result ((String) doPost(URL_SUFFIX, request));
 	}
 
 	/**
@@ -716,7 +704,7 @@ public class ServerProxy implements IServerProxy {
 	public PlayRoadBuilding_Result playRoadBuilding(
 			PlayRoadBuilding_Params request) throws ClientException {
 		URL_SUFFIX = "/moves/playRoadBuilding";
-		return (PlayRoadBuilding_Result) doPost(URL_SUFFIX, request);
+		return new PlayRoadBuilding_Result ((String) doPost(URL_SUFFIX, request));
 	}
 	
 	/**
@@ -743,7 +731,7 @@ public class ServerProxy implements IServerProxy {
 	public PlaySoldier_Result playSoldier(PlaySoldier_Params request)
 			throws ClientException {
 		URL_SUFFIX = "/moves/playSoldier";
-		return (PlaySoldier_Result) doPost(URL_SUFFIX, request);
+		return new PlaySoldier_Result ((String)doPost(URL_SUFFIX, request));
 	}
 
 	/**
@@ -764,7 +752,32 @@ public class ServerProxy implements IServerProxy {
 	public PlayYearOfPlenty_Result playYearOfPlenty(
 			PlayYearOfPlenty_Params request) throws ClientException {
 		URL_SUFFIX = "/moves/playYearOfPlenty";
-		return (PlayYearOfPlenty_Result) doPost(URL_SUFFIX, request);
+		return new PlayYearOfPlenty_Result ((String) doPost(URL_SUFFIX, request));
+	}
+	
+	/**
+	 * Doesn't work, extra credit.
+	 */
+	@Override
+	public AddAI_Result addAI(AddAI_Params request) throws ClientException {
+		//System.out.println("Add AI.");
+		URL_SUFFIX = "/game/addAI";
+
+		return new AddAI_Result((String) doPost(URL_SUFFIX, request));
+	}
+	
+	/**
+	 * TODO
+	 * EXTRA CREDIT
+	 * @param request
+	 * @return
+	 * @throws ClientException
+	 */
+	@Override
+	public ListAI_Result listAI(ListAI_Params request) throws ClientException {
+		System.out.println("List AI.");
+		URL_SUFFIX = "/game/listAI";
+		return new ListAI_Result ((String) doPost(URL_SUFFIX, request));
 	}
 
 	/**
@@ -896,7 +909,6 @@ public class ServerProxy implements IServerProxy {
 					System.out.println(eline);
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			System.out.println();

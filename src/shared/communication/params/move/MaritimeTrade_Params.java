@@ -4,6 +4,7 @@ import shared.definitions.ResourceType;
 
 public class MaritimeTrade_Params {
 	
+	private final String type = "maritimeTrade";
 	private int playerIndex;
 	private int ratio;
 	private String inputResource;

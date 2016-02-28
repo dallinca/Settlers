@@ -2,9 +2,17 @@ package shared.communication.params.move;
 
 public class RollNumber_Params {
 	
+	private final String type = "rollNumber";
+	private int playerIndex;
 	private int number;
 
-	public RollNumber_Params(int number) {
+	/**
+	 * 
+	 * @param playerIndex
+	 * @param number
+	 */
+	public RollNumber_Params(int playerIndex, int number) {
+		this.setPlayerIndex(playerIndex);
 		this.setNumber(number);
 	}
 
@@ -14,6 +22,14 @@ public class RollNumber_Params {
 
 	public void setNumber(int number) {
 		this.number = number;
+	}
+
+	public int getPlayerIndex() {
+		return playerIndex;
+	}
+
+	public void setPlayerIndex(int playerIndex) {
+		this.playerIndex = playerIndex;
 	}
 
 }
