@@ -112,7 +112,6 @@ public class DevCardController extends Controller implements IDevCardController,
 		
 		
 		
-		
 		getPlayCardView().showModal();
 	}
 
