@@ -280,7 +280,6 @@ public class ServerProxyTest {
 			prox.playRoadBuilding(new PlayRoadBuilding_Params());
 			prox.playMonument(new PlayMonument_Params());
 			prox.playMonopoly(new PlayMonopoly_Params());
-			prox.offerTrade(new OfferTrade_Params());
 			prox.maritimeTrade(new MaritimeTrade_Params());
 			prox.login(new Login_Params());
 			prox.listGames(new List_Params());

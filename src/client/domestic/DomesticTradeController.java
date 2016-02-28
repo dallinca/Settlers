@@ -1,11 +1,13 @@
 package client.domestic;
 
 import shared.definitions.*;
+import shared.model.player.Player;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
+import client.Client;
 import client.base.*;
+import client.data.PlayerInfo;
 import client.misc.*;
 
 
@@ -17,6 +19,8 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	private IDomesticTradeOverlay tradeOverlay;
 	private IWaitView waitOverlay;
 	private IAcceptTradeOverlay acceptOverlay;
+	private boolean init, chooseSend, choosePlayer;
+	private int totalWood, totalSheep, totalOre, totalWheat, totalBrick;
 
 	/**
 	 * DomesticTradeController constructor
@@ -36,6 +40,8 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		setTradeOverlay(tradeOverlay);
 		setWaitOverlay(waitOverlay);
 		setAcceptOverlay(acceptOverlay);
+		
+		init = true;
 	}
 	
 	public IDomesticTradeView getTradeView() {
@@ -72,10 +78,46 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		System.out.println("DomesticTradeController acceptOverlay()");
 		this.acceptOverlay = acceptOverlay;
 	}
+	
+	public void initPlayers(){
 
+		List<PlayerInfo> pl = Client.getInstance().getGameInfo().getPlayers();
+		ArrayList<PlayerInfo> temppl = new ArrayList<PlayerInfo>();
+
+		
+		for(int i = 0; i < pl.size(); i++){
+			if(pl.get(i).getId() == Client.getInstance().getGame().getCurrentPlayer().getPlayerId()){}
+			else{
+				temppl.add(pl.get(i));
+			}
+		}
+
+		PlayerInfo [] playerinfo = new PlayerInfo[temppl.size()];
+		temppl.toArray(playerinfo);
+		getTradeOverlay().setPlayers(playerinfo);
+		init = false;
+	}
+	
 	@Override
 	public void startTrade() {
 		System.out.println("DomesticTradeController startTrade()");
+		
+		if(init){
+			initPlayers();
+		}
+		boolean isPlayersTurn = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).isPlayersTurn();
+		//TESTING DELETE true sttement
+		isPlayersTurn = true;
+		if(isPlayersTurn){
+			getTradeOverlay().setPlayerSelectionEnabled(true);
+			getTradeOverlay().setResourceSelectionEnabled(true);
+			getTradeOverlay().setStateMessage("set the trade you want");
+		}else{
+			getTradeOverlay().setPlayerSelectionEnabled(false);
+			//Disabling resource selection is shifting everything over. Something is messed up with GUI??
+			getTradeOverlay().setResourceSelectionEnabled(false);
+			getTradeOverlay().setStateMessage("it's not your turn");
+		}
 		getTradeOverlay().showModal();
 	}
 
@@ -83,23 +125,45 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	public void decreaseResourceAmount(ResourceType resource) {
 		System.out.println("DomesticTradeController decreaseResourceAmount()");
 	}
-
+	/***
+	 * the "send" button, A player can only increase a resource type if he has greater than or equal to amount of increase
+	 */
 	@Override
 	public void increaseResourceAmount(ResourceType resource) {
 		System.out.println("DomesticTradeController increaseResourceAmount");
+		
+		if(!choosePlayer)
+			getTradeOverlay().setStateMessage("who do you want to trade with");
+		
+		chooseSend = true;
+		if(chooseSend && choosePlayer){
+			getTradeOverlay().setStateMessage("Trade!");
+			getTradeOverlay().setTradeEnabled(true);
+		}
 	}
-
+	
+	/***
+	 * A player may only send offers on his turn
+	 * 
+	 */
 	@Override
 	public void sendTradeOffer() {
 		System.out.println("DomesticTradeController sendTradeOffer()");
-
+		
 		getTradeOverlay().closeModal();
-//		getWaitOverlay().showModal();
+		getWaitOverlay().showModal();
+		getWaitOverlay().setMessage("trade transaction in progress...");
 	}
 
 	@Override
 	public void setPlayerToTradeWith(int playerIndex) {
 		System.out.println("DomesticTradeController setPlayerToTradeWith()");
+		choosePlayer = true;
+		
+		if(chooseSend && choosePlayer){
+			getTradeOverlay().setStateMessage("Trade!");
+			getTradeOverlay().setTradeEnabled(true);
+		}
 	}
 
 	@Override
@@ -115,7 +179,10 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	@Override
 	public void unsetResource(ResourceType resource) {
 		System.out.println("DomesticTradeController unsetResource()");
-
+		getTradeOverlay().setStateMessage("set the trade you want");
+		getTradeOverlay().setTradeEnabled(false);
+		chooseSend = false; 
+		choosePlayer = false;
 	}
 
 	@Override
@@ -126,7 +193,8 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 
 	@Override
 	public void acceptTrade(boolean willAccept) {
-		System.out.println("DomesticTradeController willAccept()");
+		System.out.println("DomesticTradeController willAccept()");	
+		//getAcceptOverlay().showModal();
 		getAcceptOverlay().closeModal();
 	}
 
@@ -134,10 +202,6 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
 		System.out.println("DomesticTradeController update()");
-		
-		
-		
-		
 	}
 
 }

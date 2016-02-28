@@ -305,6 +305,7 @@ public class MockClientFacade {
 	}
 
 	public RollNumber_Result rollNumber(RollNumber_Params request) throws ClientException {
+		Client.getInstance().getGame().setStatus("Discarding");
 		return null;
 	}
 

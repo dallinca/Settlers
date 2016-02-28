@@ -116,7 +116,6 @@ public class ClientFacade {
 		try {
 
 			result = sp.login(request);
-			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new Login_Result();
@@ -154,7 +153,6 @@ public class ClientFacade {
 		try {
 
 			result = sp.createGame(request);
-			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new Create_Result();
@@ -199,7 +197,6 @@ public class ClientFacade {
 		try {
 
 			result = sp.joinGame(request);
-			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new Join_Result();
@@ -217,7 +214,6 @@ public class ClientFacade {
 		try {
 
 			result = sp.listGames(request);
-			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new List_Result();
@@ -246,7 +242,6 @@ public class ClientFacade {
 		try {
 
 			result = sp.register(request);
-			updateGame(result.getGame());
 
 		} catch (ClientException e) {			
 			result = new Register_Result();
