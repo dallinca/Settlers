@@ -5,6 +5,7 @@ import shared.locations.VertexLocation;
 
 public class BuildSettlement_Params {
 	
+	private final String type = "buildSettlement";
 	private int playerIndex;
 	private BuildLocation vertexLocation;
 	private boolean free;

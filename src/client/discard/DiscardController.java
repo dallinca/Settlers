@@ -2,9 +2,9 @@ package client.discard;
 
 import shared.definitions.*;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
+import client.Client;
 import client.base.*;
 import client.misc.*;
 
@@ -15,6 +15,10 @@ import client.misc.*;
 public class DiscardController extends Controller implements IDiscardController, Observer {
 
 	private IWaitView waitView;
+	private int amountToDiscard, totalToDiscard;
+	private ArrayList<ResourceType> wood, sheep, ore, brick, wheat;
+	
+	private int numWood, numWheat, numSheep, numOre, numBrick; 
 	
 	/**
 	 * DiscardController constructor
@@ -28,6 +32,12 @@ public class DiscardController extends Controller implements IDiscardController,
 		
 		this.waitView = waitView;
 		System.out.println("DiscardController DiscardController()");
+		
+		 wood = new ArrayList<ResourceType>();
+		 sheep = new ArrayList<ResourceType>();
+		 ore = new ArrayList<ResourceType>();
+		 brick = new ArrayList<ResourceType>();
+		 wheat = new ArrayList<ResourceType>();
 	}
 
 	public IDiscardView getDiscardView() {
@@ -44,24 +54,95 @@ public class DiscardController extends Controller implements IDiscardController,
 	@Override
 	public void increaseAmount(ResourceType resource) {
 		System.out.println("DiscardController increaseAmount()");
+		
+		amountToDiscard++;
+		
+		//numWood, numWheat, numSheep, numOre, numBrick
+		if( resource == ResourceType.BRICK){
+			brick.add(resource);
+			if(brick.size() >= numWood){
+				getDiscardView().setResourceAmountChangeEnabled(resource, false, true);
+			}
+		}
+		else if(resource == ResourceType.ORE){
+			ore.add(resource);
+			if(ore.size() >= numOre){
+				getDiscardView().setResourceAmountChangeEnabled(resource, false, true);
+			}
+		}
+		else if(resource == ResourceType.SHEEP){
+			sheep.add(resource);
+			if(sheep.size() >= numSheep){
+				
+			}
+		}
+		else if(resource == ResourceType.WHEAT){
+			tradeRate = tradeWheat;
+		}
+		else if(resource == ResourceType.WOOD){
+			tradeRate = tradeWood;
+		}
+		
+		if(amountToDiscard >= totalToDiscard){
+
+			getDiscardView().setResourceAmountChangeEnabled(resource, false, true);
+			getDiscardView().setDiscardButtonEnabled(true);
+		}else{
+			getDiscardView().setDiscardButtonEnabled(false);
+		}
+
 	}
 
 	@Override
 	public void decreaseAmount(ResourceType resource) {
 		System.out.println("DiscardController decreaseAmount()");
+		amountToDiscard--;
+		
+		if( resource == ResourceType.BRICK){
+			//remove the last element
+			brick.remove(brick.size() - 1);
+			if(brick.size() <= numWood){
+				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
+			}
+		}
+		
+		
+		
+		if(amountToDiscard >= totalToDiscard){
+			getDiscardView().setDiscardButtonEnabled(true);
+		}else{
+			getDiscardView().setDiscardButtonEnabled(false);
+		}
 	}
 
 	@Override
 	public void discard() {
 		System.out.println("DiscardController discard()");
-		getDiscardView().closeModal();
+		
+		numWood = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.WOOD);
+		numWheat = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.WHEAT);
+		numSheep = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.SHEEP);
+		numOre = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.ORE);
+		numBrick = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.BRICK);
+		
+		getDiscardView().setResourceMaxAmount(ResourceType.WOOD, numWood);
+		getDiscardView().setResourceMaxAmount(ResourceType.WHEAT, numWheat);
+		getDiscardView().setResourceMaxAmount(ResourceType.SHEEP, numSheep);
+		getDiscardView().setResourceMaxAmount(ResourceType.ORE, numOre);
+		getDiscardView().setResourceMaxAmount(ResourceType.BRICK, numBrick);
+			
+		totalToDiscard = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getResourceCardHandSize();
+		getDiscardView().setStateMessage(amountToDiscard+"/"+totalToDiscard);
+		
+		if(amountToDiscard == totalToDiscard){
+			//getDiscardView().closeModal();
+		}
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("DiscardController update()");
 		// TODO Auto-generated method stub
-		
 	}
 
 }

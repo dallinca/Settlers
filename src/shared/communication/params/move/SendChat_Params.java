@@ -8,7 +8,8 @@ public class SendChat_Params {
 	
 	public SendChat_Params(int playerIndex, String content) {
 		this.playerIndex = playerIndex;
-		this.content = "\""+content+"\"";
+		//this.content = "\""+content+"\"";
+		this.content = content;
 	}
 
 	public int getPlayerIndex() {

@@ -1,6 +1,7 @@
 package shared.model.turn;
 
 import client.Client;
+import shared.definitions.ResourceType;
 import shared.model.Game;
 
 
@@ -80,13 +81,32 @@ public class ActionManager {
 	 * @param action
 	 * @param location
 	 */
-	public void canDoBuild(ActionType action){
-		if (action == ActionType.PURCHASE_CITY) PURCHASE.canDoPurchaseCity();
-		else if (action == ActionType.PURCHASE_ROAD) PURCHASE.canDoPurchaseRoad();
-		else if (action == ActionType.PURCHASE_SETTLEMENT)	PURCHASE.canDoPurchaseSettlement();
+	public boolean canDoBuild(ActionType action){
+		if (action == ActionType.PURCHASE_CITY) return PURCHASE.canDoPurchaseCity();
+		else if (action == ActionType.PURCHASE_ROAD) return PURCHASE.canDoPurchaseRoad();
+		else if (action == ActionType.PURCHASE_SETTLEMENT) return PURCHASE.canDoPurchaseSettlement();
 
+		return false;
 
 	}
+	
+	
+	public boolean canDoPlay(ActionType action, ResourceType[] toPassIn) {
+		if (action == ActionType.PLAYCARD_MONOPOLY) return PLAYCARD.canDoPlayMonopoly(toPassIn);
+		else if (action == ActionType.PLAYCARD_YEAROFPLENTY) return PLAYCARD.canDoPlayYearOfPlenty(toPassIn);
+		
+		return false;
+	}
+	
+	
+	public boolean canDoPlay(ActionType action) {
+		if (action == ActionType.PLAYCARD_BUILDROADS) return PLAYCARD.canDoPlayBuildRoads();
+		else if (action == ActionType.PLAYCARD_MONUMENT) return PLAYCARD.canDoPlayMonument();
+		else if (action == ActionType.PLAYCARD_KNIGHT) return PLAYCARD.canDoPlayKnight();
+
+		return false;
+	}
+	
 	/**
 	 * TODO javadoc
 	 * 
@@ -94,11 +114,11 @@ public class ActionManager {
 	 * @param location
 	 */
 	public void doBuild(ActionType action, Object location){
-		if (action == ActionType.PURCHASE_CITY) PURCHASE.purchaseCity(location);
-		else if (action == ActionType.PURCHASE_ROAD) PURCHASE.purchaseRoad(location);
-		else if (action == ActionType.PURCHASE_SETTLEMENT)	PURCHASE.purchaseSettlement(location);
-
-
+		if (canDoBuild(action)) {	
+			if (action == ActionType.PURCHASE_CITY) PURCHASE.purchaseCity(location);
+			else if (action == ActionType.PURCHASE_ROAD) PURCHASE.purchaseRoad(location);
+			else if (action == ActionType.PURCHASE_SETTLEMENT)	PURCHASE.purchaseSettlement(location);
+		} 
 	}
 
 	/**
@@ -122,14 +142,41 @@ public class ActionManager {
 	 * @pre action must be of 'playcard' action category.
 	 * @post action will be performed.
 	 */
-
+	
+	public void playDevelopmentCard(ActionType action, ResourceType[] toPassIn) {
+		if (action == ActionType.PLAYCARD_MONOPOLY) PLAYCARD.playMonopoly(toPassIn);
+		else if (action == ActionType.PLAYCARD_YEAROFPLENTY) PLAYCARD.playYearOfPlenty(toPassIn);
+	}
+	
 	public void playDevelopmentCard(ActionType action){
 
 		if (action == ActionType.PLAYCARD_BUILDROADS) PLAYCARD.playBuildRoads();
 		else if (action == ActionType.PLAYCARD_KNIGHT) PLAYCARD.playKnight();
-		else if (action == ActionType.PLAYCARD_MONOPOLY) PLAYCARD.playMonopoly();
-		else if (action == ActionType.PLAYCARD_YEAROFPLENTY) PLAYCARD.playYearOfPlenty();
-
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

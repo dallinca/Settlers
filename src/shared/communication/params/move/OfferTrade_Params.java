@@ -2,6 +2,7 @@ package shared.communication.params.move;
 
 public class OfferTrade_Params {
 	
+	private final String type = "offerTrade";
 	private int playerIndex;
 	private int brick;
 	private int ore;

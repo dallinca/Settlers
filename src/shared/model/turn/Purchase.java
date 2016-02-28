@@ -23,7 +23,9 @@ public class Purchase {
 	 * @post Player gains a development card from the development deck, and loses cost.
 	 */
 	public void purchaseDevelopmentCard(){
-
+		if (canDoPurchaseDevelopmentCard()) {
+			
+		}
 	}
 
 	public boolean canDoPurchaseDevelopmentCard(){
@@ -44,7 +46,8 @@ public class Purchase {
 	}
 	
 
-	public void canDoPurchaseSettlement(){
+	public boolean canDoPurchaseSettlement(){
+		return Client.getInstance().getGame().canDoCurrentPlayerBuildSettlement(Client.getInstance().getUserId());
 	}
 
 	/**
@@ -56,11 +59,13 @@ public class Purchase {
 	 * @post Player replaces a settlement with a city. player loses cost. Player gains available settlement.
 	 */
 	public void purchaseCity(Object l){
-		VertexLocation location = (VertexLocation) l;
+		if (canDoPurchaseCity()) {
+			VertexLocation location = (VertexLocation) l;
+		}
 	}
 
-	public void canDoPurchaseCity(){
-
+	public boolean canDoPurchaseCity(){
+		return Client.getInstance().getGame().canDoCurrentPlayerBuildCity(Client.getInstance().getUserId());
 	}
 	
 	/**
@@ -72,21 +77,22 @@ public class Purchase {
 	 * @post Player places road on the board, loses cost.
 	 */
 	public void purchaseRoad(Object l){
-		EdgeLocation location = (EdgeLocation) l;
-		//if(client.getUserID()==client.getCurrentPlayerID()){
-	//}
-		///player.canDoPlaceRoad???
-		//Player.placeRoad
-		//ClientFacade.placeRoadRequest
-		//
-		//
-		//
-		//
-
+		if (canDoPurchaseRoad()) {
+			EdgeLocation location = (EdgeLocation) l;
+			//if(client.getUserID()==client.getCurrentPlayerID()){
+			//}
+			///player.canDoPlaceRoad???
+			//Player.placeRoad
+			//ClientFacade.placeRoadRequest
+			//
+			//
+			//
+			//
+		}
 	}
 	
-	public void canDoPurchaseRoad(){
-
+	public boolean canDoPurchaseRoad(){
+		return Client.getInstance().getGame().canDoCurrentPlayerBuildRoad(Client.getInstance().getUserId());
 	}
 
 }

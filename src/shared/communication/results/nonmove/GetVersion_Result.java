@@ -49,7 +49,7 @@ public class GetVersion_Result {
 	public Game getGame() {
 		
 		Game game = new Game();		
-		model.
+		
 		return currentVersion;
 	}
 

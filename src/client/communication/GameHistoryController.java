@@ -1,10 +1,10 @@
 package client.communication;
 
 import java.util.*;
-
-import client.ClientFacade;
+import client.Client;
 import client.base.*;
 import shared.definitions.*;
+import shared.model.Game;
 
 
 /**
@@ -31,15 +31,41 @@ public class GameHistoryController extends Controller implements IGameHistoryCon
 		//<temp>
 		
 		List<LogEntry> entries = new ArrayList<LogEntry>();
+		if (Client.getInstance().getGame() != null) {
+			Game.Line[] history = Client.getInstance().getGame().getHistory();
+				
+		for (int i = 0; i < history.length; i++) {  
+			//Get color or user, if user than we can call the color method in the client or something...?
+			 String user = history[i].getSource();
+			 String action = history[i].getMessage(); 
+						 
+			 CatanColor color = null;
+						 
+			 //Now we have to acertain the color of the player based on the sender:
+			 for (int g = 0; g < Client.getInstance().getGame().getAllPlayers().length; g++) {
+				 if (Client.getInstance().getGame().getAllPlayers()[g].getPlayerName() == user) {
+					 color = Client.getInstance().getGame().getAllPlayers()[g].getPlayerColor();
+				 }
+			 }
+						 
+			// String message = user + " " + action;
+			 LogEntry entry = new LogEntry(color, action);
+			 //Then add it to our list we will set in the view:
+			 entries.add(entry); 
+		}
+		}
+		getView().setEntries(entries);
+
+		/*
 		entries.add(new LogEntry(CatanColor.BROWN, "Dallin Andersen was here."));
 		entries.add(new LogEntry(CatanColor.RED, "Wassup g's?"));
 		entries.add(new LogEntry(CatanColor.BROWN, "This is a brown message"));
 		entries.add(new LogEntry(CatanColor.BLUE, "I've got the bluesssss!!"));
+		*/
 		
 		getView().setEntries(entries);
-	
-		System.out.println("GameHistoryController initFromModel()");
 		//</temp>
+		System.out.println("GameHistoryController initFromModel()");
 	}
 
 	@Override
@@ -48,25 +74,28 @@ public class GameHistoryController extends Controller implements IGameHistoryCon
 		System.out.println("GameHistoryController initFromModel()");
 		
 		List<LogEntry> entries = new ArrayList<LogEntry>();
-		List<String> history = ClientFacade.getHistory();
 		
-		for (int i = 0; i < history.size(); i++) {
-			try {  
+		Game.Line[] history = Client.getInstance().getGame().getHistory();
+		
+		for (int i = 0; i < history.length; i++) {  
 				//Get color or user, if user than we can call the color method in the client or something...?
-				 String user = history.get(i).getUser();
-				 String action = history.get(i).getAction(); 
+				 String user = history[i].getSource();
+				 String action = history[i].getMessage(); 
 				 
-				 CatanColor color =  CatanColor.BLUE;//method in client that takes in the user and returns their color
+				 CatanColor color = null;
+				 
+				 //Now we have to acertain the color of the player based on the sender:
+				 for (int g = 0; g < Client.getInstance().getGame().getAllPlayers().length; g++) {
+					 if (Client.getInstance().getGame().getAllPlayers()[g].getPlayerName() == user) {
+						 color = Client.getInstance().getGame().getAllPlayers()[g].getPlayerColor();
+					 }
+				 }
 				 
 				 String message = user + " " + action;
 				 LogEntry entry = new LogEntry(color, action);
 				 
 				 //Then add it to our list we will set in the view:
 				 entries.add(entry); 
-			 }
-			catch {
-				
-			}
 				
 		}
 		

@@ -118,7 +118,6 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			getTradeOverlay().setResourceSelectionEnabled(false);
 			getTradeOverlay().setStateMessage("it's not your turn");
 		}
-		
 		getTradeOverlay().showModal();
 	}
 
@@ -153,7 +152,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		
 		getTradeOverlay().closeModal();
 		getWaitOverlay().showModal();
-		getWaitOverlay().setMessage("trade transaction in progress");
+		getWaitOverlay().setMessage("trade transaction in progress...");
 	}
 
 	@Override
@@ -165,8 +164,6 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			getTradeOverlay().setStateMessage("Trade!");
 			getTradeOverlay().setTradeEnabled(true);
 		}
-		
-		
 	}
 
 	@Override
@@ -197,6 +194,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	@Override
 	public void acceptTrade(boolean willAccept) {
 		System.out.println("DomesticTradeController willAccept()");	
+		//getAcceptOverlay().showModal();
 		getAcceptOverlay().closeModal();
 	}
 
