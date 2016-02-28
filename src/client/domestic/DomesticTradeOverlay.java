@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import shared.definitions.*;
+import client.Client;
 import client.base.*;
 import client.data.*;
 import client.utils.FontUtils;
@@ -275,6 +276,20 @@ public class DomesticTradeOverlay extends OverlayView implements IDomesticTradeO
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					Integer currentAmount = Integer.parseInt(resourceCounts.get(resourceType).getText());
+					
+					/*
+					int numWood = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.WOOD);
+					int numWheat = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.WHEAT);
+					int numSheep = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.SHEEP);
+					int numOre = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.ORE);
+					int numBrick = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.BRICK);
+					
+					if(currentAmount > numWood){}
+					if(currentAmount > numWheat){}
+					if(currentAmount > numSheep){}
+					if(currentAmount > numOre){}
+					if(currentAmount > numBrick){}*/
+					
 					getController().increaseResourceAmount(resourceType);
 					currentAmount++;
 					resourceCounts.get(resourceType).setText("" + currentAmount);
@@ -370,7 +385,7 @@ public class DomesticTradeOverlay extends OverlayView implements IDomesticTradeO
 			toggle.addActionListener(playerSelectActionListener);
 			toggle.setActionCommand(value[i].getName());
 			toggle.putClientProperty( "JButton.buttonType", "segmented" );
-			if(i == value.length - 1)
+			if(i == value.length)
 				toggle.putClientProperty( "JButton.segmentPosition", "last" );
 			else
 				toggle.putClientProperty( "JButton.segmentPosition", "middle" );
