@@ -3,12 +3,14 @@ package shared.communication.results.move;
 import shared.model.Game;
 
 public class AcceptTrade_Result {
-	private boolean valid;
-
 	
-
+	private boolean valid;
+	
 	public AcceptTrade_Result(String doPost) {
-		if (doPost.equals("Success")){
+		if (doPost==null){
+			valid = false;
+		}
+		else if (doPost.equals("Success")){
 			valid = true;
 		}
 		else {

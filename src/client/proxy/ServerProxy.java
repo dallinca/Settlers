@@ -819,7 +819,7 @@ public class ServerProxy implements IServerProxy {
 				connection.setRequestProperty("Cookie", unfixedUserCookie);
 			}
 
-			System.out.print("Call: "+job);
+			//System.out.print("Call: "+job);
 
 			connection.setRequestMethod(HTTP_POST);
 			connection.setDoInput(true);
@@ -832,7 +832,7 @@ public class ServerProxy implements IServerProxy {
 			sw.write(job);
 			sw.flush();
 
-			System.out.println(" |||| Response code: "+connection.getResponseCode());
+			//System.out.println(" |||| Response code: "+connection.getResponseCode());
 
 			InputStream in = connection.getInputStream();
 
@@ -852,7 +852,7 @@ public class ServerProxy implements IServerProxy {
 
 			in.close();
 
-			System.out.println("Response: "+job+'\n');
+			//System.out.println("Response: "+job+'\n');
 			
 			//Cookie cacher----------------------------------
 			Map<String, List<String>> headers = connection.getHeaderFields();

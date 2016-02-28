@@ -7,7 +7,10 @@ public class OfferTrade_Result {
 	private boolean valid;
 	
 	public OfferTrade_Result(String doPost) {
-		if (doPost.equals("Success")){
+		if (doPost==null){
+			valid = false;
+		}
+		else if (doPost.equals("Success")){
 			valid = true;
 		}
 		else{
