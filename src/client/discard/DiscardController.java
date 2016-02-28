@@ -60,40 +60,55 @@ public class DiscardController extends Controller implements IDiscardController,
 		System.out.println("DiscardController increaseAmount()");
 		
 		amountToDiscard++;
+		getDiscardView().setStateMessage(amountToDiscard+"/"+(totalToDiscard/2));
 		
 		if( resource == ResourceType.BRICK){
 			brick.add(resource);
+			getDiscardView().setResourceDiscardAmount(resource, brick.size());
 			if(brick.size() >= numWood){
 				getDiscardView().setResourceAmountChangeEnabled(resource, false, true);
+			}else{
+				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
 			}
 		}
 		else if(resource == ResourceType.ORE){
 			ore.add(resource);
+			getDiscardView().setResourceDiscardAmount(resource, ore.size());
 			if(ore.size() >= numOre){
 				getDiscardView().setResourceAmountChangeEnabled(resource, false, true);
+			}else{
+				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
 			}
 		}
 		else if(resource == ResourceType.SHEEP){
 			sheep.add(resource);
+			getDiscardView().setResourceDiscardAmount(resource, sheep.size());
 			if(sheep.size() >= numSheep){
 				getDiscardView().setResourceAmountChangeEnabled(resource, false, true);
+			}else{
+				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
 			}
 		}
 		else if(resource == ResourceType.WHEAT){
 			wheat.add(resource);
+			getDiscardView().setResourceDiscardAmount(resource, wheat.size());
 			if(wheat.size() >= numWheat){
 				getDiscardView().setResourceAmountChangeEnabled(resource, false, true);
+			}else{
+				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
 			}
 		}
 		else if(resource == ResourceType.WOOD){
 			wood.add(resource);
+			getDiscardView().setResourceDiscardAmount(resource, wood.size());
 			if(wood.size() >= numWood){
 				getDiscardView().setResourceAmountChangeEnabled(resource, false, true);
+			}else{
+				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
 			}
 		}
 		
 		if(amountToDiscard >= totalToDiscard){
-
 			getDiscardView().setResourceAmountChangeEnabled(resource.BRICK, false, true);
 			getDiscardView().setResourceAmountChangeEnabled(resource.ORE, false, true);
 			getDiscardView().setResourceAmountChangeEnabled(resource.SHEEP, false, true);
@@ -110,33 +125,55 @@ public class DiscardController extends Controller implements IDiscardController,
 	public void decreaseAmount(ResourceType resource) {
 		System.out.println("DiscardController decreaseAmount()");
 		amountToDiscard--;
-		
+		getDiscardView().setStateMessage(amountToDiscard+"/"+(totalToDiscard/2));
+		 
 		if( resource == ResourceType.BRICK){
 			//remove the last element
 			brick.remove(brick.size() - 1);
+			getDiscardView().setResourceDiscardAmount(resource, brick.size());
 			if(brick.size() < 1){
 				getDiscardView().setResourceAmountChangeEnabled(resource, true, false);
+			}else{
+				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
 			}
 		}
-		if( resource == ResourceType.ORE){
+		else if( resource == ResourceType.ORE){
 			//remove the last element
 			ore.remove(ore.size() - 1);
+			getDiscardView().setResourceDiscardAmount(resource, ore.size());
 			if(ore.size() < 1){
 				getDiscardView().setResourceAmountChangeEnabled(resource, true, false);
+			}else{
+				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
 			}
 		}
-		if( resource == ResourceType.SHEEP){
+		else if( resource == ResourceType.SHEEP){
 			//remove the last element
 			sheep.remove(sheep.size() - 1);
+			getDiscardView().setResourceDiscardAmount(resource, sheep.size());
 			if(sheep.size() < 1){
 				getDiscardView().setResourceAmountChangeEnabled(resource, true, false);
+			}else{
+				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
 			}
 		}
-		if( resource == ResourceType.WHEAT){
+		else if( resource == ResourceType.WHEAT){
 			//remove the last element
 			wheat.remove(wheat.size() - 1);
+			getDiscardView().setResourceDiscardAmount(resource, wheat.size());
 			if(wheat.size() < 1){
 				getDiscardView().setResourceAmountChangeEnabled(resource, true, false);
+			}else{
+				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
+			}
+		}
+		else if(resource == ResourceType.WOOD){
+			wood.remove(wood.size() - 1);
+			getDiscardView().setResourceDiscardAmount(resource, wood.size());
+			if(wood.size() < 1){
+				getDiscardView().setResourceAmountChangeEnabled(resource, true, false);
+			}else{
+				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
 			}
 		}
 		
@@ -181,15 +218,18 @@ public class DiscardController extends Controller implements IDiscardController,
 			getDiscardView().setResourceAmountChangeEnabled(ResourceType.BRICK, true, false);
 		else 
 			getDiscardView().setResourceAmountChangeEnabled(ResourceType.BRICK, false, false);
+		
+		 totalToDiscard = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getResourceCardHandSize();
+		 getDiscardView().setStateMessage(amountToDiscard+"/"+(totalToDiscard/2));
+		 
+		 getDiscardView().setDiscardButtonEnabled(false);
 	}
 	
 	@Override
 	public void discard() {
 		System.out.println("DiscardController discard()");
-
+		
 		init();	
-		totalToDiscard = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getResourceCardHandSize();
-		getDiscardView().setStateMessage(amountToDiscard+"/"+(totalToDiscard/2));
 		
 		if(amountToDiscard == totalToDiscard){
 			//getDiscardView().closeModal();
