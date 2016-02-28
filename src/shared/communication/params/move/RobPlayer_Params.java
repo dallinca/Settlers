@@ -4,6 +4,7 @@ import shared.locations.HexLocation;
 
 public class RobPlayer_Params {
 	
+	private final String type = "robPlayer";
 	private int playerIndex;
 	private HexLocation hex;
 	private int victimIndex;

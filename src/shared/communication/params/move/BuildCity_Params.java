@@ -5,6 +5,7 @@ import shared.locations.VertexLocation;
 
 public class BuildCity_Params {
 
+	private final String type = "buildCity";
 	private int playerIndex;
 	private BuildLocation vertexLocation;
 
