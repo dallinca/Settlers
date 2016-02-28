@@ -182,11 +182,18 @@ public class GetVersion_Result {
 			}
 		}
 		
-		
-		
-		
 		// Init the GAME
-		Game game = new Game();	
+		Game game = new Game(players, board, bank);
+		game.setWinner(model.getWinner());
+		game.setVersionNumber(model.getVersion());
+		game.setCurrentPlayer(players[model.turnTracker.getCurrentTurn()]);
+		game.setStatus(model.turnTracker.getStatus());
+		game.setLargestArmy(players[model.turnTracker.largestArmy]);
+		game.setLongestRoad((players[model.turnTracker.longestRoad]));
+		
+		
+		//TODO chat and history
+		
 		return currentVersion;
 	}
 
