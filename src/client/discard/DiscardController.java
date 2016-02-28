@@ -50,14 +50,17 @@ public class DiscardController extends Controller implements IDiscardController,
 		System.out.println("DiscardController getWaitView()");
 		return waitView;
 	}
-
+	
+	/***
+	 * increases the resource amount to discard. Disables up arrow of a resource if discard amount is
+	 * greater than player has in hand. Disables all up arrows if  total discard amount is reached
+	 */
 	@Override
 	public void increaseAmount(ResourceType resource) {
 		System.out.println("DiscardController increaseAmount()");
 		
 		amountToDiscard++;
 		
-		//numWood, numWheat, numSheep, numOre, numBrick
 		if( resource == ResourceType.BRICK){
 			brick.add(resource);
 			if(brick.size() >= numWood){
@@ -73,19 +76,29 @@ public class DiscardController extends Controller implements IDiscardController,
 		else if(resource == ResourceType.SHEEP){
 			sheep.add(resource);
 			if(sheep.size() >= numSheep){
-				
+				getDiscardView().setResourceAmountChangeEnabled(resource, false, true);
 			}
 		}
 		else if(resource == ResourceType.WHEAT){
-			tradeRate = tradeWheat;
+			wheat.add(resource);
+			if(wheat.size() >= numWheat){
+				getDiscardView().setResourceAmountChangeEnabled(resource, false, true);
+			}
 		}
 		else if(resource == ResourceType.WOOD){
-			tradeRate = tradeWood;
+			wood.add(resource);
+			if(wood.size() >= numWood){
+				getDiscardView().setResourceAmountChangeEnabled(resource, false, true);
+			}
 		}
 		
 		if(amountToDiscard >= totalToDiscard){
 
-			getDiscardView().setResourceAmountChangeEnabled(resource, false, true);
+			getDiscardView().setResourceAmountChangeEnabled(resource.BRICK, false, true);
+			getDiscardView().setResourceAmountChangeEnabled(resource.ORE, false, true);
+			getDiscardView().setResourceAmountChangeEnabled(resource.SHEEP, false, true);
+			getDiscardView().setResourceAmountChangeEnabled(resource.WHEAT, false, true);
+			getDiscardView().setResourceAmountChangeEnabled(resource.WOOD, false, true);
 			getDiscardView().setDiscardButtonEnabled(true);
 		}else{
 			getDiscardView().setDiscardButtonEnabled(false);
@@ -101,23 +114,40 @@ public class DiscardController extends Controller implements IDiscardController,
 		if( resource == ResourceType.BRICK){
 			//remove the last element
 			brick.remove(brick.size() - 1);
-			if(brick.size() <= numWood){
-				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
+			if(brick.size() < 1){
+				getDiscardView().setResourceAmountChangeEnabled(resource, true, false);
+			}
+		}
+		if( resource == ResourceType.ORE){
+			//remove the last element
+			ore.remove(ore.size() - 1);
+			if(ore.size() < 1){
+				getDiscardView().setResourceAmountChangeEnabled(resource, true, false);
+			}
+		}
+		if( resource == ResourceType.SHEEP){
+			//remove the last element
+			sheep.remove(sheep.size() - 1);
+			if(sheep.size() < 1){
+				getDiscardView().setResourceAmountChangeEnabled(resource, true, false);
+			}
+		}
+		if( resource == ResourceType.WHEAT){
+			//remove the last element
+			wheat.remove(wheat.size() - 1);
+			if(wheat.size() < 1){
+				getDiscardView().setResourceAmountChangeEnabled(resource, true, false);
 			}
 		}
 		
-		
-		
-		if(amountToDiscard >= totalToDiscard){
-			getDiscardView().setDiscardButtonEnabled(true);
-		}else{
+		if(amountToDiscard <= totalToDiscard){
 			getDiscardView().setDiscardButtonEnabled(false);
+		}else{
+			getDiscardView().setDiscardButtonEnabled(true);
 		}
 	}
-
-	@Override
-	public void discard() {
-		System.out.println("DiscardController discard()");
+	
+	public void init(){
 		
 		numWood = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.WOOD);
 		numWheat = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.WHEAT);
@@ -130,9 +160,36 @@ public class DiscardController extends Controller implements IDiscardController,
 		getDiscardView().setResourceMaxAmount(ResourceType.SHEEP, numSheep);
 		getDiscardView().setResourceMaxAmount(ResourceType.ORE, numOre);
 		getDiscardView().setResourceMaxAmount(ResourceType.BRICK, numBrick);
-			
+		
+		if(numWood > 0)
+			getDiscardView().setResourceAmountChangeEnabled(ResourceType.WOOD, true, false);
+		else
+			getDiscardView().setResourceAmountChangeEnabled(ResourceType.WOOD, false, false);
+		if(numWheat > 0)
+			getDiscardView().setResourceAmountChangeEnabled(ResourceType.WHEAT, true, false);
+		else
+			getDiscardView().setResourceAmountChangeEnabled(ResourceType.WHEAT, false, false);
+		if(numSheep > 0)
+			getDiscardView().setResourceAmountChangeEnabled(ResourceType.SHEEP, true, false);
+		else
+			getDiscardView().setResourceAmountChangeEnabled(ResourceType.SHEEP, false, false);
+		if(numOre > 0)
+			getDiscardView().setResourceAmountChangeEnabled(ResourceType.ORE, true, false);
+		else
+			getDiscardView().setResourceAmountChangeEnabled(ResourceType.ORE, false, false);
+		if(numBrick > 0)
+			getDiscardView().setResourceAmountChangeEnabled(ResourceType.BRICK, true, false);
+		else 
+			getDiscardView().setResourceAmountChangeEnabled(ResourceType.BRICK, false, false);
+	}
+	
+	@Override
+	public void discard() {
+		System.out.println("DiscardController discard()");
+
+		init();	
 		totalToDiscard = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getResourceCardHandSize();
-		getDiscardView().setStateMessage(amountToDiscard+"/"+totalToDiscard);
+		getDiscardView().setStateMessage(amountToDiscard+"/"+(totalToDiscard/2));
 		
 		if(amountToDiscard == totalToDiscard){
 			//getDiscardView().closeModal();
