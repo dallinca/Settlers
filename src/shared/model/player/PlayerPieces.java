@@ -418,6 +418,19 @@ public class PlayerPieces {
 			   }
 		   }
 	   }
+
+	public ArrayList<Settlement> getSettlements() {
+		return settlements;
+	}
+
+	public ArrayList<City> getCities() {
+		return cities;
+	}
+
+	public ArrayList<Road> getRoads() {
+		return roads;
+	}
+
 	     
 
 	   

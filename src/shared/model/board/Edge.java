@@ -1,5 +1,6 @@
 package shared.model.board;
 
+import shared.locations.EdgeDirection;
 import shared.model.items.Road;
 
 /**
@@ -136,8 +137,27 @@ public class Edge {
 		return y_coord_edg;
 	}
 
+	public int getTheirX_coord() {
+		return x_coord_edg - 3;
+	}
+
+	public int getTheirY_coord() {
+		return y_coord_edg - 3;
+	}
+
 	public ModEdgeDirection getDirection_edg() {
 		return direction_edg;
+	}
+	
+	public EdgeDirection getTheirEdgeDirection() {
+		if(direction_edg == ModEdgeDirection.LEFT) {
+			return EdgeDirection.NorthWest;
+		} else if(direction_edg == ModEdgeDirection.RIGHT) {
+			return EdgeDirection.NorthEast;
+		} else if(direction_edg == ModEdgeDirection.UP) {
+			return EdgeDirection.North;
+		}
+		return null;
 	}
 	
 	

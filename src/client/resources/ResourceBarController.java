@@ -2,6 +2,7 @@ package client.resources;
 
 import java.util.*;
 
+import shared.definitions.DevCardType;
 import client.Client;
 import client.base.*;
 
@@ -95,8 +96,8 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	@Override
 	public void playCard() {
 		System.out.println("ResourceBarController playCard()");
-	
-		boolean isPlayersTurn = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).isPlayersTurn(); 
+		boolean isPlayersTurn = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).isPlayersTurn();
+
 		if(isPlayersTurn){
 			getView().setElementEnabled(ResourceBarElement.PLAY_CARD, true);
 			executeElementAction(ResourceBarElement.PLAY_CARD);
