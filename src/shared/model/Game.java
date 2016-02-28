@@ -42,7 +42,7 @@ public class Game {
 	private String status = "";
 	private Line[] chat;
 	private Line[] history;
-	//private Dice dice = new Dice();
+	private int winner = -1;
 	
 	// CONSTRUCTORS
 	//////////////////////////////////////////
@@ -102,6 +102,18 @@ public class Game {
 		currentPlayer = players[0];
 		bank = new Bank();
 		board = board1;
+	}
+	
+	/**
+	 * @pre the player objects passed in are not null, neither is the Board.
+	 * 
+	 * @param the four player objects to be added to the array.
+	 */
+	public Game(Player[] players, Board board, Bank bank) {
+		this.players = players;
+		
+		this.bank = bank;
+		this.board = board;
 	}
 
 
@@ -179,7 +191,7 @@ public class Game {
 	 * @post we know who's turn it is.
 	 * 
 	 */
-	private void setCurrentPlayer(Player setPlayer) {
+	public void setCurrentPlayer(Player setPlayer) {
 		currentPlayer = setPlayer;
 	}
 
@@ -1059,7 +1071,38 @@ public class Game {
 		return true;
 	}
 	
+	public int getWinner() {
+		return winner;
+	}
+
+	public void setWinner(int winner) {
+		this.winner = winner;
+	}
 	
+	public Player getLargestArmy() {
+		return largestArmy;
+	}
+
+	public void setLargestArmy(Player largestArmy) {
+		this.largestArmy = largestArmy;
+	}
+
+	public Player getLongestRoad() {
+		return longestRoad;
+	}
+
+	public void setLongestRoad(Player longestRoad) {
+		this.longestRoad = longestRoad;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public void setChat(Line[] lines) {
 		chat = lines;
 	}

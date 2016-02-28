@@ -2,6 +2,7 @@ package shared.model.board;
 
 import shared.model.player.Player;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -64,6 +65,21 @@ public class Board {
 		// Initialize Vertices
 		initPortTypes(randomPorts);
 		initVertices();
+	}
+	
+	/**
+	 * constructor for recreating the board on the poll from the Server Model
+	 * 
+	 */
+	public Board(ArrayList<Hex> newHexes) {
+		// Init Hexes
+		for(Hex hex: newHexes) {
+			mapHexes[hex.getY_coord_hex()][hex.getX_coord_hex()] = hex;
+			hex.setBoard(this);
+		}
+		
+		// Init Edges
+		initBorders();
 	}
 	
 
@@ -913,7 +929,7 @@ public class Board {
 		mapUREdges[6][5] = null;
 		mapUREdges[6][6] = null;
 	}
-	
+
 	private void initPortTypes(boolean randomPorts) {
 		portTypeAssignments[0] = PortType.THREE;
 		portTypeAssignments[1] = PortType.WOOD;
@@ -927,6 +943,40 @@ public class Board {
 		if(randomPorts == true) {
 			shufflePortTypes();
 		}
+	}
+	
+
+	/**
+	 * This is for the Setup from the Server Model
+	 * 
+	 * @param hexLocation
+	 * @param portType
+	 */
+	public void initPortTypesFromServer(HexLocation hexLocation, PortType portType) {
+		if(hexLocation.getX() + 3 == 3 && hexLocation.getY() + 3 == 6) {
+			portTypeAssignments[0] = portType;
+		} else if(hexLocation.getX() + 3 == 5 && hexLocation.getY() + 3 == 4) {
+			portTypeAssignments[1] = portType;
+		} else if(hexLocation.getX() + 3 == 6 && hexLocation.getY() + 3 == 2) {
+			portTypeAssignments[2] = portType;
+		} else if(hexLocation.getX() + 3 == 6 && hexLocation.getY() + 3 == 0) {
+			portTypeAssignments[3] = portType;
+		} else if(hexLocation.getX() + 3 == 4 && hexLocation.getY() + 3 == 0) {
+			portTypeAssignments[4] = portType;
+		} else if(hexLocation.getX() + 3 == 2 && hexLocation.getY() + 3 == 1) {
+			portTypeAssignments[5] = portType;
+		} else if(hexLocation.getX() + 3 == 0 && hexLocation.getY() + 3 == 3) {
+			portTypeAssignments[6] = portType;
+		} else if(hexLocation.getX() + 3 == 0 && hexLocation.getY() + 3 == 5) {
+			portTypeAssignments[7] = portType;
+		} else if(hexLocation.getX() + 3 == 1 && hexLocation.getY() + 3 == 6) {
+			portTypeAssignments[8] = portType;
+		}
+	}
+	
+	public void initBordersAndVertices() {
+		initVertices();
+		initBorders();
 	}
 	
 	private void shufflePortTypes() {

@@ -1,7 +1,19 @@
 package shared.communication.results.nonmove;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+
+import shared.definitions.CatanColor;
+import shared.definitions.DevCardType;
+import shared.definitions.HexType;
+import shared.definitions.PortType;
+import shared.locations.EdgeDirection;
+import shared.locations.EdgeLocation;
+import shared.locations.HexLocation;
+import shared.locations.VertexDirection;
+import shared.locations.VertexLocation;
+import shared.model.Bank;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -9,6 +21,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import shared.model.Game;
+import shared.model.board.Board;
+import shared.model.board.Hex;
+import shared.model.board.Vertex;
+import shared.model.items.DevelopmentCard;
+import shared.model.player.Player;
 
 public class GetVersion_Result {
 
@@ -47,10 +64,262 @@ public class GetVersion_Result {
 	}
 
 	public Game getGame() {
+		// Init the BANK with the current amounts of resources and development cards
+		int wheat = model.bank.getWheat();
+		int brick = model.bank.getBrick();
+		int wood = model.bank.getWood();
+		int sheep = model.bank.getSheep();
+		int ore = model.bank.getOre();
+		int soldiers = model.deck.getSoldier();
+		int monopoly = model.deck.getMonopoly();
+		int yearOfPlenty = model.deck.getYearOfPlenty();
+		int roadBuilder = model.deck.getRoadBuilding();
+		int monument = model.deck.getMonument();
+		Bank bank = new Bank(wheat, brick, wood, sheep, ore, soldiers, monopoly, yearOfPlenty, roadBuilder, monument);
 		
-		Game game = new Game();		
+		// Init the PLAYERS
+		Player[] players = new Player[4];
+		ClientModel.MPlayer[] mPlayers = model.players;
+		for(ClientModel.MPlayer mPlayer: mPlayers) {
+			// Get the resources the player should have right now
+			wheat = mPlayer.getResources().getWheat();
+			brick = mPlayer.getResources().getBrick();
+			wood = mPlayer.getResources().getWood();
+			sheep = mPlayer.getResources().getSheep();
+			ore = mPlayer.getResources().getOre();
+			// Prep the Dev Cards
+			ArrayList<DevelopmentCard> soldierCards = new ArrayList<DevelopmentCard>();
+			ArrayList<DevelopmentCard> monopolyCards = new ArrayList<DevelopmentCard>();
+			ArrayList<DevelopmentCard> yearOfPlentyCards = new ArrayList<DevelopmentCard>();
+			ArrayList<DevelopmentCard> roadBuilderCards = new ArrayList<DevelopmentCard>();
+			ArrayList<DevelopmentCard> monumentCards = new ArrayList<DevelopmentCard>();
+			
+			// Make the Dev cards that are played that we keep track of
+			for(int i = 0; i < mPlayer.getMonuments(); i++) { monumentCards.add(new DevelopmentCard(DevCardType.MONUMENT, 2, true)); }
+			for(int i = 0; i < mPlayer.getSoldiers(); i++) 	{ soldierCards.add(new DevelopmentCard(DevCardType.SOLDIER, 2, true));}
+			// Make the Dev cards that are not played that were bought this turn
+			for(int i = 0; i < mPlayer.getNewDevCards().getSoldier(); i++) 		{ soldierCards.add(new DevelopmentCard(DevCardType.SOLDIER, 3, false)); }
+			for(int i = 0; i < mPlayer.getNewDevCards().getMonopoly(); i++) 	{ monopolyCards.add(new DevelopmentCard(DevCardType.MONOPOLY, 3, false)); }
+			for(int i = 0; i < mPlayer.getNewDevCards().getYearOfPlenty(); i++) { yearOfPlentyCards.add(new DevelopmentCard(DevCardType.YEAR_OF_PLENTY, 3, false)); }
+			for(int i = 0; i < mPlayer.getNewDevCards().getRoadBuilding(); i++) { roadBuilderCards.add(new DevelopmentCard(DevCardType.ROAD_BUILD, 3, false)); }
+			for(int i = 0; i < mPlayer.getNewDevCards().getMonopoly(); i++) 	{ monumentCards.add(new DevelopmentCard(DevCardType.MONOPOLY, 3, false)); }
+			// Make the Dev cards that are not played that were bought on a previous turn
+			for(int i = 0; i < mPlayer.getOldDevCards().getSoldier(); i++) 		{ soldierCards.add(new DevelopmentCard(DevCardType.SOLDIER, 2, false)); }
+			for(int i = 0; i < mPlayer.getOldDevCards().getMonopoly(); i++) 	{ monopolyCards.add(new DevelopmentCard(DevCardType.MONOPOLY, 2, false)); }
+			for(int i = 0; i < mPlayer.getOldDevCards().getYearOfPlenty(); i++) { yearOfPlentyCards.add(new DevelopmentCard(DevCardType.YEAR_OF_PLENTY, 2, false)); }
+			for(int i = 0; i < mPlayer.getOldDevCards().getRoadBuilding(); i++) { roadBuilderCards.add(new DevelopmentCard(DevCardType.ROAD_BUILD, 2, false)); }
+			for(int i = 0; i < mPlayer.getOldDevCards().getMonopoly(); i++) 	{ monumentCards.add(new DevelopmentCard(DevCardType.MONOPOLY, 2, false)); }
+			
+			// Create the player giving him his index, bank, and the cards he starts with
+			Player player = new Player(mPlayer.getPlayerIndex(), bank, brick, wheat, ore, sheep, wood, soldierCards, monopolyCards, yearOfPlentyCards, roadBuilderCards, monumentCards);
+			// Set other primitive Player data types
+			player.setPlayerColor(getCatanColorFromString(mPlayer.getColor())); // TODO figure out color
+			player.setHasDiscarded(mPlayer.isDiscarded());
+			player.setPlayerName(mPlayer.getName());
+			player.setHasPlayedDevCardThisTurn(mPlayer.isPlayedDevCard());
+			player.setPlayerId(mPlayer.getPlayerID());
+			player.setTotalVictoryPoints(mPlayer.getVictoryPoints());
+			players[player.getPlayerIndex()] = player;
+		}
+		
+		// Init the BOARD
+		// First with the Hexes, their types, their roll numbers
+		ArrayList<Hex> newHexes = new ArrayList<Hex>();
+		for(ClientModel.MMap.MHex mHex: model.getMap().getHexes()) {
+			boolean hasRobber = false;
+			if(model.map.getRobber() == mHex.getLocation()) {
+				hasRobber = true;
+			}
+			// Do our 3 offset, find the HexType of the String TODO (Verify this part is working), and the roll value
+			newHexes.add( new Hex(mHex.getLocation().getX() + 3, mHex.getLocation().getY() + 3, getHexTypeFromString(mHex.getResource()), mHex.getNumber(), hasRobber) );
+		}
+		// Make the Board
+		Board board = new Board(newHexes);
+		// Setup Ports, vertices, edges
+		for(ClientModel.MMap.Port port: model.map.ports) {
+			// Get hex Locations
+			HexLocation hexLoc = new HexLocation(port.getLocation().getX(), port.getLocation().getY());
+			EdgeDirection ed = getEdgeDirectionFromString(port.getDirection());
+			PortType pt = getPortTypeFromString(port.getResource());
+			// One by one setup the array of PortTypes for the vertex initialization of the Map
+			board.initPortTypesFromServer(hexLoc, pt);
+		}
+		board.initBordersAndVertices();
+		
+		// Use the Board to place all pieces Settlements, Cities, Roads
+		// First Settlements
+		for(ClientModel.MMap.VertexObject settlement: model.map.settlements) {
+			// Get hex location
+			HexLocation hexLoc = new HexLocation(settlement.getLocation().getX(),settlement.getLocation().getY());
+			VertexDirection vd = getVertexDirectionFromString(settlement.location.getDirection());
+			try {
+				players[settlement.getOwner()].getPlayerPieces().placeSettlement(board.getVertex(new VertexLocation(hexLoc, vd )));
+			} catch (Exception e) {
+				System.out.println("something went screwy and we couldn't placy the settlement");
+				e.printStackTrace();
+			}
+		}
+		for(ClientModel.MMap.VertexObject city: model.map.cities) {
+			// Get hex location
+			HexLocation hexLoc = new HexLocation(city.getLocation().getX(),city.getLocation().getY());
+			VertexDirection vd = getVertexDirectionFromString(city.location.getDirection());
+			try {
+				players[city.getOwner()].getPlayerPieces().placeCity(board.getVertex(new VertexLocation(hexLoc, vd )));
+			} catch (Exception e) {
+				System.out.println("something went screwy and we couldn't placy the settlement");
+				e.printStackTrace();
+			}
+		}
+		for(ClientModel.MMap.EdgeValue road: model.map.roads) {
+			// Get hex location
+			HexLocation hexLoc = new HexLocation(road.getLocation().getX(),road.getLocation().getY());
+			EdgeDirection ed = getEdgeDirectionFromString(road.location.getDirection());
+			try {
+				players[road.getOwner()].getPlayerPieces().placeRoad(board.getEdge(new EdgeLocation(hexLoc, ed)));
+			} catch (Exception e) {
+				System.out.println("something went screwy and we couldn't placy the settlement");
+				e.printStackTrace();
+			}
+		}
+		
+		// Init the GAME
+		Game game = new Game(players, board, bank);
+		game.setWinner(model.getWinner());
+		game.setVersionNumber(model.getVersion());
+		game.setCurrentPlayer(players[model.turnTracker.getCurrentTurn()]);
+		game.setStatus(model.turnTracker.getStatus());
+		game.setLargestArmy(players[model.turnTracker.largestArmy]);
+		game.setLongestRoad((players[model.turnTracker.longestRoad]));
+		
+		
+		//TODO chat and history
 		
 		return currentVersion;
+	}
+
+	/**
+	 * 
+	 * TODO Verify that these are the string that are being passed from the server!
+	 * 
+	 * ['Wood' or 'Brick' or 'Sheep' or 'Wheat' or 'Ore']
+	 * 
+	 * @param resource
+	 * @return
+	 */
+	private HexType getHexTypeFromString(String resource) {
+		if(resource == "wood") {
+			return HexType.WOOD;
+		} else if(resource == "brick") {
+			return HexType.BRICK;
+		} else if(resource == "sheep") {
+			return HexType.SHEEP;
+		} else if(resource == "qheat") {
+			return HexType.WHEAT;
+		} else if(resource == "ore") {
+			return HexType.ORE;
+		} else {
+			return HexType.DESERT;
+		}
+	}
+
+	/**
+	 * 
+	 * TODO Verify that these are the string that are being passed from the server!
+	 * 
+	 * ['Wood' or 'Brick' or 'Sheep' or 'Wheat' or 'Ore']
+	 * 
+	 * @param resource
+	 * @return
+	 */
+	private PortType getPortTypeFromString(String resource) {
+		if(resource == "wood") {
+			return PortType.WOOD;
+		} else if(resource == "brick") {
+			return PortType.BRICK;
+		} else if(resource == "sheep") {
+			return PortType.SHEEP;
+		} else if(resource == "qheat") {
+			return PortType.WHEAT;
+		} else if(resource == "ore") {
+			return PortType.ORE;
+		} else {
+			return PortType.THREE;
+		}
+	}
+	
+	/**
+	 * TODO Verify that these are the string that are being passed from the server!
+	 * 
+	 * @param color
+	 * @return
+	 */
+	private CatanColor getCatanColorFromString(String color) {
+		if(color == "blue") {
+			return CatanColor.BLUE;
+		} else if(color == "brown") {
+			return CatanColor.BROWN;
+		} else if(color == "green") {
+			return CatanColor.GREEN;
+		} else if(color == "orange") {
+			return CatanColor.ORANGE;
+		} else if(color == "puce") {
+			return CatanColor.PUCE;
+		} else if(color == "purple") {
+			return CatanColor.PURPLE;
+		} else if(color == "red") {
+			return CatanColor.RED;
+		} else if(color == "white") {
+			return CatanColor.WHITE;
+		} else if(color == "yellow") {
+			return CatanColor.YELLOW;
+		}
+		return null;
+	}
+	
+	/**
+	 * TODO Verify this
+	 * 
+	 * @param direction
+	 * @return
+	 */
+	private EdgeDirection getEdgeDirectionFromString(String direction) {
+		if(direction == "NW") {
+			return EdgeDirection.NorthWest;
+		} else if(direction == "N") {
+			return EdgeDirection.North;
+		} else if(direction == "NE") {
+			return EdgeDirection.NorthEast;
+		} else if(direction == "SW") {
+			return EdgeDirection.SouthWest;
+		} else if(direction == "S") {
+			return EdgeDirection.South;
+		} else if(direction == "SE") {
+			return EdgeDirection.SouthEast;
+		}
+		return null;
+	}
+	
+	/**
+	 * TODO Verify this
+	 * 
+	 * @param direction
+	 * @return
+	 */
+	private VertexDirection getVertexDirectionFromString(String direction) {
+		if(direction == "NW") {
+			return VertexDirection.NorthWest;
+		} else if(direction == "W") {
+			return VertexDirection.West;
+		} else if(direction == "SW") {
+			return VertexDirection.SouthWest;
+		} else if(direction == "SE") {
+			return VertexDirection.SouthEast;
+		} else if(direction == "E") {
+			return VertexDirection.East;
+		} else if(direction == "NE") {
+			return VertexDirection.NorthEast;
+		}
+		return null;
 	}
 
 	/**
@@ -91,14 +360,14 @@ public class GetVersion_Result {
 
 	public class ClientModel{
 
-		private DevCardList deck;
-		private Bank bank;
-		private Chat chat;
-		private Log log;
-		private Map map;
-		private Player[] players;
-		private TradeOffer tradeOffer;
-		private TurnTracker turnTracker;
+		private MDevCardList deck;
+		private MBank bank;
+		private MChat chat;
+		private MLog log;
+		private MMap map;
+		private MPlayer[] players;
+		private MTradeOffer tradeOffer;
+		private MTurnTracker turnTracker;
 		private int version;
 		private int winner;
 
@@ -138,36 +407,36 @@ public class GetVersion_Result {
 		}
 
 
-		public DevCardList getDeck() {
+		public MDevCardList getDeck() {
 			return deck;
 		}
 
 
-		public Bank getBank() {
+		public MBank getBank() {
 			return bank;
 		}
 
-		public Chat getChat() {
+		public MChat getChat() {
 			return chat;
 		}
 
-		public Log getLog() {
+		public MLog getLog() {
 			return log;
 		}
 
-		public Map getMap() {
+		public MMap getMap() {
 			return map;
 		}
 
-		public Player[] getPlayers() {
+		public MPlayer[] getPlayers() {
 			return players;
 		}
 
-		public TradeOffer getTradeOffer() {
+		public MTradeOffer getTradeOffer() {
 			return tradeOffer;
 		}
 
-		public TurnTracker getTurnTracker() {
+		public MTurnTracker getTurnTracker() {
 			return turnTracker;
 		}
 
@@ -179,12 +448,15 @@ public class GetVersion_Result {
 			return winner;
 		}
 
-		public class Bank{
+		public class MBank{
 			int brick;
 			int ore;
 			int sheep;
 			int wheat;
 			int wood;
+			public MBank(int wheat2, int brick2, int wood2, int sheep2, int ore2) {
+				// TODO Auto-generated constructor stub
+			}
 			public int getBrick() {
 				return brick;
 			}
@@ -226,7 +498,7 @@ public class GetVersion_Result {
 
 		}
 
-		public class Chat{
+		public class MChat{
 			private MessageLine[] lines;
 
 
@@ -256,7 +528,7 @@ public class GetVersion_Result {
 
 		}
 
-		public class Log{
+		public class MLog{
 			private MessageLine[] lines;
 
 			@Override
@@ -317,14 +589,14 @@ public class GetVersion_Result {
 			}
 		}
 
-		public class Map{
-			private Hex[] hexes;
+		public class MMap{
+			private MHex[] hexes;
 			private Port[] ports;
 			private EdgeValue[] roads;
 			private VertexObject[] settlements;
 			private VertexObject[] cities;
 			private int radius;
-			private HexLocation robber;
+			private MHexLocation robber;
 
 
 			/*
@@ -370,7 +642,7 @@ public class GetVersion_Result {
 						+ Arrays.toString(cities) + ", radius=" + radius
 						+ ", robber=" + robber + "]";
 			}
-			public Hex[] getHexes() {
+			public MHex[] getHexes() {
 				return hexes;
 			}
 			public Port[] getPorts() {
@@ -388,12 +660,12 @@ public class GetVersion_Result {
 			public int getRadius() {
 				return radius;
 			}
-			public HexLocation getRobber() {
+			public MHexLocation getRobber() {
 				return robber;
 			}
 			public class VertexObject{
 				private int owner;
-				private VertexLocation location;
+				private MVertexLocation location;
 
 
 				@Override
@@ -404,7 +676,7 @@ public class GetVersion_Result {
 				public int getOwner() {
 					return owner;
 				}
-				public VertexLocation getLocation() {
+				public MVertexLocation getLocation() {
 					return location;
 				}
 
@@ -416,7 +688,7 @@ public class GetVersion_Result {
 				int y;
 				String direction;
 			}*/
-			public class VertexLocation{
+			public class MVertexLocation{
 				private int x;
 				private int y;
 				private String direction;
@@ -444,7 +716,7 @@ public class GetVersion_Result {
 
 			private class EdgeValue{
 				private int owner;
-				private EdgeLocation location;
+				private MEdgeLocation location;
 				/*EdgeValue {
 				owner (index): The index (not id) of the player who owns this piece (0-3),
 					location (EdgeLocation): The location of this road.
@@ -452,7 +724,7 @@ public class GetVersion_Result {
 				public int getOwner() {
 					return owner;
 				}
-				public EdgeLocation getLocation() {
+				public MEdgeLocation getLocation() {
 					return location;
 				}
 				@Override
@@ -464,7 +736,7 @@ public class GetVersion_Result {
 
 			}
 
-			private class EdgeLocation{
+			private class MEdgeLocation{
 				private int x;
 				private int y;
 				private String direction;
@@ -494,7 +766,7 @@ public class GetVersion_Result {
 
 			private class Port{
 				private String resource;
-				private HexLocation location;				
+				private MHexLocation location;				
 				private String direction;
 				private int ratio;
 
@@ -508,7 +780,7 @@ public class GetVersion_Result {
 				public String getResource() {
 					return resource;
 				}
-				public HexLocation getLocation() {
+				public MHexLocation getLocation() {
 					return location;
 				}
 				public String getDirection() {
@@ -529,8 +801,8 @@ public class GetVersion_Result {
 
 			}
 
-			public class Hex{
-				private HexLocation location;
+			public class MHex{
+				private MHexLocation location;
 				private String resource;
 				private int number;
 				/*
@@ -540,7 +812,7 @@ public class GetVersion_Result {
 					this tile gives - it's only here if the tile is not desert., 
 				number(integer, optional): What number is on this tile. It's omitted if this is a desert hex.
 				}*/
-				public HexLocation getLocation() {
+				public MHexLocation getLocation() {
 					return location;
 				}
 				public String getResource() {
@@ -557,7 +829,7 @@ public class GetVersion_Result {
 
 
 			}
-			public class HexLocation{
+			public class MHexLocation{
 				private int x;
 				private int y;
 				/*HexLocation {
@@ -582,14 +854,14 @@ public class GetVersion_Result {
 
 
 
-		public class Player{
+		public class MPlayer{
 			private int cities;
 			private String color;
 			private boolean discarded;
 			private int monuments;
 			private String name;
-			private DevCardList newDevCards;
-			private DevCardList oldDevCards;
+			private MDevCardList newDevCards;
+			private MDevCardList oldDevCards;
 			private int playerIndex;
 			private boolean playedDevCard;
 			private int playerID;
@@ -619,11 +891,11 @@ public class GetVersion_Result {
 				return name;
 			}
 
-			public DevCardList getNewDevCards() {
+			public MDevCardList getNewDevCards() {
 				return newDevCards;
 			}
 
-			public DevCardList getOldDevCards() {
+			public MDevCardList getOldDevCards() {
 				return oldDevCards;
 			}
 
@@ -695,7 +967,7 @@ public class GetVersion_Result {
 
 		}
 
-		public class TradeOffer{
+		public class MTradeOffer{
 			private int sender;
 			private int receiver;
 			private ResourceList offer;
@@ -724,7 +996,7 @@ public class GetVersion_Result {
 
 		}
 
-		public class TurnTracker{
+		public class MTurnTracker{
 			private int currentTurn;
 			private String status;
 			private int longestRoad;
@@ -760,7 +1032,7 @@ public class GetVersion_Result {
 
 		}
 
-		public class DevCardList{
+		public class MDevCardList{
 
 			private int monopoly;
 			private int monument;

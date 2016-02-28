@@ -168,7 +168,7 @@ public class ServerProxyTest {
 		assertFalse(vResult.isUpToDate());
 		
 		GetVersion_Result.ClientModel model = vResult.getModel();
-		GetVersion_Result.ClientModel.DevCardList deck = model.getDeck();
+		GetVersion_Result.ClientModel.MDevCardList deck = model.getDeck();
 		
 		assertEquals(2, deck.getYearOfPlenty());
 		assertEquals(2, deck.getMonopoly());
@@ -180,6 +180,13 @@ public class ServerProxyTest {
 		assertEquals(24, model.getLog().getLines().length);
 		
 		//GetVersion_Result.ClientModel.Map map = model.getMap();
+		System.out.println(model.toString());
+		
+		GetVersion_Result.ClientModel.MBank bank = model.getBank();
+		
+		
+		
+		
 		//System.out.println(model.toString());
 		
 		//GetVersion_Result.ClientModel.Bank bank = model.getBank();
