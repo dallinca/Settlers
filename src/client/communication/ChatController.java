@@ -58,13 +58,14 @@ public class ChatController extends Controller implements IChatController, Obser
 		Media hit = new Media(bip);
 		MediaPlayer mediaPlayer = new MediaPlayer(hit);
 		mediaPlayer.play();
-				
-		/*try {
-			SendChat_Result result = ClientFacade.sendChat(message);
+		*/
+		
+		try {
+			SendChat_Result result = ClientFacade.getInstance().sendChat(message);
 		} catch (ServerException e) {
 			
 			e.printStackTrace();
-		}*/
+		}
 		
 	}
 
@@ -78,24 +79,30 @@ public class ChatController extends Controller implements IChatController, Obser
 		//We need  a list of messages, and who they came from. Who they came from is important so we can ascertain the color of the player.
 		 
 		 //These next two will actually have a definition they acquire from the client, not a brand new list, for obvious reasons
-		 List<String> listOfMessages = new ArrayList<String>();
+		 
+		//We will have one method that returns the log that I can parse for the source and the message rather than the arrayLists given here
+		//We need a new public class Message within game that has a string source and a string message
+		List<String> listOfMessages = new ArrayList<String>();
 		 List<String> listOfSenders = new ArrayList<String>();
+		 
+		 //Client.getInstance().getGame().getMessages();
+		 
 		 for (int i = 0; i < listOfMessages.size(); i++) {
 		  
-		 String message = listOfMessages.get(i);
-		 String sender = listOfSenders.get(i);
-		  
-		 //Now we have to acertain the color of the player based on the sender:
-		 //CatanColor color = "Call a method in the client that takes in the sender and returns the color they are"; 
-		  
-		 //Compile the two together and send them off to the client!
-		  
-		 //edit: I had the message and color reversed in the constructor. Whoops.
-		 LogEntry entry = new LogEntry(color, message);
-		 
-		 //Then add it to our list we will set in the view:
-		 entries.add(entry);
-		  
+			 String message = listOfMessages.get(i);
+			 String sender = listOfSenders.get(i);
+			  
+			 //Now we have to acertain the color of the player based on the sender:
+			 //CatanColor color = "Call a method in the client that takes in the sender and returns the color they are"; 
+			  
+			 //Compile the two together and send them off to the client!
+			  
+			 //edit: I had the message and color reversed in the constructor. Whoops.
+			 LogEntry entry = new LogEntry(color, message);
+			 
+			 //Then add it to our list we will set in the view:
+			 entries.add(entry);
+			  
 		 }	
 		/* We need to send the messages off to the ChatView. To do so we need to previously have compiled who said what and who they were and what they said, then we should in that above for loop
 		 * add them to a list that we can send to setEntries that needs to be of type: "final List<LogEntry> entries" as stated in ChatView.java 

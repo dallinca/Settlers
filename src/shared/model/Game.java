@@ -313,9 +313,12 @@ public class Game {
 	 * @param devCardType
 	 * @return
 	 */
-	public boolean canDoCurrentPlayerUseDevelopmentCard(DevCardType devCardType) {
+	public boolean canDoCurrentPlayerUseDevelopmentCard(int userID, DevCardType devCardType) {
 		//We need to be able to measure how long a player has owned a card.
-		return currentPlayer.canDoPlayDevelopmentCard(turnNumber, devCardType);		
+		if (currentPlayer.getPlayerId() == userID) {
+			return currentPlayer.canDoPlayDevelopmentCard(turnNumber, devCardType);
+		} 
+		return false;
 	}
 	
 	/**
@@ -327,6 +330,29 @@ public class Game {
 		return currentPlayer.numberUnplayedDevCards(devCardType);
 	}
 	
+	
+	/**
+	 * This card is special because it is the only development card that references the bank, so additional checks need to be made, and so for security reasons it gets its own method to do so.
+	 */
+	public boolean canDoCurrentPlayerUseYearOfPlenty(ResourceType[] resourceType, int userID) {
+		//This is important because the bank not have the cards they need.
+		if (currentPlayer.getPlayerId() == userID) {
+			if (resourceType.length == 1) {
+				if (!canDoPlayerTake2OfResource(resourceType[0])) {
+					return false;
+				}
+			} else {
+				for (int i = 0; i < resourceType.length; i++) {
+					if (!bank.canDoPlayerTakeResource(resourceType[i]))
+						return false;
+				}
+			}
+			return currentPlayer.canDoPlayDevelopmentCard(turnNumber, DevCardType.YEAR_OF_PLENTY);
+			
+		}
+		return false;
+	}
+	
 	/**
 	 * TODO Javadoc and Implement
 	 * 
@@ -335,45 +361,56 @@ public class Game {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean useDevelopmentCard(DevCardType devCardType, ResourceType[] resourceType) throws Exception {
-		if (currentPlayer.canDoPlayDevelopmentCard(turnNumber, devCardType)) {
-			switch (devCardType) {
-				case MONOPOLY:
-					if (resourceType == null || resourceType.length > 1) {
-						throw new Exception("Trying to use monopoly on more than one resource!");
-					}
-					//Declare a Resource the player wants, and then extract it from all players who have it.
-					for (int i = 0; i < players.length; i++) {
-						if (players[i] != currentPlayer) {
-							//If not the current player, ask the player for an Array list of it's resource card of that type
-							currentPlayer.conformToMonopoly(resourceType[0]).addAll(players[i].conformToMonopoly(resourceType[0]));
-							players[i].conformToMonopoly(resourceType[0]).clear();
+	public boolean useDevelopmentCard(int userID, DevCardType devCardType, ResourceType[] resourceType) throws Exception {
+		
+		if (currentPlayer.getPlayerId() == userID) {
+		
+			if (currentPlayer.canDoPlayDevelopmentCard(turnNumber, devCardType)) {
+				switch (devCardType) {
+					case MONOPOLY:
+						if (resourceType == null || resourceType.length > 1) {
+							throw new Exception("Trying to use monopoly on more than one resource!");
 						}
-					}
-					setVersionNumber(versionNumber++);
-					return doWeHaveAWinner();
-				case YEAR_OF_PLENTY:
-					//Add two resources of the types specified to the currentPlayers hand
-					if (resourceType.length == 1) {
-						ResourceCard resource = bank.playerTakeResource(resourceType[0]);
-						//some sneaky idea that realizes conformToMonopoly returns the arraylist of that players cards of a specified type.
-						currentPlayer.conformToMonopoly(resourceType[0]).add(resource);;
-						//repeat
-						resource = bank.playerTakeResource(resource.getResourceType());
-						currentPlayer.conformToMonopoly(resourceType[0]).add(resource);
-					}
-					else if (resourceType.length == 2) {
-						for (int g = 0; g < resourceType.length; g++) {
-							ResourceCard resource = bank.playerTakeResource(resourceType[g]);
-							//some sneaky idea that realizes conformToMonopoly returns the arraylist of that players cards of a specified type.
-							currentPlayer.conformToMonopoly(resourceType[g]).add(resource);
+						//Declare a Resource the player wants, and then extract it from all players who have it.
+						for (int i = 0; i < players.length; i++) {
+							if (players[i] != currentPlayer) {
+								//If not the current player, ask the player for an Array list of it's resource card of that type
+								currentPlayer.conformToMonopoly(resourceType[0]).addAll(players[i].conformToMonopoly(resourceType[0]));
+								players[i].conformToMonopoly(resourceType[0]).clear();
+							}
 						}
-					}
-					setVersionNumber(versionNumber++);
-					return doWeHaveAWinner();
-				default: throw new Exception("Wrong declaration for a development card of this type.");
+						setVersionNumber(versionNumber++);
+						return doWeHaveAWinner();
+					case YEAR_OF_PLENTY:
+						if (canDoCurrentPlayerUseYearOfPlenty(resourceType, userID)) {
+							//Add two resources of the types specified to the currentPlayers hand
+							if (resourceType.length == 1) {
+								ResourceCard resource = bank.playerTakeResource(resourceType[0]);
+								//some sneaky idea that realizes conformToMonopoly returns the arraylist of that players cards of a specified type.
+								currentPlayer.conformToMonopoly(resourceType[0]).add(resource);;
+								//repeat
+								resource = bank.playerTakeResource(resource.getResourceType());
+								currentPlayer.conformToMonopoly(resourceType[0]).add(resource);
+							}
+							else if (resourceType.length == 2) {
+								for (int g = 0; g < resourceType.length; g++) {
+									ResourceCard resource = bank.playerTakeResource(resourceType[g]);
+									//some sneaky idea that realizes conformToMonopoly returns the arraylist of that players cards of a specified type.
+									currentPlayer.conformToMonopoly(resourceType[g]).add(resource);
+								}
+							}
+							setVersionNumber(versionNumber++);
+							return doWeHaveAWinner();
+						} else {
+							throw new Exception("The bank has not what you seek.");
+						}
+					default: throw new Exception("Wrong declaration for a development card of this type.");
+				}
 			}
+		} else {
+			throw new Exception("You cannot use a development Card");
 		}
+		
 		return doWeHaveAWinner();
 	}
 	
@@ -384,75 +421,78 @@ public class Game {
 	 * @return whether or not you just won the game
 	 * @throws Exception
 	 */
-	public boolean useDevelopmentCard(DevCardType devCardType) throws Exception {
-		if (currentPlayer.canDoPlayDevelopmentCard(turnNumber, devCardType)) {
-		//Marks the card as played
-		currentPlayer.playDevelopmentCard(turnNumber, devCardType);
+	public boolean useDevelopmentCard(int userID, DevCardType devCardType) throws Exception {
+		if (currentPlayer.getPlayerId() == userID) {
 		
-		switch (devCardType) {
-			case SOLDIER:
-				//Do they have more than three soldiers? Do they have the most soldiers? If so, award them the Largest Army award (assuming they don't already have it) and take it from the previous title holder
-				//Must move robber to a different hex
-								
-				boolean firstTime = true;
-				
-				//Initial selection of LargestArmy recipient.
-				if (currentPlayer.getNumberOfSoldiersPlayed() == 3) {
-					for (int i = 0; i < players.length; i++) {
-						if (players[i].getPlayerId() != currentPlayer.getPlayerId() && players[i].getNumberOfSoldiersPlayed() >= 3) {
-								firstTime = false;
-						}
-					}
-					if (firstTime) {
-						indexOfLargestArmy = currentPlayer.getPlayerIndex();
-						largestArmy = currentPlayer;
-						currentPlayer.incrementVictoryPoints();
-						currentPlayer.incrementVictoryPoints();
-					}
-				}
-				int test = 0;
-				//Check for competition
-				if (currentPlayer.getNumberOfSoldiersPlayed() >= 3 && !firstTime) {
-					if (currentPlayer.getNumberOfSoldiersPlayed() > largestArmy.getNumberOfSoldiersPlayed() && currentPlayer.getPlayerId() != largestArmy.getPlayerId()) {
-						//indexOfLargestArmy = currentPlayer.getPlayerId();
-						
+			if (currentPlayer.canDoPlayDevelopmentCard(turnNumber, devCardType)) {
+			//Marks the card as played
+			currentPlayer.playDevelopmentCard(turnNumber, devCardType);
+			
+			switch (devCardType) {
+				case SOLDIER:
+					//Do they have more than three soldiers? Do they have the most soldiers? If so, award them the Largest Army award (assuming they don't already have it) and take it from the previous title holder
+					//Must move robber to a different hex
+									
+					boolean firstTime = true;
+					
+					//Initial selection of LargestArmy recipient.
+					if (currentPlayer.getNumberOfSoldiersPlayed() == 3) {
 						for (int i = 0; i < players.length; i++) {
-							if (largestArmy.getPlayerId() == players[i].getPlayerId()) {
-								players[i].decrementVictoryPoints();
-								players[i].decrementVictoryPoints();
+							if (players[i].getPlayerId() != currentPlayer.getPlayerId() && players[i].getNumberOfSoldiersPlayed() >= 3) {
+									firstTime = false;
 							}
 						}
-					
-						largestArmy = currentPlayer;
-						currentPlayer.incrementVictoryPoints();
-						currentPlayer.incrementVictoryPoints();
+						if (firstTime) {
+							indexOfLargestArmy = currentPlayer.getPlayerIndex();
+							largestArmy = currentPlayer;
+							currentPlayer.incrementVictoryPoints();
+							currentPlayer.incrementVictoryPoints();
+						}
 					}
+					int test = 0;
+					//Check for competition
+					if (currentPlayer.getNumberOfSoldiersPlayed() >= 3 && !firstTime) {
+						if (currentPlayer.getNumberOfSoldiersPlayed() > largestArmy.getNumberOfSoldiersPlayed() && currentPlayer.getPlayerId() != largestArmy.getPlayerId()) {
+							//indexOfLargestArmy = currentPlayer.getPlayerId();
+							
+							for (int i = 0; i < players.length; i++) {
+								if (largestArmy.getPlayerId() == players[i].getPlayerId()) {
+									players[i].decrementVictoryPoints();
+									players[i].decrementVictoryPoints();
+								}
+							}
+						
+							largestArmy = currentPlayer;
+							currentPlayer.incrementVictoryPoints();
+							currentPlayer.incrementVictoryPoints();
+						}
+						
+					}
+					//Did the Largest Army award win the game?!
+					setVersionNumber(versionNumber++);
+					return doWeHaveAWinner();
 					
-				}
-				//Did the Largest Army award win the game?!
-				setVersionNumber(versionNumber++);
-				return doWeHaveAWinner();
-				
-			case MONUMENT:
-				//Give the player their due reward
-				currentPlayer.incrementVictoryPoints();
-				setVersionNumber(versionNumber++);
-				return doWeHaveAWinner();
-				
-			case ROAD_BUILD:
-				//Perhaps to avoid the cost of the roads, we can have an overridden method that asserts true on the canDoBuy and asserts true and avoids the cost. Who knows
-				
-				setVersionNumber(versionNumber++);
-				//Did the two extra roads with the game?!?! This may result in the longest road being awarded. 
-				return doWeHaveAWinner();
-		}
-		
-		}
-	
-		else 
-			throw new Exception("Cannot Play development card!");
-		return doWeHaveAWinner();
-		
+				case MONUMENT:
+					//Give the player their due reward
+					currentPlayer.incrementVictoryPoints();
+					setVersionNumber(versionNumber++);
+					return doWeHaveAWinner();
+					
+				case ROAD_BUILD:
+					//Perhaps to avoid the cost of the roads, we can have an overridden method that asserts true on the canDoBuy and asserts true and avoids the cost. Who knows
+					
+					setVersionNumber(versionNumber++);
+					//Did the two extra roads with the game?!?! This may result in the longest road being awarded. 
+					return doWeHaveAWinner();
+			}
+			
+			}
+			
+			else 
+				throw new Exception("Cannot Play development card, you card doesn't exist!");
+			return doWeHaveAWinner();
+		} else
+			throw new Exception("Cannot Play development card, you are not the current Player!");
 	}
 	
 	
