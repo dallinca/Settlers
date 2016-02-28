@@ -330,7 +330,10 @@ public class Game {
 	 * 
 	 * @return how many unused cards the player has of the specified devCardType
 	 */
-	public int numberUnplayedDevCards(DevCardType devCardType) {
+	public int numberUnplayedDevCards(int userID, DevCardType devCardType) {
+		if (currentPlayer.getPlayerId() != userID) {
+			return -1;
+		} 
 		return currentPlayer.numberUnplayedDevCards(devCardType);
 	}
 	

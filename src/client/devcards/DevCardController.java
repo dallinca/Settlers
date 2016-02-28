@@ -5,14 +5,15 @@ import shared.definitions.ResourceType;
 import shared.model.turn.ActionManager;
 import shared.model.turn.ActionType;
 
-import java.io.File;
+//import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.sound.sampled.AudioInputStream;
+/*import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
+import javax.sound.sampled.Clip;*/
 
+import client.Client;
 import client.base.*;
 
 
@@ -85,7 +86,8 @@ public class DevCardController extends Controller implements IDevCardController,
 				 try {	
 					 ActionManager.getInstance().doPurchase(ActionType.PURCHASE_DEVELOPMENT);
 					 
-					 try {
+					/* try {
+					 		//for later hahaha
 						 	//This means you bought a card and it worked ;)
 					        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Purchased.wav").getAbsoluteFile());
 					        Clip clip = AudioSystem.getClip();
@@ -94,7 +96,7 @@ public class DevCardController extends Controller implements IDevCardController,
 					    } catch(Exception ex) {
 					        System.out.println("Error with playing sound.");
 					        ex.printStackTrace();
-					    }
+					    }*/
 				 } catch(Exception ex) {
 				        System.out.println("Error with Buying a Card.");
 				        ex.printStackTrace();
@@ -129,14 +131,8 @@ public class DevCardController extends Controller implements IDevCardController,
 		
 		boolean result = ActionManager.getInstance().canDoPlay(ActionType.PLAYCARD_MONOPOLY, toPassIn);
 		if (result) {
-			try {
-				ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_MONOPOLY, toPassIn);
-			} catch {
-				
-			}
+			ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_MONOPOLY, toPassIn);
 		}
-		
-	
 	}
 	
 	
@@ -147,11 +143,7 @@ public class DevCardController extends Controller implements IDevCardController,
 		
 		boolean result = ActionManager.getInstance().canDoPlay(ActionType.PLAYCARD_MONUMENT);
 		if (result) {
-			try {
-				ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_MONUMENT);
-			} catch {
-				
-			}
+			ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_MONUMENT);
 		}
 	}
 
@@ -160,12 +152,8 @@ public class DevCardController extends Controller implements IDevCardController,
 		System.out.println("DevCardController playRoadBuildCard()");
 		boolean result = ActionManager.getInstance().canDoPlay(ActionType.PLAYCARD_BUILDROADS);
 		if (result) {
-			try {
-				ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_BUILDROADS);
-				roadAction.execute();
-			} catch {
-				
-			}
+			ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_BUILDROADS);
+			roadAction.execute();
 		}
 		
 	}
@@ -211,6 +199,7 @@ public class DevCardController extends Controller implements IDevCardController,
 	public void update(Observable o, Object arg) {
 		System.out.println("DevCardController update()");
 		// TODO Auto-generated method stub
+		//Should we check and see if we've even begun? Basically that round 1 and 2 have passed?
 		
 		//This method needs to figure out how many cards the current player has, how many are playable, and what types they are. We need to get those three things from the server.
 		//So it would appear that it would follow that we should create three lists that have this information in them, or check and see if the Facade has the functionality to send them to us at this point
@@ -219,11 +208,13 @@ public class DevCardController extends Controller implements IDevCardController,
 		//And as we check to see if any are playable, if we find at least one that is, we pass the view that information and the type it is. So we have to iterate through all of these cards.
 		//If we find none, then our boolean in the method call will be false: setCardEnabled(DevCardType cardType, boolean enabled)
 		//And if we find any at all, regardless of playable or not, we will call this method setCardAmount(DevCardType cardType, int amount)
-		//
 		
+		DevCardType[] types = {DevCardType.YEAR_OF_PLENTY, DevCardType.SOLDIER, DevCardType.MONOPOLY, DevCardType.MONUMENT, DevCardType.ROAD_BUILD};
 		
-		
-		
+		for (int i = 0; i < types.length; i++) {
+			boolean enableOrNot = Client.getInstance().getGame().canDoCurrentPlayerUseDevelopmentCard(Client.getInstance().getUserId(), types[i]);
+			getPlayCardView().setCardEnabled(types[i], enableOrNot);
+		}
 	}
 
 }
