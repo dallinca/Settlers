@@ -153,7 +153,7 @@ public class JsonConverter {
 			try {
 				new VertexLocation(hexLoc, vd );
 				board.getVertex(new VertexLocation(hexLoc, vd ));
-				players[city.getOwner()].getPlayerPieces().placeCity(board.getVertex(new VertexLocation(hexLoc, vd )));
+				players[city.getOwner()].getPlayerPieces().placeInitialCity(board.getVertex(new VertexLocation(hexLoc, vd )));
 			} catch (Exception e) {
 				System.out.println("something went screwy and we couldn't place the city");
 				e.printStackTrace();

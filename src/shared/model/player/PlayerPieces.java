@@ -419,6 +419,21 @@ public class PlayerPieces {
 		   }
 	   }
 	   
+
+	   public void placeInitialCity(Vertex vertex) throws AllPiecesPlayedException {
+		   if(hasAvailableCity() == false) {
+			   throw new AllPiecesPlayedException("All the cities have already been placed");
+		   }
+		   for(City city: cities) { // Go through all players settlements
+			   if(city.getVertex() == null) { // Find the first city that is not on the map
+				   // Move the city onto the map
+				   city.setVertex(vertex);
+				   vertex.buildMunicipal(city); // set the vertex to the city
+				   break;
+			   }
+		   }
+	   }
+	   
 	   /**
 	    * Returns the number of unplayed roads, for the gui count
 	    * 
