@@ -228,6 +228,7 @@ public class Board {
 	 */
 	public boolean canDoPlaceInitialRoadOnEdge(Player player, EdgeLocation edgeLocation) {
 		if(edgeLocation == null) {
+			System.out.println("Board1: false");
 			return false;
 		}
 		// Use the edgelocation to find that Edge in our data Structure
@@ -240,10 +241,12 @@ public class Board {
 		
 		// player not null, edge not null, and does not have a road
 		if(player == null || player.canDoBuildInitialRoad() == false || edge == null || edge.hasRoad() == true) {
+			System.out.println("Board2: false");
 			return false;
 		}
 
 		// The player should be able to initialize their first two roads on any valid non-taken edge location
+		System.out.println("Board3: true");
 		return true;
 	}
 
