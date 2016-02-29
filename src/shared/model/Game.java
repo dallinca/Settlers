@@ -252,6 +252,36 @@ public class Game {
 	
 	// RESOURCE BAR CAN-DO CALLS
 	//////////////////////////////////////////
+
+	   /**
+	    * Returns the number of unplayed roads for the specified user, for the gui count.<br>
+	    * return 0 if the given id is not found in the game
+	    * 
+	    * @return the number of unplayed roads, for the gui count
+	    */
+	   public int getNumberUnplayedRoads(int UserId) {
+		   return getPlayerByID(UserId).getNumberUnplayedRoads();
+	   }
+
+	   /**
+	    * Returns the number of unplayed cities for the specified user, for the gui count.<br>
+	    * return 0 if the given id is not found in the game
+	    * 
+	    * @return the number of unplayed cities, for the gui count
+	    */
+	   public int getNumberUnplayedCities(int UserId) {
+		   return getPlayerByID(UserId).getNumberUnplayedCities();
+	   }	
+
+	   /**
+	    * Returns the number of unplayed settlements for the specified user, for the gui count.<br>
+	    * return 0 if the given id is not found in the game
+	    * 
+	    * @return the number of unplayed settlements, for the gui count
+	    */
+	   public int getNumberUnplayedSettlements(int UserId) {
+		   return getPlayerByID(UserId).getNumberUnplayedSettlements();
+	   }
 	
 	/**
 	 * This method polls the player to see if the player can build a road and then returns the result to that which called it (most likely the client)
@@ -342,7 +372,7 @@ public class Game {
 	 * 
 	 * @return how many unused cards the player has of the specified devCardType
 	 */
-	public int numberUnplayedDevCards(DevCardType devCardType) {
+	public int numberUnplayedDevCards(int userID, DevCardType devCardType) {
 		return currentPlayer.numberUnplayedDevCards(devCardType);
 	}
 	

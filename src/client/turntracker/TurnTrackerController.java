@@ -50,8 +50,8 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 			System.out.println("i: "+i+ " players[i].getPlayerIndex(): "+players[i].getPlayerIndex()+ 
 					"players[i].getPlayerName(): "+ players[i].getPlayerName()+" players[i].getPlayerColor(): "+players[i].getPlayerColor());
 
-			getView().setLocalPlayerColor(players[i].getPlayerColor());
 		}
+		getView().setLocalPlayerColor(Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getPlayerColor());
 	}
 
 	@Override

@@ -94,6 +94,8 @@ public class ResourceCardHand {
 			addCard(bank.playerTakeResource(ResourceType.SHEEP));
 			addCard(bank.playerTakeResource(ResourceType.WHEAT));
 			addCard(bank.playerTakeResource(ResourceType.WHEAT));
+			addCard(bank.playerTakeResource(ResourceType.ORE));
+			addCard(bank.playerTakeResource(ResourceType.ORE));
 		} catch (Exception e) {
 			System.out.println("YOU HAVE NOT INITIALIZED THE BANK");
 			e.printStackTrace();

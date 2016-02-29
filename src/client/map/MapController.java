@@ -26,8 +26,6 @@ public class MapController extends Controller implements IMapController, Observe
 	private IRobView robView;
 	private Game game;
 	
-	private Client client;
-	private ActionManager actionManger;
 	
 	public MapController(IMapView view, IRobView robView) {
 		
@@ -37,9 +35,7 @@ public class MapController extends Controller implements IMapController, Observe
 		setRobView(robView);
 		
 		initFromModel();
-		actionManger = ActionManager.getInstance();
-		client = Client.getInstance();
-		client.addObserver(this);
+		Client.getInstance().addObserver(this);
 		
 	}
 	
@@ -124,21 +120,33 @@ public class MapController extends Controller implements IMapController, Observe
 		// Init all the roads, settlements, and cities!
 		for(Player player: Client.getInstance().getGame().getAllPlayers()) {
 			for(Road road: player.getPlayerPieces().getRoads()) {
-				HexLocation hx = new HexLocation(road.getEdge().getTheirX_coord(), road.getEdge().getTheirY_coord());
-				EdgeLocation el = new EdgeLocation(hx, road.getEdge().getTheirEdgeDirection());
-				getView().placeRoad(el, road.getPlayer().getPlayerColor());
+				// Only place the peice on the map on the gui if it is assigned a location in the model
+				if(road.getEdge() != null) {
+					HexLocation hx = new HexLocation(road.getEdge().getTheirX_coord(), road.getEdge().getTheirY_coord());
+					EdgeLocation el = new EdgeLocation(hx, road.getEdge().getTheirEdgeDirection());
+					getView().placeRoad(el, road.getPlayer().getPlayerColor());
+				}
 			}
 			for(Settlement settlement: player.getPlayerPieces().getSettlements()) {
-				//HexLocation hx = new HexLocation(settlement.getVertex());
-				//VertexLocation vl = new VertexLocation();
-				//getView().placeSettlement(vertLoc, color);
+				if(settlement.getVertex() != null) {
+					// Only place the peice on the map on the gui if it is assigned a location in the model
+					HexLocation hx = new HexLocation(settlement.getVertex().getTheirX_coord_ver(), settlement.getVertex().getTheirY_coord_ver());
+					VertexLocation vl = new VertexLocation(hx, settlement.getVertex().getTheirVertexDirection());
+					getView().placeSettlement(vl, settlement.getPlayer().getPlayerColor());
+				}
 				
 			}
 			for(City city: player.getPlayerPieces().getCities()) {
-				
+				if(city.getVertex() != null) {
+					// Only place the peice on the map on the gui if it is assigned a location in the model
+					HexLocation hx = new HexLocation(city.getVertex().getTheirX_coord_ver(), city.getVertex().getTheirY_coord_ver());
+					VertexLocation vl = new VertexLocation(hx, city.getVertex().getTheirVertexDirection());
+					getView().placeCity(vl, city.getPlayer().getPlayerColor());
+				}
 			}
 		}
 		
+		//
 		
 	}
 
@@ -148,8 +156,7 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public boolean canPlaceRoad(EdgeLocation edgeLoc) {
 		System.out.println("MapController canPlaceRoad()");
-		client.getGame().canDoPlaceRoadOnEdge( client.getUserId(), edgeLoc);
-		return true;
+		return Client.getInstance().getGame().canDoPlaceRoadOnEdge( Client.getInstance().getUserId(), edgeLoc);
 	}
 
 	/**
@@ -158,8 +165,7 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public boolean canPlaceSettlement(VertexLocation vertLoc) {
 		System.out.println("MapController canPlaceSettlement()");
-		client.getGame().canDoPlaceSettlementOnVertex( client.getUserId(), vertLoc);
-		return true;
+		return Client.getInstance().getGame().canDoPlaceSettlementOnVertex( Client.getInstance().getUserId(), vertLoc);
 	}
 
 	/**
@@ -168,8 +174,7 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public boolean canPlaceCity(VertexLocation vertLoc) {
 		System.out.println("MapController canPlaceCity()");
-		client.getGame().canDoPlaceCityOnVertex(vertLoc);
-		return true;
+		return Client.getInstance().getGame().canDoPlaceCityOnVertex(vertLoc);
 	}
 
 	/**
@@ -178,8 +183,7 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public boolean canPlaceRobber(HexLocation hexLoc) {
 		System.out.println("MapController canPlaceRobber()");
-		client.getGame().canDoMoveRobberToHex( client.getUserId(), hexLoc);
-		return true;
+		return Client.getInstance().getGame().canDoMoveRobberToHex( Client.getInstance().getUserId(), hexLoc);
 	}
 
 	/**
@@ -189,13 +193,13 @@ public class MapController extends Controller implements IMapController, Observe
 	public void placeRoad(EdgeLocation edgeLoc) {
 		System.out.println("MapController placeRoad()");
 		try {
-			client.getGame().placeRoadOnEdge( client.getUserId(), edgeLoc);
+			Client.getInstance().getGame().placeRoadOnEdge( Client.getInstance().getUserId(), edgeLoc);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		getView().placeRoad(edgeLoc, client.getColor());
+		getView().placeRoad(edgeLoc, Client.getInstance().getColor());
 	}
 
 	/**
@@ -205,12 +209,12 @@ public class MapController extends Controller implements IMapController, Observe
 	public void placeSettlement(VertexLocation vertLoc) {
 		System.out.println("MapController placeSettlement()");
 		try {
-			client.getGame().placeSettlementOnVertex(client.getUserId(), vertLoc);
+			Client.getInstance().getGame().placeSettlementOnVertex(Client.getInstance().getUserId(), vertLoc);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		getView().placeSettlement(vertLoc, client.getColor());
+		getView().placeSettlement(vertLoc, Client.getInstance().getColor());
 	}
 
 	/**
@@ -220,12 +224,12 @@ public class MapController extends Controller implements IMapController, Observe
 	public void placeCity(VertexLocation vertLoc) {
 		System.out.println("MapController placeCity()");
 		try {
-			client.getGame().placeCityOnVertex(vertLoc);
+			Client.getInstance().getGame().placeCityOnVertex(vertLoc);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		getView().placeCity(vertLoc, client.getColor());
+		getView().placeCity(vertLoc, Client.getInstance().getColor());
 	}
 
 	/**
@@ -235,7 +239,7 @@ public class MapController extends Controller implements IMapController, Observe
 	public void placeRobber(HexLocation hexLoc) {
 		System.out.println("MapController placeRobber()");
 		try {
-			client.getGame().moveRobberToHex(client.getUserId(), hexLoc);
+			Client.getInstance().getGame().moveRobberToHex(Client.getInstance().getUserId(), hexLoc);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -270,7 +274,7 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public void playSoldierCard() {	
 		System.out.println("MapController playSoldierCard()");
-		actionManger.doAction(ActionType.PLAYCARD_KNIGHT);
+		ActionManager.getInstance().doAction(ActionType.PLAYCARD_KNIGHT);
 	}
 
 	/**
@@ -279,7 +283,7 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public void playRoadBuildingCard() {
 		System.out.println("MapController playRoadBuildingCard()");	
-		actionManger.doAction(ActionType.PLAYCARD_BUILDROADS);
+		ActionManager.getInstance().doAction(ActionType.PLAYCARD_BUILDROADS);
 	}
 
 	/**
@@ -290,7 +294,7 @@ public class MapController extends Controller implements IMapController, Observe
 		System.out.println("MapController robPlayer()");
 
 		try {
-			client.getGame().stealPlayerResource(client.getUserId(), victim.getId());
+			Client.getInstance().getGame().stealPlayerResource(Client.getInstance().getUserId(), victim.getId());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

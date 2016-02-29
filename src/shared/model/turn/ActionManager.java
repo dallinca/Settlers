@@ -44,8 +44,20 @@ public class ActionManager {
 	public void doAction(ActionType action){
 
 		if (action.getCategory() == ActionType.PURCHASE) doPurchase(action);
-		else if (action.getCategory() == ActionType.TRADE) doTrade(action);
-		else if (action.getCategory() == ActionType.PLAYCARD) playDevelopmentCard(action);	
+		else if (action.getCategory() == ActionType.TRADE)
+			try {
+				doTrade(action);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		else if (action.getCategory() == ActionType.PLAYCARD)
+			try {
+				playDevelopmentCard(action);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
 
 		Client.getInstance().notifyAll();
 	}
@@ -72,7 +84,7 @@ public class ActionManager {
 	 * @post action will be performed.
 	 */
 	public void doPurchase(ActionType action){
-		if (action == ActionType.PURCHASE_DEVELOPMENT) PURCHASE.purchaseDevelopmentCard();
+		if (action == ActionType.PURCHASE_DEVELOPMENT && canDoPurchase(action)) PURCHASE.purchaseDevelopmentCard();
 	}	
 	
 	/**
@@ -112,46 +124,81 @@ public class ActionManager {
 	 * 
 	 * @param action
 	 * @param location
+	 * @throws Exception 
 	 */
-	public void doBuild(ActionType action, Object location){
+	public void doBuild(ActionType action, Object location) throws Exception{
 		if (canDoBuild(action)) {	
 			if (action == ActionType.PURCHASE_CITY) PURCHASE.purchaseCity(location);
 			else if (action == ActionType.PURCHASE_ROAD) PURCHASE.purchaseRoad(location);
 			else if (action == ActionType.PURCHASE_SETTLEMENT)	PURCHASE.purchaseSettlement(location);
+			else throw new Exception("Should not have been able to call doBuild method");
 		} 
 	}
+	
+	/**
+	 * Checks to see if the trade can even happen
+	 * @pre valid action type, and that the trade is happening on the correct turn (current player has to be trading with somebody)
+	 * 
+	 * @param action
+	 * @return
+	 */
+	public boolean canDoTrade(ActionType action) {
+		if (action == ActionType.TRADE_BANK) return TRADE.canDoTradeWithBank();
+		else if (action == ActionType.TRADE_PLAYER) return TRADE.canDoTradeWithPlayer();
+		
+		return false;
+	}
+	
+	
 
 	/**
 	 * Initiates a trade of given type for the player.
 	 * @param action
+	 * @throws Exception 
 	 * 
 	 * @pre action must be of 'trade' action category.
 	 * @post action will be performed.
 	 */
-
-	public void doTrade(ActionType action){
-
-		if (action == ActionType.TRADE_BANK) TRADE.tradeWithBank();
-		else if (action == ActionType.TRADE_PLAYER)	TRADE.tradeWithPlayer();		
+	public void doTrade(ActionType action) throws Exception{
+		if (canDoTrade(action)) {
+			try {
+				if (action == ActionType.TRADE_BANK) TRADE.tradeWithBank();
+				else if (action == ActionType.TRADE_PLAYER)	TRADE.tradeWithPlayer();
+			} catch(Exception e) {
+				System.out.println("Should not have been able to trade");
+			}
+		} else throw new Exception("Should not have been able to call doTrade method");
 	}	
 
 	/**
 	 * Performs a play card action of given type for the player.
 	 * @param action
+	 * @throws Exception 
 	 * 
 	 * @pre action must be of 'playcard' action category.
 	 * @post action will be performed.
 	 */
 	
-	public void playDevelopmentCard(ActionType action, ResourceType[] toPassIn) {
-		if (action == ActionType.PLAYCARD_MONOPOLY) PLAYCARD.playMonopoly(toPassIn);
-		else if (action == ActionType.PLAYCARD_YEAROFPLENTY) PLAYCARD.playYearOfPlenty(toPassIn);
+	public void playDevelopmentCard(ActionType action, ResourceType[] toPassIn) throws Exception {
+		if (canDoPlay(action, toPassIn)) {
+			try {
+				if (action == ActionType.PLAYCARD_MONOPOLY) PLAYCARD.playMonopoly(toPassIn);
+				else if (action == ActionType.PLAYCARD_YEAROFPLENTY) PLAYCARD.playYearOfPlenty(toPassIn);
+			} catch (Exception e) {
+				System.out.println("Something went wrong when trying to play either your Monopoly or Year of Plenty card.");
+			}
+		} else throw new Exception("Should not have been able to call the playDevelopmentCard (for monopoly and year of Plenty) method");
 	}
 	
-	public void playDevelopmentCard(ActionType action){
-
-		if (action == ActionType.PLAYCARD_BUILDROADS) PLAYCARD.playBuildRoads();
-		else if (action == ActionType.PLAYCARD_KNIGHT) PLAYCARD.playKnight();
+	public void playDevelopmentCard(ActionType action) throws Exception{
+		if (canDoPlay(action)) {
+			try {
+				if (action == ActionType.PLAYCARD_BUILDROADS) PLAYCARD.playBuildRoads();
+				else if (action == ActionType.PLAYCARD_KNIGHT) PLAYCARD.playKnight();
+			} catch (Exception e) {
+				System.out.println("Something went wrong when trying to play either your Soldier or Road Builder card.");
+			}
+		} else throw new Exception("Should not have been able to call the playDevelopmentCard method");
 	}
 
 }
