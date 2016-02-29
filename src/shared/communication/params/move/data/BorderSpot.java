@@ -13,34 +13,30 @@ public class BorderSpot {
 		this.x = border.getHexLoc().getX();
 		this.y = border.getHexLoc().getY();
 
-		border.getDir();
-
 		switch (border.getDir()){
 		
-		case NorthWest: direction = "\"NW\"";
+		case NorthWest: direction = "NW";
 		break;
 		
-		case North: direction = "\"N\"";
+		case North: direction = "N";
 		break;
 		
-		case NorthEast: direction = "\"NE\"";
+		case NorthEast: direction = "NE";
 		break;
 		
-		case SouthEast: direction = "\"SE\"";
+		case SouthEast: direction = "SE";
 		break;
 		
-		case South: direction = "\"S\"";
+		case South: direction = "S";
 		break;
 		
-		case SouthWest: direction = "\"SW\"";
+		case SouthWest: direction = "SW";
 		break;
 		
 		default: //Do nothing, doesn't happen.
 			break;
 
 		}
-
-		this.direction = border.getDir().toString();
 	}
 
 

@@ -1,20 +1,45 @@
 package shared.communication.results.move;
 
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
 import shared.model.Game;
 
 public class AcceptTrade_Result {
 	
 	private boolean valid;
-	
-	public AcceptTrade_Result(String doPost) {
-		if (doPost==null){
-			valid = false;
+	private Game game;
+	private ClientModel model;
+
+	public ClientModel getModel() {
+		return model;
+	}
+
+	public void setModel(ClientModel model) {
+		this.model = model;
+	}
+
+	public void setGame(Game game) {
+		this.game = game;
+	}
+	public Game getGame(){
+		return game;
+	}
+
+	public AcceptTrade_Result(String post) {
+
+		if (post==null){
+			setValid(false);
 		}
-		else if (doPost.equals("Success")){
-			valid = true;
+		else if (post.equals("\"true\"")){
+			setValid(true);
+			game = null;
+			model = null;
 		}
-		else {
-			valid = false;
+		else{
+			setValid(true);
+			JsonConverter converter = new JsonConverter();
+			game = converter.parseJson(post);
+			model = converter.getModel();
 		}
 	}
 	
@@ -28,10 +53,5 @@ public class AcceptTrade_Result {
 
 	public void setValid(boolean valid) {
 		this.valid = valid;
-	}
-
-	public Game getGame() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

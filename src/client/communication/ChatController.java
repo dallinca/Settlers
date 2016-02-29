@@ -43,7 +43,18 @@ public class ChatController extends Controller implements IChatController, Obser
 		
 		//Put this in the update function, it works!!! Hooray! but we need to iterate through all the messages and write them all, so put it in a for loop
 		List<LogEntry> entries = new ArrayList<LogEntry>();
-		LogEntry entry = new LogEntry(CatanColor.BLUE, message); 
+		int myId = Client.getInstance().getUserId();
+		System.out.println(myId);
+		int index = -1;
+		
+		for (int i = 0; i < Client.getInstance().getGame().getAllPlayers().length; i++) {
+			if (myId == Client.getInstance().getGame().getAllPlayers()[i].getPlayerId()) {
+				index = i;
+			}
+		}
+		
+		CatanColor color = Client.getInstance().getGame().getAllPlayers()[index].getPlayerColor();
+		LogEntry entry = new LogEntry(color, message); 
 		entries.add(entry);
 		this.getView().setEntries(entries);
 		

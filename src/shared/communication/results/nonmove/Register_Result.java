@@ -2,19 +2,17 @@ package shared.communication.results.nonmove;
 
 public class Register_Result {
 
-	private boolean wasRegistered = false;
 	private int id = -1;
-	private String name = "";
+	private String name;
 	private boolean valid;
 
 	// CONSTRUCTORS
 	//////////////////////
-	public Register_Result(boolean wasRegistered, int id, String name) {
-		this.wasRegistered = wasRegistered;
+	public Register_Result(boolean valid, int id, String name) {
+		this.valid = valid;
 		this.id = id;
 		this.name = name;
 	}
-
 
 	public Register_Result() {
 		valid = false;
@@ -40,15 +38,6 @@ public class Register_Result {
 
 	public boolean isValid() {
 		return valid;
-	}
-
-
-	public boolean isWasRegistered() {
-		return wasRegistered;
-	}
-
-	public void setWasRegistered(boolean wasRegistered) {
-		this.wasRegistered = wasRegistered;
 	}
 
 	public int getId() {

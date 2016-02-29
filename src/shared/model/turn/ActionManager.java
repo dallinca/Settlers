@@ -44,8 +44,20 @@ public class ActionManager {
 	public void doAction(ActionType action){
 
 		if (action.getCategory() == ActionType.PURCHASE) doPurchase(action);
-		else if (action.getCategory() == ActionType.TRADE) doTrade(action);
-		else if (action.getCategory() == ActionType.PLAYCARD) playDevelopmentCard(action);	
+		else if (action.getCategory() == ActionType.TRADE)
+			try {
+				doTrade(action);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		else if (action.getCategory() == ActionType.PLAYCARD)
+			try {
+				playDevelopmentCard(action);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
 
 		Client.getInstance().notifyAll();
 	}
@@ -72,7 +84,7 @@ public class ActionManager {
 	 * @post action will be performed.
 	 */
 	public void doPurchase(ActionType action){
-		if (action == ActionType.PURCHASE_DEVELOPMENT) PURCHASE.purchaseDevelopmentCard();
+		if (action == ActionType.PURCHASE_DEVELOPMENT && canDoPurchase(action)) PURCHASE.purchaseDevelopmentCard();
 	}	
 	
 	/**
@@ -131,8 +143,8 @@ public class ActionManager {
 	 * @return
 	 */
 	public boolean canDoTrade(ActionType action) {
-		if (action == ActionType.TRADE_BANK) return Trade.canDoTradeWithBank();
-		else if (action == ActionType.TRADE_PLAYER) return Trade.canDoTradeWithPlayer();
+		if (action == ActionType.TRADE_BANK) return TRADE.canDoTradeWithBank();
+		else if (action == ActionType.TRADE_PLAYER) return TRADE.canDoTradeWithPlayer();
 		
 		return false;
 	}

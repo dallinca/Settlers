@@ -61,6 +61,7 @@ import shared.communication.results.nonmove.ListAI_Result;
 import shared.communication.results.nonmove.List_Result;
 import shared.communication.results.nonmove.Login_Result;
 import shared.communication.results.nonmove.Register_Result;
+import shared.communication.results.nonmove.Reset_Result;
 import client.Client;
 import client.ClientException;
 
@@ -215,6 +216,16 @@ public class ServerProxy implements IServerProxy {
 		URL_SUFFIX = sb.toString();
 				
 		return new GetVersion_Result((String) doPost(URL_SUFFIX, request));
+	}
+	
+	
+	public Reset_Result reset(Reset_Params request)
+			throws ClientException {
+		
+		URL_SUFFIX = "/game/reset";
+		
+		System.out.println("Game reset: "+(String)doPost(URL_SUFFIX, request));
+		return new Reset_Result();
 	}
 
 	/**
@@ -433,7 +444,7 @@ public class ServerProxy implements IServerProxy {
 	 * 
 	 * @param request BuildSettlement_Params
 	 * free: boolean [whether or not you get this piece for free (i.e. in setup)]
-	 * vertexLocation: VertextLocation [in the location of the settlement]
+	 * vertexLocation: VertexLocation [in the location of the settlement]
 	 * @return result BuildSettlement_Result
 	 * @throws ClientException
 	 * 
@@ -819,6 +830,9 @@ public class ServerProxy implements IServerProxy {
 				connection.setRequestProperty("Cookie", unfixedUserCookie);
 			}
 
+			if (request.getClass()==BuildSettlement_Params.class){
+				System.out.print("Call: "+job);
+			}
 			//System.out.print("Call: "+job);
 
 			connection.setRequestMethod(HTTP_POST);
@@ -832,6 +846,9 @@ public class ServerProxy implements IServerProxy {
 			sw.write(job);
 			sw.flush();
 
+			if (request.getClass()==BuildSettlement_Params.class){
+				System.out.println(" |||| Response code: "+connection.getResponseCode());
+			}
 			//System.out.println(" |||| Response code: "+connection.getResponseCode());
 
 			InputStream in = connection.getInputStream();
@@ -853,6 +870,10 @@ public class ServerProxy implements IServerProxy {
 			in.close();
 
 			//System.out.println("Response: "+job+'\n');
+			
+			if (request.getClass()==BuildSettlement_Params.class){
+				System.out.println("Response: "+job+'\n');
+			}
 			
 			//Cookie cacher----------------------------------
 			Map<String, List<String>> headers = connection.getHeaderFields();

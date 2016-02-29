@@ -3,16 +3,33 @@ package shared.communication.params.move.data;
 import shared.locations.VertexLocation;
 
 public class BuildLocation {
-	
+
 	private int x;
 	private int y;
 	private String direction;
-	
+
 	public BuildLocation(VertexLocation location){
-		
+
 		x = location.getHexLoc().getX();
 		y = location.getHexLoc().getY();
-		direction = location.getDir().toString();
+		
+		switch (location.getDir()){
+
+		case NorthWest: direction = "NW";
+		break;
+
+		case NorthEast: direction = "NE";
+		break;
+
+		case SouthEast: direction = "SE";
+		break;
+		case SouthWest: direction = "SW";
+		break;
+
+		default: //Do nothing, doesn't happen.
+			break;
+
+		}
 	}
 
 	public int getX() {
@@ -38,6 +55,6 @@ public class BuildLocation {
 	public void setDirection(String direction) {
 		this.direction = direction;
 	}
-	
-	
+
+
 }

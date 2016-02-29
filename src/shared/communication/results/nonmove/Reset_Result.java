@@ -1,13 +1,23 @@
-package shared.communication.results.move;
+package shared.communication.results.nonmove;
 
 import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
 import shared.model.Game;
 
-public class RobPlayer_Result {
+public class Reset_Result {
+
+	private Game game;	
 	private boolean valid;
-	private Game game;
+	private boolean upToDate;
 	private ClientModel model;
+
+	public Game getGame() {
+		return game;
+	}
+
+	public void setGame(Game game) {
+		this.game = game;
+	}
 
 	public ClientModel getModel() {
 		return model;
@@ -17,40 +27,45 @@ public class RobPlayer_Result {
 		this.model = model;
 	}
 
-	public void setGame(Game game) {
-		this.game = game;
-	}
-	public Game getGame(){
-		return game;
+	public Reset_Result(){
+		valid = false;
+		game = null;
+		model = null;
 	}
 
-	public RobPlayer_Result(String post) {
+	public Reset_Result(String post) {
 
 		if (post==null){
 			setValid(false);
 		}
 		else if (post.equals("\"true\"")){
+			setUpToDate(true);
 			setValid(true);
 			game = null;
 			model = null;
 		}
 		else{
 			setValid(true);
+			setUpToDate(false);
 			JsonConverter converter = new JsonConverter();
 			game = converter.parseJson(post);
 			model = converter.getModel();
 		}
 	}
 
-	public RobPlayer_Result(){
-		valid = false;
-	}
-
-	public boolean isValid() {
+	public boolean isValid() {		
 		return valid;
 	}
-
+	
 	public void setValid(boolean valid) {
 		this.valid = valid;
+	}
+
+	public boolean isUpToDate() {
+		return upToDate;
+	}
+
+	public void setUpToDate(boolean upToDate) {
+		this.upToDate = upToDate;
 	}
 }
