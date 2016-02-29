@@ -45,6 +45,7 @@ public class DevCardController extends Controller implements IDevCardController,
 		this.buyCardView = buyCardView;
 		this.soldierAction = soldierAction;
 		this.roadAction = roadAction;
+		
 	}
 
 	public IPlayDevCardView getPlayCardView() {
@@ -112,6 +113,18 @@ public class DevCardController extends Controller implements IDevCardController,
 	public void startPlayCard() {
 		System.out.println("DevCardController startPlayCard()");
 		
+		DevCardType[] types = {DevCardType.YEAR_OF_PLENTY, DevCardType.SOLDIER, DevCardType.MONOPOLY, DevCardType.MONUMENT, DevCardType.ROAD_BUILD};
+		
+		for (int i = 0; i < types.length; i++) {
+			boolean enableOrNot = Client.getInstance().getGame().canDoCurrentPlayerUseDevelopmentCard(Client.getInstance().getUserId(), types[i]);
+			getPlayCardView().setCardAmount(types[i], Client.getInstance().getGame().numberUnplayedDevCards(Client.getInstance().getUserId(), types[i]));
+			
+			if (Client.getInstance().getGame().getCurrentPlayer().getPlayerId() == Client.getInstance().getUserId()) {
+				getPlayCardView().setCardEnabled(types[i], enableOrNot);
+			} else {
+				getPlayCardView().setCardEnabled(types[i], false);
+			}
+		}
 		
 		
 		getPlayCardView().showModal();
@@ -233,6 +246,7 @@ public class DevCardController extends Controller implements IDevCardController,
 		
 		for (int i = 0; i < types.length; i++) {
 			boolean enableOrNot = Client.getInstance().getGame().canDoCurrentPlayerUseDevelopmentCard(Client.getInstance().getUserId(), types[i]);
+			getPlayCardView().setCardAmount(types[i], Client.getInstance().getGame().numberUnplayedDevCards(Client.getInstance().getUserId(), types[i]));
 			getPlayCardView().setCardEnabled(types[i], enableOrNot);
 		}
 	}
