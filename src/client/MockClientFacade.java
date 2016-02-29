@@ -179,6 +179,16 @@ public class MockClientFacade {
 		p3.setPlayerColor(pi3.getColor());
 		p3.setPlayerId(pi3.getId());
 
+		if(p0.getPlayerId() == Client.getInstance().getUserId()) {
+			p0.setPlayerColor(color);
+		} else if(p1.getPlayerId() == Client.getInstance().getUserId()) {
+			p1.setPlayerColor(color);
+		} else if(p2.getPlayerId() == Client.getInstance().getUserId()) {
+			p2.setPlayerColor(color);
+		} else if(p3.getPlayerId() == Client.getInstance().getUserId()) {
+			p3.setPlayerColor(color);
+		}
+
 		try {
 			// ROADS
 			p0.getPlayerPieces().placeRoad(board.getEdge(3, 3, ModEdgeDirection.LEFT));
@@ -193,6 +203,7 @@ public class MockClientFacade {
 			p2.getPlayerPieces().placeSettlement(board.getVertex(9, 1));
 			// CITIES
 			p0.getPlayerPieces().placeCity(board.getVertex(3, 3));
+			p2.getPlayerPieces().placeCity(board.getVertex(9, 1));
 			//p3.getPlayerPieces().placeCity(board.getVertex(6, 6));
 			//p1.getPlayerPieces().placeCity(board.getVertex(8, 8));
 			//p2.getPlayerPieces().placeCity(board.getVertex(0, 8));
@@ -261,6 +272,10 @@ public class MockClientFacade {
 			result.setWasLoggedIn(true);
 			result.setName("bummer");
 			result.setId(1111);
+		} else if (username.equals("manndi")) {
+			result.setWasLoggedIn(true);
+			result.setName("manndi");
+			result.setId(13);
 		} else {
 			result.setWasLoggedIn(false);
 		}

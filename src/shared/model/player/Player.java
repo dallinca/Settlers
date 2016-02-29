@@ -8,8 +8,10 @@ import shared.definitions.ResourceType;
 import shared.model.Bank;
 import shared.model.board.Edge;
 import shared.model.board.Vertex;
+import shared.model.items.City;
 import shared.model.items.DevelopmentCard;
 import shared.model.items.ResourceCard;
+import shared.model.items.Settlement;
 import shared.model.player.exceptions.AllPiecesPlayedException;
 import shared.model.player.exceptions.CannotBuyException;
 import shared.model.player.exceptions.CollectResourcesException;
@@ -673,7 +675,32 @@ public class Player {
 			this.totalVictoryPoints = totalVictoryPoints;
 		}
 	
-		
-		
+
+	   /**
+	    * Returns the number of unplayed roads, for the gui count
+	    * 
+	    * @return the number of unplayed roads, for the gui count
+	    */
+	   public int getNumberUnplayedRoads() {
+		   return playerPieces.getNumberUnplayedRoads();
+	   }
+
+	   /**
+	    * Returns the number of unplayed cities, for the gui count
+	    * 
+	    * @return the number of unplayed cities, for the gui count
+	    */
+	   public int getNumberUnplayedCities() {
+		   return playerPieces.getNumberUnplayedCities();
+	   }	
+
+	   /**
+	    * Returns the number of unplayed settlements, for the gui count
+	    * 
+	    * @return the number of unplayed settlements, for the gui count
+	    */
+	   public int getNumberUnplayedSettlements() {
+		   return playerPieces.getNumberUnplayedSettlements();
+	   }
 		
 }
