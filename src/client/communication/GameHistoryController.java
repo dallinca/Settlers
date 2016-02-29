@@ -92,7 +92,7 @@ public class GameHistoryController extends Controller implements IGameHistoryCon
 				 }
 				 
 				 String message = user + " " + action;
-				 LogEntry entry = new LogEntry(color, action);
+				 LogEntry entry = new LogEntry(color, message);
 				 
 				 //Then add it to our list we will set in the view:
 				 entries.add(entry); 

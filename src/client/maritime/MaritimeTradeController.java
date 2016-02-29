@@ -2,6 +2,8 @@ package client.maritime;
 
 import shared.definitions.*;
 import shared.model.player.ResourceCardHand;
+import shared.model.turn.ActionManager;
+import shared.model.turn.ActionType;
 
 import java.util.ArrayList;
 import java.util.Observable;
@@ -64,8 +66,10 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	public void startTrade() {
 		System.out.println("MaritimeTradeController startTrade()");
 		
+		boolean canTrade = ActionManager.getInstance().canDoPurchase(ActionType.TRADE_BANK);
 		boolean isPlayersTurn = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).isPlayersTurn();
-		if(isPlayersTurn){
+		
+		if(isPlayersTurn && canTrade){
 			
 			ArrayList<ResourceType> resourceArray = new ArrayList<ResourceType>();
 			
@@ -121,6 +125,8 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	public void makeTrade() {
 		System.out.println("MaritimeTradeController makeTrade()");
 		//Client.getInstance().getGame().doMaritimeTrade(tradeIn, receive);
+		
+		
 		getTradeOverlay().closeModal();
 	}
 

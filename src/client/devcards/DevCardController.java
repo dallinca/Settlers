@@ -85,7 +85,7 @@ public class DevCardController extends Controller implements IDevCardController,
 			 
 			 if (result) {
 				 try {	
-					 ActionManager.getInstance().doPurchase(ActionType.PURCHASE_DEVELOPMENT);
+					 ActionManager.getInstance().doAction(ActionType.PURCHASE_DEVELOPMENT);
 					 
 					/* try {
 					 		//for later hahaha
@@ -161,7 +161,7 @@ public class DevCardController extends Controller implements IDevCardController,
 		boolean result = ActionManager.getInstance().canDoPlay(ActionType.PLAYCARD_MONUMENT);
 		if (result) {
 			try {
-				ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_MONUMENT);
+				ActionManager.getInstance().doAction(ActionType.PLAYCARD_MONUMENT);
 			} catch (Exception e) {
 				System.out.println("Something went wrong while trying to play a monument card");
 			}
@@ -189,12 +189,13 @@ public class DevCardController extends Controller implements IDevCardController,
 		
 		boolean result = ActionManager.getInstance().canDoPlay(ActionType.PLAYCARD_KNIGHT);
 		if (result) {
+			soldierAction.execute();
+			
 			try {
 				ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_KNIGHT);
 			} catch (Exception e) {
 				System.out.println("Something went wrong while trying to play a monopoly card");
-			}
-			soldierAction.execute();			
+			}			
 		}
 		
 		

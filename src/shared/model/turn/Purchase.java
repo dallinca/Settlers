@@ -1,6 +1,8 @@
 package shared.model.turn;
 
 import client.Client;
+import client.ClientException;
+import client.ClientFacade;
 import shared.locations.EdgeLocation;
 import shared.locations.VertexLocation;
 import shared.model.Game;
@@ -24,7 +26,11 @@ public class Purchase {
 	 */
 	public void purchaseDevelopmentCard(){
 		if (canDoPurchaseDevelopmentCard()) {
-			
+			try {
+				ClientFacade.getInstanceOf().buyDevCard();
+			} catch (ClientException e) {
+				System.out.println("Failed to buy a Development Card!");
+			}
 		}
 	}
 

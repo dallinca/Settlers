@@ -1,6 +1,7 @@
 package shared.model.turn;
 
 import client.Client;
+import client.ClientFacade;
 import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
 import shared.model.Game;
@@ -28,10 +29,10 @@ public class PlayCard {
 	public void playMonument() throws Exception{
 		if (canDoPlayMonument()) {	
 			try {
-				Client.getInstance().getGame().useDevelopmentCard(Client.getInstance().getUserId(), DevCardType.MONUMENT);
+				ClientFacade.getInstanceOf().playMonument();
+				//Client.getInstance().getGame().useDevelopmentCard(Client.getInstance().getUserId(), DevCardType.MONUMENT);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("There was an Error in playing a Monument Card");
 			}
 		} else {
 			throw new Exception("You should not have been authorized to call playMonument");
@@ -56,7 +57,8 @@ public class PlayCard {
 	public void playKnight() throws Exception{
 		if (canDoPlayKnight()) {
 			try {
-				Client.getInstance().getGame().useDevelopmentCard(Client.getInstance().getUserId(), DevCardType.SOLDIER);
+				ClientFacade.getInstanceOf().playSoldier(hex, victimIndex)
+				//Client.getInstance().getGame().useDevelopmentCard(Client.getInstance().getUserId(), DevCardType.SOLDIER);
 			} catch (Exception e) {
 				System.out.println("Something went wrong while trying to play a Soldier Card.");
 			}
@@ -78,8 +80,22 @@ public class PlayCard {
 	 */
 	public void playYearOfPlenty(ResourceType[] toPassIn) throws Exception{
 		if (canDoPlayYearOfPlenty(toPassIn)) {
+			
+			ResourceType resource1 = null;
+			ResourceType resource2 = null;
+			
+			if (toPassIn.length == 1) {
+				resource1 = toPassIn[0];
+				resource2 = resource1;
+			} else if (toPassIn.length == 2) {
+				resource1 = toPassIn[0];
+				resource2 = toPassIn[1];
+			} else throw new Exception("Array Too large or non-existant!");
+			
 			try {
-				Client.getInstance().getGame().useDevelopmentCard(Client.getInstance().getUserId(), DevCardType.YEAR_OF_PLENTY, toPassIn);
+				ClientFacade.getInstanceOf().playYearOfPlenty(resource1, resource2);
+				//We do not need to update the model if Facade is called...
+				//Client.getInstance().getGame().useDevelopmentCard(Client.getInstance().getUserId(), DevCardType.YEAR_OF_PLENTY, toPassIn);
 			} catch (Exception e) {
 				System.out.println("Something went wrong while trying to play Year of Plenty Card.");
 			}
@@ -102,7 +118,9 @@ public class PlayCard {
 	public void playMonopoly(ResourceType[] toPassIn) throws Exception{
 		if (canDoPlayMonopoly(toPassIn)) {
 			try {
-				Client.getInstance().getGame().useDevelopmentCard(Client.getInstance().getUserId(), DevCardType.MONOPOLY, toPassIn);
+				//Array size is only 1 and will only ever be 1.
+				ClientFacade.getInstanceOf().playMonopoly(toPassIn[0]);
+				//Client.getInstance().getGame().useDevelopmentCard(Client.getInstance().getUserId(), DevCardType.MONOPOLY, toPassIn);
 			} catch (Exception e) {
 				System.out.println("Something went wrong when trying to play a Monopoly Card");
 			}
@@ -125,7 +143,8 @@ public class PlayCard {
 	public void playBuildRoads() throws Exception{
 		if (canDoPlayBuildRoads()) {
 			try {
-				Client.getInstance().getGame().useDevelopmentCard(Client.getInstance().getUserId(), DevCardType.ROAD_BUILD);
+				ClientFacade.getInstanceOf().playRoadBuilding(roadLocation1, roadLocation2)
+				//Client.getInstance().getGame().useDevelopmentCard(Client.getInstance().getUserId(), DevCardType.ROAD_BUILD);
 			} catch (Exception e) {
 				System.out.println("Something went wrong when trying to play a Road Builder card.");
 			} 
