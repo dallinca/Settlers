@@ -1,5 +1,6 @@
 package shared.model.board;
 
+import shared.locations.VertexDirection;
 import shared.model.items.Municipal;
 
 /**
@@ -187,7 +188,33 @@ public class Vertex {
 	public int getY_coord_ver() {
 		return y_coord_ver;
 	}
+
+	public int getTheirX_coord_ver() {
+		// if x is even
+		if(getX_coord_ver() % 2 == 0) {
+			return (getX_coord_ver() / 2) - 3;
+		}
+		// x is odd
+		return ((getX_coord_ver() + 1) / 2) - 3;
+	}
+
+	public int getTheirY_coord_ver() {
+		// if x is even
+		if(getY_coord_ver() % 2 == 0) {
+			return ((getY_coord_ver() + 2) / 2) - 3;
+		}
+		// x is odd
+		return ((getY_coord_ver() + 1) / 2) - 3;
+	}
 	
+	public VertexDirection getTheirVertexDirection() {
+		// if x is even
+		if(getY_coord_ver() % 2 == 0) {
+			return VertexDirection.NorthEast;
+		}
+		// x is odd
+		return VertexDirection.NorthWest;
+	}
 	
 	
 
