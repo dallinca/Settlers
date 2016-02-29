@@ -124,21 +124,33 @@ public class MapController extends Controller implements IMapController, Observe
 		// Init all the roads, settlements, and cities!
 		for(Player player: Client.getInstance().getGame().getAllPlayers()) {
 			for(Road road: player.getPlayerPieces().getRoads()) {
-				HexLocation hx = new HexLocation(road.getEdge().getTheirX_coord(), road.getEdge().getTheirY_coord());
-				EdgeLocation el = new EdgeLocation(hx, road.getEdge().getTheirEdgeDirection());
-				getView().placeRoad(el, road.getPlayer().getPlayerColor());
+				// Only place the peice on the map on the gui if it is assigned a location in the model
+				if(road.getEdge() != null) {
+					HexLocation hx = new HexLocation(road.getEdge().getTheirX_coord(), road.getEdge().getTheirY_coord());
+					EdgeLocation el = new EdgeLocation(hx, road.getEdge().getTheirEdgeDirection());
+					getView().placeRoad(el, road.getPlayer().getPlayerColor());
+				}
 			}
 			for(Settlement settlement: player.getPlayerPieces().getSettlements()) {
-				//HexLocation hx = new HexLocation(settlement.getVertex());
-				//VertexLocation vl = new VertexLocation();
-				//getView().placeSettlement(vertLoc, color);
+				if(settlement.getVertex() != null) {
+					// Only place the peice on the map on the gui if it is assigned a location in the model
+					HexLocation hx = new HexLocation(settlement.getVertex().getTheirX_coord_ver(), settlement.getVertex().getTheirY_coord_ver());
+					VertexLocation vl = new VertexLocation(hx, settlement.getVertex().getTheirVertexDirection());
+					getView().placeSettlement(vl, settlement.getPlayer().getPlayerColor());
+				}
 				
 			}
 			for(City city: player.getPlayerPieces().getCities()) {
-				
+				if(city.getVertex() != null) {
+					// Only place the peice on the map on the gui if it is assigned a location in the model
+					HexLocation hx = new HexLocation(city.getVertex().getTheirX_coord_ver(), city.getVertex().getTheirY_coord_ver());
+					VertexLocation vl = new VertexLocation(hx, city.getVertex().getTheirVertexDirection());
+					getView().placeCity(vl, city.getPlayer().getPlayerColor());
+				}
 			}
 		}
 		
+		//
 		
 	}
 
