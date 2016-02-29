@@ -74,6 +74,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 			getView().setElementEnabled(ResourceBarElement.PLAY_CARD, true);
 			executeElementAction(ResourceBarElement.PLAY_CARD);
 		}else{
+			executeElementAction(ResourceBarElement.PLAY_CARD);
 			getView().setElementEnabled(ResourceBarElement.PLAY_CARD, false);
 		}
 		
