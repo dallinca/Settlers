@@ -41,6 +41,9 @@ public class DevelopmentCardHand {
 		this.roadBuilderCards = new ArrayList<DevelopmentCard>();
 		this.monopolyCards = new ArrayList<DevelopmentCard>();
 		this.yearOfPlentyCards = new ArrayList<DevelopmentCard>();
+		
+		initTestCards();
+		
 	}
     
     /**
@@ -57,9 +60,35 @@ public class DevelopmentCardHand {
 		this.roadBuilderCards = yearOfPlenty;
 		this.monopolyCards = roadBuilder;
 		this.yearOfPlentyCards = monument;
-
+		
 	}
-
+	
+	/**
+	 * This serves no purpose other than to help with testing.
+	 */
+	public void initTestCards() {
+		DevelopmentCard a = new DevelopmentCard(DevCardType.SOLDIER);
+		
+		DevelopmentCard b = new DevelopmentCard(DevCardType.MONOPOLY);
+		DevelopmentCard c = new DevelopmentCard(DevCardType.MONOPOLY);
+		
+		DevelopmentCard d = new DevelopmentCard(DevCardType.YEAR_OF_PLENTY);
+		
+		
+		DevelopmentCard e = new DevelopmentCard(DevCardType.MONUMENT);
+		DevelopmentCard f = new DevelopmentCard(DevCardType.MONUMENT);
+		
+		
+		this.soldierCards.add(a);
+		this.victoryPointCards.add(e);
+		this.victoryPointCards.add(f);
+		
+		this.monopolyCards.add(b);
+		this.monopolyCards.add(c);
+		
+		this.yearOfPlentyCards.add(d);
+	}
+	
 	/**
 	 * Checks to see if there is at least one card of the said type that can be played this turn
 	 * 
@@ -192,6 +221,9 @@ public class DevelopmentCardHand {
 				}
 			}
 		}
+		
+		System.out.println("I am checking how many unplayed cards I have! Which is: " + numberAvailable);
+		
 		return numberAvailable;
 	}
 	
