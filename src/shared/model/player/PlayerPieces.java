@@ -418,6 +418,52 @@ public class PlayerPieces {
 			   }
 		   }
 	   }
+	   
+	   /**
+	    * Returns the number of unplayed roads, for the gui count
+	    * 
+	    * @return the number of unplayed roads, for the gui count
+	    */
+	   public int getNumberUnplayedRoads() {
+		   int number = 0;
+		   for(Road road: roads) {
+			   if(road.getEdge() == null) {
+				   number++;
+			   }
+		   }
+		   return number;
+	   }
+
+	   /**
+	    * Returns the number of unplayed cities, for the gui count
+	    * 
+	    * @return the number of unplayed cities, for the gui count
+	    */
+	   public int getNumberUnplayedCities() {
+		   int number = 0;
+		   for(City city: cities) {
+			   if(city.getVertex() == null) {
+				   number++;
+			   }
+		   }
+		   return number;
+	   }	
+
+	   /**
+	    * Returns the number of unplayed settlements, for the gui count
+	    * 
+	    * @return the number of unplayed settlements, for the gui count
+	    */
+	   public int getNumberUnplayedSettlements() {
+		   int number = 0;
+		   for(Settlement settlement: settlements) {
+			   if(settlement.getVertex() == null) {
+				   number++;
+			   }
+		   }
+		   return number;
+	   }
+	   
 
 	public ArrayList<Settlement> getSettlements() {
 		return settlements;
