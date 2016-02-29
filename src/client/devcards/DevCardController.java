@@ -131,7 +131,11 @@ public class DevCardController extends Controller implements IDevCardController,
 		
 		boolean result = ActionManager.getInstance().canDoPlay(ActionType.PLAYCARD_MONOPOLY, toPassIn);
 		if (result) {
-			ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_MONOPOLY, toPassIn);
+			try {
+				ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_MONOPOLY, toPassIn);
+			} catch (Exception e) {
+				System.out.println("Something went wrong while trying to play a monopoly card");
+			}
 		}
 	}
 	
@@ -143,7 +147,11 @@ public class DevCardController extends Controller implements IDevCardController,
 		
 		boolean result = ActionManager.getInstance().canDoPlay(ActionType.PLAYCARD_MONUMENT);
 		if (result) {
-			ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_MONUMENT);
+			try {
+				ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_MONUMENT);
+			} catch (Exception e) {
+				System.out.println("Something went wrong while trying to play a monument card");
+			}
 		}
 	}
 
@@ -152,7 +160,11 @@ public class DevCardController extends Controller implements IDevCardController,
 		System.out.println("DevCardController playRoadBuildCard()");
 		boolean result = ActionManager.getInstance().canDoPlay(ActionType.PLAYCARD_BUILDROADS);
 		if (result) {
-			ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_BUILDROADS);
+			try {
+				ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_BUILDROADS);
+			} catch (Exception e) {
+				System.out.println("Something went wrong while trying to play a road build card");
+			}
 			roadAction.execute();
 		}
 		
@@ -164,7 +176,11 @@ public class DevCardController extends Controller implements IDevCardController,
 		
 		boolean result = ActionManager.getInstance().canDoPlay(ActionType.PLAYCARD_KNIGHT);
 		if (result) {
-			ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_KNIGHT);
+			try {
+				ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_KNIGHT);
+			} catch (Exception e) {
+				System.out.println("Something went wrong while trying to play a monopoly card");
+			}
 			soldierAction.execute();			
 		}
 		
@@ -189,7 +205,11 @@ public class DevCardController extends Controller implements IDevCardController,
 		
 		boolean result = ActionManager.getInstance().canDoPlay(ActionType.PLAYCARD_YEAROFPLENTY, toPassIn);
 		if (result) {
-			ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_YEAROFPLENTY, toPassIn);
+			try {
+				ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_YEAROFPLENTY, toPassIn);
+			} catch (Exception e) {
+				System.out.println("Something went wrong while trying to play a year of plenty card");
+			}
 		}
 		
 		
