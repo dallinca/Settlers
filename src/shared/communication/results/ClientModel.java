@@ -6,16 +6,16 @@ import java.util.Arrays;
 public class ClientModel {
 
 
-	 MDevCardList deck;
-	 MBank bank;
-	 MChat chat;
-	 MLog log;
-	 MMap map;
-	 MPlayer[] players;
-	 MTradeOffer tradeOffer;
+	MDevCardList deck;
+	MBank bank;
+	MChat chat;
+	MLog log;
+	MMap map;
+	MPlayer[] players;
+	MTradeOffer tradeOffer;
 	MTurnTracker turnTracker;
-	 int version;
-	 int winner;
+	int version;
+	int winner;
 
 	@Override
 	public String toString() {
@@ -98,7 +98,7 @@ public class ClientModel {
 	}
 
 	public class MChat{
-		 MessageLine[] lines;
+		MessageLine[] lines;
 
 
 		@Override
@@ -123,7 +123,7 @@ public class ClientModel {
 	}
 
 	public class MLog{
-		 MessageLine[] lines;
+		MessageLine[] lines;
 
 		@Override
 		public String toString() {
@@ -145,7 +145,7 @@ public class ClientModel {
 	}
 
 	public class MessageList{
-		 MessageLine[] lines;
+		MessageLine[] lines;
 
 		@Override
 		public String toString() {
@@ -158,8 +158,8 @@ public class ClientModel {
 	}
 
 	public class MessageLine{
-		 String message;
-		 String source;	
+		String message;
+		String source;	
 
 		public String getMessage() {
 			return message;
@@ -177,22 +177,22 @@ public class ClientModel {
 	}
 
 	public class MMap{
-		 MHex[] hexes;
-		 Port[] ports;
-		 EdgeValue[] roads;
-		 VertexObject[] settlements;
-		 VertexObject[] cities;
-		 int radius;
-		 MHexLocation robber;
+		MHex[] hexes;
+		Port[] ports;
+		EdgeValue[] roads;
+		VertexObject[] settlements;
+		VertexObject[] cities;
+		int radius;
+		MHexLocation robber;
 
 		@Override
 		public String toString() {
-			return "Map [hexes=" + Arrays.toString(hexes) + ", ports="
-					+ Arrays.toString(ports) + ", roads="
-					+ Arrays.toString(roads) + ", settlements="
-					+ Arrays.toString(settlements) + ", cities="
-					+ Arrays.toString(cities) + ", radius=" + radius
-					+ ", robber=" + robber + "]";
+			return "Map [hexes=" + Arrays.toString(hexes) + ",\n ports="
+					+ Arrays.toString(ports) + ",\n roads="
+					+ Arrays.toString(roads) + ",\n settlements="
+					+ Arrays.toString(settlements) + ",\n cities="
+					+ Arrays.toString(cities) + ",\n radius=" + radius
+					+ ",\n robber=" + robber + "]";
 		}
 		public MHex[] getHexes() {
 			return hexes;
@@ -216,8 +216,8 @@ public class ClientModel {
 			return robber;
 		}
 		public class VertexObject{
-			 int owner;
-			 MVertexLocation location;
+			int owner;
+			MVertexLocation location;
 
 
 			@Override
@@ -235,9 +235,10 @@ public class ClientModel {
 		}
 
 		public class MVertexLocation{
-			 int x;
-			 int y;
-			 String direction;
+
+			String direction;
+			int x;
+			int y;
 
 
 			@Override
@@ -261,7 +262,8 @@ public class ClientModel {
 		}
 
 		class EdgeValue{
-			 int owner;
+
+			int owner;
 			MEdgeLocation location;
 
 			public int getOwner() {
@@ -280,9 +282,11 @@ public class ClientModel {
 		}
 
 		class MEdgeLocation{
-			 int x;
-			 int y;
-			 String direction;
+
+			String direction;
+			int x;
+			int y;
+
 			public int getX() {
 				return x;
 			}
@@ -301,10 +305,10 @@ public class ClientModel {
 		}
 
 		class Port{
-			 String resource;
-			 MHexLocation location;				
-			 String direction;
-			 int ratio;
+			String resource;
+			MHexLocation location;				
+			String direction;
+			int ratio;
 
 
 			@Override
@@ -329,9 +333,9 @@ public class ClientModel {
 		}
 
 		public class MHex{
-			 MHexLocation location;
-			 String resource;
-			 int number;
+			MHexLocation location;
+			String resource;
+			int number;
 
 			public MHexLocation getLocation() {
 				return location;
@@ -351,8 +355,8 @@ public class ClientModel {
 
 		}
 		public class MHexLocation{
-			 int x;
-			 int y;
+			int x;
+			int y;
 
 			public int getX() {
 				return x;
@@ -373,21 +377,21 @@ public class ClientModel {
 
 
 	public class MPlayer{
-		 int cities;
-		 String color;
-		 boolean discarded;
-		 int monuments;
-		 String name;
-		 MDevCardList newDevCards;
-		 MDevCardList oldDevCards;
-		 int playerIndex;
-		 boolean playedDevCard;
-		 int playerID;
-		 ResourceList resources;
-		 int roads;
-		 int settlements;
-		 int soldiers;
-		 int victoryPoints;
+		int cities;
+		String color;
+		boolean discarded;
+		int monuments;
+		String name;
+		MDevCardList newDevCards;
+		MDevCardList oldDevCards;
+		int playerIndex;
+		boolean playedDevCard;
+		int playerID;
+		ResourceList resources;
+		int roads;
+		int settlements;
+		int soldiers;
+		int victoryPoints;
 
 		public int getCities() {
 			return cities;
@@ -451,22 +455,22 @@ public class ClientModel {
 
 		@Override
 		public String toString() {
-			return "Player [cities=" + cities + ", color=" + color
-					+ ", discarded=" + discarded + ", monuments="
-					+ monuments + ", name=" + name + ", newDevCards="
-					+ newDevCards + ", oldDevCards=" + oldDevCards
-					+ ", playerIndex=" + playerIndex + ", playedDevCard="
-					+ playedDevCard + ", playerID=" + playerID
-					+ ", resources=" + resources + ", roads=" + roads
-					+ ", settlements=" + settlements + ", soldiers="
-					+ soldiers + ", victoryPoints=" + victoryPoints + "]";
+			return "Player [cities=" + cities + ",\n color=" + color
+					+ ",\n discarded=" + discarded + ",\n monuments="
+					+ monuments + ",\n name=" + name + ",\n newDevCards="
+					+ newDevCards + ",\n oldDevCards=" + oldDevCards
+					+ ",\n playerIndex=" + playerIndex + ",\n playedDevCard="
+					+ playedDevCard + ",\n playerID=" + playerID
+					+ ",\n resources=" + resources + ",\n roads=" + roads
+					+ ",\n settlements=" + settlements + ",\n soldiers="
+					+ soldiers + ",\n victoryPoints=" + victoryPoints + "]";
 		}
 	}
 
 	public class MTradeOffer{
-		 int sender;
-		 int receiver;
-		 ResourceList offer;
+		int sender;
+		int receiver;
+		ResourceList offer;
 		public int getSender() {
 			return sender;
 		}
@@ -513,11 +517,15 @@ public class ClientModel {
 
 	public class MDevCardList{
 
-		 int monopoly;
-		 int monument;
-		 int roadBuilding;
-		 int soldier;
-		 int yearOfPlenty;
+		int yearOfPlenty;
+		int monopoly;
+		int soldier;
+		int roadBuilding;
+		int monument;
+
+
+
+
 		public int getMonopoly() {
 			return monopoly;
 		}
@@ -545,11 +553,11 @@ public class ClientModel {
 
 	public class ResourceList{		
 
-		 int brick;
-		 int ore;
-		 int sheep;
-		 int wheat;
-		 int wood;
+		int brick;
+		int ore;
+		int sheep;
+		int wheat;
+		int wood;
 		public int getBrick() {
 			return brick;
 		}
