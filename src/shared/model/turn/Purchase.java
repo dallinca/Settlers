@@ -27,7 +27,7 @@ public class Purchase {
 	public void purchaseDevelopmentCard(){
 		if (canDoPurchaseDevelopmentCard()) {
 			try {
-				ClientFacade.getInstanceOf().buyDevCard();
+				ClientFacade.getInstance().buyDevCard();
 			} catch (ClientException e) {
 				System.out.println("Failed to buy a Development Card!");
 			}

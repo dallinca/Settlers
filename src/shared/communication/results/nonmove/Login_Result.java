@@ -42,14 +42,15 @@ public class Login_Result {
 		this.valid = wasLoggedIn;
 	}
 
-	public int getId() {
+	public int getID() {
 		return playerID;
 	}
+	
 
-	public void setId(int id) {
+	public void setID(int id) {
 		this.playerID = id;
 	}
-
+	
 	public String getName() {
 		return name;
 	}

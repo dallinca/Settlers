@@ -14,7 +14,7 @@ public class Join_Params {
 	 */
 	public Join_Params(int gameID, CatanColor color) {
 		this.id = gameID;
-
+		
 		switch (color) {
 
 		case RED: this.color = "red";
@@ -32,7 +32,7 @@ public class Join_Params {
 		case GREEN: this.color = "green";
 		break;
 
-		case PURPLE: this.color = "pruple";
+		case PURPLE: this.color = "purple";
 		break;
 
 		case PUCE: this.color = "puce";

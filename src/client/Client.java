@@ -3,8 +3,6 @@ import java.util.*;
 
 import client.data.GameInfo;
 
-import client.proxy.IServerProxy;
-
 import shared.definitions.CatanColor;
 import shared.model.Game;
 
@@ -12,16 +10,22 @@ public class Client extends Observable {
 	
 	private GameInfo gameInfo; // This is a class provided to us. We are using for player waiting modal view.
 	private Game game;
-	private IServerProxy isp;
 	private int UserId;
 	private String name;
 	private CatanColor color;
 	private int playerIndex;
 	
+	private ServerPoller myServerPoller;
+	
 	private static Client SINGLETON = null;
 	// CONSTRUCTORS
 	//////////////////////
-	private Client(){ }
+	private Client(){
+		
+		setMyServerPoller(new ServerPoller());
+				
+	}
+	
 	
 	public static Client getInstance( ) {
 		if(SINGLETON == null) {
@@ -82,6 +86,15 @@ public class Client extends Observable {
 
 	public void setGameInfo(GameInfo gameInfo) {
 		this.gameInfo = gameInfo;
+	}
+
+
+	public ServerPoller getMyServerPoller() {
+		return myServerPoller;
+	}
+
+	protected void setMyServerPoller(ServerPoller myServerPoller) {
+		this.myServerPoller = myServerPoller;
 	}
 	
 	

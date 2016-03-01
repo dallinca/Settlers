@@ -66,7 +66,7 @@ public class ChatController extends Controller implements IChatController, Obser
 		*/
 		
 		try {
-			ClientFacade.getInstanceOf().sendChat(message);
+			ClientFacade.getInstance().sendChat(message);
 		} catch (ClientException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

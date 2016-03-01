@@ -158,14 +158,9 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public boolean canPlaceRoad(EdgeLocation edgeLoc) {
 		System.out.println("MapController canPlaceRoad()");
-		if(hello <= 10) {
-			hello++;
-			return false;
-		}
-		return true;
-		//boolean canDo = Client.getInstance().getGame().canDoPlaceRoadOnEdge( Client.getInstance().getUserId(), edgeLoc);
-		//System.out.println("MapController: " + canDo);
-		//return canDo;
+		boolean canDo = Client.getInstance().getGame().canDoPlaceRoadOnEdge( Client.getInstance().getUserId(), edgeLoc);
+		System.out.println("MapController: " + canDo);
+		return canDo;
 	}
 
 	/**
@@ -265,8 +260,7 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {	
 		System.out.println("MapController startMove()");
-		System.out.println("CCCOOOOOOOOOOOOLOLLLLLLLLLOOOOORRRRRR" + Client.getInstance().getColor());
-		getView().startDrop(PieceType.ROAD, Client.getInstance().getColor(), true);
+		getView().startDrop(pieceType, Client.getInstance().getColor(), true);
 	}
 
 	/**

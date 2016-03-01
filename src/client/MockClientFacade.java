@@ -160,6 +160,7 @@ public class MockClientFacade {
 		p0.setPlayerName(pi0.getName());
 		p0.setPlayerColor(pi0.getColor());
 		p0.setPlayerId(pi0.getId());
+		p0.setPlayersTurn(true);
 
 		PlayerInfo pi1 = Client.getInstance().getGameInfo().getPlayers().get(1);
 		Player p1 = new Player(pi1.getPlayerIndex(), bank);
@@ -191,13 +192,13 @@ public class MockClientFacade {
 
 		try {
 			// ROADS
-			//p0.getPlayerPieces().placeRoad(board.getEdge(3, 3, ModEdgeDirection.LEFT));
+			p0.getPlayerPieces().placeRoad(board.getEdge(3, 3, ModEdgeDirection.LEFT));
 			//p0.getPlayerPieces().placeRoad(board.getEdge(4, 4, ModEdgeDirection.LEFT));
 			p1.getPlayerPieces().placeRoad(board.getEdge(2, 2, ModEdgeDirection.UP));
 			p2.getPlayerPieces().placeRoad(board.getEdge(3, 5, ModEdgeDirection.RIGHT));
 			p3.getPlayerPieces().placeRoad(board.getEdge(1, 6, ModEdgeDirection.UP));
 			// SETTLEMENTS
-			//p0.getPlayerPieces().placeSettlement(board.getVertex(3, 3));
+			p0.getPlayerPieces().placeSettlement(board.getVertex(4, 6));
 			//p0.getPlayerPieces().placeSettlement(board.getVertex(4, 4));
 			//p0.getPlayerPieces().placeSettlement(board.getVertex(5, 5));
 			p2.getPlayerPieces().placeSettlement(board.getVertex(9, 1));

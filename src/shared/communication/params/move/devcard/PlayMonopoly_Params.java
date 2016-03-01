@@ -4,33 +4,19 @@ import shared.definitions.ResourceType;
 
 public class PlayMonopoly_Params {
 
+	private final String type = "Monopoly";
 	private int playerIndex;
 	private String resource;
 
+	/**
+	 * 
+	 * @param playerIndex
+	 * @param type
+	 */
 	public PlayMonopoly_Params(int playerIndex, ResourceType type) {
+		
 		this.playerIndex = playerIndex;
-
-		switch (type){
-
-		case BRICK: resource = "Brick";
-		break;
-
-		case ORE: resource = "Ore";
-		break;
-
-		case SHEEP: resource = "Sheep";
-		break;
-
-		case WHEAT: resource = "Wheat";
-		break;
-
-		case WOOD: resource = "Wood";
-		break;	
-
-		default:
-			break;
-
-		}
+		resource = type.toString().toLowerCase();
 	}
 
 	public int getPlayerIndex() {

@@ -3,10 +3,8 @@ package client;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import shared.communication.params.nonmove.GetVersion_Params;
 import shared.communication.results.nonmove.GetVersion_Result;
 import shared.model.Game;
-import client.proxy.IServerProxy;
 
 
 /**
@@ -18,8 +16,7 @@ import client.proxy.IServerProxy;
 public class ServerPoller {
 
 	private Timer pollTimer;
-	private IServerProxy proxy;
-	private Client client;
+	private int interval;
 
 	/**
 	 * 
@@ -30,20 +27,23 @@ public class ServerPoller {
 	 * @pre None
 	 * @post Server poller is created.
 	 */
-	public ServerPoller(IServerProxy proxy, Client client){
-		this.client = client;
-		this.proxy = proxy;			
+	public ServerPoller(){		
+		this.interval = 1500;
 	}
 
 	public boolean start(){
 		pollTimer = new Timer();
-		pollTimer.schedule(new timedPoll(), 0, 1500);	//every 1.5 seconds
+		pollTimer.schedule(new timedPoll(), 0, interval);	//every 1.5 seconds
 		return true;
 	}
 
 	public boolean stop(){
 		pollTimer.cancel();
 		return true;
+	}
+
+	public void setTimer(int interval){
+		this.interval = interval;
 	}
 
 	/**
@@ -65,25 +65,16 @@ public class ServerPoller {
 	 * @post Current game state will be obtained from server.
 	 */	
 	private void pollServer(){
-		GetVersion_Params pollRequest = new GetVersion_Params();
-		GetVersion_Result pollResult = null;
 
-		try {
-			pollResult = proxy.getVersion(pollRequest);
-
-		} catch (ClientException e) {
-			pollResult = new GetVersion_Result();
-			System.out.println("Server poll failed.");
-			e.printStackTrace();
-		}
+		GetVersion_Result pollResult = ClientFacade.getInstance().getVersion();
 
 		if (pollResult.isValid()){
 
 			if (!pollResult.isUpToDate()){				
 
 				Game update = pollResult.getGame();
+				Client.getInstance().setGame(update);	
 
-				client.setGame(update);	
 			}
 		}	
 

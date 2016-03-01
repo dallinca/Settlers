@@ -27,7 +27,7 @@ import com.google.gson.reflect.TypeToken;
 public class LoginController extends Controller implements ILoginController, Observer {
 
 	private Client clientInfo;
-	private MockClientFacade clientFacade;
+	private ClientFacade clientFacade;
 	private IMessageView messageView;
 	private IAction loginAction;
 	
@@ -43,7 +43,7 @@ public class LoginController extends Controller implements ILoginController, Obs
 		System.out.println("LoginController LoginController()");
 		this.messageView = messageView;
 		this.clientInfo = Client.getInstance();
-		this.clientFacade = MockClientFacade.getInstance();
+		this.clientFacade = ClientFacade.getInstance();
 	}
 	
 	public ILoginView getLoginView() {
@@ -104,14 +104,7 @@ public class LoginController extends Controller implements ILoginController, Obs
 			if(checkPassword(userpassword, userpassword)){
 				// call the client facade with the username and password to attempt registry 
 				Login_Result login_result = null;
-				try {
-					login_result = clientFacade.login(username, userpassword);
-				} catch (ClientException e) {
-					e.printStackTrace();
-					getMessageView().setMessage("Login failed, possibly no connection to the internet, Client Exception()");
-					getMessageView().showModal();
-					return;
-				}
+				login_result = clientFacade.login(username, userpassword);
 				
 				// If a result is passed back check to see if the registry was successful
 				if( login_result == null || login_result.isWasLoggedIn() == false) {
@@ -122,7 +115,7 @@ public class LoginController extends Controller implements ILoginController, Obs
 				
 				// If register succeeded
 				clientInfo.setName(login_result.getName());
-				clientInfo.setUserId(login_result.getId());
+				clientInfo.setUserId(login_result.getID());
 				System.out.println("about to login");
 				getLoginView().closeModal();
 				loginAction.execute();
@@ -218,17 +211,10 @@ public class LoginController extends Controller implements ILoginController, Obs
 			if(checkPassword(registerpassword, repeatregisterpassword)){
 				// call the client facade with the username and password to attempt registry 
 				Register_Result register_result = null;
-				try {
-					register_result = clientFacade.register(registername, registerpassword);
-				} catch (ClientException e) {
-					e.printStackTrace();
-					getMessageView().setMessage("Registration failed, possibly no connection to the internet, Client Exception()");
-					getMessageView().showModal();
-					return;
-				}
+				register_result = clientFacade.register(registername, registerpassword);
 				
 				// If a result is passed back check to see if the registry was successful
-				if( register_result == null || register_result.isWasRegistered() == false) {
+				if( register_result == null || register_result.isValid() == false) {
 					getMessageView().setMessage("Registration failed, possibly no connection to the internet");
 					getMessageView().showModal();
 					return;

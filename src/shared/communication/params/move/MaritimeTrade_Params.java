@@ -11,15 +11,21 @@ public class MaritimeTrade_Params {
 	private String outputResource;
 	
 	
-	
+	/**
+	 * 
+	 * @param playerIndex
+	 * @param ratio
+	 * @param inputResource
+	 * @param outputResource
+	 */
 	
 	public MaritimeTrade_Params(int playerIndex, int ratio,
 			ResourceType inputResource, ResourceType outputResource) {
 		super();
 		this.playerIndex = playerIndex;
 		this.ratio = ratio;
-		this.inputResource = inputResource.toString();
-		this.outputResource = outputResource.toString();
+		this.inputResource = inputResource.toString().toLowerCase();
+		this.outputResource = outputResource.toString().toLowerCase();
 	}
 
 

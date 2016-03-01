@@ -37,11 +37,7 @@ public class ServerPollerTest {
 	@Test
 	public void PollTest() throws ClientException {
 		
-		prox = new MockServerProxy();	
-
-		client = new Client(prox);
-		
-		poller = new ServerPoller(prox, client);
+		poller = new ServerPoller();
 		
 		assertTrue(poller.start());
 		assertTrue(poller.stop());

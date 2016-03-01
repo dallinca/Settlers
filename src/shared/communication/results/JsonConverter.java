@@ -106,6 +106,10 @@ public class JsonConverter {
 			player.setPlayerId(mPlayer.getPlayerID());
 			player.setTotalVictoryPoints(mPlayer.getVictoryPoints());
 			players[player.getPlayerIndex()] = player;
+			// Set the turn of the current player
+			if(mPlayer.getPlayerIndex() == model.turnTracker.currentTurn) {
+				player.setPlayersTurn(true);
+			}
 		}
 
 		// Init the BOARD
@@ -114,7 +118,10 @@ public class JsonConverter {
 		ArrayList<Hex> newHexes = new ArrayList<Hex>();
 		for(ClientModel.MMap.MHex mHex: modelMap.getHexes()) {
 			boolean hasRobber = false;
-			if(model.getMap().getRobber() == mHex.getLocation()) {
+			if(model.getMap().getRobber().getX() == mHex.getLocation().getX() &&
+					model.getMap().getRobber().getY() == mHex.getLocation().getY())
+			{
+				System.out.println("Dreams came true");
 				hasRobber = true;
 			}
 			// Do our 3 offset, find the HexType of the String TODO (Verify this part is working), and the roll value
@@ -122,6 +129,7 @@ public class JsonConverter {
 		}
 		// Make the Board
 		Board board = new Board(newHexes);
+		board.setHexWithRobber(board.getHex(model.map.robber.x + 3, model.map.robber.y + 3));
 		// Setup Ports, vertices, edges
 		for(ClientModel.MMap.Port port: modelMap.getPorts()) {
 			// Get hex Locations
@@ -240,7 +248,7 @@ public class JsonConverter {
 			return HexType.BRICK;
 		} else if(resource.equals("sheep")) {
 			return HexType.SHEEP;
-		} else if(resource.equals("qheat")) {
+		} else if(resource.equals("wheat")) {
 			return HexType.WHEAT;
 		} else if(resource.equals("ore")) {
 			return HexType.ORE;
