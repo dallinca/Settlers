@@ -40,6 +40,7 @@ import shared.locations.VertexLocation;
 import shared.model.Game.Line;
 import client.Client;
 import client.ClientException;
+import client.data.GameInfo;
 import client.proxy.*;
 
 /**
@@ -65,7 +66,7 @@ public class ServerProxyTest {
 	public void tearDown(){
 	}
 
-	//@Test
+	@Test
 	public void testLogin() throws ClientException {		
 		Login_Result result = prox.login(new Login_Params("Sam", "sam"));
 
@@ -88,7 +89,7 @@ public class ServerProxyTest {
 		prox.reset(new Reset_Params());
 	}
 
-	//@Test
+	@Test
 	public void testRegister() throws ClientException {
 
 		Register_Result regResult = prox.register(new Register_Params("Tiger", "Shark"));
@@ -128,21 +129,32 @@ public class ServerProxyTest {
 		prox.reset(new Reset_Params());
 	}
 
-	//@Test
+	@Test
 	public void testList() throws ClientException {
 		prox.login(new Login_Params("Sam", "sam"));
 
 		List_Result lResult = prox.listGames(new List_Params());
 		//System.out.println(lResult.toString());
-
+		
 		assertTrue(lResult.isValid());
+		/*for(Game g : lResult.getListedGames()){
+			System.out.println(g.getTitle());
+			
+		}*/
+		
+		GameInfo[] myInfo = lResult.getGames();
+		
+		assertEquals(4, myInfo.length);
+		/*for (int i = 0; i < myInfo.length; i++){
+			System.out.println(myInfo[i].getPlayers().toString());
+		}*/
 
 		//System.out.println("End list test.");	
 
 	}
 
 
-	//@Test
+	@Test
 	public void testJoin() throws ClientException {
 
 		Register_Result rResult = prox.register(new Register_Params("Tiger0", "Shark0"));
@@ -174,7 +186,7 @@ public class ServerProxyTest {
 		assertTrue(jResult.isValid());
 	}
 
-	//@Test
+	@Test
 	public void testGetVersion() throws ClientException {
 
 		Login_Result lResult = prox.login(new Login_Params("Sam", "sam"));		
@@ -295,6 +307,8 @@ public class ServerProxyTest {
 
 		RollNumber_Result rnResult = prox.rollNumber(new RollNumber_Params(0, 10));
 		assertTrue(rnResult.isValid());
+		
+		System.out.println(rnResult.getModel().toString());
 
 		SendChat_Result scResult = prox.sendChat(new SendChat_Params(0, "Yo bro how's it going???"));
 		assertTrue(scResult.isValid());
@@ -466,7 +480,7 @@ public class ServerProxyTest {
 		 */
 	}
 
-	//@Test
+	@Test
 	public void testCommands() throws ClientException {
 		//Ensure ant server is running before this test goes.
 
@@ -505,7 +519,7 @@ public class ServerProxyTest {
 		}
 	}
 
-	//@Test
+	@Test
 	public void testCookies() throws ClientException {
 
 		prox.login(new Login_Params("Sam", "sam"));

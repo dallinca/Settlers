@@ -244,7 +244,7 @@ public class JsonConverter {
 			return HexType.BRICK;
 		} else if(resource.equals("sheep")) {
 			return HexType.SHEEP;
-		} else if(resource.equals("qheat")) {
+		} else if(resource.equals("wheat")) {
 			return HexType.WHEAT;
 		} else if(resource.equals("ore")) {
 			return HexType.ORE;
