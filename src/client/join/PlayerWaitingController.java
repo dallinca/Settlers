@@ -18,6 +18,7 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 
 	private IPlayerWaitingView view;
 	private Client client;
+	private boolean firstTime = true;
 	
 	/**
 	 * TODO - Javadoc and Implement
@@ -60,9 +61,10 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 
 		getView().showModal();
 		
-		if(getView().isModalShowing() && client.getGameInfo().getPlayers().size() == 4) {
-			getView().closeModal();
-		}
+		Client.getInstance().getMyServerPoller().start();
+		//if(getView().isModalShowing() && client.getGameInfo().getPlayers().size() == 4) {
+		//	getView().closeModal();
+		//}
 	}
 
 	/**
@@ -87,9 +89,13 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 	public void update(Observable o, Object arg) {
 		System.out.println("PlayerWaitingController update");
 		// TODO Auto-generated method stub
-		if(getView().isModalShowing() && client.getGameInfo().getPlayers().size() == 4) {
-			
+		//if(getView().isModalShowing() && client.getGameInfo().getPlayers().size() == 4) {
+		//	
+		//	getView().closeModal();
+		//}
+		if(Client.getInstance().getGame() != null ) {
 			getView().closeModal();
+			firstTime = false;
 		}
 	}
 

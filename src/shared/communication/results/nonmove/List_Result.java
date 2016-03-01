@@ -90,6 +90,7 @@ public class List_Result {
 				pi.setId(llp.get(j).id);
 				pi.setName(llp.get(j).name.replace("\"",""));
 				pi.setPlayerIndex(j);
+				games[i].addPlayer(pi);
 			}
 		}
 		

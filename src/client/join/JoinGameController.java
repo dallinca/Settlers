@@ -12,7 +12,6 @@ import java.util.Observer;
 import client.Client;
 import client.ClientException;
 import client.ClientFacade;
-import client.MockClientFacade;
 import client.base.*;
 import client.data.*;
 import client.misc.*;
@@ -25,7 +24,6 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 
 	private GameInfo gameInfo; // For storing the GameInfo for the desired game to join
 	private Client clientInfo;
-	private MockClientFacade mockClientFacade;
 	private INewGameView newGameView;
 	private ISelectColorView selectColorView;
 	private IMessageView messageView;
@@ -262,7 +260,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		join_result = ClientFacade.getInstance().joinGame(gameInfo.getId(), color);
 
 		// If something went wrong with joining the game
-		if(join_result == null || join_result.isJoined() == false) {
+		if(join_result == null || join_result.isValid() == false) {
 			getSelectColorView().closeModal();
 			getMessageView().setMessage("Game could not be joined");
 			getMessageView().showModal();

@@ -96,7 +96,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("ResourceBarController update()");
-
+		
 		boolean canBuildRoad = Client.getInstance().getGame().canDoCurrentPlayerBuildRoad(Client.getInstance().getUserId());
 		if(canBuildRoad){
 			getView().setElementEnabled(ResourceBarElement.ROAD, true);

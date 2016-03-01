@@ -176,10 +176,15 @@ public class ClientFacade {
 	 * @post Communicator will return usable PollServer_Result.
 	 */
 	public GetVersion_Result getVersion()  {
-
+		GetVersion_Params request;
 		GetVersion_Result result; 
-		GetVersion_Params request = new GetVersion_Params(Client.getInstance().getGame().getVersionNumber());		
-
+		
+		if(Client.getInstance().getGame() == null) {
+			request = new GetVersion_Params(-1);
+		} else {
+			request = new GetVersion_Params(Client.getInstance().getGame().getVersionNumber());		
+		}
+		
 		try {
 
 			result = sp.getVersion(request);
@@ -189,7 +194,7 @@ public class ClientFacade {
 			result = new GetVersion_Result();
 
 			e.printStackTrace();
-		}		
+		}
 
 		return result;
 	}
