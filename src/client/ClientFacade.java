@@ -117,10 +117,12 @@ public class ClientFacade {
 
 		try {
 
-			result = sp.login(request);
+			result = sp.login(request);	
+			
+			c.setUserId(result.getID());
 
 		} catch (ClientException e) {			
-			result = new Login_Result();
+			result = new Login_Result();			
 
 			e.printStackTrace();
 		}		

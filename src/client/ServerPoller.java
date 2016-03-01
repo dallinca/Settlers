@@ -3,10 +3,8 @@ package client;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import shared.communication.params.nonmove.GetVersion_Params;
 import shared.communication.results.nonmove.GetVersion_Result;
 import shared.model.Game;
-import client.proxy.IServerProxy;
 
 
 /**

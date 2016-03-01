@@ -72,14 +72,14 @@ public class ServerProxyTest {
 
 		assertTrue(result.isValid());
 		assertEquals("Sam", result.getName());
-		assertEquals(0, result.getId());
+		assertEquals(0, result.getID());
 
 		result = prox.login(new Login_Params("Sam", "sam"));
 
 
 		assertTrue(result.isValid());
 		assertEquals("Sam", result.getName());
-		assertEquals(0, result.getId());
+		assertEquals(0, result.getID());
 
 		result = prox.login(new Login_Params("sam", "sam"));
 
@@ -105,7 +105,7 @@ public class ServerProxyTest {
 
 		assertTrue(result.isValid());
 		assertEquals("Tiger", result.getName());
-		assertEquals(13, result.getId());
+		assertEquals(13, result.getID());
 
 		prox.reset(new Reset_Params());
 	}

@@ -107,7 +107,7 @@ public class ServerProxy implements IServerProxy {
 	private static ServerProxy SINGLETON4 = null;
 
 	protected ServerProxy(){
-		this.SINGLETON = new ServerProxy();
+		ServerProxy.SINGLETON = new ServerProxy();
 		
 		SERVER_HOST = "localhost";
 		SERVER_PORT = 8081;				
