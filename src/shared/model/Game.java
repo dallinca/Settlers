@@ -785,12 +785,15 @@ public class Game {
 	public boolean canDoPlaceRoadOnEdge(int UserId, EdgeLocation edgeLocation) {
 		// Check if the user is the current player
 		if(UserId != currentPlayer.getPlayerId()) {
+			System.out.println("Game1: false");
 			return false;
 		}
 		// If we are in the setup phase, the rules for placing a road are slightly different
 		if(turnNumber < 2) {
+			System.out.println("Game2: " + board.canDoPlaceInitialRoadOnEdge(getCurrentPlayer(), edgeLocation));
 			return board.canDoPlaceInitialRoadOnEdge(getCurrentPlayer(), edgeLocation);
 		} else {
+			System.out.println("Game3: " + board.canDoPlaceInitialRoadOnEdge(getCurrentPlayer(), edgeLocation));
 			return board.canDoPlaceRoadOnEdge(getCurrentPlayer(), edgeLocation);	
 		}
 	}

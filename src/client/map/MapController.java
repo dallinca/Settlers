@@ -150,13 +150,22 @@ public class MapController extends Controller implements IMapController, Observe
 		
 	}
 
+	
+	int hello = 0;
 	/**
 	 * TODO
 	 * 
 	 */
 	public boolean canPlaceRoad(EdgeLocation edgeLoc) {
 		System.out.println("MapController canPlaceRoad()");
-		return Client.getInstance().getGame().canDoPlaceRoadOnEdge( Client.getInstance().getUserId(), edgeLoc);
+		if(hello <= 10) {
+			hello++;
+			return false;
+		}
+		return true;
+		//boolean canDo = Client.getInstance().getGame().canDoPlaceRoadOnEdge( Client.getInstance().getUserId(), edgeLoc);
+		//System.out.println("MapController: " + canDo);
+		//return canDo;
 	}
 
 	/**
@@ -183,7 +192,8 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public boolean canPlaceRobber(HexLocation hexLoc) {
 		System.out.println("MapController canPlaceRobber()");
-		return Client.getInstance().getGame().canDoMoveRobberToHex( Client.getInstance().getUserId(), hexLoc);
+		return true;
+//		return Client.getInstance().getGame().canDoMoveRobberToHex( Client.getInstance().getUserId(), hexLoc);
 	}
 
 	/**
@@ -255,8 +265,8 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {	
 		System.out.println("MapController startMove()");
-
-		getView().startDrop(pieceType, CatanColor.ORANGE, true);
+		System.out.println("CCCOOOOOOOOOOOOLOLLLLLLLLLOOOOORRRRRR" + Client.getInstance().getColor());
+		getView().startDrop(PieceType.ROAD, Client.getInstance().getColor(), true);
 	}
 
 	/**
@@ -274,7 +284,11 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public void playSoldierCard() {	
 		System.out.println("MapController playSoldierCard()");
-		ActionManager.getInstance().doAction(ActionType.PLAYCARD_KNIGHT);
+		//ActionManager.getInstance().doAction(ActionType.PLAYCARD_KNIGHT);
+		
+		//getView();
+		
+		robView.showModal();
 	}
 
 	/**

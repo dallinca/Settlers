@@ -13,8 +13,13 @@ import shared.communication.params.move.*;
 import shared.communication.params.nonmove.*;
 import shared.communication.params.move.devcard.*;
 import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
 import shared.communication.results.ClientModel.MessageLine;
 import shared.communication.results.move.AcceptTrade_Result;
+import shared.communication.results.move.BuildCity_Result;
+import shared.communication.results.move.BuildRoad_Result;
+import shared.communication.results.move.BuildSettlement_Result;
+import shared.communication.results.move.BuyDevCard_Result;
 import shared.communication.results.move.FinishTurn_Result;
 import shared.communication.results.move.OfferTrade_Result;
 import shared.communication.results.move.RollNumber_Result;
@@ -28,6 +33,11 @@ import shared.communication.results.nonmove.Login_Result;
 import shared.communication.results.nonmove.Register_Result;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
+import shared.locations.EdgeDirection;
+import shared.locations.EdgeLocation;
+import shared.locations.HexLocation;
+import shared.locations.VertexDirection;
+import shared.locations.VertexLocation;
 import shared.model.Game.Line;
 import client.Client;
 import client.ClientException;
@@ -52,7 +62,11 @@ public class ServerProxyTest {
 
 	}
 
-	//	@Test
+	@Before
+	public void tearDown(){
+	}
+
+	//@Test
 	public void testLogin() throws ClientException {		
 		Login_Result result = prox.login(new Login_Params("Sam", "sam"));
 
@@ -71,9 +85,11 @@ public class ServerProxyTest {
 		result = prox.login(new Login_Params("sam", "sam"));
 
 		assertFalse(result.isValid());
+
+		prox.reset(new Reset_Params());
 	}
 
-	//	@Test
+	//@Test
 	public void testRegister() throws ClientException {
 
 		Register_Result regResult = prox.register(new Register_Params("Tiger", "Shark"));
@@ -91,9 +107,11 @@ public class ServerProxyTest {
 		assertTrue(result.isValid());
 		assertEquals("Tiger", result.getName());
 		assertEquals(13, result.getId());
+
+		prox.reset(new Reset_Params());
 	}
 
-	//	@Test
+	//@Test
 	public void testCreate() throws ClientException {
 
 		@SuppressWarnings("unused")//It is used.
@@ -108,7 +126,7 @@ public class ServerProxyTest {
 		assertEquals("\"TestGame\"", createResult.getTitle());
 		assertEquals(createResult.getID(), 4);
 
-
+		prox.reset(new Reset_Params());
 	}
 
 	//@Test
@@ -121,10 +139,11 @@ public class ServerProxyTest {
 		assertTrue(lResult.isValid());
 
 		//System.out.println("End list test.");	
+
 	}
 
 
-	//	@Test
+	//@Test
 	public void testJoin() throws ClientException {
 
 		Register_Result rResult = prox.register(new Register_Params("Tiger0", "Shark0"));
@@ -154,10 +173,9 @@ public class ServerProxyTest {
 		Join_Result jResult = prox.joinGame(new Join_Params(joinGameID, CatanColor.RED));
 		assertNotNull(jResult);
 		assertTrue(jResult.isValid());
-
 	}
 
-	@Test
+	//@Test
 	public void testGetVersion() throws ClientException {
 
 		Login_Result lResult = prox.login(new Login_Params("Sam", "sam"));		
@@ -165,6 +183,8 @@ public class ServerProxyTest {
 
 		Join_Result jResult = prox.joinGame(new Join_Params(0, CatanColor.ORANGE));
 		assertTrue(jResult.isValid());
+		
+		prox.reset(new Reset_Params());
 		//assertEquals(3, createResult.getID());
 
 		GetVersion_Result vResult = prox.getVersion(new GetVersion_Params());
@@ -194,33 +214,31 @@ public class ServerProxyTest {
 			System.out.println(l);
 		}*/
 
-		assertEquals(1, model.getChat().getLines().length);
-		assertEquals(27, model.getLog().getLines().length);
+		assertEquals(0, model.getChat().getLines().length);
+		//assertEquals(27, model.getLog().getLines().length);
 
 		//GetVersion_Result.ClientModel.Map map = model.getMap();
-		System.out.println(model.toString());
+		//System.out.println(model.toString());
 
-		ClientModel.MBank bank = model.getBank();
-		
+		//ClientModel.MBank bank = model.getBank();
+
 		shared.model.Game game = vResult.getGame();
-		
+
 		//{"resources":{"brick":0,"wood":1,"sheep":1,"wheat":1,"ore":0},
-		
+
 		assertEquals("Sam", model.getPlayers()[0].getName());
 		assertEquals(0, model.getPlayers()[0].getResources().getBrick());
 		assertEquals(1, model.getPlayers()[0].getResources().getWood());
-		assertEquals(3, model.getPlayers()[0].getResources().getSheep());
+		assertEquals(1, model.getPlayers()[0].getResources().getSheep());
 		assertEquals(1, model.getPlayers()[0].getResources().getWheat());
 		assertEquals(0, model.getPlayers()[0].getResources().getOre());
-		
+
 		assertEquals("Sam", game.getAllPlayers()[0].getPlayerName());
 		assertEquals(0, game.getAllPlayers()[0].getNumberResourcesOfType(ResourceType.BRICK));
 		assertEquals(1, game.getAllPlayers()[0].getNumberResourcesOfType(ResourceType.WOOD));
 		assertEquals(3, game.getAllPlayers()[0].getNumberResourcesOfType(ResourceType.SHEEP));
 		assertEquals(1, game.getAllPlayers()[0].getNumberResourcesOfType(ResourceType.WHEAT));
 		assertEquals(0, game.getAllPlayers()[0].getNumberResourcesOfType(ResourceType.ORE));
-		
-		
 
 		//System.out.println(model.toString());
 
@@ -277,22 +295,170 @@ public class ServerProxyTest {
 		prox4.joinGame(new Join_Params(0, CatanColor.GREEN));
 
 		RollNumber_Result rnResult = prox.rollNumber(new RollNumber_Params(0, 10));
-		SendChat_Result scResult = prox.sendChat(new SendChat_Params(0, "Yo bro how's it going???"));
+		assertTrue(rnResult.isValid());
 
-		FinishTurn_Result ftResult = prox.finishTurn(new FinishTurn_Params(0));
+		SendChat_Result scResult = prox.sendChat(new SendChat_Params(0, "Yo bro how's it going???"));
+		assertTrue(scResult.isValid());
 
 		OfferTrade_Result otResult = prox.offerTrade(new OfferTrade_Params(0, 1, 0, 1, 1, 1, -1));
-		AcceptTrade_Result atResult = prox2.acceptTrade(new AcceptTrade_Params(1, false));
-
-		assertTrue(scResult.isValid());
-		assertTrue(rnResult.isValid());
-		assertTrue(ftResult.isValid());
 		assertTrue(otResult.isValid());
+
+		AcceptTrade_Result atResult = prox2.acceptTrade(new AcceptTrade_Params(1, false));
 		assertTrue(atResult.isValid());
 
+		assertEquals(0, atResult.getModel().getTurnTracker().getCurrentTurn());
+		FinishTurn_Result ftResult = prox.finishTurn(new FinishTurn_Params(0));
+		assertTrue(ftResult.isValid());
+		assertEquals(1, ftResult.getModel().getTurnTracker().getCurrentTurn());
 
+		prox2.rollNumber(new RollNumber_Params(1, 7));
+		prox2.robPlayer(new RobPlayer_Params(1, new HexLocation(2, 0), 0));		// rob from player 1.
+		prox2.finishTurn(new FinishTurn_Params(1));
 
+		for (int i = 0; i < 3; i++){
+			//2,4,5,6,8,9,10,11
+			prox3.rollNumber(new RollNumber_Params(2, 2));
+			prox3.finishTurn(new FinishTurn_Params(2));
 
+			prox4.rollNumber(new RollNumber_Params(3, 4));
+			prox4.finishTurn(new FinishTurn_Params(3));
+
+			prox.rollNumber(new RollNumber_Params(0, 5));
+			prox.finishTurn(new FinishTurn_Params(0));
+
+			prox2.rollNumber(new RollNumber_Params(1, 6));
+			prox2.finishTurn(new FinishTurn_Params(1));
+
+			prox3.rollNumber(new RollNumber_Params(2, 8));
+			prox3.finishTurn(new FinishTurn_Params(2));
+
+			prox4.rollNumber(new RollNumber_Params(3, 9));
+			prox4.finishTurn(new FinishTurn_Params(3));
+
+			prox.rollNumber(new RollNumber_Params(0, 5));
+			prox.finishTurn(new FinishTurn_Params(0));
+
+			prox2.rollNumber(new RollNumber_Params(1, 10));
+			prox2.finishTurn(new FinishTurn_Params(1));			
+		}
+		
+		prox3.rollNumber(new RollNumber_Params(2, 11));
+		prox3.finishTurn(new FinishTurn_Params(2));
+
+		rnResult= prox4.rollNumber(new RollNumber_Params(3, 11));
+		prox4.finishTurn(new FinishTurn_Params(3));
+		
+		
+		otResult = prox.offerTrade(new OfferTrade_Params(0, 1, -4, -7, 1, -3, -4));
+		assertTrue(otResult.isValid());
+
+		atResult = prox2.acceptTrade(new AcceptTrade_Params(1, true));
+		assertTrue(atResult.isValid());
+		
+		/*BuyDevCard_Result bdcResult = prox.buyDevCard(new BuyDevCard_Params(1));
+		assertTrue(bdcResult.isValid());*/
+		
+		//System.out.println(atResult.getModel().toString());
+		
+		if (!(atResult.getModel().getPlayers()[0].getResources().getOre()>0)){
+			System.out.println("Insufficient ore: "+ rnResult.getModel().getPlayers()[0].getResources().getOre());
+			fail();
+		}else if (!(atResult.getModel().getPlayers()[0].getResources().getWheat()>0)){
+			System.out.println("Insufficient wheat: "+ rnResult.getModel().getPlayers()[0].getResources().getWheat());
+			fail();
+		}else if (!(atResult.getModel().getPlayers()[0].getResources().getSheep()>0)){
+			System.out.println("Insufficient sheep: "+ rnResult.getModel().getPlayers()[0].getResources().getSheep());
+			fail();
+		}
+		BuyDevCard_Result bdcResult = prox.buyDevCard(new BuyDevCard_Params(0));
+		assertTrue(bdcResult.isValid());
+		
+		System.out.println(bdcResult.getModel().toString());
+		
+		if (!(bdcResult.getModel().getPlayers()[0].getResources().getWood()>0)){
+			fail();
+		}else if (!(bdcResult.getModel().getPlayers()[0].getResources().getBrick()>0)){
+			fail();
+		}		
+		EdgeLocation el = new EdgeLocation(new HexLocation(1,0), EdgeDirection.SouthEast);
+		BuildRoad_Result brResult = prox.buildRoad(new BuildRoad_Params(0, el, false));
+		assertTrue(brResult.isValid());
+		
+		
+		if (!(brResult.getModel().getPlayers()[0].getResources().getBrick()>0)){
+			fail();
+		}else if (!(brResult.getModel().getPlayers()[0].getResources().getWheat()>0)){
+			fail();
+		}else if (!(brResult.getModel().getPlayers()[0].getResources().getWood()>0)){
+			fail();
+		}else if (!(brResult.getModel().getPlayers()[0].getResources().getSheep()>0)){
+			fail();
+		}
+		VertexLocation vl = new VertexLocation(new HexLocation(2,-1), VertexDirection.SouthWest);
+		BuildSettlement_Result bsResult = prox.buildSettlement(new BuildSettlement_Params(0, vl, false));
+		assertTrue(bsResult.isValid());
+		
+		
+		
+		if (!(brResult.getModel().getPlayers()[0].getResources().getWheat()>=2)){
+			fail();
+		}else if (!(brResult.getModel().getPlayers()[0].getResources().getOre()>=3)){
+			fail();
+		}
+		BuildCity_Result bcResult = prox.buildCity(new BuildCity_Params(0, vl));
+		assertTrue(bcResult.isValid());
+		
+		System.out.println(bcResult.getModel().toString());
+		
+
+		
+		//prox.playYearOfPlenty(new PlayYearOfPlenty_Params());
+		//prox.playSoldier(new PlaySoldier_Params());
+		//prox.playRoadBuilding(new PlayRoadBuilding_Params());
+		//prox.playMonument(new PlayMonument_Params());
+		//prox.playMonopoly(new PlayMonopoly_Params());
+		//prox.maritimeTrade(new MaritimeTrade_Params());
+
+		//prox.discardCards(new DiscardCards_Params());
+		/*
+		 * 
+		 * 
+		 * private Game game;
+	private ClientModel model;
+
+	public ClientModel getModel() {
+		return model;
+	}
+
+	public void setModel(ClientModel model) {
+		this.model = model;
+	}
+
+	public void setGame(Game game) {
+		this.game = game;
+	}
+	public Game getGame(){
+		return game;
+	}
+
+	public RobPlayer_Result(String post) {
+
+		if (post==null){
+			setValid(false);
+		}
+		else if (post.equals("\"true\"")){
+			setValid(true);
+			game = null;
+			model = null;
+		}
+		else{
+			setValid(true);
+			JsonConverter converter = new JsonConverter();
+			game = converter.parseJson(post);
+			model = converter.getModel();
+		}
+	}
+		 */
 	}
 
 	//@Test

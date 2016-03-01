@@ -191,18 +191,18 @@ public class MockClientFacade {
 
 		try {
 			// ROADS
-			p0.getPlayerPieces().placeRoad(board.getEdge(3, 3, ModEdgeDirection.LEFT));
-			p0.getPlayerPieces().placeRoad(board.getEdge(4, 4, ModEdgeDirection.LEFT));
+			//p0.getPlayerPieces().placeRoad(board.getEdge(3, 3, ModEdgeDirection.LEFT));
+			//p0.getPlayerPieces().placeRoad(board.getEdge(4, 4, ModEdgeDirection.LEFT));
 			p1.getPlayerPieces().placeRoad(board.getEdge(2, 2, ModEdgeDirection.UP));
 			p2.getPlayerPieces().placeRoad(board.getEdge(3, 5, ModEdgeDirection.RIGHT));
 			p3.getPlayerPieces().placeRoad(board.getEdge(1, 6, ModEdgeDirection.UP));
 			// SETTLEMENTS
-			p0.getPlayerPieces().placeSettlement(board.getVertex(3, 3));
-			p0.getPlayerPieces().placeSettlement(board.getVertex(4, 4));
-			p0.getPlayerPieces().placeSettlement(board.getVertex(5, 5));
+			//p0.getPlayerPieces().placeSettlement(board.getVertex(3, 3));
+			//p0.getPlayerPieces().placeSettlement(board.getVertex(4, 4));
+			//p0.getPlayerPieces().placeSettlement(board.getVertex(5, 5));
 			p2.getPlayerPieces().placeSettlement(board.getVertex(9, 1));
 			// CITIES
-			p0.getPlayerPieces().placeCity(board.getVertex(3, 3));
+			//p0.getPlayerPieces().placeCity(board.getVertex(3, 3));
 			p2.getPlayerPieces().placeCity(board.getVertex(9, 1));
 			//p3.getPlayerPieces().placeCity(board.getVertex(6, 6));
 			//p1.getPlayerPieces().placeCity(board.getVertex(8, 8));

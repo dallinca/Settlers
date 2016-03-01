@@ -6,12 +6,12 @@ public class RobPlayer_Params {
 	
 	private final String type = "robPlayer";
 	private int playerIndex;
-	private HexLocation hex;
+	private HexLocation location;
 	private int victimIndex;
 
 	public RobPlayer_Params(int playerIndex, HexLocation hex, int victimIndex) {
 		this.playerIndex = playerIndex;
-		this.hex = hex;
+		this.location = hex;
 		this.victimIndex = victimIndex;
 	}
 
@@ -23,12 +23,12 @@ public class RobPlayer_Params {
 		this.playerIndex = playerIndex;
 	}
 
-	public HexLocation getHex() {
-		return hex;
+	public HexLocation getLocation() {
+		return location;
 	}
 
-	public void setHex(HexLocation hex) {
-		this.hex = hex;
+	public void setLocation(HexLocation hex) {
+		this.location = hex;
 	}
 
 	public int getVictimIndex() {

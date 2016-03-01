@@ -4,6 +4,8 @@ import client.Client;
 import client.ClientFacade;
 import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
+import shared.locations.EdgeLocation;
+import shared.locations.HexLocation;
 import shared.model.Game;
 
 
@@ -54,10 +56,10 @@ public class PlayCard {
 	 * @pre Player must have an army development card.
 	 * @post Player takes associated action.
 	 */
-	public void playKnight() throws Exception{
+	public void playKnight(HexLocation hex, int victimIndex) throws Exception{
 		if (canDoPlayKnight()) {
 			try {
-				ClientFacade.getInstanceOf().playSoldier(hex, victimIndex)
+				ClientFacade.getInstanceOf().playSoldier(hex, victimIndex);
 				//Client.getInstance().getGame().useDevelopmentCard(Client.getInstance().getUserId(), DevCardType.SOLDIER);
 			} catch (Exception e) {
 				System.out.println("Something went wrong while trying to play a Soldier Card.");
@@ -140,10 +142,10 @@ public class PlayCard {
 	 * @pre Player must have build roads development card.
 	 * @post Player takes associated action.
 	 */
-	public void playBuildRoads() throws Exception{
+	public void playBuildRoads(EdgeLocation roadLocation1, EdgeLocation roadLocation2) throws Exception{
 		if (canDoPlayBuildRoads()) {
 			try {
-				ClientFacade.getInstanceOf().playRoadBuilding(roadLocation1, roadLocation2)
+				ClientFacade.getInstanceOf().playRoadBuilding(roadLocation1, roadLocation2);
 				//Client.getInstance().getGame().useDevelopmentCard(Client.getInstance().getUserId(), DevCardType.ROAD_BUILD);
 			} catch (Exception e) {
 				System.out.println("Something went wrong when trying to play a Road Builder card.");

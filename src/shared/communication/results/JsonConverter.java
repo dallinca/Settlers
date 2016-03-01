@@ -39,6 +39,8 @@ public class JsonConverter {
 
 		setModel(gson.fromJson(jsonGame, ClientModel.class));
 
+		//System.out.println(model.toString());
+
 		return getGame();
 	}	
 
@@ -140,7 +142,7 @@ public class JsonConverter {
 			try {
 				players[settlement.getOwner()].getPlayerPieces().placeSettlement(board.getVertex(new VertexLocation(hexLoc, vd )));
 			} catch (Exception e) {
-				System.out.println("something went screwy and we couldn't placy the settlement");
+				System.out.println("something went screwy and we couldn't place the settlement");
 				e.printStackTrace();
 			}
 		}
@@ -149,9 +151,11 @@ public class JsonConverter {
 			HexLocation hexLoc = new HexLocation(city.getLocation().getX(),city.getLocation().getY());
 			VertexDirection vd = getVertexDirectionFromString(city.getLocation().getDirection());
 			try {
-				players[city.getOwner()].getPlayerPieces().placeCity(board.getVertex(new VertexLocation(hexLoc, vd )));
+				new VertexLocation(hexLoc, vd );
+				board.getVertex(new VertexLocation(hexLoc, vd ));
+				players[city.getOwner()].getPlayerPieces().placeInitialCity(board.getVertex(new VertexLocation(hexLoc, vd )));
 			} catch (Exception e) {
-				System.out.println("something went screwy and we couldn't placy the settlement");
+				System.out.println("something went screwy and we couldn't place the city");
 				e.printStackTrace();
 			}
 		}
@@ -162,7 +166,7 @@ public class JsonConverter {
 			try {
 				players[road.getOwner()].getPlayerPieces().placeRoad(board.getEdge(new EdgeLocation(hexLoc, ed)));
 			} catch (Exception e) {
-				System.out.println("something went screwy and we couldn't placy the settlement");
+				System.out.println("something went screwy and we couldn't place the road");
 				e.printStackTrace();
 			}
 		}
@@ -228,19 +232,20 @@ public class JsonConverter {
 	 * @return
 	 */
 	private HexType getHexTypeFromString(String resource) {
-		if(resource == "wood") {
-			return HexType.WOOD;
-		} else if(resource == "brick") {
-			return HexType.BRICK;
-		} else if(resource == "sheep") {
-			return HexType.SHEEP;
-		} else if(resource == "qheat") {
-			return HexType.WHEAT;
-		} else if(resource == "ore") {
-			return HexType.ORE;
-		} else {
+		if(resource==null){
 			return HexType.DESERT;
+		}	else if(resource.equals("wood")) {
+			return HexType.WOOD;
+		} else if(resource.equals("brick")) {
+			return HexType.BRICK;
+		} else if(resource.equals("sheep")) {
+			return HexType.SHEEP;
+		} else if(resource.equals("qheat")) {
+			return HexType.WHEAT;
+		} else if(resource.equals("ore")) {
+			return HexType.ORE;
 		}
+		return null; 		
 	}
 
 	/**
@@ -253,19 +258,20 @@ public class JsonConverter {
 	 * @return
 	 */
 	private PortType getPortTypeFromString(String resource) {
-		if(resource == "wood") {
-			return PortType.WOOD;
-		} else if(resource == "brick") {
-			return PortType.BRICK;
-		} else if(resource == "sheep") {
-			return PortType.SHEEP;
-		} else if(resource == "qheat") {
-			return PortType.WHEAT;
-		} else if(resource == "ore") {
-			return PortType.ORE;
-		} else {
+		if(resource==null){
 			return PortType.THREE;
-		}
+		} else if(resource.equals("wood")) {
+			return PortType.WOOD;
+		} else if(resource.equals("brick")) {
+			return PortType.BRICK;
+		} else if(resource.equals("sheep")) {
+			return PortType.SHEEP;
+		} else if(resource.equals("qheat")) {
+			return PortType.WHEAT;
+		} else if(resource.equals("ore")) {
+			return PortType.ORE;
+		} 
+		return null;
 	}
 
 	/**
@@ -275,23 +281,23 @@ public class JsonConverter {
 	 * @return
 	 */
 	private CatanColor getCatanColorFromString(String color) {
-		if(color == "blue") {
+		if(color.equals("blue")) {
 			return CatanColor.BLUE;
-		} else if(color == "brown") {
+		} else if(color.equals("brown")) {
 			return CatanColor.BROWN;
-		} else if(color == "green") {
+		} else if(color.equals("green")) {
 			return CatanColor.GREEN;
-		} else if(color == "orange") {
+		} else if(color.equals("orange")) {
 			return CatanColor.ORANGE;
-		} else if(color == "puce") {
+		} else if(color.equals("puce")) {
 			return CatanColor.PUCE;
-		} else if(color == "purple") {
+		} else if(color.equals("purple")) {
 			return CatanColor.PURPLE;
-		} else if(color == "red") {
+		} else if(color.equals("red")) {
 			return CatanColor.RED;
-		} else if(color == "white") {
+		} else if(color.equals("white")) {
 			return CatanColor.WHITE;
-		} else if(color == "yellow") {
+		} else if(color.equals("yellow")) {
 			return CatanColor.YELLOW;
 		}
 		return null;
@@ -304,17 +310,17 @@ public class JsonConverter {
 	 * @return
 	 */
 	private EdgeDirection getEdgeDirectionFromString(String direction) {
-		if(direction == "NW") {
+		if(direction.equals("NW")) {
 			return EdgeDirection.NorthWest;
-		} else if(direction == "N") {
+		} else if(direction.equals("N")) {
 			return EdgeDirection.North;
-		} else if(direction == "NE") {
+		} else if(direction.equals("NE")) {
 			return EdgeDirection.NorthEast;
-		} else if(direction == "SW") {
+		} else if(direction.equals("SW")) {
 			return EdgeDirection.SouthWest;
-		} else if(direction == "S") {
+		} else if(direction.equals("S")) {
 			return EdgeDirection.South;
-		} else if(direction == "SE") {
+		} else if(direction.equals("SE")) {
 			return EdgeDirection.SouthEast;
 		}
 		return null;
@@ -327,17 +333,18 @@ public class JsonConverter {
 	 * @return
 	 */
 	private VertexDirection getVertexDirectionFromString(String direction) {
-		if(direction == "NW") {
+
+		if(direction.equals("NW")) {
 			return VertexDirection.NorthWest;
-		} else if(direction == "W") {
+		} else if(direction.equals("W")) {
 			return VertexDirection.West;
-		} else if(direction == "SW") {
+		} else if(direction.equals("SW")) {
 			return VertexDirection.SouthWest;
-		} else if(direction == "SE") {
+		} else if(direction.equals("SE")) {
 			return VertexDirection.SouthEast;
-		} else if(direction == "E") {
+		} else if(direction.equals("E")) {
 			return VertexDirection.East;
-		} else if(direction == "NE") {
+		} else if(direction.equals("NE")) {
 			return VertexDirection.NorthEast;
 		}
 		return null;
