@@ -26,11 +26,11 @@ public class Purchase {
 	 */
 	public void purchaseDevelopmentCard(){
 		if (canDoPurchaseDevelopmentCard()) {
-			try {
+			//try {
 				ClientFacade.getInstance().buyDevCard();
-			} catch (ClientException e) {
+			/*} catch (ClientException e) {
 				System.out.println("Failed to buy a Development Card!");
-			}
+			}*/
 		}
 	}
 

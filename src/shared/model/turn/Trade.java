@@ -1,6 +1,7 @@
 package shared.model.turn;
 
 import client.Client;
+import shared.definitions.ResourceType;
 import shared.model.Game;
 
 
@@ -16,7 +17,7 @@ public class Trade {
 	}
 	
 	public boolean canDoTradeWithPlayer() {
-		return Client.getInstance().getGame().canDoCurrentPlayerDoDomesticTrade(tradeIn, receive);
+		return Client.getInstance().getGame().canDoCurrentPlayerDoDomesticTrade(0, null, 0, null);
 	}
 	
 	
@@ -43,7 +44,7 @@ public class Trade {
 	}
 
 	
-	public boolean canDoTradeWithBank() {
+	public boolean canDoTradeWithBank(ResourceType tradeIn, ResourceType receive) {
 		return Client.getInstance().getGame().canDoCurrentPlayerDoMaritimeTrade(tradeIn, receive);
 	}
 	
@@ -56,7 +57,7 @@ public class Trade {
 	 * @post Player's cards go back to deck, gains selected resource card.
 	 * 
 	 */
-	public void tradeWithBank() throws Exception{
+	public void tradeWithBank(ResourceType tradeIn, ResourceType receive) throws Exception{
 		if (canDoTradeWithPlayer()) {
 			try {
 				Client.getInstance().getGame().doMaritimeTrade(null, null);

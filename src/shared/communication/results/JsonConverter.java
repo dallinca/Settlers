@@ -274,11 +274,14 @@ public class JsonConverter {
 			return PortType.BRICK;
 		} else if(resource.equals("sheep")) {
 			return PortType.SHEEP;
-		} else if(resource.equals("qheat")) {
+		} else if(resource.equals("wheat")) {
 			return PortType.WHEAT;
 		} else if(resource.equals("ore")) {
 			return PortType.ORE;
 		} 
+		System.out.println("\n\n\n\n");
+		System.out.println("Returned null porttype");
+		System.out.println("\n\n\n\n");
 		return null;
 	}
 

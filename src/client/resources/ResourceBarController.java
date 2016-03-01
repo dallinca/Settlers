@@ -4,6 +4,7 @@ import java.util.*;
 
 import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
+import shared.model.Game;
 import client.Client;
 import client.base.*;
 
@@ -98,45 +99,49 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 		System.out.println("ResourceBarController update()");
 		
 		if (Client.getInstance().getGame() != null) {
-		boolean canBuildRoad = Client.getInstance().getGame().canDoCurrentPlayerBuildRoad(Client.getInstance().getUserId());
-		if(canBuildRoad){
-			getView().setElementEnabled(ResourceBarElement.ROAD, true);
-		}else{
-			getView().setElementEnabled(ResourceBarElement.ROAD, false);
-		}
-
-		boolean canBuildSettlement = Client.getInstance().getGame().canDoCurrentPlayerBuildSettlement(Client.getInstance().getUserId());
-		if(canBuildSettlement){
-			getView().setElementEnabled(ResourceBarElement.SETTLEMENT, true);
-		}else{
-			getView().setElementEnabled(ResourceBarElement.SETTLEMENT, false);
-		}
-
-		boolean canBuildCity = Client.getInstance().getGame().canDoCurrentPlayerBuildCity(Client.getInstance().getUserId());
-		if(canBuildCity){
-			getView().setElementEnabled(ResourceBarElement.CITY, true);
-		}else{
-			getView().setElementEnabled(ResourceBarElement.CITY, false);
-		}
-		
-		boolean canBuyCard = Client.getInstance().getGame().canDoCurrentPlayerBuyDevelopmentCard(Client.getInstance().getUserId());
-		if(canBuyCard){
-			getView().setElementEnabled(ResourceBarElement.BUY_CARD, true);
-		}else{
-			getView().setElementEnabled(ResourceBarElement.BUY_CARD, false);
-		}
-		
-		// Set resource amounts
-		getView().setElementAmount(ResourceBarElement.WOOD, Client.getInstance().getGame().getNumberResourcesOfType(Client.getInstance().getUserId(), ResourceType.WOOD));
-		getView().setElementAmount(ResourceBarElement.BRICK, Client.getInstance().getGame().getNumberResourcesOfType(Client.getInstance().getUserId(), ResourceType.BRICK));
-		getView().setElementAmount(ResourceBarElement.ORE, Client.getInstance().getGame().getNumberResourcesOfType(Client.getInstance().getUserId(), ResourceType.ORE));
-		getView().setElementAmount(ResourceBarElement.SHEEP, Client.getInstance().getGame().getNumberResourcesOfType(Client.getInstance().getUserId(), ResourceType.SHEEP));
-		getView().setElementAmount(ResourceBarElement.WHEAT, Client.getInstance().getGame().getNumberResourcesOfType(Client.getInstance().getUserId(), ResourceType.WHEAT));
-		
-		// Set piece amounts
-		getView().setElementAmount(ResourceBarElement.SETTLEMENT, Client.getInstance().getGame().getNumberUnplayedSettlements(Client.getInstance().getUserId()));
-		getView().setElementAmount(ResourceBarElement.CITY, Client.getInstance().getGame().getNumberUnplayedCities(Client.getInstance().getUserId()));
-		getView().setElementAmount(ResourceBarElement.ROAD, Client.getInstance().getGame().getNumberUnplayedRoads(Client.getInstance().getUserId()));
+			Game game = Client.getInstance().getGame();
+			System.out.println("Client.getInstance().getUserId(): " + Client.getInstance().getUserId());
+			System.out.println("Client.getInstance().getGame(): " + Client.getInstance().getGame());
+			System.out.println("Client.getInstance().getGame(): " + Client.getInstance().getGame());
+			boolean canBuildRoad = Client.getInstance().getGame().canDoCurrentPlayerBuildRoad(Client.getInstance().getUserId());
+			if(canBuildRoad){
+				getView().setElementEnabled(ResourceBarElement.ROAD, true);
+			}else{
+				getView().setElementEnabled(ResourceBarElement.ROAD, false);
+			}
+			game.canDoCurrentPlayerBuildCity(123);
+			boolean canBuildSettlement = Client.getInstance().getGame().canDoCurrentPlayerBuildSettlement(Client.getInstance().getUserId());
+			if(canBuildSettlement){
+				getView().setElementEnabled(ResourceBarElement.SETTLEMENT, true);
+			}else{
+				getView().setElementEnabled(ResourceBarElement.SETTLEMENT, false);
+			}
+	
+			boolean canBuildCity = Client.getInstance().getGame().canDoCurrentPlayerBuildCity(Client.getInstance().getUserId());
+			if(canBuildCity){
+				getView().setElementEnabled(ResourceBarElement.CITY, true);
+			}else{
+				getView().setElementEnabled(ResourceBarElement.CITY, false);
+			}
+			
+			boolean canBuyCard = Client.getInstance().getGame().canDoCurrentPlayerBuyDevelopmentCard(Client.getInstance().getUserId());
+			if(canBuyCard){
+				getView().setElementEnabled(ResourceBarElement.BUY_CARD, true);
+			}else{
+				getView().setElementEnabled(ResourceBarElement.BUY_CARD, false);
+			}
+			
+			// Set resource amounts
+			getView().setElementAmount(ResourceBarElement.WOOD, Client.getInstance().getGame().getNumberResourcesOfType(Client.getInstance().getUserId(), ResourceType.WOOD));
+			getView().setElementAmount(ResourceBarElement.BRICK, Client.getInstance().getGame().getNumberResourcesOfType(Client.getInstance().getUserId(), ResourceType.BRICK));
+			getView().setElementAmount(ResourceBarElement.ORE, Client.getInstance().getGame().getNumberResourcesOfType(Client.getInstance().getUserId(), ResourceType.ORE));
+			getView().setElementAmount(ResourceBarElement.SHEEP, Client.getInstance().getGame().getNumberResourcesOfType(Client.getInstance().getUserId(), ResourceType.SHEEP));
+			getView().setElementAmount(ResourceBarElement.WHEAT, Client.getInstance().getGame().getNumberResourcesOfType(Client.getInstance().getUserId(), ResourceType.WHEAT));
+			
+			// Set piece amounts
+			getView().setElementAmount(ResourceBarElement.SETTLEMENT, Client.getInstance().getGame().getNumberUnplayedSettlements(Client.getInstance().getUserId()));
+			getView().setElementAmount(ResourceBarElement.CITY, Client.getInstance().getGame().getNumberUnplayedCities(Client.getInstance().getUserId()));
+			getView().setElementAmount(ResourceBarElement.ROAD, Client.getInstance().getGame().getNumberUnplayedRoads(Client.getInstance().getUserId()));
 		}
 	}
 
