@@ -31,7 +31,7 @@ public class PlayCard {
 	public void playMonument() throws Exception{
 		if (canDoPlayMonument()) {	
 			try {
-				ClientFacade.getInstanceOf().playMonument();
+				ClientFacade.getInstance().playMonument();
 				//Client.getInstance().getGame().useDevelopmentCard(Client.getInstance().getUserId(), DevCardType.MONUMENT);
 			} catch (Exception e) {
 				System.out.println("There was an Error in playing a Monument Card");
@@ -59,7 +59,7 @@ public class PlayCard {
 	public void playKnight(HexLocation hex, int victimIndex) throws Exception{
 		if (canDoPlayKnight()) {
 			try {
-				ClientFacade.getInstanceOf().playSoldier(hex, victimIndex);
+				ClientFacade.getInstance().playSoldier(hex, victimIndex);
 				//Client.getInstance().getGame().useDevelopmentCard(Client.getInstance().getUserId(), DevCardType.SOLDIER);
 			} catch (Exception e) {
 				System.out.println("Something went wrong while trying to play a Soldier Card.");
@@ -95,7 +95,7 @@ public class PlayCard {
 			} else throw new Exception("Array Too large or non-existant!");
 			
 			try {
-				ClientFacade.getInstanceOf().playYearOfPlenty(resource1, resource2);
+				ClientFacade.getInstance().playYearOfPlenty(resource1, resource2);
 				//We do not need to update the model if Facade is called...
 				//Client.getInstance().getGame().useDevelopmentCard(Client.getInstance().getUserId(), DevCardType.YEAR_OF_PLENTY, toPassIn);
 			} catch (Exception e) {
@@ -121,7 +121,7 @@ public class PlayCard {
 		if (canDoPlayMonopoly(toPassIn)) {
 			try {
 				//Array size is only 1 and will only ever be 1.
-				ClientFacade.getInstanceOf().playMonopoly(toPassIn[0]);
+				ClientFacade.getInstance().playMonopoly(toPassIn[0]);
 				//Client.getInstance().getGame().useDevelopmentCard(Client.getInstance().getUserId(), DevCardType.MONOPOLY, toPassIn);
 			} catch (Exception e) {
 				System.out.println("Something went wrong when trying to play a Monopoly Card");
@@ -145,7 +145,7 @@ public class PlayCard {
 	public void playBuildRoads(EdgeLocation roadLocation1, EdgeLocation roadLocation2) throws Exception{
 		if (canDoPlayBuildRoads()) {
 			try {
-				ClientFacade.getInstanceOf().playRoadBuilding(roadLocation1, roadLocation2);
+				ClientFacade.getInstance().playRoadBuilding(roadLocation1, roadLocation2);
 				//Client.getInstance().getGame().useDevelopmentCard(Client.getInstance().getUserId(), DevCardType.ROAD_BUILD);
 			} catch (Exception e) {
 				System.out.println("Something went wrong when trying to play a Road Builder card.");
