@@ -16,8 +16,6 @@ import shared.model.Game;
 public class ServerPoller {
 
 	private Timer pollTimer;
-	private ClientFacade f;
-	private Client c;
 	private int interval;
 
 	/**
@@ -29,9 +27,7 @@ public class ServerPoller {
 	 * @pre None
 	 * @post Server poller is created.
 	 */
-	public ServerPoller(){
-		this.c = Client.getInstance();
-		this.f = ClientFacade.getInstanceOf();			
+	public ServerPoller(){		
 		this.interval = 1500;
 	}
 
@@ -70,14 +66,14 @@ public class ServerPoller {
 	 */	
 	private void pollServer(){
 
-		GetVersion_Result pollResult = f.getVersion();
+		GetVersion_Result pollResult = ClientFacade.getInstanceOf().getVersion();
 
 		if (pollResult.isValid()){
 
 			if (!pollResult.isUpToDate()){				
 
 				Game update = pollResult.getGame();
-				c.setGame(update);	
+				Client.getInstance().setGame(update);	
 
 			}
 		}	

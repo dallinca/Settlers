@@ -90,8 +90,6 @@ public class ServerProxy implements IServerProxy {
 	private int playerID;
 	private int gameID;
 
-	private Client client;
-
 	/**
 	 * 
 	 * @param serverHost Name of server
@@ -145,13 +143,11 @@ public class ServerProxy implements IServerProxy {
 		return SINGLETON4;
 	}*/
 	
-	public ServerProxy(String serverHost, int serverPort, Client c){
+	public ServerProxy(String serverHost, int serverPort){
 		userCookie = "";
 		gameCookie = "";
 		playerID = -1;
-		client = Client.getInstance();
 		setupProxy(serverHost, serverPort);		
-		setClient(c);
 	}
 	
 	public void setupProxy(String serverHost, int serverPort){
@@ -168,10 +164,6 @@ public class ServerProxy implements IServerProxy {
 		return gameCookie;
 	}
 	
-	public void setClient(Client c){
-		client = c;
-	}
-
 	public int getPlayerID(){
 		return playerID;
 	}
@@ -250,11 +242,11 @@ public class ServerProxy implements IServerProxy {
 		//	System.out.println("Get version.");
 		StringBuilder sb = new StringBuilder();
 		sb.append("/game/model?version=");
-		if (client==null){
+		if (Client.getInstance().getGame()==null){
 			sb.append(-1);
 		}
 		else{
-			sb.append(client.getGame().getVersionNumber());
+			sb.append(Client.getInstance().getGame().getVersionNumber());
 		}
 		URL_SUFFIX = sb.toString();
 
