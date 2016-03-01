@@ -160,6 +160,7 @@ public class MockClientFacade {
 		p0.setPlayerName(pi0.getName());
 		p0.setPlayerColor(pi0.getColor());
 		p0.setPlayerId(pi0.getId());
+		p0.setPlayersTurn(true);
 
 		PlayerInfo pi1 = Client.getInstance().getGameInfo().getPlayers().get(1);
 		Player p1 = new Player(pi1.getPlayerIndex(), bank);

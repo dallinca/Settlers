@@ -60,27 +60,25 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 		if(init){
 			initFromModel();
 		}
-		else{
-			Player[] players = Client.getInstance().getGame().getAllPlayers();
-			for(int i = 0; i < players.length && players[i] != null; i++){
+		Player[] players = Client.getInstance().getGame().getAllPlayers();
+		for(int i = 0; i < players.length && players[i] != null; i++){
 
-				boolean highlight = false;
-				boolean largestArmy = false;
-				boolean longestRoad = false;
-				
-				if(players[i].isPlayersTurn()){
-					highlight = true;
-				}
-				if(players[i].isHasLargestArmy()){
-					largestArmy = true;
-				}
-				if(players[i].isHasLongestRoad()){
-					longestRoad = true;
-				}
-		
-				getView().updatePlayer(players[i].getPlayerIndex(), players[i].getVictoryPoints(), highlight,
-						  largestArmy, longestRoad);
+			boolean highlight = false;
+			boolean largestArmy = false;
+			boolean longestRoad = false;
+			
+			if(players[i].isPlayersTurn()){
+				highlight = true;
 			}
+			if(players[i].isHasLargestArmy()){
+				largestArmy = true;
+			}
+			if(players[i].isHasLongestRoad()){
+				longestRoad = true;
+			}
+	
+			getView().updatePlayer(players[i].getPlayerIndex(), players[i].getVictoryPoints(), highlight,
+					  largestArmy, longestRoad);
 		}
 		init = false;
 	}
