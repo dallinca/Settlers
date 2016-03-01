@@ -28,7 +28,7 @@ public class ServerPoller {
 	 * @post Server poller is created.
 	 */
 	public ServerPoller(){		
-		this.interval = 1500;
+		this.interval = 3500;
 	}
 
 	public boolean start(){
@@ -65,6 +65,7 @@ public class ServerPoller {
 	 * @post Current game state will be obtained from server.
 	 */	
 	private void pollServer(){
+		System.out.println("Poll server!");
 
 		GetVersion_Result pollResult = ClientFacade.getInstance().getVersion();
 
