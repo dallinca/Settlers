@@ -62,6 +62,7 @@ public class Catan extends JFrame
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run()
 			{
+				ClientFacade.getInstance().getProxy().setupProxy(args[0], Integer.parseInt(args[1]));
 				new Catan();
 				
 				// PLAYER WAITING - Controller
