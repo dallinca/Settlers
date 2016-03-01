@@ -193,6 +193,9 @@ public class ClientFacade {
 				//System.out.println(result);
 				updateGame(result.getGame());
 			}
+			else{
+				System.out.println("Up to date.");
+			}
 
 		} catch (ClientException e) {			
 			result = new GetVersion_Result();

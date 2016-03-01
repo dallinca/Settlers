@@ -57,6 +57,7 @@ public class MapController extends Controller implements IMapController, Observe
 	protected void initFromModel() {
 		System.out.println("MapController initFromModel()");
 		
+		
 		// Check if there is a game to initialize from
 		if(Client.getInstance().getGame() == null) {
 			return;
@@ -83,14 +84,9 @@ public class MapController extends Controller implements IMapController, Observe
 		getView().addHex(new HexLocation(-2, -1), HexType.WATER);
 		getView().addHex(new HexLocation(-1, -2), HexType.WATER);
 
-		getView().addNumber(new HexLocation(0, 0), 5);
-		getView().addNumber(new HexLocation(1, 0), 3);
-		getView().addNumber(new HexLocation(0, -1), 2);
-		getView().addHex(new HexLocation(0, 0), HexType.BRICK);
 		// Init the land hexes
 
 		Hex[][] allLandHexes = Client.getInstance().getGame().getMapHexes();
-		System.out.println(allLandHexes);
 
 		Hex curHex = null;
 		for(int i = 0; i < allLandHexes.length; i++) {
@@ -99,9 +95,12 @@ public class MapController extends Controller implements IMapController, Observe
 				curHex = allLandHexes[i][j];
 				if(curHex != null) {
 					getView().addHex(new HexLocation(curHex.getTheirX_coord_hex(), curHex.getTheirY_coord_hex()), curHex.getHexType());
-					if(curHex.getRollValue() != -1) {
+					//System.out.println("X: "+curHex.getTheirX_coord_hex() + " Y: " +curHex.getTheirY_coord_hex() + " TYPE: "+curHex.getHexType());
+					if(curHex.getRollValue() > 0) {
 						getView().addNumber(new HexLocation(curHex.getTheirX_coord_hex(), curHex.getTheirY_coord_hex()), curHex.getRollValue());
+						//System.out.println(" Roll value: " + curHex.getRollValue());
 					} else {
+						//System.out.println("   Placing robber here!");
 						getView().placeRobber(new HexLocation(curHex.getTheirX_coord_hex(), curHex.getTheirY_coord_hex()));
 					}
 				}
