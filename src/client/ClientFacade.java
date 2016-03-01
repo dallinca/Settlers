@@ -188,7 +188,11 @@ public class ClientFacade {
 		try {
 
 			result = sp.getVersion(request);
-			updateGame(result.getGame());
+			if(!result.isUpToDate()){
+				System.out.println("UPDATING GAME");
+				//System.out.println(result);
+				updateGame(result.getGame());
+			}
 
 		} catch (ClientException e) {			
 			result = new GetVersion_Result();

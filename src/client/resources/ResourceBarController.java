@@ -4,6 +4,7 @@ import java.util.*;
 
 import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
+import shared.model.Game;
 import client.Client;
 import client.base.*;
 
@@ -96,14 +97,17 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("ResourceBarController update()");
-		
+		Game game = Client.getInstance().getGame();
+		System.out.println("Client.getInstance().getUserId(): " + Client.getInstance().getUserId());
+		System.out.println("Client.getInstance().getGame(): " + Client.getInstance().getGame());
+		System.out.println("Client.getInstance().getGame(): " + Client.getInstance().getGame());
 		boolean canBuildRoad = Client.getInstance().getGame().canDoCurrentPlayerBuildRoad(Client.getInstance().getUserId());
 		if(canBuildRoad){
 			getView().setElementEnabled(ResourceBarElement.ROAD, true);
 		}else{
 			getView().setElementEnabled(ResourceBarElement.ROAD, false);
 		}
-
+		game.canDoCurrentPlayerBuildCity(123);
 		boolean canBuildSettlement = Client.getInstance().getGame().canDoCurrentPlayerBuildSettlement(Client.getInstance().getUserId());
 		if(canBuildSettlement){
 			getView().setElementEnabled(ResourceBarElement.SETTLEMENT, true);
