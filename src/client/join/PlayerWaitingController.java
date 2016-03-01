@@ -62,9 +62,9 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 		getView().showModal();
 		
 		Client.getInstance().getMyServerPoller().start();
-		//if(getView().isModalShowing() && client.getGameInfo().getPlayers().size() == 4) {
-		//	getView().closeModal();
-		//}
+		if(getView().isModalShowing() && client.getGameInfo().getPlayers().size() == 4) {
+			getView().closeModal();
+		}
 	}
 
 	/**

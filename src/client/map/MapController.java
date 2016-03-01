@@ -62,7 +62,7 @@ public class MapController extends Controller implements IMapController, Observe
 			return;
 			//Client.getInstance().setGame(new Game());
 		}
-
+		
 		// Init the water Hexes
 		getView().addHex(new HexLocation(0, -3), HexType.WATER);
 		getView().addHex(new HexLocation(1, -3), HexType.WATER);
@@ -83,9 +83,14 @@ public class MapController extends Controller implements IMapController, Observe
 		getView().addHex(new HexLocation(-2, -1), HexType.WATER);
 		getView().addHex(new HexLocation(-1, -2), HexType.WATER);
 
-		
+		getView().addNumber(new HexLocation(0, 0), 5);
+		getView().addNumber(new HexLocation(1, 0), 3);
+		getView().addNumber(new HexLocation(0, -1), 2);
+		getView().addHex(new HexLocation(0, 0), HexType.BRICK);
 		// Init the land hexes
+
 		Hex[][] allLandHexes = Client.getInstance().getGame().getMapHexes();
+		System.out.println(allLandHexes);
 
 		Hex curHex = null;
 		for(int i = 0; i < allLandHexes.length; i++) {
@@ -319,7 +324,7 @@ public class MapController extends Controller implements IMapController, Observe
 		//store current Game in controller
 		this.game = (Game)arg;
 		if(init) {
-			initFromModel();
+		initFromModel();
 			init = false;
 			return;
 		}

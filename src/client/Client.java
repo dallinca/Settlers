@@ -2,9 +2,9 @@ package client;
 import java.util.*;
 
 import client.data.GameInfo;
-
 import shared.definitions.CatanColor;
 import shared.model.Game;
+import shared.model.board.Hex;
 
 public class Client extends Observable {
 	
@@ -37,7 +37,7 @@ public class Client extends Observable {
 	// GETTERS AND SETTERS
 	//////////////////////
 	
-	public Game getGame() {
+	public synchronized Game getGame() {
 		return game;
 	}
 
@@ -46,7 +46,8 @@ public class Client extends Observable {
 		//update all controllers by passing each the current game object
 		setChanged();
 		//notifyObservers(this.game);
-		notifyObservers();
+		notifyObservers(this.game);
+		clearChanged();
 	}
 
 	public String getName() {
@@ -97,6 +98,10 @@ public class Client extends Observable {
 	protected void setMyServerPoller(ServerPoller myServerPoller) {
 		this.myServerPoller = myServerPoller;
 	}
+
+
+	
+	
 	
 	
 }
