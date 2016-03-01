@@ -101,14 +101,12 @@ public class ServerProxy implements IServerProxy {
 	 * @post The client communicator will know how to communicate with the server.
 	 */
 
-	private static ServerProxy SINGLETON = null;
-	private static ServerProxy SINGLETON2 = null;
-	private static ServerProxy SINGLETON3 = null;
-	private static ServerProxy SINGLETON4 = null;
+	/*private ServerProxy SINGLETON = null;
+	private ServerProxy SINGLETON2 = null;
+	private ServerProxy SINGLETON3 = null;
+	private ServerProxy SINGLETON4 = null;*/
 
-	protected ServerProxy(){
-		ServerProxy.SINGLETON = new ServerProxy();
-		
+	public ServerProxy(){
 		SERVER_HOST = "localhost";
 		SERVER_PORT = 8081;				
 		URL_PREFIX = "http://" + SERVER_HOST + ":" + SERVER_PORT;
@@ -116,32 +114,44 @@ public class ServerProxy implements IServerProxy {
 		userCookie = "";
 		gameCookie = "";
 		playerID = -1;
-		client = Client.getInstance();
+	}
+	
+	/*private ServerProxy(ServerProxy s){
+		s = new ServerProxy();		
 	}
 
 	public static ServerProxy getInstance(){
 		if (SINGLETON == null){
-			SINGLETON = new ServerProxy();
+			SINGLETON = new ServerProxy(SINGLETON);
 		}
 		return SINGLETON;
 	}
 	public static ServerProxy getInstance2(){
 		if (SINGLETON2 == null){
-			SINGLETON2 = new ServerProxy();
+			SINGLETON2 = new ServerProxy(SINGLETON2);
 		}
 		return SINGLETON2;
 	}
 	public static ServerProxy getInstance3(){
 		if (SINGLETON3 == null){
-			SINGLETON3 = new ServerProxy();
+			SINGLETON3 = new ServerProxy(SINGLETON3);
 		}
 		return SINGLETON3;
 	}
 	public static ServerProxy getInstance4(){
 		if (SINGLETON4 == null){
-			SINGLETON4 = new ServerProxy();
+			SINGLETON4 = new ServerProxy(SINGLETON4);
 		}
 		return SINGLETON4;
+	}*/
+	
+	public ServerProxy(String serverHost, int serverPort, Client c){
+		userCookie = "";
+		gameCookie = "";
+		playerID = -1;
+		client = Client.getInstance();
+		setupProxy(serverHost, serverPort);		
+		setClient(c);
 	}
 	
 	public void setupProxy(String serverHost, int serverPort){
@@ -156,6 +166,10 @@ public class ServerProxy implements IServerProxy {
 	}
 	public String getGameCookie(){
 		return gameCookie;
+	}
+	
+	public void setClient(Client c){
+		client = c;
 	}
 
 	public int getPlayerID(){

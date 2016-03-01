@@ -53,7 +53,7 @@ public class ServerProxyTest {
 	@BeforeClass
 	public static void setUp(){
 
-		prox = ServerProxy.getInstance();
+		prox = new ServerProxy();
 	}
 
 	@AfterClass
@@ -244,9 +244,9 @@ public class ServerProxyTest {
 		//GetVersion_Result.ClientModel.Bank bank = model.getBank();
 
 
-		ServerProxy prox2 = ServerProxy.getInstance2();		
-		ServerProxy prox3 = ServerProxy.getInstance3();
-		ServerProxy prox4 = ServerProxy.getInstance4();
+		ServerProxy prox2 = new ServerProxy();		
+		ServerProxy prox3 = new ServerProxy();
+		ServerProxy prox4 = new ServerProxy();
 
 		prox2.login(new Login_Params("Brooke", "brooke"));
 		prox2.joinGame(new Join_Params(0, CatanColor.BLUE));
@@ -277,9 +277,9 @@ public class ServerProxyTest {
 	@Test
 	public void basicCommands() throws ClientException {
 
-		ServerProxy prox2 = ServerProxy.getInstance2();		
-		ServerProxy prox3 = ServerProxy.getInstance3();
-		ServerProxy prox4 = ServerProxy.getInstance4();
+		ServerProxy prox2 = new ServerProxy();		
+		ServerProxy prox3 = new ServerProxy();
+		ServerProxy prox4 = new ServerProxy();
 
 		Login_Result lResult = prox.login(new Login_Params("Sam", "sam"));		
 		assertTrue(lResult.isValid());				
@@ -472,9 +472,9 @@ public class ServerProxyTest {
 
 		//System.out.println("Testing all commands.");
 		//At this stage, all commands return 400's because of their empty states.
-		ServerProxy prox2 = ServerProxy.getInstance2();		
-		ServerProxy prox3 = ServerProxy.getInstance3();		
-		ServerProxy prox4 = ServerProxy.getInstance4();
+		ServerProxy prox2 = new ServerProxy();		
+		ServerProxy prox3 = new ServerProxy();		
+		ServerProxy prox4 = new ServerProxy();
 
 		try{
 			/*

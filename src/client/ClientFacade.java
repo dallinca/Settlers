@@ -71,8 +71,10 @@ public class ClientFacade {
 	
 	
 	protected ClientFacade(){
-		this.sp = ServerProxy.getInstance();
+		ServerProxy serv = new ServerProxy();
 		this.c = Client.getInstance();
+		serv.setClient(c);		
+		sp = serv;
 	}
 	
 	public static ClientFacade getInstanceOf(){
