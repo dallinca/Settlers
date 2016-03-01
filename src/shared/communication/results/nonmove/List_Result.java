@@ -79,18 +79,17 @@ public class List_Result {
 		for (int i =0;i<listedGames.size(); i++){
 			games[i]=new GameInfo();
 			games[i].setId(listedGames.get(i).getID());
-			games[i].setTitle(listedGames.get(i).getTitle());
+			games[i].setTitle(listedGames.get(i).getTitle().replace("\"",""));
 			
 			LinkedList<Player> llp = new LinkedList<Player>();
 			llp = listedGames.get(i).getPlayers();
 			
 			for (int j = 0; j < llp.size(); j++){
 				PlayerInfo pi = new PlayerInfo();
-				pi.setColor(getCatanColorFromString(llp.get(j).color));
+				pi.setColor(getCatanColorFromString(llp.get(j).color.replace("\"","")));
 				pi.setId(llp.get(j).id);
-				pi.setName(llp.get(j).name);
+				pi.setName(llp.get(j).name.replace("\"",""));
 				pi.setPlayerIndex(j);
-				
 			}
 		}
 		
