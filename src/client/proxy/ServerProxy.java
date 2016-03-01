@@ -64,6 +64,7 @@ import shared.communication.results.nonmove.Register_Result;
 import shared.communication.results.nonmove.Reset_Result;
 import client.Client;
 import client.ClientException;
+import client.ClientFacade;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -88,9 +89,8 @@ public class ServerProxy implements IServerProxy {
 	private String URL_SUFFIX;
 	private int playerID;
 	private int gameID;
-	
-	private Client client;
 
+	private Client client;
 
 	/**
 	 * 
@@ -101,18 +101,14 @@ public class ServerProxy implements IServerProxy {
 	 * @post The client communicator will know how to communicate with the server.
 	 */
 
-	public ServerProxy(String serverHost, int serverPort, Client c){
-		SERVER_HOST = serverHost;
-		SERVER_PORT = serverPort;				
-		URL_PREFIX = "http://" + SERVER_HOST + ":" + SERVER_PORT;
+	private static ServerProxy SINGLETON = null;
+	private static ServerProxy SINGLETON2 = null;
+	private static ServerProxy SINGLETON3 = null;
+	private static ServerProxy SINGLETON4 = null;
 
-		userCookie = "";
-		gameCookie = "";
-		playerID = -1;
-		client = c;
-	}
-
-	public ServerProxy(){
+	protected ServerProxy(){
+		this.SINGLETON = new ServerProxy();
+		
 		SERVER_HOST = "localhost";
 		SERVER_PORT = 8081;				
 		URL_PREFIX = "http://" + SERVER_HOST + ":" + SERVER_PORT;
@@ -120,6 +116,39 @@ public class ServerProxy implements IServerProxy {
 		userCookie = "";
 		gameCookie = "";
 		playerID = -1;
+		client = Client.getInstance();
+	}
+
+	public static ServerProxy getInstance(){
+		if (SINGLETON == null){
+			SINGLETON = new ServerProxy();
+		}
+		return SINGLETON;
+	}
+	public static ServerProxy getInstance2(){
+		if (SINGLETON2 == null){
+			SINGLETON2 = new ServerProxy();
+		}
+		return SINGLETON2;
+	}
+	public static ServerProxy getInstance3(){
+		if (SINGLETON3 == null){
+			SINGLETON3 = new ServerProxy();
+		}
+		return SINGLETON3;
+	}
+	public static ServerProxy getInstance4(){
+		if (SINGLETON4 == null){
+			SINGLETON4 = new ServerProxy();
+		}
+		return SINGLETON4;
+	}
+	
+	public void setupProxy(String serverHost, int serverPort){
+		SERVER_HOST = serverHost;
+		SERVER_PORT = serverPort;				
+		URL_PREFIX = "http://" + SERVER_HOST + ":" + SERVER_PORT;
+		return;
 	}
 
 	public String getUserCookie(){
@@ -132,7 +161,7 @@ public class ServerProxy implements IServerProxy {
 	public int getPlayerID(){
 		return playerID;
 	}
-	
+
 	public int getGameID(){
 		return gameID;
 	}	
@@ -214,16 +243,16 @@ public class ServerProxy implements IServerProxy {
 			sb.append(client.getGame().getVersionNumber());
 		}
 		URL_SUFFIX = sb.toString();
-				
+
 		return new GetVersion_Result((String) doPost(URL_SUFFIX, request));
 	}
-	
-	
+
+
 	public Reset_Result reset(Reset_Params request)
 			throws ClientException {
-		
+
 		URL_SUFFIX = "/game/reset";
-		
+
 		System.out.println("Game reset: "+(String)doPost(URL_SUFFIX, request));
 		return new Reset_Result();
 	}
@@ -383,7 +412,7 @@ public class ServerProxy implements IServerProxy {
 		URL_SUFFIX = "/moves/acceptTrade";
 		return new AcceptTrade_Result((String) doPost(URL_SUFFIX, request));
 	}
-	
+
 	/**
 	 * Build a city over one of your preexisting settlements.
 	 * 
@@ -606,7 +635,7 @@ public class ServerProxy implements IServerProxy {
 		URL_SUFFIX = "/moves/robPlayer";
 		return new RobPlayer_Result ((String) doPost(URL_SUFFIX, request));
 	}
-	
+
 	/**
 	 * Roll a dice to trigger resource gathering on your turn.
 	 * 
@@ -664,7 +693,7 @@ public class ServerProxy implements IServerProxy {
 	@Override
 	public PlayMonopoly_Result playMonopoly(PlayMonopoly_Params request)
 			throws ClientException {
-		URL_SUFFIX = "/moves/playMonopoly";
+		URL_SUFFIX = "/moves/Monopoly";
 		return new PlayMonopoly_Result ((String) doPost(URL_SUFFIX, request));
 	}
 
@@ -687,7 +716,7 @@ public class ServerProxy implements IServerProxy {
 	@Override
 	public PlayMonument_Result playMonument(PlayMonument_Params request)
 			throws ClientException {
-		URL_SUFFIX = "/moves/playMonument";
+		URL_SUFFIX = "/moves/Monument";
 		return new PlayMonument_Result ((String) doPost(URL_SUFFIX, request));
 	}
 
@@ -714,10 +743,10 @@ public class ServerProxy implements IServerProxy {
 	@Override
 	public PlayRoadBuilding_Result playRoadBuilding(
 			PlayRoadBuilding_Params request) throws ClientException {
-		URL_SUFFIX = "/moves/playRoadBuilding";
+		URL_SUFFIX = "/moves/Road_Building";
 		return new PlayRoadBuilding_Result ((String) doPost(URL_SUFFIX, request));
 	}
-	
+
 	/**
 	 * Move robber to a new location and choose an adjacent player (or none) to rob.
 	 * 
@@ -741,7 +770,7 @@ public class ServerProxy implements IServerProxy {
 	@Override
 	public PlaySoldier_Result playSoldier(PlaySoldier_Params request)
 			throws ClientException {
-		URL_SUFFIX = "/moves/playSoldier";
+		URL_SUFFIX = "/moves/Soldier";
 		return new PlaySoldier_Result ((String)doPost(URL_SUFFIX, request));
 	}
 
@@ -762,10 +791,10 @@ public class ServerProxy implements IServerProxy {
 	@Override
 	public PlayYearOfPlenty_Result playYearOfPlenty(
 			PlayYearOfPlenty_Params request) throws ClientException {
-		URL_SUFFIX = "/moves/playYearOfPlenty";
+		URL_SUFFIX = "/moves/Year_of_Plenty";
 		return new PlayYearOfPlenty_Result ((String) doPost(URL_SUFFIX, request));
 	}
-	
+
 	/**
 	 * Doesn't work, extra credit.
 	 */
@@ -776,7 +805,7 @@ public class ServerProxy implements IServerProxy {
 
 		return new AddAI_Result((String) doPost(URL_SUFFIX, request));
 	}
-	
+
 	/**
 	 * TODO
 	 * EXTRA CREDIT
@@ -830,7 +859,7 @@ public class ServerProxy implements IServerProxy {
 				connection.setRequestProperty("Cookie", unfixedUserCookie);
 			}
 
-			if (request.getClass()==BuildSettlement_Params.class){
+			if (request.getClass()==MaritimeTrade_Params.class){
 				System.out.print("Call: "+job);
 			}
 			//System.out.print("Call: "+job);
@@ -840,13 +869,13 @@ public class ServerProxy implements IServerProxy {
 			connection.setDoOutput(true);	
 
 			connection.connect(); // sends cookies
-			
+
 
 			OutputStreamWriter sw = new OutputStreamWriter(connection.getOutputStream());
 			sw.write(job);
 			sw.flush();
 
-			if (request.getClass()==BuildSettlement_Params.class){
+			if (request.getClass()==MaritimeTrade_Params.class){
 				System.out.println(" |||| Response code: "+connection.getResponseCode());
 			}
 			//System.out.println(" |||| Response code: "+connection.getResponseCode());
@@ -870,11 +899,11 @@ public class ServerProxy implements IServerProxy {
 			in.close();
 
 			//System.out.println("Response: "+job+'\n');
-			
-			if (request.getClass()==BuildSettlement_Params.class){
+
+			if (request.getClass()==MaritimeTrade_Params.class){
 				System.out.println("Response: "+job+'\n');
 			}
-			
+
 			//Cookie cacher----------------------------------
 			Map<String, List<String>> headers = connection.getHeaderFields();
 
@@ -900,14 +929,14 @@ public class ServerProxy implements IServerProxy {
 				unfixedGameCookie = headers.get("Set-cookie").get(0);
 
 				gameCookie = unfixedGameCookie;
-				
+
 
 				if (gameCookie.endsWith("Path=/;")) {
 					gameCookie = gameCookie.substring(0, gameCookie.length() - 8);
 					unfixedGameCookie = gameCookie;
 					gameCookie = gameCookie.substring(11, gameCookie.length());
 				}
-					
+
 				//System.out.println("Game cookie: "+ gameCookie);
 				gameID = Integer.parseInt(gameCookie);
 			}

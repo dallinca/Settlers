@@ -5,11 +5,17 @@ import shared.locations.EdgeLocation;
 
 public class PlayRoadBuilding_Params {
 	
+	private final String type = "Road_Building";
 	private int playerIndex;
 	private BorderSpot spot1;
 	private BorderSpot spot2;
 	
-
+/**
+ * 
+ * @param playerIndex
+ * @param spot1
+ * @param spot2
+ */
 	public PlayRoadBuilding_Params(int playerIndex, EdgeLocation spot1,
 			EdgeLocation spot2) {
 		this.playerIndex = playerIndex;
