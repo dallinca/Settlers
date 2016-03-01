@@ -106,6 +106,10 @@ public class JsonConverter {
 			player.setPlayerId(mPlayer.getPlayerID());
 			player.setTotalVictoryPoints(mPlayer.getVictoryPoints());
 			players[player.getPlayerIndex()] = player;
+			// Set the turn of the current player
+			if(mPlayer.getPlayerIndex() == model.turnTracker.currentTurn) {
+				player.setPlayersTurn(true);
+			}
 		}
 
 		// Init the BOARD
