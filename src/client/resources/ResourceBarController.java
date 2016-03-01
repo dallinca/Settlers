@@ -46,6 +46,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	public void buildRoad() {
 		System.out.println("ResourceBarController buildRoad()");
 		executeElementAction(ResourceBarElement.ROAD);
+		
 		//elementActions.put(ResourceBarElement.ROAD, )
 	}
 
@@ -140,6 +141,19 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 		getView().setElementAmount(ResourceBarElement.SETTLEMENT, Client.getInstance().getGame().getNumberUnplayedSettlements(Client.getInstance().getUserId()));
 		getView().setElementAmount(ResourceBarElement.CITY, Client.getInstance().getGame().getNumberUnplayedCities(Client.getInstance().getUserId()));
 		getView().setElementAmount(ResourceBarElement.ROAD, Client.getInstance().getGame().getNumberUnplayedRoads(Client.getInstance().getUserId()));
+	
+	
+	
+		
+		
+
+		System.out.println("This is the STATUS! " + Client.getInstance().getGame().getStatus());
+		if(Client.getInstance().getGame().getStatus().equals("FirstRound") && Client.getInstance().getGame().canDoCurrentPlayerBuildRoad(Client.getInstance().getUserId())) {
+			System.out.println("We should put up the Modal!");
+			buildSettlement();
+			buildRoad();
+		}
+	
 	}
 
 }
