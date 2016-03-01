@@ -429,7 +429,7 @@ public class ServerProxyTest {
 		/*System.out.println("Sheep after: "+mtResult.getModel().getPlayers()[0].getResources().getSheep());
 		System.out.println("Wood after: " +mtResult.getModel().getPlayers()[0].getResources().getWood());*/
 		
-		//System.out.println(bcResult.getModel().toString());
+		System.out.println(bcResult.getModel().toString());
 		
 
 		PlayYearOfPlenty_Result yopResult = prox.playYearOfPlenty(new PlayYearOfPlenty_Params(0, ResourceType.ORE, ResourceType.BRICK));
