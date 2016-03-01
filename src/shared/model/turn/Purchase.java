@@ -44,7 +44,7 @@ public class Purchase {
 	 */
 	public void purchaseSettlement(Object l){
 		VertexLocation location = (VertexLocation) l;
-		
+		ClientFacade.getInstance().buildSettlement(location);
 	}
 	
 
