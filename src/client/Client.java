@@ -22,7 +22,7 @@ public class Client extends Observable {
 	//////////////////////
 	private Client(){
 		
-		setMyServerPoller(new ServerPoller(ClientFacade.getInstanceOf(), this));
+		setMyServerPoller(new ServerPoller());
 				
 	}
 	

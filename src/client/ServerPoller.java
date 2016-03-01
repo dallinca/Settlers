@@ -29,9 +29,9 @@ public class ServerPoller {
 	 * @pre None
 	 * @post Server poller is created.
 	 */
-	public ServerPoller(ClientFacade facade, Client client){
-		this.c = client;
-		this.f = facade;			
+	public ServerPoller(){
+		this.c = Client.getInstance();
+		this.f = ClientFacade.getInstanceOf();			
 		this.interval = 1500;
 	}
 
