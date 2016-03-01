@@ -129,6 +129,7 @@ public class JsonConverter {
 		}
 		// Make the Board
 		Board board = new Board(newHexes);
+		board.setHexWithRobber(board.getHex(model.map.robber.x + 3, model.map.robber.y + 3));
 		// Setup Ports, vertices, edges
 		for(ClientModel.MMap.Port port: modelMap.getPorts()) {
 			// Get hex Locations

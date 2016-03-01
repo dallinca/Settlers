@@ -1183,5 +1183,15 @@ public class Board {
 		mapVertices[11][10] = null;
 		mapVertices[11][11] = null;
 	}
+
+	public Hex getHexWithRobber() {
+		return hexWithRobber;
+	}
+
+	public void setHexWithRobber(Hex hexWithRobber) {
+		this.hexWithRobber = hexWithRobber;
+	}
+	
+	
 	
 }
