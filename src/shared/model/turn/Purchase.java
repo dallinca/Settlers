@@ -80,16 +80,7 @@ public class Purchase {
 	 */
 	public void purchaseRoad(Object l){
 		if (canDoPurchaseRoad()) {
-			EdgeLocation location = (EdgeLocation) l;
-			//if(client.getUserID()==client.getCurrentPlayerID()){
-			//}
-			///player.canDoPlaceRoad???
-			//Player.placeRoad
-			//ClientFacade.placeRoadRequest
-			//
-			//
-			//
-			//
+			ClientFacade.getInstance().buildRoad((EdgeLocation)l );
 		}
 	}
 	
