@@ -52,7 +52,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	public void buildSettlement() {
 		System.out.println("ResourceBarController buildSettlement()");
 		executeElementAction(ResourceBarElement.SETTLEMENT);
-		
+		//System.out.println(elementActions);
 	}
 
 	@Override
@@ -72,12 +72,12 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	@Override
 	public void playCard() {
 		System.out.println("ResourceBarController playCard()");
-		/*boolean isPlayersTurn = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).isPlayersTurn();
+		boolean isPlayersTurn = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).isPlayersTurn();
 
-		if(isPlayersTurn){
+		//if(isPlayersTurn){
 			getView().setElementEnabled(ResourceBarElement.PLAY_CARD, true);
 			executeElementAction(ResourceBarElement.PLAY_CARD);
-		}else{
+		/*}else{
 			executeElementAction(ResourceBarElement.PLAY_CARD);
 			getView().setElementEnabled(ResourceBarElement.PLAY_CARD, false);
 		}*/

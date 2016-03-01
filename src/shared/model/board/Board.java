@@ -308,7 +308,8 @@ public class Board {
 		Edge[] edges = vertex.getAdjacentEdges();
 		for(Edge edge: edges) {
 			// If the edge has a road, that is owned by the player in question, then the player has access to the vertex
-			if(edge.getRoad() != null && edge.getRoad().getPlayer().getPlayerId() == player.getPlayerId()) {
+			if(edge != null && edge.getRoad() != null && edge.getRoad().getPlayer().getPlayerId() == player.getPlayerId()) {
+				System.out.println("SUP");
 				return true;
 			}
 		}

@@ -286,6 +286,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 			return;
 		}
 		// If join succeeded, check if the player already exists in the game
+		Client.getInstance().setColor(color);
 		boolean playerAlreadyInGame = false;
 		for(PlayerInfo player: gameInfo.getPlayers()) {
 			// If we find a player in the page who has the same id as the currently logged in user
