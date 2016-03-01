@@ -35,6 +35,8 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	@Override
 	public void endTurn() {
 		System.out.println("TurnTrackerController endTurn()");
+		//Does this do it?
+		Client.getInstance().getGame().incrementPlayer();
 	}
 	
 	private void initFromModel() {

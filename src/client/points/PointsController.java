@@ -58,7 +58,7 @@ public class PointsController extends Controller implements IPointsController, O
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("PointsController update()");
-
+		if (Client.getInstance().getGame() != null) {
 		if(Client.getInstance().getGame().doWeHaveAWinner()){
 			Client.getInstance().getGame().getCurrentPlayer().getPlayerName();
 			//setWinner(String name, boolean isLocalPlayer);
@@ -66,6 +66,7 @@ public class PointsController extends Controller implements IPointsController, O
 		Player[] players = Client.getInstance().getGame().getAllPlayers();
 		for(int i = 0; i < players.length; i++){
 			getPointsView().setPoints(players[i].getVictoryPoints());
+		}
 		}
 	}
 	

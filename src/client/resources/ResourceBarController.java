@@ -97,6 +97,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	public void update(Observable o, Object arg) {
 		System.out.println("ResourceBarController update()");
 		
+		if (Client.getInstance().getGame() != null) {
 		boolean canBuildRoad = Client.getInstance().getGame().canDoCurrentPlayerBuildRoad(Client.getInstance().getUserId());
 		if(canBuildRoad){
 			getView().setElementEnabled(ResourceBarElement.ROAD, true);
@@ -136,6 +137,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 		getView().setElementAmount(ResourceBarElement.SETTLEMENT, Client.getInstance().getGame().getNumberUnplayedSettlements(Client.getInstance().getUserId()));
 		getView().setElementAmount(ResourceBarElement.CITY, Client.getInstance().getGame().getNumberUnplayedCities(Client.getInstance().getUserId()));
 		getView().setElementAmount(ResourceBarElement.ROAD, Client.getInstance().getGame().getNumberUnplayedRoads(Client.getInstance().getUserId()));
+		}
 	}
 
 }
