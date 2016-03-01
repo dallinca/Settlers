@@ -4,10 +4,17 @@ import shared.locations.HexLocation;
 
 public class PlaySoldier_Params {
 	
+	private final String type = "Soldier";
 	private int playerIndex;
 	private int victimIndex;
 	private HexLocation location;	
 
+	/**
+	 * 
+	 * @param playerIndex
+	 * @param victimIndex
+	 * @param hex
+	 */
 	public PlaySoldier_Params(int playerIndex, int victimIndex, HexLocation hex) {
 		this.playerIndex = playerIndex;
 		this.location = hex;

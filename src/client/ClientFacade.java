@@ -69,8 +69,10 @@ public class ClientFacade {
 	
 	private static ClientFacade SINGLETON = null;
 	
+	
 	protected ClientFacade(){
-		this.sp = new ServerProxy();
+		this.sp = ServerProxy.getInstance();
+		this.c = Client.getInstance();
 	}
 	
 	public static ClientFacade getInstanceOf(){
@@ -81,7 +83,7 @@ public class ClientFacade {
 	}
 
 	private IServerProxy sp;
-
+	private Client c; 
 
 	/**
 	 * Creates facade, specifying the location of the master server.
@@ -140,13 +142,13 @@ public class ClientFacade {
 	 * extra credit
 	 * @param request
 	 * @return
-	 * @throws ClientException
+	 * @
 	 */
-	public AddAI_Result addAI(AddAI_Params request) throws ClientException {
+	public AddAI_Result addAI(AddAI_Params request)  {
 		return null;
 	}
 
-	public Create_Result createGame(String name, boolean randomTiles, boolean randomNumbers, boolean randomPorts) throws ClientException {
+	public Create_Result createGame(String name, boolean randomTiles, boolean randomNumbers, boolean randomPorts)  {
 		Create_Result result; 
 		Create_Params request = new Create_Params(name, randomTiles, randomNumbers, randomPorts);		
 
@@ -171,10 +173,10 @@ public class ClientFacade {
 	 * @pre Client is validated and participating in a game.
 	 * @post Communicator will return usable PollServer_Result.
 	 */
-	public GetVersion_Result getVersion() throws ClientException {
+	public GetVersion_Result getVersion()  {
 
 		GetVersion_Result result; 
-		GetVersion_Params request = new GetVersion_Params(Client.getInstance().getGame().getVersionNumber());		
+		GetVersion_Params request = new GetVersion_Params(c.getGame().getVersionNumber());		
 
 		try {
 
@@ -190,7 +192,7 @@ public class ClientFacade {
 		return result;
 	}
 
-	public Join_Result joinGame(int gameID, CatanColor color) throws ClientException {
+	public Join_Result joinGame(int gameID, CatanColor color)  {
 		Join_Result result; 
 		Join_Params request = new Join_Params(gameID, color);		
 
@@ -207,7 +209,7 @@ public class ClientFacade {
 		return result;
 	}
 
-	public List_Result listGames() throws ClientException {
+	public List_Result listGames()  {
 		List_Result result; 
 		List_Params request = new List_Params();		
 
@@ -229,13 +231,13 @@ public class ClientFacade {
 	 * 
 	 * @param request
 	 * @return
-	 * @throws ClientException
+	 * @
 	 */
-	public ListAI_Result listAI() throws ClientException {
+	public ListAI_Result listAI()  {
 		return null;
 	}
 
-	public Register_Result register(String username, String password) throws ClientException {
+	public Register_Result register(String username, String password)  {
 		Register_Result result; 
 		Register_Params request = new Register_Params(username, password);		
 
@@ -255,8 +257,8 @@ public class ClientFacade {
 	//misc commands
 
 
-	public SendChat_Result sendChat(String content) throws ClientException {
-		int playerIndex = Client.getInstance().getPlayerIndex();
+	public SendChat_Result sendChat(String content)  {
+		int playerIndex = c.getPlayerIndex();
 
 		SendChat_Result result; 
 		SendChat_Params request = new SendChat_Params(playerIndex, content);		
@@ -275,9 +277,9 @@ public class ClientFacade {
 		return result;
 	}	
 
-	public AcceptTrade_Result acceptTrade(boolean willAccept) throws ClientException {
+	public AcceptTrade_Result acceptTrade(boolean willAccept)  {
 		AcceptTrade_Result result; 
-		AcceptTrade_Params request = new AcceptTrade_Params(willAccept);		
+		AcceptTrade_Params request = new AcceptTrade_Params(0, willAccept);		
 
 		try {
 
@@ -294,8 +296,8 @@ public class ClientFacade {
 	}
 
 
-	public RollNumber_Result rollNumber(int number) throws ClientException {
-		int playerIndex = Client.getInstance().getPlayerIndex();
+	public RollNumber_Result rollNumber(int number)  {
+		int playerIndex = c.getPlayerIndex();
 		
 		RollNumber_Result result; 
 		RollNumber_Params request = new RollNumber_Params(playerIndex, number);		
@@ -315,8 +317,8 @@ public class ClientFacade {
 	}
 
 
-	public DiscardCards_Result discardCards(int brick, int ore, int sheep, int wheat, int wood) throws ClientException {
-		int playerIndex = Client.getInstance().getPlayerIndex();
+	public DiscardCards_Result discardCards(int brick, int ore, int sheep, int wheat, int wood)  {
+		int playerIndex = c.getPlayerIndex();
 
 		DiscardCards_Result result; 
 		DiscardCards_Params request = new DiscardCards_Params(playerIndex, brick, ore, sheep, wheat, wood);		
@@ -337,9 +339,9 @@ public class ClientFacade {
 
 	//move
 
-	public BuildCity_Result buildCity(VertexLocation location) throws ClientException {
+	public BuildCity_Result buildCity(VertexLocation location)  {
 		
-		int playerIndex = Client.getInstance().getPlayerIndex();
+		int playerIndex = c.getPlayerIndex();
 
 		BuildCity_Result result; 
 
@@ -358,10 +360,10 @@ public class ClientFacade {
 		return result;
 	}
 
-	public BuildRoad_Result buildRoad(EdgeLocation roadLocation) throws ClientException {
+	public BuildRoad_Result buildRoad(EdgeLocation roadLocation)  {
 		
-		int playerIndex = Client.getInstance().getPlayerIndex();
-		boolean free = Client.getInstance().getGame().isInSetUpPhase();
+		int playerIndex = c.getPlayerIndex();
+		boolean free = c.getGame().isInSetUpPhase();
 		
 		BuildRoad_Result result; 
 		BuildRoad_Params request = new BuildRoad_Params(playerIndex, roadLocation, free);		
@@ -380,10 +382,10 @@ public class ClientFacade {
 		return result;	
 	}
 
-	public BuildSettlement_Result buildSettlement(VertexLocation location) throws ClientException {
+	public BuildSettlement_Result buildSettlement(VertexLocation location)  {
 
-		int playerIndex = Client.getInstance().getPlayerIndex();
-		boolean free = Client.getInstance().getGame().isInSetUpPhase();
+		int playerIndex = c.getPlayerIndex();
+		boolean free = c.getGame().isInSetUpPhase();
 
 		BuildSettlement_Result result; 
 
@@ -402,8 +404,8 @@ public class ClientFacade {
 		return result;
 	}
 
-	public BuyDevCard_Result buyDevCard() throws ClientException {
-		int playerIndex = Client.getInstance().getPlayerIndex();
+	public BuyDevCard_Result buyDevCard()  {
+		int playerIndex = c.getPlayerIndex();
 		BuyDevCard_Result result; 
 		BuyDevCard_Params request = new BuyDevCard_Params(playerIndex);		
 
@@ -421,8 +423,8 @@ public class ClientFacade {
 		return result;
 	}
 
-	public FinishTurn_Result finishTurn() throws ClientException {
-		int playerIndex = Client.getInstance().getPlayerIndex();
+	public FinishTurn_Result finishTurn()  {
+		int playerIndex = c.getPlayerIndex();
 		FinishTurn_Result result; 
 		FinishTurn_Params request = new FinishTurn_Params(playerIndex);		
 
@@ -441,9 +443,9 @@ public class ClientFacade {
 	}
 
 	public MaritimeTrade_Result maritimeTrade(int ratio, ResourceType inputResource, 
-			ResourceType outputResource) throws ClientException {
+			ResourceType outputResource)  {
 
-		int playerIndex = Client.getInstance().getPlayerIndex();
+		int playerIndex = c.getPlayerIndex();
 		MaritimeTrade_Result result; 
 		MaritimeTrade_Params request = new MaritimeTrade_Params(playerIndex, ratio, inputResource, outputResource);		
 
@@ -461,9 +463,9 @@ public class ClientFacade {
 		return result;
 	}
 
-	public OfferTrade_Result offerTrade(int brick, int ore, int sheep, int wheat, int wood, int receiver) throws ClientException {
+	public OfferTrade_Result offerTrade(int brick, int ore, int sheep, int wheat, int wood, int receiver)  {
 
-		int playerIndex = Client.getInstance().getPlayerIndex();
+		int playerIndex = c.getPlayerIndex();
 		OfferTrade_Result result; 
 		OfferTrade_Params request = new OfferTrade_Params(playerIndex, receiver, brick, ore, sheep, wheat, wood);		
 
@@ -482,9 +484,9 @@ public class ClientFacade {
 
 	}
 
-	public RobPlayer_Result robPlayer(HexLocation hex, int victimIndex) throws ClientException {
+	public RobPlayer_Result robPlayer(HexLocation hex, int victimIndex)  {
 
-		int playerIndex = Client.getInstance().getPlayerIndex();
+		int playerIndex = c.getPlayerIndex();
 		RobPlayer_Result result; 
 		RobPlayer_Params request = new RobPlayer_Params(playerIndex, hex, victimIndex);		
 
@@ -504,9 +506,9 @@ public class ClientFacade {
 
 	//dev card play
 
-	public PlayMonopoly_Result playMonopoly(ResourceType type) throws ClientException {
+	public PlayMonopoly_Result playMonopoly(ResourceType type)  {
 
-		int playerIndex = Client.getInstance().getPlayerIndex();
+		int playerIndex = c.getPlayerIndex();
 		PlayMonopoly_Result result; 
 		PlayMonopoly_Params request = new PlayMonopoly_Params(playerIndex, type);		
 
@@ -524,9 +526,9 @@ public class ClientFacade {
 		return result;
 	}
 
-	public PlayMonument_Result playMonument() throws ClientException {
+	public PlayMonument_Result playMonument()  {
 
-		int playerIndex = Client.getInstance().getPlayerIndex();
+		int playerIndex = c.getPlayerIndex();
 		PlayMonument_Result result; 
 		PlayMonument_Params request = new PlayMonument_Params(playerIndex);		
 
@@ -546,9 +548,9 @@ public class ClientFacade {
 	}
 
 	public PlayRoadBuilding_Result playRoadBuilding(EdgeLocation roadLocation1, 
-			EdgeLocation roadLocation2) throws ClientException {
+			EdgeLocation roadLocation2)  {
 
-		int playerIndex = Client.getInstance().getPlayerIndex();
+		int playerIndex = c.getPlayerIndex();
 		PlayRoadBuilding_Result result; 
 		PlayRoadBuilding_Params request = new PlayRoadBuilding_Params(playerIndex, roadLocation1, roadLocation2);		
 
@@ -566,9 +568,9 @@ public class ClientFacade {
 		return result;		
 	}
 
-	public PlaySoldier_Result playSoldier(HexLocation hex, int victimIndex) throws ClientException {
+	public PlaySoldier_Result playSoldier(HexLocation hex, int victimIndex)  {
 
-		int playerIndex = Client.getInstance().getPlayerIndex();
+		int playerIndex = c.getPlayerIndex();
 		PlaySoldier_Result result; 
 		PlaySoldier_Params request = new PlaySoldier_Params(playerIndex, victimIndex, hex);		
 
@@ -586,9 +588,9 @@ public class ClientFacade {
 		return result;
 	}
 
-	public PlayYearOfPlenty_Result playYearOfPlenty(ResourceType resource1, ResourceType resource2) throws ClientException {
+	public PlayYearOfPlenty_Result playYearOfPlenty(ResourceType resource1, ResourceType resource2)  {
 
-		int playerIndex = Client.getInstance().getPlayerIndex();
+		int playerIndex = c.getPlayerIndex();
 		PlayYearOfPlenty_Result result; 
 		PlayYearOfPlenty_Params request = new PlayYearOfPlenty_Params(playerIndex, resource1, resource2);		
 
@@ -608,7 +610,7 @@ public class ClientFacade {
 	
 	private void updateGame(Game game){
 		
-		Client.getInstance().setGame(game);
+		c.setGame(game);
 		return;
 	}
 }

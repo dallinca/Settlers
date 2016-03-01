@@ -4,58 +4,22 @@ import shared.definitions.ResourceType;
 
 public class PlayYearOfPlenty_Params {
 
+	private final String type = "YearOfPlenty";
 	private int playerIndex;
 	private String resource1;
 	private String resource2;
 
 
-
+/**
+ * 
+ * @param playerIndex
+ * @param type1
+ * @param type2
+ */
 	public PlayYearOfPlenty_Params(int playerIndex, ResourceType type1, ResourceType type2) {
 		this.playerIndex = playerIndex;
-
-		switch (type1){
-
-		case BRICK: resource1 = "Brick";
-		break;
-
-		case ORE: resource1 = "Ore";
-		break;
-
-		case SHEEP: resource1 = "Sheep";
-		break;
-
-		case WHEAT: resource1 = "Wheat";
-		break;
-
-		case WOOD: resource1 = "Wood";
-		break;	
-
-		default:
-			break;
-
-		}
-
-		switch (type2){
-
-		case BRICK: resource2 = "Brick";
-		break;
-
-		case ORE: resource2 = "Ore";
-		break;
-
-		case SHEEP: resource2 = "Sheep";
-		break;
-
-		case WHEAT: resource2 = "Wheat";
-		break;
-
-		case WOOD: resource2 = "Wood";
-		break;	
-
-		default:
-			break;
-
-		}
+		resource1 = type1.toString().toLowerCase();
+		resource2 = type2.toString().toLowerCase();
 	}
 
 

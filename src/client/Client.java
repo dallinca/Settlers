@@ -18,10 +18,17 @@ public class Client extends Observable {
 	private CatanColor color;
 	private int playerIndex;
 	
+	private ServerPoller myServerPoller;
+	
 	private static Client SINGLETON = null;
 	// CONSTRUCTORS
 	//////////////////////
-	private Client(){ }
+	private Client(){
+		
+		setMyServerPoller(new ServerPoller(ClientFacade.getInstanceOf(), this));
+				
+	}
+	
 	
 	public static Client getInstance( ) {
 		if(SINGLETON == null) {
@@ -82,6 +89,15 @@ public class Client extends Observable {
 
 	public void setGameInfo(GameInfo gameInfo) {
 		this.gameInfo = gameInfo;
+	}
+
+
+	public ServerPoller getMyServerPoller() {
+		return myServerPoller;
+	}
+
+	protected void setMyServerPoller(ServerPoller myServerPoller) {
+		this.myServerPoller = myServerPoller;
 	}
 	
 	
