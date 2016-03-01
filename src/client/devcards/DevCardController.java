@@ -62,6 +62,9 @@ public class DevCardController extends Controller implements IDevCardController,
 	public void startBuyCard() {
 		System.out.println("DevCardController startBuyCard()");
 		
+		//for the test: 
+		getBuyCardView().showModal();
+		
 		boolean canBuy = ActionManager.getInstance().canDoPurchase(ActionType.PURCHASE_DEVELOPMENT);
 		
 		if (canBuy) {
@@ -124,6 +127,9 @@ public class DevCardController extends Controller implements IDevCardController,
 			} else {
 				getPlayCardView().setCardEnabled(types[i], false);
 			}
+			
+			//forSoldiertest:
+			getPlayCardView().setCardEnabled(DevCardType.SOLDIER, true);
 		}
 		
 		

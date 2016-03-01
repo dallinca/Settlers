@@ -63,6 +63,13 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	public void buyCard() {
 		System.out.println("ResourceBarController buyCard()");
 		
+		boolean isPlayersTurn = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).isPlayersTurn();
+		if (isPlayersTurn) {
+			getView().setElementEnabled(ResourceBarElement.PLAY_CARD, true);
+			executeElementAction(ResourceBarElement.BUY_CARD);
+		} else {
+			getView().setElementEnabled(ResourceBarElement.BUY_CARD, false);
+		}
 	}
 
 	@Override
@@ -97,7 +104,8 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 		if(canBuildRoad){
 			//elementActions.get(ResourceBarElement.ROAD).;
 			getView().setElementEnabled(ResourceBarElement.ROAD, true);
-			executeElementAction(ResourceBarElement.ROAD);
+			//These execute statements try and run the function, the update should only make changes, not bring up all the views!
+			//executeElementAction(ResourceBarElement.ROAD);
 		}else{
 			getView().setElementEnabled(ResourceBarElement.ROAD, false);
 		}
@@ -105,7 +113,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 		boolean canBuildSettlement = Client.getInstance().getGame().canDoCurrentPlayerBuildSettlement(Client.getInstance().getUserId());
 		if(canBuildSettlement){
 			getView().setElementEnabled(ResourceBarElement.SETTLEMENT, true);
-			executeElementAction(ResourceBarElement.SETTLEMENT);
+			//executeElementAction(ResourceBarElement.SETTLEMENT);
 		}else{
 			getView().setElementEnabled(ResourceBarElement.SETTLEMENT, false);
 		}
@@ -113,7 +121,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 		boolean canBuildCity = Client.getInstance().getGame().canDoCurrentPlayerBuildCity(Client.getInstance().getUserId());
 		if(canBuildCity){
 			getView().setElementEnabled(ResourceBarElement.CITY, true);
-			executeElementAction(ResourceBarElement.CITY);
+			//executeElementAction(ResourceBarElement.CITY);
 		}else{
 			getView().setElementEnabled(ResourceBarElement.CITY, false);
 		}
@@ -121,7 +129,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 		boolean canBuyCard = Client.getInstance().getGame().canDoCurrentPlayerBuyDevelopmentCard(Client.getInstance().getUserId());
 		if(canBuyCard){
 			getView().setElementEnabled(ResourceBarElement.BUY_CARD, true);
-			executeElementAction(ResourceBarElement.BUY_CARD);
+			//executeElementAction(ResourceBarElement.BUY_CARD);
 		}else{
 			getView().setElementEnabled(ResourceBarElement.BUY_CARD, false);
 		}
