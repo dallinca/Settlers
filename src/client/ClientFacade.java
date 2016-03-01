@@ -75,7 +75,7 @@ public class ClientFacade {
 		//this.c = Client.getInstance();
 	}
 	
-	public static ClientFacade getInstanceOf(){
+	public static ClientFacade getInstance(){
 		if (SINGLETON == null){
 			SINGLETON = new ClientFacade();
 		}

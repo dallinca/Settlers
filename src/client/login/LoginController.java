@@ -43,7 +43,7 @@ public class LoginController extends Controller implements ILoginController, Obs
 		System.out.println("LoginController LoginController()");
 		this.messageView = messageView;
 		this.clientInfo = Client.getInstance();
-		this.clientFacade = ClientFacade.getInstanceOf();
+		this.clientFacade = ClientFacade.getInstance();
 	}
 	
 	public ILoginView getLoginView() {

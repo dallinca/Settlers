@@ -66,7 +66,7 @@ public class ServerPoller {
 	 */	
 	private void pollServer(){
 
-		GetVersion_Result pollResult = ClientFacade.getInstanceOf().getVersion();
+		GetVersion_Result pollResult = ClientFacade.getInstance().getVersion();
 
 		if (pollResult.isValid()){
 

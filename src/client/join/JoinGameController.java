@@ -125,16 +125,12 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	public void start() {
 		System.out.println("JoinGameController start()");
 		List_Result result = null;
-		try {
-			result = MockClientFacade.getInstance().listGames();
-			GameInfo[] games = new GameInfo[result.getGames().length];
-			games = result.getGames();
-			PlayerInfo localPlayer = new PlayerInfo();
-			localPlayer.setId(Client.getInstance().getUserId());
-			getJoinGameView().setGames(games, localPlayer);
-		} catch (ClientException e) {
-			e.printStackTrace();
-		}
+		result = ClientFacade.getInstance().listGames();
+		GameInfo[] games = new GameInfo[result.getGames().length];
+		games = result.getGames();
+		PlayerInfo localPlayer = new PlayerInfo();
+		localPlayer.setId(Client.getInstance().getUserId());
+		getJoinGameView().setGames(games, localPlayer);
 		if(!getJoinGameView().isModalShowing()) {
 			getJoinGameView().showModal();
 		}
@@ -181,16 +177,10 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	public void createNewGame() {
 		System.out.println("JoinGameController createNewGame()");
 		Create_Result create_result = null;
-		try {
-			create_result = MockClientFacade.getInstance().createGame(getNewGameView().getTitle(), 
-					getNewGameView().getRandomlyPlaceHexes(), 
-					getNewGameView().getRandomlyPlaceNumbers(), 
-					getNewGameView().getUseRandomPorts());
-		} catch (ClientException e) {
-			getMessageView().setMessage("Game could not be created, possibly not connected to internet");
-			getMessageView().showModal();
-			e.printStackTrace();
-		}
+		create_result = ClientFacade.getInstance().createGame(getNewGameView().getTitle(), 
+				getNewGameView().getRandomlyPlaceHexes(), 
+				getNewGameView().getRandomlyPlaceNumbers(), 
+				getNewGameView().getUseRandomPorts());
 		// Check to see if the creation of the game failed
 		if(create_result.isValid() == false) {
 			getNewGameView().closeModal();
@@ -269,14 +259,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		System.out.println("JoinGameController joinGame()");
 		Client.getInstance().setGameInfo(gameInfo);
 		Join_Result join_result = null;
-		try {
-			join_result = MockClientFacade.getInstance().joinGame(gameInfo.getId(), color);
-		} catch (ClientException e) {
-			getSelectColorView().closeModal();
-			getMessageView().setMessage("Game could not be joined, threw Exception");
-			getMessageView().showModal();
-			e.printStackTrace();
-		}
+		join_result = ClientFacade.getInstance().joinGame(gameInfo.getId(), color);
 
 		// If something went wrong with joining the game
 		if(join_result == null || join_result.isJoined() == false) {

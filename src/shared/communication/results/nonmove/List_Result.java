@@ -3,11 +3,15 @@ package shared.communication.results.nonmove;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import shared.communication.results.JsonConverter;
+import shared.definitions.CatanColor;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import client.data.GameInfo;
+import client.data.PlayerInfo;
 
 public class List_Result {
 
@@ -70,6 +74,26 @@ public class List_Result {
 	}
 
 	public GameInfo[] getGames() {
+		
+		games = new GameInfo[listedGames.size()];
+		for (int i =0;i<listedGames.size(); i++){
+			games[i]=new GameInfo();
+			games[i].setId(listedGames.get(i).getID());
+			games[i].setTitle(listedGames.get(i).getTitle());
+			
+			LinkedList<Player> llp = new LinkedList<Player>();
+			llp = listedGames.get(i).getPlayers();
+			
+			for (int j = 0; j < llp.size(); j++){
+				PlayerInfo pi = new PlayerInfo();
+				pi.setColor(getCatanColorFromString(llp.get(j).color));
+				pi.setId(llp.get(j).id);
+				pi.setName(llp.get(j).name);
+				pi.setPlayerIndex(j);
+				
+			}
+		}
+		
 		return games;
 	}
 
@@ -94,6 +118,28 @@ public class List_Result {
 		this.valid = valid;
 	}
 
+	private CatanColor getCatanColorFromString(String color) {
+		if(color.equals("blue")) {
+			return CatanColor.BLUE;
+		} else if(color.equals("brown")) {
+			return CatanColor.BROWN;
+		} else if(color.equals("green")) {
+			return CatanColor.GREEN;
+		} else if(color.equals("orange")) {
+			return CatanColor.ORANGE;
+		} else if(color.equals("puce")) {
+			return CatanColor.PUCE;
+		} else if(color.equals("purple")) {
+			return CatanColor.PURPLE;
+		} else if(color.equals("red")) {
+			return CatanColor.RED;
+		} else if(color.equals("white")) {
+			return CatanColor.WHITE;
+		} else if(color.equals("yellow")) {
+			return CatanColor.YELLOW;
+		}
+		return null;
+	}
 	//INTERNAL DATA OBJECTS
 	public class Player{
 		String color;
@@ -103,10 +149,13 @@ public class List_Result {
 		
 		public Player(String color, String name, int id){
 			this.color = color;
+			
 			this.name = name;
 			this.id = id;
 			this.empty = false;
 		}
+		
+		
 		
 		public Player(){
 			this.empty = true;
@@ -159,8 +208,10 @@ public class List_Result {
 		public int getID(){
 			return id;
 		}
+		public LinkedList<Player> getPlayers(){
+			return players;
+		}
 	}
-
 
 
 }
