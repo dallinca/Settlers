@@ -35,7 +35,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	 * Sets the action to be executed when the specified resource bar element is clicked by the user
 	 * 
 	 * @param element The resource bar element with which the action is associated
-	 * @param action The action to be executed
+	 * @param action The action to be execute
 	 */
 	public void setElementAction(ResourceBarElement element, IAction action) {
 		System.out.println("ResourceBarController setElementAction()");
@@ -66,23 +66,23 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	@Override
 	public void buyCard() {
 		System.out.println("ResourceBarController buyCard()");
+		
 		executeElementAction(ResourceBarElement.BUY_CARD);
 		
+		boolean isPlayersTurn = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).isPlayersTurn();
+		if (isPlayersTurn) {
+			getView().setElementEnabled(ResourceBarElement.PLAY_CARD, true);
+			executeElementAction(ResourceBarElement.BUY_CARD);
+		} else {
+			getView().setElementEnabled(ResourceBarElement.BUY_CARD, false);
+		}
 	}
 
 	@Override
 	public void playCard() {
 		System.out.println("ResourceBarController playCard()");
-		boolean isPlayersTurn = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).isPlayersTurn();
-
-		//if(isPlayersTurn){
-			getView().setElementEnabled(ResourceBarElement.PLAY_CARD, true);
-			executeElementAction(ResourceBarElement.PLAY_CARD);
-		/*}else{
-			executeElementAction(ResourceBarElement.PLAY_CARD);
-			getView().setElementEnabled(ResourceBarElement.PLAY_CARD, false);
-		}*/
-		
+		getView().setElementEnabled(ResourceBarElement.PLAY_CARD, true);
+		executeElementAction(ResourceBarElement.PLAY_CARD);		
 	}
 	
 	private void executeElementAction(ResourceBarElement element) {

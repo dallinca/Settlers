@@ -278,7 +278,11 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public void playSoldierCard() {	
 		System.out.println("MapController playSoldierCard()");
-		ActionManager.getInstance().doAction(ActionType.PLAYCARD_KNIGHT);
+		//ActionManager.getInstance().doAction(ActionType.PLAYCARD_KNIGHT);
+		
+		//getView();
+		
+		robView.showModal();
 	}
 
 	/**
