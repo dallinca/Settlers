@@ -118,7 +118,10 @@ public class JsonConverter {
 		ArrayList<Hex> newHexes = new ArrayList<Hex>();
 		for(ClientModel.MMap.MHex mHex: modelMap.getHexes()) {
 			boolean hasRobber = false;
-			if(model.getMap().getRobber() == mHex.getLocation()) {
+			if(model.getMap().getRobber().getX() == mHex.getLocation().getX() &&
+					model.getMap().getRobber().getY() == mHex.getLocation().getY())
+			{
+				System.out.println("Dreams came true");
 				hasRobber = true;
 			}
 			// Do our 3 offset, find the HexType of the String TODO (Verify this part is working), and the roll value
