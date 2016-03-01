@@ -65,13 +65,7 @@ public class ChatController extends Controller implements IChatController, Obser
 		mediaPlayer.play();
 		*/
 		
-		try {
 			ClientFacade.getInstance().sendChat(message);
-		} catch (ClientException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 	}
 
 

@@ -157,12 +157,12 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 				break;
 		}
 		System.out.println("You found me!");
-		try {
-			ClientFacade.getInstanceOf().maritimeTrade(tradeRate, giveType, getType);
-		} catch (ClientException e) {
-			e.printStackTrace();
-			System.out.println("Something went wrong with the trade.");
-		}
+		//try {
+			ClientFacade.getInstance().maritimeTrade(tradeRate, giveType, getType);
+		//} catch (ClientException e) {
+			//e.printStackTrace();
+			//System.out.println("Something went wrong with the trade.");
+		//}
 		
 		getTradeOverlay().closeModal();
 	}
