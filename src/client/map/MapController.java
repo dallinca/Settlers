@@ -203,12 +203,13 @@ public class MapController extends Controller implements IMapController, Observe
 		System.out.println("MapController placeRoad()");
 		try {
 			Client.getInstance().getGame().placeRoadOnEdge( Client.getInstance().getUserId(), edgeLoc);
+			ActionManager.getInstance().doBuild(ActionType.PURCHASE_ROAD, edgeLoc);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		getView().placeRoad(edgeLoc, Client.getInstance().getColor());
+		//getView().placeRoad(edgeLoc, Client.getInstance().getColor());
 	}
 
 	/**
@@ -264,7 +265,12 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {	
 		System.out.println("MapController startMove()");
-		getView().startDrop(pieceType, Client.getInstance().getColor(), true);
+		boolean canCancel = true;
+		if(Client.getInstance().getGame().getStatus().equals("FirstRound")) {
+			canCancel = false;
+		}
+		System.out.println("END of STARTMOVE");
+		getView().startDrop(pieceType, Client.getInstance().getColor(), canCancel);
 	}
 
 	/**

@@ -26,11 +26,7 @@ public class Purchase {
 	 */
 	public void purchaseDevelopmentCard(){
 		if (canDoPurchaseDevelopmentCard()) {
-			//try {
-				ClientFacade.getInstance().buyDevCard();
-			/*} catch (ClientException e) {
-				System.out.println("Failed to buy a Development Card!");
-			}*/
+			ClientFacade.getInstance().buyDevCard();
 		}
 	}
 
@@ -48,7 +44,7 @@ public class Purchase {
 	 */
 	public void purchaseSettlement(Object l){
 		VertexLocation location = (VertexLocation) l;
-		
+		ClientFacade.getInstance().buildSettlement(location);
 	}
 	
 
@@ -84,16 +80,7 @@ public class Purchase {
 	 */
 	public void purchaseRoad(Object l){
 		if (canDoPurchaseRoad()) {
-			EdgeLocation location = (EdgeLocation) l;
-			//if(client.getUserID()==client.getCurrentPlayerID()){
-			//}
-			///player.canDoPlaceRoad???
-			//Player.placeRoad
-			//ClientFacade.placeRoadRequest
-			//
-			//
-			//
-			//
+			ClientFacade.getInstance().buildRoad((EdgeLocation)l );
 		}
 	}
 	

@@ -46,6 +46,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	public void buildRoad() {
 		System.out.println("ResourceBarController buildRoad()");
 		executeElementAction(ResourceBarElement.ROAD);
+		
 		//elementActions.put(ResourceBarElement.ROAD, )
 	}
 
@@ -143,6 +144,34 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 			getView().setElementAmount(ResourceBarElement.CITY, Client.getInstance().getGame().getNumberUnplayedCities(Client.getInstance().getUserId()));
 			getView().setElementAmount(ResourceBarElement.ROAD, Client.getInstance().getGame().getNumberUnplayedRoads(Client.getInstance().getUserId()));
 		}
+<<<<<<< HEAD
+=======
+		
+		// Set resource amounts
+		getView().setElementAmount(ResourceBarElement.WOOD, Client.getInstance().getGame().getNumberResourcesOfType(Client.getInstance().getUserId(), ResourceType.WOOD));
+		getView().setElementAmount(ResourceBarElement.BRICK, Client.getInstance().getGame().getNumberResourcesOfType(Client.getInstance().getUserId(), ResourceType.BRICK));
+		getView().setElementAmount(ResourceBarElement.ORE, Client.getInstance().getGame().getNumberResourcesOfType(Client.getInstance().getUserId(), ResourceType.ORE));
+		getView().setElementAmount(ResourceBarElement.SHEEP, Client.getInstance().getGame().getNumberResourcesOfType(Client.getInstance().getUserId(), ResourceType.SHEEP));
+		getView().setElementAmount(ResourceBarElement.WHEAT, Client.getInstance().getGame().getNumberResourcesOfType(Client.getInstance().getUserId(), ResourceType.WHEAT));
+		
+		// Set piece amounts
+		getView().setElementAmount(ResourceBarElement.SETTLEMENT, Client.getInstance().getGame().getNumberUnplayedSettlements(Client.getInstance().getUserId()));
+		getView().setElementAmount(ResourceBarElement.CITY, Client.getInstance().getGame().getNumberUnplayedCities(Client.getInstance().getUserId()));
+		getView().setElementAmount(ResourceBarElement.ROAD, Client.getInstance().getGame().getNumberUnplayedRoads(Client.getInstance().getUserId()));
+	
+	
+	
+		
+		
+
+		System.out.println("This is the STATUS! " + Client.getInstance().getGame().getStatus());
+		if(Client.getInstance().getGame().getStatus().equals("FirstRound") && Client.getInstance().getGame().canDoCurrentPlayerBuildRoad(Client.getInstance().getUserId())) {
+			System.out.println("We should put up the Modal!");
+			buildSettlement();
+			buildRoad();
+		}
+	
+>>>>>>> cc7058e32d797329efecab74082caa569fa33d6f
 	}
 
 }
