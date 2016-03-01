@@ -419,7 +419,13 @@ public class PlayerPieces {
 		   }
 	   }
 	   
-
+	   /**
+	    * Placing a city initialization from the TA server
+	    * 
+	    * 
+	    * @param vertex
+	    * @throws AllPiecesPlayedException
+	    */
 	   public void placeInitialCity(Vertex vertex) throws AllPiecesPlayedException {
 		   if(hasAvailableCity() == false) {
 			   throw new AllPiecesPlayedException("All the cities have already been placed");
