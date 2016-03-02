@@ -144,8 +144,6 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 			getView().setElementAmount(ResourceBarElement.CITY, Client.getInstance().getGame().getNumberUnplayedCities(Client.getInstance().getUserId()));
 			getView().setElementAmount(ResourceBarElement.ROAD, Client.getInstance().getGame().getNumberUnplayedRoads(Client.getInstance().getUserId()));
 		}
-<<<<<<< HEAD
-=======
 		
 		// Set resource amounts
 		getView().setElementAmount(ResourceBarElement.WOOD, Client.getInstance().getGame().getNumberResourcesOfType(Client.getInstance().getUserId(), ResourceType.WOOD));
@@ -170,8 +168,6 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 			buildSettlement();
 			buildRoad();
 		}
-	
->>>>>>> cc7058e32d797329efecab74082caa569fa33d6f
 	}
 
 }
