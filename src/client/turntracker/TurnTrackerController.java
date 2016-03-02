@@ -35,6 +35,8 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	@Override
 	public void endTurn() {
 		System.out.println("TurnTrackerController endTurn()");
+		//Does this do it?
+		Client.getInstance().getGame().incrementPlayer();
 	}
 	
 	private void initFromModel() {
@@ -57,28 +59,34 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("TurnTrackerController update()");
+		// If the game is null just return
+		if(Client.getInstance().getGame() == null) {
+			return;
+		}
 		if(init){
 			initFromModel();
 		}
-		Player[] players = Client.getInstance().getGame().getAllPlayers();
-		for(int i = 0; i < players.length && players[i] != null; i++){
-
-			boolean highlight = false;
-			boolean largestArmy = false;
-			boolean longestRoad = false;
-			
-			if(players[i].isPlayersTurn()){
-				highlight = true;
-			}
-			if(players[i].isHasLargestArmy()){
-				largestArmy = true;
-			}
-			if(players[i].isHasLongestRoad()){
-				longestRoad = true;
-			}
+		if (Client.getInstance().getGame() != null) {
+			Player[] players = Client.getInstance().getGame().getAllPlayers();
+			for(int i = 0; i < players.length && players[i] != null; i++){
 	
-			getView().updatePlayer(players[i].getPlayerIndex(), players[i].getVictoryPoints(), highlight,
-					  largestArmy, longestRoad);
+				boolean highlight = false;
+				boolean largestArmy = false;
+				boolean longestRoad = false;
+				
+				if(players[i].isPlayersTurn()){
+					highlight = true;
+				}
+				if(players[i].isHasLargestArmy()){
+					largestArmy = true;
+				}
+				if(players[i].isHasLongestRoad()){
+					longestRoad = true;
+				}
+		
+				getView().updatePlayer(players[i].getPlayerIndex(), players[i].getVictoryPoints(), highlight,
+						  largestArmy, longestRoad);
+			}
 		}
 		init = false;
 	}

@@ -28,7 +28,7 @@ public class ServerPoller {
 	 * @post Server poller is created.
 	 */
 	public ServerPoller(){		
-		this.interval = 3500;
+		this.interval = 5000;
 	}
 
 	public boolean start(){

@@ -14,7 +14,7 @@ public class Dice {
 
 	
 	Dice() {
-
+		System.out.println("Dice Dice()");
 	}
 	/**
 	 * Rolls the game dice.
@@ -23,6 +23,7 @@ public class Dice {
 	 * @post Rolls dice and enables players to perform associated action.
 	 */
 	public void rollDice(){
+		System.out.println("Dice rollDice()");
 		
 		Random ran = new Random();
 		
@@ -43,6 +44,7 @@ public class Dice {
 	 * @post Resources will be assigned to various players if possible.
 	 */
 	public void assignResources(int diceResult){
+		System.out.println("Dice assignResources()");
 				
 	}
 	
@@ -54,6 +56,7 @@ public class Dice {
 	 * 
 	 */
 	public void moveRobber(){
+		System.out.println("Dice moveRobber()");
 						
 	}	
 	
@@ -66,6 +69,7 @@ public class Dice {
 	 * 
 	 */
 	public void stealResource(){
+		System.out.println("Dice stealResource()");
 		
 		
 	}	
