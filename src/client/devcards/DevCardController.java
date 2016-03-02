@@ -119,7 +119,7 @@ public class DevCardController extends Controller implements IDevCardController,
 		DevCardType[] types = {DevCardType.YEAR_OF_PLENTY, DevCardType.SOLDIER, DevCardType.MONOPOLY, DevCardType.MONUMENT, DevCardType.ROAD_BUILD};
 		
 		for (int i = 0; i < types.length; i++) {
-			boolean enableOrNot = Client.getInstance().getGame().canDoCurrentPlayerUseDevelopmentCard(Client.getInstance().getUserId(), types[i]);
+			boolean enableOrNot = Client.getInstance().getGame().canDoPlayerUseDevelopmentCard(Client.getInstance().getUserId(), types[i]);
 			getPlayCardView().setCardAmount(types[i], Client.getInstance().getGame().numberUnplayedDevCards(Client.getInstance().getUserId(), types[i]));
 			
 			if (Client.getInstance().getGame().getCurrentPlayer().getPlayerId() == Client.getInstance().getUserId()) {
@@ -242,6 +242,10 @@ public class DevCardController extends Controller implements IDevCardController,
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("DevCardController update()");
+		// If the game is null just return
+		if(Client.getInstance().getGame() == null) {
+			return;
+		}
 		// TODO Auto-generated method stub
 		//Should we check and see if we've even begun? Basically that round 1 and 2 have passed?
 		
@@ -256,7 +260,7 @@ public class DevCardController extends Controller implements IDevCardController,
 		DevCardType[] types = {DevCardType.YEAR_OF_PLENTY, DevCardType.SOLDIER, DevCardType.MONOPOLY, DevCardType.MONUMENT, DevCardType.ROAD_BUILD};
 		
 		for (int i = 0; i < types.length; i++) {
-			boolean enableOrNot = Client.getInstance().getGame().canDoCurrentPlayerUseDevelopmentCard(Client.getInstance().getUserId(), types[i]);
+			boolean enableOrNot = Client.getInstance().getGame().canDoPlayerUseDevelopmentCard(Client.getInstance().getUserId(), types[i]);
 			getPlayCardView().setCardAmount(types[i], Client.getInstance().getGame().numberUnplayedDevCards(Client.getInstance().getUserId(), types[i]));
 			getPlayCardView().setCardEnabled(types[i], enableOrNot);
 		}

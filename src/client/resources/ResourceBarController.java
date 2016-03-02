@@ -97,33 +97,42 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 
 	@Override
 	public void update(Observable o, Object arg) {
+		// If the game is null just return
+		if(Client.getInstance().getGame() == null) {
+			return;
+		}
+
+		Client ZeClieeent = (Client) o;
+		System.out.println("Roads unbuilt: " + ZeClieeent.getGame().getCurrentPlayer().getNumberUnplayedRoads());
+		
+		
 		System.out.println("ResourceBarController update()");
 		Game game = Client.getInstance().getGame();
 		System.out.println("Client.getInstance().getUserId(): " + Client.getInstance().getUserId());
 		System.out.println("Client.getInstance().getGame(): " + Client.getInstance().getGame());
 		System.out.println("Client.getInstance().getGame(): " + Client.getInstance().getGame());
-		boolean canBuildRoad = Client.getInstance().getGame().canDoCurrentPlayerBuildRoad(Client.getInstance().getUserId());
+		boolean canBuildRoad = Client.getInstance().getGame().canDoPlayerBuildRoad(Client.getInstance().getUserId());
 		if(canBuildRoad){
 			getView().setElementEnabled(ResourceBarElement.ROAD, true);
 		}else{
 			getView().setElementEnabled(ResourceBarElement.ROAD, false);
 		}
-		game.canDoCurrentPlayerBuildCity(123);
-		boolean canBuildSettlement = Client.getInstance().getGame().canDoCurrentPlayerBuildSettlement(Client.getInstance().getUserId());
+		
+		boolean canBuildSettlement = Client.getInstance().getGame().canDoPlayerBuildSettlement(Client.getInstance().getUserId());
 		if(canBuildSettlement){
 			getView().setElementEnabled(ResourceBarElement.SETTLEMENT, true);
 		}else{
 			getView().setElementEnabled(ResourceBarElement.SETTLEMENT, false);
 		}
 
-		boolean canBuildCity = Client.getInstance().getGame().canDoCurrentPlayerBuildCity(Client.getInstance().getUserId());
+		boolean canBuildCity = Client.getInstance().getGame().canDoPlayerBuildCity(Client.getInstance().getUserId());
 		if(canBuildCity){
 			getView().setElementEnabled(ResourceBarElement.CITY, true);
 		}else{
 			getView().setElementEnabled(ResourceBarElement.CITY, false);
 		}
 		
-		boolean canBuyCard = Client.getInstance().getGame().canDoCurrentPlayerBuyDevelopmentCard(Client.getInstance().getUserId());
+		boolean canBuyCard = Client.getInstance().getGame().canDoPlayerBuyDevelopmentCard(Client.getInstance().getUserId());
 		if(canBuyCard){
 			getView().setElementEnabled(ResourceBarElement.BUY_CARD, true);
 		}else{
@@ -148,10 +157,13 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 		
 
 		System.out.println("This is the STATUS! " + Client.getInstance().getGame().getStatus());
-		if(Client.getInstance().getGame().getStatus().equals("FirstRound") && Client.getInstance().getGame().canDoCurrentPlayerBuildRoad(Client.getInstance().getUserId())) {
-			System.out.println("We should put up the Modal!");
-			buildSettlement();
-			buildRoad();
+		if(Client.getInstance().getGame().getStatus().equals("FirstRound") && Client.getInstance().getGame().canDoPlayerBuildRoad(Client.getInstance().getUserId())) {
+			System.out.println("\n\nWe should put up the Building Modal!\n\n");
+			if(Client.getInstance().getGame().canDoPlayerBuildRoad(Client.getInstance().getUserId())) {
+				buildRoad();
+			} else {
+				buildSettlement();
+			}
 		}
 	
 	}

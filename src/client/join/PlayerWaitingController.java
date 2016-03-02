@@ -28,11 +28,11 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 	public PlayerWaitingController(IPlayerWaitingView view) {
 
 		super(view);
-		System.out.println("PlayerWaitingController PlayerWaitingController");
+		System.out.println("PlayerWaitingController PlayerWaitingController()");
 		
 		this.view = view;
 		client = Client.getInstance();
-		//client.addObserver(this);
+		Client.getInstance().addObserver(this);
 	}
 
 	/**
@@ -42,7 +42,7 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 	 */
 	@Override
 	public IPlayerWaitingView getView() {
-		System.out.println("PlayerWaitingController IPlayerWaitingView");
+		System.out.println("PlayerWaitingController IPlayerWaitingView()");
 
 		return (IPlayerWaitingView)super.getView();
 	}
@@ -54,17 +54,17 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 	 */
 	@Override
 	public void start() {
-		System.out.println("PlayerWaitingController start");
+		System.out.println("PlayerWaitingController start()");
 		// Get the players from the gameInfo to initialize the waiting screen
 		PlayerInfo[] players = new PlayerInfo[client.getGameInfo().getPlayers().size()];
 		view.setPlayers(client.getGameInfo().getPlayers().toArray(players));
-
+		// Show the view
 		getView().showModal();
-		
+		// Start the poller for other people joining updates
 		Client.getInstance().getMyServerPoller().start();
-		if(getView().isModalShowing() && client.getGameInfo().getPlayers().size() == 4) {
-			getView().closeModal();
-		}
+		//if(getView().isModalShowing() && client.getGameInfo().getPlayers().size() == 4) {
+		//	getView().closeModal();
+		//}
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 	 */
 	@Override
 	public void addAI() {
-		System.out.println("PlayerWaitingController addAI");
+		System.out.println("PlayerWaitingController addAI()");
 
 		// TEMPORARY
 		getView().closeModal();
@@ -87,13 +87,17 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
-		System.out.println("PlayerWaitingController update");
+		System.out.println("PlayerWaitingController update()");
+		PlayerInfo[] players = new PlayerInfo[client.getGameInfo().getPlayers().size()];
+		client.getGameInfo().getPlayers().toArray(players);
+		view.setPlayers(players);
 		// TODO Auto-generated method stub
 		//if(getView().isModalShowing() && client.getGameInfo().getPlayers().size() == 4) {
 		//	
 		//	getView().closeModal();
 		//}
 		if(Client.getInstance().getGame() != null ) {
+			System.out.println("going to try and close the modal");
 			getView().closeModal();
 			firstTime = false;
 		}

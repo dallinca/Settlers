@@ -239,6 +239,10 @@ public class DiscardController extends Controller implements IDiscardController,
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("DiscardController update()");
+		// If the game is null just return
+		if(Client.getInstance().getGame() == null) {
+			return;
+		}
 		// TODO Auto-generated method stub
 	}
 

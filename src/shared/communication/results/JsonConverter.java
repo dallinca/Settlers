@@ -1,6 +1,7 @@
 package shared.communication.results;
 
 import java.util.ArrayList;
+
 import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
 import shared.definitions.HexType;
@@ -11,7 +12,11 @@ import shared.locations.HexLocation;
 import shared.locations.VertexDirection;
 import shared.locations.VertexLocation;
 import shared.model.Bank;
+import client.Client;
+import client.data.PlayerInfo;
+
 import com.google.gson.Gson;
+
 import shared.model.Game;
 import shared.model.board.Board;
 import shared.model.board.Hex;
@@ -45,6 +50,31 @@ public class JsonConverter {
 	}	
 
 	private Game getGame() {
+		// check to see if we are going to be updating the entire game, or just the player waiting screen
+		int counter = 0;
+		ArrayList<PlayerInfo> playersInfo = new ArrayList<PlayerInfo>();
+		System.out.println("jsonConverter1");
+		for(ClientModel.MPlayer mPlayer: model.getPlayers()) {
+			if(mPlayer != null) {
+				PlayerInfo playerInfo= new PlayerInfo();
+				playerInfo.setColor(getCatanColorFromString(mPlayer.color));
+				playerInfo.setId(mPlayer.playerID);
+				playerInfo.setName(mPlayer.name);
+				playerInfo.setPlayerIndex(mPlayer.playerIndex);
+				playersInfo.add(playerInfo);
+				counter++;
+			}
+			System.out.println(counter);
+		}
+		System.out.println("jsonConverter2");
+		// Not enough players to start the real game
+		if(counter < 4) {
+			System.out.println("jsonConverter3");
+			Client.getInstance().updatePlayersInGameInfo(playersInfo);
+			return null;
+		}
+		System.out.println("jsonConverter4");
+		
 		// Init the BANK with the current amounts of resources and development cards
 
 		ClientModel.MBank modelbank = model.getBank();
@@ -66,6 +96,14 @@ public class JsonConverter {
 		// Init the PLAYERS
 		Player[] players = new Player[4];
 		ClientModel.MPlayer[] mPlayers = model.getPlayers();
+		System.out.println(mPlayers);
+		System.out.println("About to setup XXX " + mPlayers.length + " Players");
+		
+		System.out.println("About to setup XXX " + model.turnTracker.status + " Status");
+		for(ClientModel.MPlayer mPlayer: model.getPlayers()) {
+			System.out.println(mPlayer.name);
+		}
+		
 		for(ClientModel.MPlayer mPlayer: mPlayers) {
 			// Get the resources the player should have right now
 			wheat = mPlayer.getResources().getWheat();

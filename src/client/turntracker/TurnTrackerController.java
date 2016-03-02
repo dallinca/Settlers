@@ -57,6 +57,10 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("TurnTrackerController update()");
+		// If the game is null just return
+		if(Client.getInstance().getGame() == null) {
+			return;
+		}
 		if(init){
 			initFromModel();
 		}

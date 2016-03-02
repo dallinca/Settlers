@@ -326,10 +326,16 @@ public class MapController extends Controller implements IMapController, Observe
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("MapController update()");
+		// If the game is null just return
+		if(Client.getInstance().getGame() == null) {
+			return;
+		}
+		Client ZeClieeent = (Client) o;
+		System.out.println("Roads unbuilt: " + ZeClieeent.getGame().getCurrentPlayer().getNumberUnplayedRoads());
 		//store current Game in controller
-		this.game = (Game)arg;
+		//this.game = (Game)arg;
 		if(init) {
-		initFromModel();
+			initFromModel();
 			init = false;
 			return;
 		}

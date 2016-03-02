@@ -21,6 +21,7 @@ public class ActionManager {
 	private Dice DICE = null;
 
 	protected ActionManager(){
+		System.out.println("ActionManager ActionType()");
 		TRADE = new Trade();
 		PURCHASE = new Purchase();
 		PLAYCARD = new PlayCard();
@@ -28,6 +29,7 @@ public class ActionManager {
 	}
 	
 	public static ActionManager getInstance() {
+		System.out.println("ActionManager getInstance()");
 		if(SINGLETON == null) {
 			SINGLETON = new ActionManager();
 		}
@@ -42,6 +44,7 @@ public class ActionManager {
 	 * @post action will be performed.
 	 */
 	public void doAction(ActionType action){
+		System.out.println("ActionManager doAction()");
 
 		if (action.getCategory() == ActionType.PURCHASE) doPurchase(action);
 		else if (action.getCategory() == ActionType.TRADE)
@@ -70,6 +73,7 @@ public class ActionManager {
 	 * @post action will be performed.
 	 */
 	public boolean canDoPurchase(ActionType action){
+		System.out.println("ActionManager canDoPurchase()");
 		if (action == ActionType.PURCHASE_DEVELOPMENT) 
 			return PURCHASE.canDoPurchaseDevelopmentCard();
 		return false;
@@ -84,6 +88,7 @@ public class ActionManager {
 	 * @post action will be performed.
 	 */
 	public void doPurchase(ActionType action){
+		System.out.println("ActionManager doPurchase()");
 		if (action == ActionType.PURCHASE_DEVELOPMENT && canDoPurchase(action)) PURCHASE.purchaseDevelopmentCard();
 	}	
 	
@@ -94,6 +99,7 @@ public class ActionManager {
 	 * @param location
 	 */
 	public boolean canDoBuild(ActionType action){
+		System.out.println("ActionManager canDoBuild()");
 		if (action == ActionType.PURCHASE_CITY) return PURCHASE.canDoPurchaseCity();
 		else if (action == ActionType.PURCHASE_ROAD) return PURCHASE.canDoPurchaseRoad();
 		else if (action == ActionType.PURCHASE_SETTLEMENT) return PURCHASE.canDoPurchaseSettlement();
@@ -101,9 +107,27 @@ public class ActionManager {
 		return false;
 
 	}
+
+	/**
+	 * TODO javadoc
+	 * 
+	 * @param action
+	 * @param location
+	 * @throws Exception 
+	 */
+	public void doBuild(ActionType action, Object location) throws Exception{
+		System.out.println("ActionManager doBuild()");
+		//if (canDoBuild(action)) {	
+			if (action == ActionType.PURCHASE_CITY) PURCHASE.purchaseCity(location);
+			else if (action == ActionType.PURCHASE_ROAD) PURCHASE.purchaseRoad(location);
+			else if (action == ActionType.PURCHASE_SETTLEMENT)	PURCHASE.purchaseSettlement(location);
+			else throw new Exception("Should not have been able to call doBuild method");
+		//} 
+	}
 	
 	
 	public boolean canDoPlay(ActionType action, ResourceType[] toPassIn) {
+		System.out.println("ActionManager canDoPlay()");
 		if (action == ActionType.PLAYCARD_MONOPOLY) return PLAYCARD.canDoPlayMonopoly(toPassIn);
 		else if (action == ActionType.PLAYCARD_YEAROFPLENTY) return PLAYCARD.canDoPlayYearOfPlenty(toPassIn);
 		
@@ -112,6 +136,7 @@ public class ActionManager {
 	
 	
 	public boolean canDoPlay(ActionType action) {
+		System.out.println("ActionManager canDoPlay()");
 		if (action == ActionType.PLAYCARD_BUILDROADS) return PLAYCARD.canDoPlayBuildRoads();
 		else if (action == ActionType.PLAYCARD_MONUMENT) return PLAYCARD.canDoPlayMonument();
 		else if (action == ActionType.PLAYCARD_KNIGHT) {
@@ -123,22 +148,6 @@ public class ActionManager {
 	}
 	
 	/**
-	 * TODO javadoc
-	 * 
-	 * @param action
-	 * @param location
-	 * @throws Exception 
-	 */
-	public void doBuild(ActionType action, Object location) throws Exception{
-		if (canDoBuild(action)) {	
-			if (action == ActionType.PURCHASE_CITY) PURCHASE.purchaseCity(location);
-			else if (action == ActionType.PURCHASE_ROAD) PURCHASE.purchaseRoad(location);
-			else if (action == ActionType.PURCHASE_SETTLEMENT)	PURCHASE.purchaseSettlement(location);
-			else throw new Exception("Should not have been able to call doBuild method");
-		} 
-	}
-	
-	/**
 	 * Checks to see if the trade can even happen
 	 * @pre valid action type, and that the trade is happening on the correct turn (current player has to be trading with somebody)
 	 * 
@@ -146,6 +155,7 @@ public class ActionManager {
 	 * @return
 	 */
 	public boolean canDoTrade(ActionType action) {
+		System.out.println("ActionManager canDoTrade()");
 		if (action == ActionType.TRADE_BANK) return TRADE.canDoTradeWithBank();
 		else if (action == ActionType.TRADE_PLAYER) return TRADE.canDoTradeWithPlayer();
 		
@@ -163,6 +173,7 @@ public class ActionManager {
 	 * @post action will be performed.
 	 */
 	public void doTrade(ActionType action) throws Exception{
+		System.out.println("ActionManager doTrade()");
 		if (canDoTrade(action)) {
 			try {
 				if (action == ActionType.TRADE_BANK) TRADE.tradeWithBank();
@@ -183,6 +194,7 @@ public class ActionManager {
 	 */
 	
 	public void playDevelopmentCard(ActionType action, ResourceType[] toPassIn) throws Exception {
+		System.out.println("ActionManager playDevelopmentCard()");
 		if (canDoPlay(action, toPassIn)) {
 			try {
 				if (action == ActionType.PLAYCARD_MONOPOLY) PLAYCARD.playMonopoly(toPassIn);
@@ -194,6 +206,7 @@ public class ActionManager {
 	}
 	
 	public void playDevelopmentCard(ActionType action) throws Exception{
+		System.out.println("ActionManager playDevelopmentCard()");
 		if (canDoPlay(action)) {
 			try {
 			//Fix parameters as they are passed in from above coming from a view generated by the implementation of the state pattern.

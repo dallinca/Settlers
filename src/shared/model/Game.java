@@ -84,7 +84,7 @@ public class Game {
 		
 		currentPlayer = players[0];
 		this.board = board;
-		System.out.println("Game constructore 2 was called");
+		System.out.println("Game constructor 2 was called");
 	}
 
 	/**
@@ -287,13 +287,16 @@ public class Game {
 	 * This method polls the player to see if the player can build a road and then returns the result to that which called it (most likely the client)
 	 * @return a true or false to if the player can build a road there.
 	 */
-	public boolean canDoCurrentPlayerBuildRoad(int UserId) {
+	public boolean canDoPlayerBuildRoad(int UserId) {
 		// Check if the user is the current player
 		if(UserId != currentPlayer.getPlayerId()) {
 			return false;
 		}
 		// If we are in the first two rounds the answer is simply "yes"
 		if(turnNumber < 2) {
+			if(currentPlayer.getNumberUnplayedRoads() - 13 < currentPlayer.getNumberUnplayedSettlements() - 3) {
+				return false;
+			}
 			return true;
 		}
 		return currentPlayer.canDoBuyRoad();	
@@ -303,7 +306,7 @@ public class Game {
 	 * Asks the player if he or she can build a settlement and tells the client that.
 	 * @return
 	 */
-	public boolean canDoCurrentPlayerBuildSettlement(int UserId) {
+	public boolean canDoPlayerBuildSettlement(int UserId) {
 		// Check if the user is the current player
 		if(UserId != currentPlayer.getPlayerId()) {
 			return false;
@@ -319,7 +322,7 @@ public class Game {
 	 * Asks the player if he or she can build a city and tells the client that.
 	 * @return
 	 */
-	public boolean canDoCurrentPlayerBuildCity(int UserId) {
+	public boolean canDoPlayerBuildCity(int UserId) {
 		// Check if the user is the current player
 		if(UserId != currentPlayer.getPlayerId()) {
 			return false;
@@ -331,7 +334,7 @@ public class Game {
 	 * Asks the player if he or she can buy a development card and tells the client that.
 	 * @return
 	 */
-	public boolean canDoCurrentPlayerBuyDevelopmentCard(int UserId) {
+	public boolean canDoPlayerBuyDevelopmentCard(int UserId) {
 		// Check if the user is the current player
 		if(UserId != currentPlayer.getPlayerId()) {
 			return false;
@@ -359,7 +362,7 @@ public class Game {
 	 * @param devCardType
 	 * @return
 	 */
-	public boolean canDoCurrentPlayerUseDevelopmentCard(int userID, DevCardType devCardType) {
+	public boolean canDoPlayerUseDevelopmentCard(int userID, DevCardType devCardType) {
 		//We need to be able to measure how long a player has owned a card.
 		if (currentPlayer.getPlayerId() == userID) {
 			return currentPlayer.canDoPlayDevelopmentCard(turnNumber, devCardType);
@@ -380,7 +383,7 @@ public class Game {
 	/**
 	 * This card is special because it is the only development card that references the bank, so additional checks need to be made, and so for security reasons it gets its own method to do so.
 	 */
-	public boolean canDoCurrentPlayerUseYearOfPlenty(ResourceType[] resourceType, int userID) {
+	public boolean canDoPlayerUseYearOfPlenty(ResourceType[] resourceType, int userID) {
 		//This is important because the bank not have the cards they need.
 		if (currentPlayer.getPlayerId() == userID) {
 			if (resourceType.length == 1) {
@@ -428,7 +431,7 @@ public class Game {
 						setVersionNumber(versionNumber++);
 						return doWeHaveAWinner();
 					case YEAR_OF_PLENTY:
-						if (canDoCurrentPlayerUseYearOfPlenty(resourceType, userID)) {
+						if (canDoPlayerUseYearOfPlenty(resourceType, userID)) {
 							//Add two resources of the types specified to the currentPlayers hand
 							if (resourceType.length == 1) {
 								ResourceCard resource = bank.playerTakeResource(resourceType[0]);
@@ -547,7 +550,7 @@ public class Game {
 	 * @pre the resource types are valid
 	 * @post returns whether or not you can do the trade or not
 	 */
-	public boolean canDoCurrentPlayerDoMaritimeTrade(ResourceType tradeIn, ResourceType receive) {
+	public boolean canDoPlayerDoMaritimeTrade(ResourceType tradeIn, ResourceType receive) {
 		
 		if (canDoPlayerTakeResource(receive) && canTradeResourcesToBank(tradeIn)) {
 			return true;
@@ -567,7 +570,7 @@ public class Game {
 	 * 
 	 */
 	public void doMaritimeTrade(ResourceType tradeIn, ResourceType receive) throws Exception  {
-		if (canDoCurrentPlayerDoMaritimeTrade(tradeIn, receive)) {
+		if (canDoPlayerDoMaritimeTrade(tradeIn, receive)) {
 			ResourceCard[] tradingCards = currentPlayer.prepareBankTrade(tradeIn);
 			bank.playerTurnInResources(tradingCards);
 			currentPlayer.getResourceCardHand().addCard(bank.playerTakeResource(receive));
@@ -638,7 +641,7 @@ public class Game {
 	 * @pre: the player in question who calls this method is taking his/her turn currently
 	 * @post 
 	 */
-	public boolean canDoCurrentPlayerDoDomesticTrade(int p1id, int[] p1resources, int p2id, int[] p2resources) {
+	public boolean canDoPlayerDoDomesticTrade(int p1id, int[] p1resources, int p2id, int[] p2resources) {
 		//Is it the Current Players turn and do they have any resources?
 		//Do they have the resources he said he would trade
 		
@@ -722,7 +725,7 @@ public class Game {
 	 * 
 	 */
 	public void doDomesticTrade(int p1id, int[] p1resources, int p2id, int[] p2resources) throws Exception {
-		if (canDoCurrentPlayerDoDomesticTrade(p1id, p1resources, p2id, p2resources)) {
+		if (canDoPlayerDoDomesticTrade(p1id, p1resources, p2id, p2resources)) {
 			ResourceType resourceType = null;
 			for (int i = 0; i < p1resources.length; i++) {
 				if (p1resources[i] > 0) {
@@ -790,6 +793,9 @@ public class Game {
 		}
 		// If we are in the setup phase, the rules for placing a road are slightly different
 		if(turnNumber < 2) {
+			if(currentPlayer.getNumberUnplayedRoads() - 13 < currentPlayer.getNumberUnplayedSettlements() - 3) {
+				return false;
+			}
 			System.out.println("Game2: " + board.canDoPlaceInitialRoadOnEdge(getCurrentPlayer(), edgeLocation));
 			return board.canDoPlaceInitialRoadOnEdge(getCurrentPlayer(), edgeLocation);
 		} else {

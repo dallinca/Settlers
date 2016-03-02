@@ -72,6 +72,10 @@ public class GameHistoryController extends Controller implements IGameHistoryCon
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
 		System.out.println("GameHistoryController initFromModel()");
+		// If the game is null just return
+		if(Client.getInstance().getGame() == null) {
+			return;
+		}
 		
 		List<LogEntry> entries = new ArrayList<LogEntry>();
 		

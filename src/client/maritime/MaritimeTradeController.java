@@ -233,7 +233,7 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 		ArrayList<ResourceType> enabledResources = new ArrayList<ResourceType>();
 		
 		for (int i = 0; i < checking.length; i++) {
-			 if( Client.getInstance().getGame().canDoCurrentPlayerDoMaritimeTrade(giveType, checking[i]) == true) {
+			 if( Client.getInstance().getGame().canDoPlayerDoMaritimeTrade(giveType, checking[i]) == true) {
 				 enabledResources.add(checking[i]);
 			 }
 		}
@@ -278,6 +278,10 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("MaritimeTradeController update()");
+		// If the game is null just return
+		if(Client.getInstance().getGame() == null) {
+			return;
+		}
 		// TODO Auto-generated method stub
 		
 	}

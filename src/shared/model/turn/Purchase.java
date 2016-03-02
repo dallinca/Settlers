@@ -16,6 +16,7 @@ public class Purchase {
 
 	
 	Purchase() {
+		System.out.println("Purchase Purchase()");
 
 	}
 	/**
@@ -25,13 +26,15 @@ public class Purchase {
 	 * @post Player gains a development card from the development deck, and loses cost.
 	 */
 	public void purchaseDevelopmentCard(){
+		System.out.println("Purchase purchaseCity()");
 		if (canDoPurchaseDevelopmentCard()) {
 			ClientFacade.getInstance().buyDevCard();
 		}
 	}
 
 	public boolean canDoPurchaseDevelopmentCard(){
-		return Client.getInstance().getGame().canDoCurrentPlayerBuyDevelopmentCard(Client.getInstance().getUserId());
+		System.out.println("Purchase canDoPurchaseDevelopmentCard()");
+		return Client.getInstance().getGame().canDoPlayerBuyDevelopmentCard(Client.getInstance().getUserId());
 	}
 
 	/**
@@ -43,13 +46,15 @@ public class Purchase {
 	 * @post Player places settlement on the board, loses cost.
 	 */
 	public void purchaseSettlement(Object l){
+		System.out.println("Purchase purchaseSettlement()");
 		VertexLocation location = (VertexLocation) l;
 		ClientFacade.getInstance().buildSettlement(location);
 	}
 	
 
 	public boolean canDoPurchaseSettlement(){
-		return Client.getInstance().getGame().canDoCurrentPlayerBuildSettlement(Client.getInstance().getUserId());
+		System.out.println("Purchase canDoPurchaseSettlement()");
+		return Client.getInstance().getGame().canDoPlayerBuildSettlement(Client.getInstance().getUserId());
 	}
 
 	/**
@@ -61,13 +66,15 @@ public class Purchase {
 	 * @post Player replaces a settlement with a city. player loses cost. Player gains available settlement.
 	 */
 	public void purchaseCity(Object l){
+		System.out.println("Purchase purchaseCity()");
 		if (canDoPurchaseCity()) {
 			VertexLocation location = (VertexLocation) l;
 		}
 	}
 
 	public boolean canDoPurchaseCity(){
-		return Client.getInstance().getGame().canDoCurrentPlayerBuildCity(Client.getInstance().getUserId());
+		System.out.println("Purchase canDoPurchaseCity()");
+		return Client.getInstance().getGame().canDoPlayerBuildCity(Client.getInstance().getUserId());
 	}
 	
 	/**
@@ -79,13 +86,19 @@ public class Purchase {
 	 * @post Player places road on the board, loses cost.
 	 */
 	public void purchaseRoad(Object l){
-		if (canDoPurchaseRoad()) {
+		System.out.println("Purchase purchaseRoad()");
+		//if (canDoPurchaseRoad()) {
 			ClientFacade.getInstance().buildRoad((EdgeLocation)l );
-		}
+			System.out.println("Purchase purchaseRoad() Could Purchase");
+			return;
+		//}
+		//System.out.println("Purchase purchaseRoad() Could Not Purchase");
+		//return;
 	}
 	
 	public boolean canDoPurchaseRoad(){
-		return Client.getInstance().getGame().canDoCurrentPlayerBuildRoad(Client.getInstance().getUserId());
+		System.out.println("Purchase canDoPurchaseRoad()");
+		return Client.getInstance().getGame().canDoPlayerBuildRoad(Client.getInstance().getUserId());
 	}
 
 }

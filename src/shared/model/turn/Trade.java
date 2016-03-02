@@ -16,6 +16,7 @@ public class Trade {
 	}
 	
 	public boolean canDoTradeWithPlayer() {
+		System.out.println("Trade canDoTradeWithPlayer()");
 		//return Client.getInstance().getGame().canDoCurrentPlayerDoDomesticTrade(tradeIn, receive);
 		return false;
 	}
@@ -31,6 +32,7 @@ public class Trade {
 	 * @post Player and another player either swap proffered cards, or the trade is refused.
 	 */
 	public void tradeWithPlayer() throws Exception{
+		System.out.println("Trade tradeWithPlayer()");
 		if (canDoTradeWithPlayer()) {
 			try {
 				Client.getInstance().getGame().doDomesticTrade(0, null, 0, null);
@@ -45,6 +47,7 @@ public class Trade {
 
 	
 	public boolean canDoTradeWithBank() {
+		System.out.println("Trade canDoTradeWithBank()");
 		//return Client.getInstance().getGame().canDoCurrentPlayerDoMaritimeTrade(tradeIn, receive);
 		return false;
 	}
@@ -59,6 +62,7 @@ public class Trade {
 	 * 
 	 */
 	public void tradeWithBank() throws Exception{
+		System.out.println("Trade tradeWithBank()");
 		if (canDoTradeWithPlayer()) {
 			try {
 				Client.getInstance().getGame().doMaritimeTrade(null, null);

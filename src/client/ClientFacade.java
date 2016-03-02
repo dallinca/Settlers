@@ -71,11 +71,13 @@ public class ClientFacade {
 	
 	
 	protected ClientFacade(){
+		System.out.println("ClientFacade ClientFacade()");
 		sp = new ServerProxy();
 		//this.c = Client.getInstance();
 	}
 	
 	public static ClientFacade getInstance(){
+		System.out.println("ClientFacade ClientFacade()");
 		if (SINGLETON == null){
 			SINGLETON = new ClientFacade();
 		}
@@ -94,6 +96,7 @@ public class ClientFacade {
 	 * @post Client will be able to communicate with server.
 	 */
 	ClientFacade(IServerProxy proxy){
+		System.out.println("ClientFacade ClientFacade()");
 		this.sp = proxy;
 	}
 
@@ -110,7 +113,8 @@ public class ClientFacade {
 	 * @pre None
 	 * @post Communicator will return usable ValidateUser_Result
 	 */
-	public Login_Result login(String username, String password) {		
+	public Login_Result login(String username, String password) {
+		System.out.println("ClientFacade login()");		
 
 		Login_Result result; 
 		Login_Params request = new Login_Params(username, password);		
@@ -137,6 +141,7 @@ public class ClientFacade {
 	 * @post Data will be mapped onto client model.
 	 */
 	public void parseJSONData(Object JSONdata){
+		System.out.println("ClientFacade parseJSONData()");
 
 	}
 
@@ -147,6 +152,7 @@ public class ClientFacade {
 	 * @
 	 */
 	public AddAI_Result addAI(AddAI_Params request)  {
+		System.out.println("ClientFacade addAI()");
 		return null;
 	}
 
@@ -176,6 +182,7 @@ public class ClientFacade {
 	 * @post Communicator will return usable PollServer_Result.
 	 */
 	public GetVersion_Result getVersion()  {
+		System.out.println("ClientFacade getVersion()");
 		GetVersion_Params request;
 		GetVersion_Result result; 
 		
@@ -189,9 +196,10 @@ public class ClientFacade {
 
 			result = sp.getVersion(request);
 			if(!result.isUpToDate()){
-				System.out.println("UPDATING GAME");
-				//System.out.println(result);
-				updateGame(result.getGame());
+				if(result.getGame() != null) {
+					System.out.println("UPDATING GAME");
+					updateGame(result.getGame());
+				}
 			}
 			else{
 				System.out.println("Up to date.");
@@ -207,6 +215,7 @@ public class ClientFacade {
 	}
 
 	public Join_Result joinGame(int gameID, CatanColor color)  {
+		System.out.println("ClientFacade joinGame()");
 		Join_Result result; 
 		Join_Params request = new Join_Params(gameID, color);		
 
@@ -224,6 +233,7 @@ public class ClientFacade {
 	}
 
 	public List_Result listGames()  {
+		System.out.println("ClientFacade listGames()");
 		List_Result result; 
 		List_Params request = new List_Params();		
 
@@ -248,10 +258,12 @@ public class ClientFacade {
 	 * @
 	 */
 	public ListAI_Result listAI()  {
+		System.out.println("ClientFacade listAI()");
 		return null;
 	}
 
 	public Register_Result register(String username, String password)  {
+		System.out.println("ClientFacade register()");
 		Register_Result result; 
 		Register_Params request = new Register_Params(username, password);		
 
@@ -272,6 +284,7 @@ public class ClientFacade {
 
 
 	public SendChat_Result sendChat(String content)  {
+		System.out.println("ClientFacade sendChat()");
 		int playerIndex = Client.getInstance().getPlayerIndex();
 
 		SendChat_Result result; 
@@ -292,6 +305,7 @@ public class ClientFacade {
 	}	
 
 	public AcceptTrade_Result acceptTrade(boolean willAccept)  {
+		System.out.println("ClientFacade acceptTrade()");
 		AcceptTrade_Result result; 
 		AcceptTrade_Params request = new AcceptTrade_Params(0, willAccept);		
 
@@ -311,6 +325,7 @@ public class ClientFacade {
 
 
 	public RollNumber_Result rollNumber(int number)  {
+		System.out.println("ClientFacade rollNumber()");
 		int playerIndex = Client.getInstance().getPlayerIndex();
 		
 		RollNumber_Result result; 
@@ -332,6 +347,7 @@ public class ClientFacade {
 
 
 	public DiscardCards_Result discardCards(int brick, int ore, int sheep, int wheat, int wood)  {
+		System.out.println("ClientFacade discardCards()");
 		int playerIndex = Client.getInstance().getPlayerIndex();
 
 		DiscardCards_Result result; 
@@ -354,6 +370,7 @@ public class ClientFacade {
 	//move
 
 	public BuildCity_Result buildCity(VertexLocation location)  {
+		System.out.println("ClientFacade buildCity()");
 		
 		int playerIndex = Client.getInstance().getPlayerIndex();
 
@@ -375,6 +392,7 @@ public class ClientFacade {
 	}
 
 	public BuildRoad_Result buildRoad(EdgeLocation roadLocation)  {
+		System.out.println("ClientFacade buildRoad()");
 		
 		int playerIndex = Client.getInstance().getPlayerIndex();
 		boolean free = Client.getInstance().getGame().isInSetUpPhase();
@@ -397,6 +415,7 @@ public class ClientFacade {
 	}
 
 	public BuildSettlement_Result buildSettlement(VertexLocation location)  {
+		System.out.println("ClientFacade buildSettlement()");
 
 		int playerIndex = Client.getInstance().getPlayerIndex();
 		boolean free = Client.getInstance().getGame().isInSetUpPhase();
@@ -419,6 +438,7 @@ public class ClientFacade {
 	}
 
 	public BuyDevCard_Result buyDevCard()  {
+		System.out.println("ClientFacade buyDevCard()");
 		int playerIndex = Client.getInstance().getPlayerIndex();
 		BuyDevCard_Result result; 
 		BuyDevCard_Params request = new BuyDevCard_Params(playerIndex);		
@@ -438,6 +458,7 @@ public class ClientFacade {
 	}
 
 	public FinishTurn_Result finishTurn()  {
+		System.out.println("ClientFacade finishTurn()");
 		int playerIndex = Client.getInstance().getPlayerIndex();
 		FinishTurn_Result result; 
 		FinishTurn_Params request = new FinishTurn_Params(playerIndex);		
@@ -458,6 +479,7 @@ public class ClientFacade {
 
 	public MaritimeTrade_Result maritimeTrade(int ratio, ResourceType inputResource, 
 			ResourceType outputResource)  {
+		System.out.println("ClientFacade maritimeTrade()");
 
 		int playerIndex = Client.getInstance().getPlayerIndex();
 		MaritimeTrade_Result result; 
@@ -478,6 +500,7 @@ public class ClientFacade {
 	}
 
 	public OfferTrade_Result offerTrade(int brick, int ore, int sheep, int wheat, int wood, int receiver)  {
+		System.out.println("ClientFacade offerTrade()");
 
 		int playerIndex = Client.getInstance().getPlayerIndex();
 		OfferTrade_Result result; 
@@ -499,6 +522,7 @@ public class ClientFacade {
 	}
 
 	public RobPlayer_Result robPlayer(HexLocation hex, int victimIndex)  {
+		System.out.println("ClientFacade robPlayer()");
 
 		int playerIndex = Client.getInstance().getPlayerIndex();
 		RobPlayer_Result result; 
@@ -521,6 +545,7 @@ public class ClientFacade {
 	//dev card play
 
 	public PlayMonopoly_Result playMonopoly(ResourceType type)  {
+		System.out.println("ClientFacade playMonopoly()");
 
 		int playerIndex = Client.getInstance().getPlayerIndex();
 		PlayMonopoly_Result result; 
@@ -541,6 +566,7 @@ public class ClientFacade {
 	}
 
 	public PlayMonument_Result playMonument()  {
+		System.out.println("ClientFacade playMonument()");
 
 		int playerIndex = Client.getInstance().getPlayerIndex();
 		PlayMonument_Result result; 
@@ -563,6 +589,7 @@ public class ClientFacade {
 
 	public PlayRoadBuilding_Result playRoadBuilding(EdgeLocation roadLocation1, 
 			EdgeLocation roadLocation2)  {
+		System.out.println("ClientFacade playRoadBuilding()");
 
 		int playerIndex = Client.getInstance().getPlayerIndex();
 		PlayRoadBuilding_Result result; 
@@ -583,6 +610,7 @@ public class ClientFacade {
 	}
 
 	public PlaySoldier_Result playSoldier(HexLocation hex, int victimIndex)  {
+		System.out.println("ClientFacade playSoldier()");
 
 		int playerIndex = Client.getInstance().getPlayerIndex();
 		PlaySoldier_Result result; 
@@ -603,6 +631,7 @@ public class ClientFacade {
 	}
 
 	public PlayYearOfPlenty_Result playYearOfPlenty(ResourceType resource1, ResourceType resource2)  {
+		System.out.println("ClientFacade playYearOfPlenty()");
 
 		int playerIndex = Client.getInstance().getPlayerIndex();
 		PlayYearOfPlenty_Result result; 
@@ -623,6 +652,7 @@ public class ClientFacade {
 	}
 	
 	private void updateGame(Game game){
+		System.out.println("ClientFacade updateGame()");
 		
 		Client.getInstance().setGame(game);
 		return;

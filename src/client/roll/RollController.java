@@ -63,6 +63,10 @@ public class RollController extends Controller implements IRollController, Obser
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
 		System.out.println("RollController update()");
+		// If the game is null just return
+		if(Client.getInstance().getGame() == null) {
+			return;
+		}
 	}
 
 }

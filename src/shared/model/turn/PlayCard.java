@@ -18,7 +18,7 @@ public class PlayCard {
 
 	
 	PlayCard() {
-
+		System.out.println("PlayCard PlayCard()");
 	}
 	
 	/**
@@ -29,6 +29,7 @@ public class PlayCard {
 	 * @post Player takes associated action.
 	 */
 	public void playMonument() throws Exception{
+		System.out.println("PlayCard playMonument()");
 		if (canDoPlayMonument()) {	
 			try {
 				ClientFacade.getInstance().playMonument();
@@ -45,7 +46,8 @@ public class PlayCard {
 	 * @return whether or not they have a monument that can be played
 	 */
 	public boolean canDoPlayMonument() {
-		return Client.getInstance().getGame().canDoCurrentPlayerUseDevelopmentCard(Client.getInstance().getUserId(), DevCardType.MONUMENT);
+		System.out.println("PlayCard canDoPlayMonument()");
+		return Client.getInstance().getGame().canDoPlayerUseDevelopmentCard(Client.getInstance().getUserId(), DevCardType.MONUMENT);
 		
 	}
 	
@@ -57,6 +59,7 @@ public class PlayCard {
 	 * @post Player takes associated action.
 	 */
 	public void playKnight(HexLocation hex, int victimIndex) throws Exception{
+		System.out.println("PlayCard playKnight()");
 		if (canDoPlayKnight()) {
 			try {
 				ClientFacade.getInstance().playSoldier(hex, victimIndex);
@@ -70,7 +73,8 @@ public class PlayCard {
 	}
 	
 	public boolean canDoPlayKnight() {
-		return Client.getInstance().getGame().canDoCurrentPlayerUseDevelopmentCard(Client.getInstance().getUserId(), DevCardType.SOLDIER);
+		System.out.println("PlayCard canDoPlayKnight()");
+		return Client.getInstance().getGame().canDoPlayerUseDevelopmentCard(Client.getInstance().getUserId(), DevCardType.SOLDIER);
 	}
 
 	/**
@@ -81,6 +85,7 @@ public class PlayCard {
 	 * @post Player takes associated action.
 	 */
 	public void playYearOfPlenty(ResourceType[] toPassIn) throws Exception{
+		System.out.println("PlayCard playYearOfPlenty()");
 		if (canDoPlayYearOfPlenty(toPassIn)) {
 			
 			ResourceType resource1 = null;
@@ -107,7 +112,8 @@ public class PlayCard {
 	}
 	
 	public boolean canDoPlayYearOfPlenty(ResourceType[] toPassIn) {
-		return Client.getInstance().getGame().canDoCurrentPlayerUseYearOfPlenty(toPassIn, Client.getInstance().getUserId());
+		System.out.println("PlayCard canDoPlayYearOfPlenty()");
+		return Client.getInstance().getGame().canDoPlayerUseYearOfPlenty(toPassIn, Client.getInstance().getUserId());
 	}
 	
 	/**
@@ -118,6 +124,7 @@ public class PlayCard {
 	 * @post Player takes associated action.
 	 */
 	public void playMonopoly(ResourceType[] toPassIn) throws Exception{
+		System.out.println("PlayCard playMonopoly()");
 		if (canDoPlayMonopoly(toPassIn)) {
 			try {
 				//Array size is only 1 and will only ever be 1.
@@ -132,7 +139,8 @@ public class PlayCard {
 	}
 	
 	public boolean canDoPlayMonopoly(ResourceType[] toPassIn) {		
-		return Client.getInstance().getGame().canDoCurrentPlayerUseDevelopmentCard(Client.getInstance().getUserId(), DevCardType.MONOPOLY);
+		System.out.println("PlayCard canDoPlayMonopoly()");
+		return Client.getInstance().getGame().canDoPlayerUseDevelopmentCard(Client.getInstance().getUserId(), DevCardType.MONOPOLY);
 	}
 
 	/**
@@ -143,6 +151,7 @@ public class PlayCard {
 	 * @post Player takes associated action.
 	 */
 	public void playBuildRoads(EdgeLocation roadLocation1, EdgeLocation roadLocation2) throws Exception{
+		System.out.println("PlayCard playBuildRoads()");
 		if (canDoPlayBuildRoads()) {
 			try {
 				ClientFacade.getInstance().playRoadBuilding(roadLocation1, roadLocation2);
@@ -156,7 +165,8 @@ public class PlayCard {
 	}
 	
 	public boolean canDoPlayBuildRoads() {
-		return Client.getInstance().getGame().canDoCurrentPlayerUseDevelopmentCard(Client.getInstance().getUserId(), DevCardType.ROAD_BUILD);
+		System.out.println("PlayCard canDoPlayBuildRoads()");
+		return Client.getInstance().getGame().canDoPlayerUseDevelopmentCard(Client.getInstance().getUserId(), DevCardType.ROAD_BUILD);
 	}
 	
 }

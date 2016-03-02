@@ -35,10 +35,12 @@ public enum ActionType  {
 	 * @post Action category will be assigned to given action type.
 	 */
     private ActionType(ActionType category) {
+		System.out.println("ActionType ActionType(ActionType category)");
         this.category = category;
     }
     
     private ActionType(){
+		System.out.println("ActionType ActionType()");
     	this.category = null;
     }
 	
@@ -48,6 +50,7 @@ public enum ActionType  {
 	 * @post Returns action category of action type.
 	 */
     ActionType getCategory(){
+		System.out.println("ActionType getCategory()");
     	return this.category;
     };    	
 }
