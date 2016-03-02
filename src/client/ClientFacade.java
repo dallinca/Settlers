@@ -100,6 +100,10 @@ public class ClientFacade {
 		this.sp = proxy;
 	}
 
+	public ServerProxy getProxy() {
+		return (ServerProxy)sp;
+	}
+	
 	/*public ClientFacade(){		
 		this.sp = new ServerProxy();				
 	}*/

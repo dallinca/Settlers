@@ -49,7 +49,7 @@ public class ActionManager {
 		if (action.getCategory() == ActionType.PURCHASE) doPurchase(action);
 		else if (action.getCategory() == ActionType.TRADE)
 			try {
-				doTrade(action);
+				doTrade(action, null, null);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -156,7 +156,7 @@ public class ActionManager {
 	 */
 	public boolean canDoTrade(ActionType action) {
 		System.out.println("ActionManager canDoTrade()");
-		if (action == ActionType.TRADE_BANK) return TRADE.canDoTradeWithBank();
+		if (action == ActionType.TRADE_BANK) return TRADE.canDoTradeWithBank(null, null);
 		else if (action == ActionType.TRADE_PLAYER) return TRADE.canDoTradeWithPlayer();
 		
 		return false;
@@ -172,11 +172,11 @@ public class ActionManager {
 	 * @pre action must be of 'trade' action category.
 	 * @post action will be performed.
 	 */
-	public void doTrade(ActionType action) throws Exception{
+	public void doTrade(ActionType action, ResourceType resourceIn, ResourceType resourceOut) throws Exception{
 		System.out.println("ActionManager doTrade()");
 		if (canDoTrade(action)) {
 			try {
-				if (action == ActionType.TRADE_BANK) TRADE.tradeWithBank();
+				if (action == ActionType.TRADE_BANK) TRADE.tradeWithBank(resourceIn, resourceOut);
 				else if (action == ActionType.TRADE_PLAYER)	TRADE.tradeWithPlayer();
 			} catch(Exception e) {
 				System.out.println("Should not have been able to trade");
