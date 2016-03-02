@@ -40,6 +40,10 @@ public class Register_Result {
 		return valid;
 	}
 
+	public void setValid(boolean v){
+		valid = v;
+		return;
+	}
 	public int getId() {
 		return id;
 	}

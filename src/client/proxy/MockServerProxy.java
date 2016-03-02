@@ -106,7 +106,7 @@ public class MockServerProxy implements IServerProxy {
 		
 		JsonElement json = gson.toJsonTree("{\n			  \"title\": \"myveryfirstgame\",\n			  \"id\": 3,\n			  \"players\": [\n			    {},\n			    {},\n			    {},\n			    {}\n			  ]\n			}");
 		
-		return new Create_Result(json);
+		return new Create_Result();
 		//#2
 		/*
 		{
@@ -159,7 +159,7 @@ public class MockServerProxy implements IServerProxy {
 		
 		JsonElement json = gson.toJsonTree(testVersion);
 		
-		GetVersion_Result result = new GetVersion_Result(json);
+		GetVersion_Result result = new GetVersion_Result();
 		
 		//http://localhost:8081/game/model?version=1
 

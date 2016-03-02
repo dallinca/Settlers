@@ -264,19 +264,19 @@ public class MockClientFacade {
 		if(username.equals("mack")) {
 			result.setWasLoggedIn(true);
 			result.setName("mack");
-			result.setId(24);
+			result.setID(24);
 		} else if (username.equals("Chewy")) {
 			result.setWasLoggedIn(true);
 			result.setName("Chewy");
-			result.setId(1);
+			result.setID(1);
 		} else if (username.equals("bummer")) {
 			result.setWasLoggedIn(true);
 			result.setName("bummer");
-			result.setId(1111);
+			result.setID(1111);
 		} else if (username.equals("manndi")) {
 			result.setWasLoggedIn(true);
 			result.setName("manndi");
-			result.setId(13);
+			result.setID(13);
 		} else {
 			result.setWasLoggedIn(false);
 		}
@@ -293,11 +293,11 @@ public class MockClientFacade {
 	public Register_Result register(String username, String password) throws ClientException {
 		Register_Result result = new Register_Result();
 		if(username.equals("puppy")) {
-			result.setWasRegistered(true);
+			result.setValid(true);
 			result.setName("puppy");
 			result.setId(44);
 		} else {
-			result.setWasRegistered(false);
+			result.setValid(false);
 		}
 		return result;
 	}

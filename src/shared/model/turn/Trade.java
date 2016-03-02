@@ -16,7 +16,8 @@ public class Trade {
 	}
 	
 	public boolean canDoTradeWithPlayer() {
-		return Client.getInstance().getGame().canDoCurrentPlayerDoDomesticTrade(tradeIn, receive);
+		//return Client.getInstance().getGame().canDoCurrentPlayerDoDomesticTrade(tradeIn, receive);
+		return false;
 	}
 	
 	
@@ -44,7 +45,8 @@ public class Trade {
 
 	
 	public boolean canDoTradeWithBank() {
-		return Client.getInstance().getGame().canDoCurrentPlayerDoMaritimeTrade(tradeIn, receive);
+		//return Client.getInstance().getGame().canDoCurrentPlayerDoMaritimeTrade(tradeIn, receive);
+		return false;
 	}
 	
 	/**
