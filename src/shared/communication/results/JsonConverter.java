@@ -252,9 +252,9 @@ public class JsonConverter {
 		version.setCurrentPlayer(players[model.turnTracker.getCurrentTurn()]);
 		version.setStatus(model.turnTracker.getStatus());
 		System.out.println("About to setup XXX " + model.turnTracker.status + " Status");
-		if(model.turnTracker.getStatus() == "FirstRound") {
+		if(model.turnTracker.getStatus().equals("FirstRound")) {
 			version.setTurnNumber(0);
-		} else if(model.turnTracker.getStatus() == "SecondRound") {
+		} else if(model.turnTracker.getStatus().equals("SecondRound")) {
 			version.setTurnNumber(1);
 		} else {
 			version.setTurnNumber(3);
