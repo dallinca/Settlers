@@ -206,11 +206,15 @@ public class Game {
 	 * @return whether the specified player can roll the dice
 	 */
 	public boolean canDoRollDice(int UserId) {
-		// Check if the user is the current player
+		// Check if the user is the current player		
 		if(UserId != currentPlayer.getPlayerId()) {
-			return false;
+			
 		}
-		return true;
+		else if(getStatus().equals("Rolling")){
+			return true;
+		}
+
+		return false;
 	}
 	
 	/**
@@ -227,9 +231,10 @@ public class Game {
 		Random ran = new Random();
 		int rollValue = ran.nextInt(6) + ran.nextInt(6) + 2;
 		// If the roll is not a 7 then we have the players all collect their resources
+		/*
 		if(rollValue != 7) {
 			playersCollectResources(rollValue);
-		}
+		}*/
 		// If the roll is a seven, tell the client and wait for attempts to move the robber
 		return rollValue;
 	}

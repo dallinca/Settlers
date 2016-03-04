@@ -1,4 +1,4 @@
-<project name="Demo Server" default="server" basedir=".">
+  <project name="Demo Server" default="server" basedir=".">
 
 	<!-- PROPERTIES -->
 	<!-- ********** -->
@@ -90,17 +90,6 @@
 		</javadoc>
    </target>
 
-    <!--
-    <target name="make-js-doc" description="Generate the JavaScript docs">
-        <echo> Making JavaScript documentation </echo>
-        <exec executable="yuidoc">
-            <arg value="-o"/>
-            <arg value="${yuidoc.dir}"/>
-            <arg value="${javascript.dir}"/>
-        </exec>
-	</target>
-    -->
-
   	<property name="java.dir" location="java"/>
 	<property name="java.src" location="${java.dir}/src"/>
 	<property name="java.images" location="${java.dir}/images"/>
@@ -139,14 +128,14 @@
 				<include name="**"/>
 			</fileset>
 		</copy>
- 		<jar jarfile="${java.dist}/catan-client.jar" basedir="${bin}">
+ 		<jar jarfile="${java.dist}/catan-client.jar" basedir="bin">
 			<manifest>
 				<attribute name="Main-Class" value="client.main.Catan"/>
 				<attribute name="Class-Path"
 					value="lib/gson-2.2.4.jar" />
 			</manifest>
 		</jar>
- 		<jar jarfile="${java.dist}/catan-server.jar" basedir="${bin}">
+ 		<jar jarfile="${java.dist}/catan-server.jar" basedir="bin">
 			<manifest>
 				<attribute name="Main-Class" value="PUT THE NAME OF YOUR SERVER'S MAIN CLASS HERE"/>
 				<attribute name="Class-Path"

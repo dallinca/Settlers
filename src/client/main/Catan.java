@@ -62,7 +62,11 @@ public class Catan extends JFrame
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run()
 			{
+				
 				if (args.length == 2) {
+					
+					System.out.println("server name: "+args[0]);
+					System.out.println("server port: "+args[1]);
 					ClientFacade.getInstance().getProxy().setupProxy(args[0], Integer.parseInt(args[1]));
 				}
 				new Catan();

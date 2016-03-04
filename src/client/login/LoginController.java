@@ -101,7 +101,7 @@ public class LoginController extends Controller implements ILoginController, Obs
 		String userpassword = loginview.getLoginPassword();
 
 		if(checkName(username)){
-			if(checkPassword(userpassword, userpassword)){
+			if(checkLoginPassword(userpassword)){
 				// call the client facade with the username and password to attempt registry 
 				Login_Result login_result = null;
 				login_result = clientFacade.login(username, userpassword);
@@ -155,7 +155,22 @@ public class LoginController extends Controller implements ILoginController, Obs
 		System.out.println("LoginController checkName() returning true");
 		return true;
 	}
-	
+
+	public boolean checkLoginPassword(String loginpassword){
+		
+		for(int i = 0; i < loginpassword.length(); i++){
+			char c = loginpassword.charAt(i);
+			if(Character.isLetter(c) || Character.isDigit(c)|| c == '-' || c == '_'){ }
+			else{
+				getMessageView().setMessage("The password must be five or "
+						+ "more characters: letters, digits, _ and - ");
+				getMessageView().showModal();
+				return false;
+			}
+		}
+		return true; 
+		
+	}
 	/**
 	 * Checks that the input conditions of registering a new password 
 	 * @param String registerpassword, String repeatregisterpassword

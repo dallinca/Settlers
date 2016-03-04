@@ -2,8 +2,12 @@ package client.roll;
 
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import shared.model.Game;
 import client.Client;
+import client.ClientFacade;
 import client.base.*;
 
 
@@ -13,7 +17,7 @@ import client.base.*;
 public class RollController extends Controller implements IRollController, Observer {
 
 	private IRollResultView resultView;
-
+	private Timer rollTimer;
 	/**
 	 * RollController constructor
 	 * 
@@ -24,12 +28,12 @@ public class RollController extends Controller implements IRollController, Obser
 
 		super(view);
 		System.out.println("RollController RollController()");
-		
+
 		setResultView(resultView);
-		
+		this.rollTimer = new Timer();
 		Client.getInstance().addObserver(this);
 	}
-	
+
 	public IRollResultView getResultView() {
 		System.out.println("RollController getResultView()");
 		return resultView;
@@ -43,18 +47,19 @@ public class RollController extends Controller implements IRollController, Obser
 		System.out.println("RollController getRollView()");
 		return (IRollView)getView();
 	}
-	
+
 	@Override
 	public void rollDice() {
 		System.out.println("RollController rollDice()");
-		
+		rollTimer.cancel();
 		int rollValue = 0;
 		try {
 			rollValue = Client.getInstance().getGame().RollDice(Client.getInstance().getUserId());
+			ClientFacade.getInstance().rollNumber(rollValue);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 		this.resultView.setRollValue(rollValue);
 		getResultView().showModal();
 	}
@@ -64,10 +69,28 @@ public class RollController extends Controller implements IRollController, Obser
 		// TODO Auto-generated method stub
 		System.out.println("RollController update()");
 		// If the game is null just return
-		if(Client.getInstance().getGame() == null) {
+		Game game = Client.getInstance().getGame();
+		if(game == null) {
 			return;
+		}
+
+		Client client = (Client) o;
+		int userid = Client.getInstance().getUserId();
+		System.out.println("CAN ROLL DICE"+game.canDoRollDice(userid));
+		if(game.canDoRollDice(userid)){
+			
+			getRollView().showModal();
+			getRollView().setMessage("Rolling automatically in... 10 seconds");
+			int interval = 10000;
+			rollTimer.scheduleAtFixedRate(new timedPoll(), interval, 1);
 		}
 	}
 
+	class timedPoll extends TimerTask {
+		public void run() {
+			getRollView().closeModal();
+			rollDice();
+		}
+	}
 }
 
