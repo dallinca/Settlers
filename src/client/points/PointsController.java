@@ -49,10 +49,8 @@ public class PointsController extends Controller implements IPointsController, O
 	 * Each players points should init to 0
 	 */
 	private void initFromModel() {
-		System.out.println("PointsController initFromModel()");		
-		//<temp>		
-			getPointsView().setPoints(0);
-		//</temp>
+		System.out.println("PointsController initFromModel()");			
+		getPointsView().setPoints(0);
 	}
 
 	@Override
@@ -66,8 +64,7 @@ public class PointsController extends Controller implements IPointsController, O
 		if(Client.getInstance().getGame().doWeHaveAWinner()){
 			String winnersName = Client.getInstance().getGame().getCurrentPlayer().getPlayerName();
 			//player can only win the game on his turn. So all other players will receive false
-			boolean didPlayerWin = Client.getInstance().getGame().getCurrentPlayer().isPlayersTurn();
-			finishedView.setWinner(winnersName, didPlayerWin);
+			finishedView.setWinner(winnersName, true);
 			finishedView.showModal();
 		}
 		Player[] players = Client.getInstance().getGame().getAllPlayers();
