@@ -119,6 +119,12 @@ public class Game {
 
 	// CURRENT PLAYER CALLS
 	//////////////////////////////////////////
+	public boolean canDoPlayerEndTurn(int UserId) {	
+		if(UserId != currentPlayer.getPlayerId()) {
+			return false;
+		}
+		return true;
+	}
 	/**
 	 * This method will cycle through the array of players and will rotate them through the currentPlayer so the turns can proceed.
 	 * This will be helpful when the index of the player array is [3] and we need to bring it back to [0] showing that that person is next.
@@ -208,7 +214,7 @@ public class Game {
 	public boolean canDoRollDice(int UserId) {
 		// Check if the user is the current player		
 		if(UserId != currentPlayer.getPlayerId()) {
-			
+			return false;
 		}
 		else if(getStatus().equals("Rolling")){
 			return true;
