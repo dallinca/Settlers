@@ -71,7 +71,7 @@ public class Purchase {
 	}
 	
 
-	public boolean canDoPurchaseSettlement(){
+	public boolean canDoPurchaseSettlement(Object l){
 		System.out.println("Purchase canDoPurchaseSettlement()");
 		return Client.getInstance().getGame().canDoPlayerBuildSettlement(Client.getInstance().getUserId());
 	}
@@ -86,12 +86,12 @@ public class Purchase {
 	 */
 	public void purchaseCity(Object l){
 		System.out.println("Purchase purchaseCity()");
-		if (canDoPurchaseCity()) {
+		if (canDoPurchaseCity(l)) {
 			VertexLocation location = (VertexLocation) l;
 		}
 	}
 
-	public boolean canDoPurchaseCity(){
+	public boolean canDoPurchaseCity(Object l){
 		System.out.println("Purchase canDoPurchaseCity()");
 		return Client.getInstance().getGame().canDoPlayerBuildCity(Client.getInstance().getUserId());
 	}
@@ -106,16 +106,16 @@ public class Purchase {
 	 */
 	public void purchaseRoad(Object l){
 		System.out.println("Purchase purchaseRoad()");
-		//if (canDoPurchaseRoad()) {
+		if (canDoPurchaseRoad(l)) {
 			ClientFacade.getInstance().buildRoad((EdgeLocation)l );
 			System.out.println("Purchase purchaseRoad() Could Purchase");
 			return;
-		//}
-		//System.out.println("Purchase purchaseRoad() Could Not Purchase");
-		//return;
+		}
+		System.out.println("Purchase purchaseRoad() Could Not Purchase");
+		return;
 	}
 	
-	public boolean canDoPurchaseRoad(){
+	public boolean canDoPurchaseRoad(Object l){
 		System.out.println("Purchase canDoPurchaseRoad()");
 		return Client.getInstance().getGame().canDoPlayerBuildRoad(Client.getInstance().getUserId());
 	}
