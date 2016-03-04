@@ -38,4 +38,10 @@ public class RollState implements MapState {
 		return null;
 	}
 
+	@Override
+	public void initFromModel() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
