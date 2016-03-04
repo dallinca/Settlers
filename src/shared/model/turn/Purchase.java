@@ -3,6 +3,7 @@ package shared.model.turn;
 import client.Client;
 import client.ClientException;
 import client.ClientFacade;
+import shared.definitions.ResourceType;
 import shared.locations.EdgeLocation;
 import shared.locations.VertexLocation;
 import shared.model.Game;
@@ -33,8 +34,26 @@ public class Purchase {
 	}
 
 	public boolean canDoPurchaseDevelopmentCard(){
+		
 		System.out.println("Purchase canDoPurchaseDevelopmentCard()");
-		return Client.getInstance().getGame().canDoPlayerBuyDevelopmentCard(Client.getInstance().getUserId());
+		
+		Game g = Client.getInstance().getGame();
+		int ID = Client.getInstance().getUserId();
+		
+		if (!g.canDoPlayerBuyDevelopmentCard(ID)){
+			return false;
+		}
+		
+		int ore = g.getCurrentPlayer().getNumberResourcesOfType(ResourceType.ORE);
+		int sheep = g.getCurrentPlayer().getNumberResourcesOfType(ResourceType.SHEEP);
+		int wheat = g.getCurrentPlayer().getNumberResourcesOfType(ResourceType.WHEAT);
+		
+		if (ore>0&&sheep>0&&wheat>0){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 
 	/**

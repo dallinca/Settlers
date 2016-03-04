@@ -157,7 +157,10 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 		
 
 		System.out.println("This is the STATUS! " + Client.getInstance().getGame().getStatus());
-		if(Client.getInstance().getGame().getStatus().equals("FirstRound") && Client.getInstance().getGame().canDoPlayerBuildRoad(Client.getInstance().getUserId())) {
+		System.out.println("status: " + Client.getInstance().getGame().getStatus());
+		System.out.println("turnNumber: " + Client.getInstance().getGame().getTurnNumber());
+		System.out.println("canDoPlayerBuildRoad: " + Client.getInstance().getGame().canDoPlayerBuildRoad(Client.getInstance().getUserId()));
+		if(Client.getInstance().getGame().getTurnNumber() < 2 && Client.getInstance().getGame().canDoPlayerBuildRoad(Client.getInstance().getUserId())) {
 			System.out.println("\n\nWe should put up the Building Modal!\n\n");
 			if(Client.getInstance().getGame().canDoPlayerBuildRoad(Client.getInstance().getUserId())) {
 				buildRoad();
