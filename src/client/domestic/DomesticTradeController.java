@@ -1,11 +1,13 @@
 package client.domestic;
 
 import shared.definitions.*;
+import shared.model.Game;
 import shared.model.player.Player;
 
 import java.util.*;
 
 import client.Client;
+import client.ClientFacade;
 import client.base.*;
 import client.data.PlayerInfo;
 import client.misc.*;
@@ -21,6 +23,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	private IAcceptTradeOverlay acceptOverlay;
 	private boolean init, chooseSend, choosePlayer;
 	private int totalWood, totalSheep, totalOre, totalWheat, totalBrick;
+	private int tradeIndex;
 
 	/**
 	 * DomesticTradeController constructor
@@ -31,19 +34,25 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	 * @param acceptOverlay Accept trade overlay which lets the user accept or reject a proposed trade
 	 */
 	public DomesticTradeController(IDomesticTradeView tradeView, IDomesticTradeOverlay tradeOverlay,
-									IWaitView waitOverlay, IAcceptTradeOverlay acceptOverlay) {
+			IWaitView waitOverlay, IAcceptTradeOverlay acceptOverlay) {
 
 		super(tradeView);
-		
+
 		System.out.println("DomesticTradeController DomesticTradeController()");
-		
+
 		setTradeOverlay(tradeOverlay);
 		setWaitOverlay(waitOverlay);
 		setAcceptOverlay(acceptOverlay);
-		
+
+		totalWood = 0;
+		totalSheep = 0;
+		totalOre = 0;
+		totalWheat = 0;
+		totalBrick = 0;
+
 		init = true;
 	}
-	
+
 	public IDomesticTradeView getTradeView() {
 		System.out.println("DomesticTradeController getTradeView()");
 		return (IDomesticTradeView)super.getView();
@@ -78,13 +87,13 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		System.out.println("DomesticTradeController acceptOverlay()");
 		this.acceptOverlay = acceptOverlay;
 	}
-	
+
 	public void initPlayers(){
 
 		List<PlayerInfo> pl = Client.getInstance().getGameInfo().getPlayers();
 		ArrayList<PlayerInfo> temppl = new ArrayList<PlayerInfo>();
 
-		
+
 		for(int i = 0; i < pl.size(); i++){
 			if(pl.get(i).getId() == Client.getInstance().getGame().getCurrentPlayer().getPlayerId()){}
 			else{
@@ -97,11 +106,11 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		getTradeOverlay().setPlayers(playerinfo);
 		init = false;
 	}
-	
+
 	@Override
 	public void startTrade() {
 		System.out.println("DomesticTradeController startTrade()");
-		
+
 		if(init){
 			initPlayers();
 		}
@@ -124,24 +133,31 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	@Override
 	public void decreaseResourceAmount(ResourceType resource) {
 		System.out.println("DomesticTradeController decreaseResourceAmount()");
+
 	}
 	/***
 	 * the "send" button, A player can only increase a resource type if he has greater than or equal to amount of increase
 	 */
 	@Override
 	public void increaseResourceAmount(ResourceType resource) {
+
 		System.out.println("DomesticTradeController increaseResourceAmount");
-		
+
+
+
+
+
+
 		if(!choosePlayer)
 			getTradeOverlay().setStateMessage("who do you want to trade with");
-		
+
 		chooseSend = true;
 		if(chooseSend && choosePlayer){
 			getTradeOverlay().setStateMessage("Trade!");
 			getTradeOverlay().setTradeEnabled(true);
 		}
 	}
-	
+
 	/***
 	 * A player may only send offers on his turn
 	 * 
@@ -149,17 +165,24 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	@Override
 	public void sendTradeOffer() {
 		System.out.println("DomesticTradeController sendTradeOffer()");
-		
+
 		getTradeOverlay().closeModal();
 		getWaitOverlay().showModal();
 		getWaitOverlay().setMessage("trade transaction in progress...");
+		//send ints
+		ClientFacade.getInstance().offerTrade(totalBrick, totalOre, totalSheep, totalWheat, totalWood, tradeIndex);
 	}
 
 	@Override
 	public void setPlayerToTradeWith(int playerIndex) {
 		System.out.println("DomesticTradeController setPlayerToTradeWith()");
-		choosePlayer = true;
-		
+		if (playerIndex==-1){
+			choosePlayer=false;
+		}else if ((playerIndex > -1) && (playerIndex < 4)){
+			tradeIndex = playerIndex;
+			choosePlayer=true;
+		}
+		getTradeOverlay().
 		if(chooseSend && choosePlayer){
 			getTradeOverlay().setStateMessage("Trade!");
 			getTradeOverlay().setTradeEnabled(true);
@@ -169,11 +192,63 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	@Override
 	public void setResourceToReceive(ResourceType resource) {
 		System.out.println("DomesticTradeController setResourceToReceive()");
+		
+		Player p = Client.getInstance().getGame().getCurrentPlayer();
+		
+		switch(resource){
+		case WOOD: 
+			totalWood--;
+			if (p.getResourceCardHand().getNumberResourcesOfType(ResourceType.WOOD)==totalWood){
+				tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WOOD, false,true);
+			
+		}
+
 	}
 
 	@Override
 	public void setResourceToSend(ResourceType resource) {
 		System.out.println("DomesticTradeController setResourceToSend()");
+
+		/*Player p = Client.getInstance().getGame().getCurrentPlayer();
+
+		switch(resource){
+		case WOOD: if (p.getResourceCardHand().getNumberResourcesOfType(ResourceType.WOOD) >= (totalWood+1)){ 
+			totalWood++;
+			if (p.getResourceCardHand().getNumberResourcesOfType(ResourceType.WOOD)==totalWood){
+				tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WOOD, false,true);
+			}
+		}
+		break;		
+		case SHEEP: if (p.getResourceCardHand().getNumberResourcesOfType(ResourceType.SHEEP) >= (totalSheep+1)){ 
+			totalSheep++;
+			if (p.getResourceCardHand().getNumberResourcesOfType(ResourceType.SHEEP)==totalSheep){
+				tradeOverlay.setResourceAmountChangeEnabled(ResourceType.SHEEP, false,true);
+			}
+		}
+		break;		
+		case ORE: if (p.getResourceCardHand().getNumberResourcesOfType(ResourceType.ORE) >= (totalOre+1)){ 
+			totalOre++;
+			if (p.getResourceCardHand().getNumberResourcesOfType(ResourceType.ORE)==totalOre){
+				tradeOverlay.setResourceAmountChangeEnabled(ResourceType.ORE, false,true);
+			}
+		}
+		break;		
+		case WHEAT: if (p.getResourceCardHand().getNumberResourcesOfType(ResourceType.WHEAT) >= (totalWheat+1)){ 
+			totalWheat++;
+			if (p.getResourceCardHand().getNumberResourcesOfType(ResourceType.WHEAT)==totalWheat){
+				tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WHEAT, false,true);
+			}
+		}
+		break;		
+		case BRICK: 
+			if (p.getResourceCardHand().getNumberResourcesOfType(ResourceType.BRICK) >= (totalBrick+1)){ 
+				totalBrick++;
+				if (p.getResourceCardHand().getNumberResourcesOfType(ResourceType.BRICK)==totalBrick){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.BRICK, false,true);
+				}
+			}
+			break;						
+		}*/
 	}
 
 	@Override
@@ -202,10 +277,21 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
 		System.out.println("DomesticTradeController update()");
+
 		// If the game is null just return
 		if(Client.getInstance().getGame() == null) {
 			return;
 		}
+		
+		Game g = Client.getInstance().getGame();
+		
+		Player p = g.getPlayerByID(Client.getInstance().getUserId());
+		if (g.getCurrentPlayer().getPlayerId() == p.getPlayerId()){
+			
+			
+			
+		}
+		
 	}
 
 }
