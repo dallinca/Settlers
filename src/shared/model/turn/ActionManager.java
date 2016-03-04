@@ -98,11 +98,11 @@ public class ActionManager {
 	 * @param action
 	 * @param location
 	 */
-	public boolean canDoBuild(ActionType action){
+	public boolean canDoBuild(ActionType action, Object location){
 		System.out.println("ActionManager canDoBuild()");
-		if (action == ActionType.PURCHASE_CITY) return PURCHASE.canDoPurchaseCity();
-		else if (action == ActionType.PURCHASE_ROAD) return PURCHASE.canDoPurchaseRoad();
-		else if (action == ActionType.PURCHASE_SETTLEMENT) return PURCHASE.canDoPurchaseSettlement();
+		if (action == ActionType.PURCHASE_CITY) return PURCHASE.canDoPurchaseCity(location);
+		else if (action == ActionType.PURCHASE_ROAD) return PURCHASE.canDoPurchaseRoad(location);
+		else if (action == ActionType.PURCHASE_SETTLEMENT) return PURCHASE.canDoPurchaseSettlement(location);
 
 		return false;
 

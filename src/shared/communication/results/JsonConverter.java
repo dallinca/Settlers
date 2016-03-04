@@ -99,7 +99,6 @@ public class JsonConverter {
 		System.out.println(mPlayers);
 		System.out.println("About to setup XXX " + mPlayers.length + " Players");
 		
-		System.out.println("About to setup XXX " + model.turnTracker.status + " Status");
 		for(ClientModel.MPlayer mPlayer: model.getPlayers()) {
 			System.out.println(mPlayer.name);
 		}
@@ -252,7 +251,11 @@ public class JsonConverter {
 		version.setVersionNumber(model.getVersion());
 		version.setCurrentPlayer(players[model.turnTracker.getCurrentTurn()]);
 		version.setStatus(model.turnTracker.getStatus());
-
+		System.out.println("About to setup XXX " + model.turnTracker.status + " Status");
+		if(model.turnTracker.getStatus() != "FirstRound" && model.turnTracker.getStatus() != "SecondRound") {
+			version.setTurnNumber(3);
+		}
+		
 		if (model.turnTracker.largestArmy!=-1){
 
 			version.setLargestArmy(players[model.turnTracker.largestArmy]);
