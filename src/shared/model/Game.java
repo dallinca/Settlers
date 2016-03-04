@@ -125,6 +125,14 @@ public class Game {
 		}
 		return true;
 	}
+	
+	
+	public boolean isPlayersTurn(int UserId) {	
+		if(UserId != currentPlayer.getPlayerId()) {
+			return false;
+		}
+		return true;
+	}
 	/**
 	 * This method will cycle through the array of players and will rotate them through the currentPlayer so the turns can proceed.
 	 * This will be helpful when the index of the player array is [3] and we need to bring it back to [0] showing that that person is next.
