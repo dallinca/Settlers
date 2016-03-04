@@ -278,20 +278,23 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		// TODO Auto-generated method stub
 		System.out.println("DomesticTradeController update()");
 
+		Game game = Client.getInstance().getGame();
+		
 		// If the game is null just return
-		if(Client.getInstance().getGame() == null) {
+		if(game == null) {
 			return;
 		}
 		
-		Game g = Client.getInstance().getGame();
 		
-		Player p = g.getPlayerByID(Client.getInstance().getUserId());
-		if (g.getCurrentPlayer().getPlayerId() == p.getPlayerId()){
+		
+		//Is it the players turn?
+		if(game.isPlayersTurn(game.getCurrentPlayer().getPlayerId())){
 			
 			
+			
+		}else{
 			
 		}
-		
 	}
 
 }

@@ -1,6 +1,7 @@
 package client.turntracker;
 
 import shared.definitions.CatanColor;
+import shared.model.Game;
 import shared.model.player.Player;
 
 import java.util.Observable;
@@ -62,15 +63,18 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("TurnTrackerController update()");
+		
+		Game game = Client.getInstance().getGame();
+		
 		// If the game is null just return
-		if(Client.getInstance().getGame() == null) {
+		if(game == null) {
 			return;
 		}
 		if(init){
 			initFromModel();
 		}
-		if (Client.getInstance().getGame() != null) {
-			Player[] players = Client.getInstance().getGame().getAllPlayers();
+		if (game != null) {
+			Player[] players = game.getAllPlayers();
 			for(int i = 0; i < players.length && players[i] != null; i++){
 	
 				boolean highlight = false;
@@ -91,12 +95,17 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 						  largestArmy, longestRoad);
 			}
 		}
-		//If game state is playing then, button enabled, else disabled
-		if(Client.getInstance().getGame().getStatus().equals("Playing"))
-			getView().updateGameState("Finish Turn", true);
+		
+		//Is it the players turn
+		if(game.isPlayersTurn(game.getCurrentPlayer().getPlayerId())){
+			//If game state is playing then, button enabled, else disabled
+			if(game.getStatus().equals("Playing"))
+				getView().updateGameState("Finish Turn", true);
+			else
+				getView().updateGameState("Waiting for Other Players", false);
+		}
 		else
 			getView().updateGameState("Waiting for Other Players", false);
-		
 		init = false;
 	}
 
