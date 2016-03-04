@@ -7,6 +7,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import client.Client;
+import client.ClientFacade;
 import client.base.*;
 
 
@@ -35,6 +36,8 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	@Override
 	public void endTurn() {
 		System.out.println("TurnTrackerController endTurn()");
+		
+		ClientFacade.getInstance().finishTurn();
 		//Does this do it?
 		Client.getInstance().getGame().incrementPlayer();
 	}
@@ -88,6 +91,12 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 						  largestArmy, longestRoad);
 			}
 		}
+		//If game state is playing then, button enabled, else disabled
+		if(Client.getInstance().getGame().getStatus().equals("Playing"))
+			getView().updateGameState("Finish Turn", true);
+		else
+			getView().updateGameState("Waiting for Other Players", false);
+		
 		init = false;
 	}
 
