@@ -319,14 +319,11 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 		// If the game is null just return
 		if(Client.getInstance().getGame() == null) {
 			return;
-		} else if (Client.getInstance().getGame().getStatus().equals("Robbing")) {
-			return;
-		}
+		} 
 		
-		if (Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getUserId())) {
-
-				getTradeView().enableMaritimeTrade(true);
-		} else {
+		/*else if (Client.getInstance().getGame().getStatus().equals("Robbing")) {
+			return;
+		} else if (!Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getUserId())) {
 			//getTradeView().enableMaritimeTrade(false);
 			
 			ArrayList<ResourceType> disableEverything = new ArrayList<ResourceType>();
@@ -339,7 +336,7 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 			getTradeOverlay().showGiveOptions(resourceType);
 			getTradeOverlay().hideGetOptions();
 				
-		}
+		}*/
 		
 	
 	}
