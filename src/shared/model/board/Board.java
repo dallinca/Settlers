@@ -183,7 +183,8 @@ public class Board {
 		for(int i = 0; i < sides.length; i++) {
 			// the side either has no Municipal, or the municipal is owned by the player wanting to place a road
 			if(sides[i].getVertex().hasMunicipal() == false
-					|| sides[i].getVertex().getMunicipal().getPlayer().getPlayerId() == player.getPlayerId()) {
+					|| sides[i].getVertex().getMunicipal().getPlayer().getPlayerId() == player.getPlayerId())
+			{
 				Edge[] edges = sides[i].getEdges();
 				for(int j = 0; j < edges.length; j++) {
 					// there is an adjacent edge that has a road owned by the player wanting to place a road
@@ -240,8 +241,16 @@ public class Board {
 		
 		// player not null, edge not null, and does not have a road
 		if(player == null || player.canDoBuildInitialRoad() == false || edge == null || edge.hasRoad() == true) {
-			
 			return false;
+		}
+		// edge has an adjacent edge that has a road owned by the player, that does not
+		// have an enemy municipality on the converging vertex
+		EdgeSide[] sides = edge.getSides();
+		for(int i = 0; i < sides.length; i++) {
+			// the side either has no Municipal, or the municipal is owned by the player wanting to place a road
+			if(sides[i].getVertex().hasMunicipal() == true) {
+				return false;
+			}
 		}
 
 		// The player should be able to initialize their first two roads on any valid non-taken edge location

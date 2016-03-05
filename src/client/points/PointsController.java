@@ -69,7 +69,9 @@ public class PointsController extends Controller implements IPointsController, O
 		}
 		Player[] players = Client.getInstance().getGame().getAllPlayers();
 		for(int i = 0; i < players.length; i++){
-			getPointsView().setPoints(players[i].getVictoryPoints());
+			if(Client.getInstance().getUserId() == players[i].getPlayerId()) {
+				getPointsView().setPoints(players[i].getVictoryPoints());
+			}
 		}
 	}
 	
