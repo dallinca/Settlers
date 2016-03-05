@@ -41,7 +41,7 @@ public class DiscardController extends Controller implements IDiscardController,
 		 ore = new ArrayList<ResourceType>();
 		 brick = new ArrayList<ResourceType>();
 		 wheat = new ArrayList<ResourceType>();
-		
+		Client.getInstance().addObserver(this);
 		//int woodCount, sheepCount, oreCount, brickCount, wheatCount;
 		
 	}
