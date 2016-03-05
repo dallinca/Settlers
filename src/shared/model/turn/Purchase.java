@@ -88,7 +88,7 @@ public class Purchase {
 		System.out.println("Purchase purchaseCity()");
 		if (canDoPurchaseCity(l)) {
 			VertexLocation location = (VertexLocation) l;
-			ClientFacade.getInstance().buildSettlement(location);
+			ClientFacade.getInstance().buildCity(location);
 		}
 	}
 

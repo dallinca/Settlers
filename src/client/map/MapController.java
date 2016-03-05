@@ -325,7 +325,9 @@ public class MapController extends Controller implements IMapController, Observe
 	public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {	
 		System.out.println("MapController startMove()");
 		boolean canCancel = true;
-		if(Client.getInstance().getGame().getStatus().equals("FirstRound") || Client.getInstance().getGame().getStatus().equals("SecondRound")) {
+		if(Client.getInstance().getGame().getStatus().equals("FirstRound") ||
+				Client.getInstance().getGame().getStatus().equals("SecondRound") ||
+				Client.getInstance().getGame().getStatus().equals("Robbing")) {
 			canCancel = false;
 		}
 		System.out.println("END of STARTMOVE");
