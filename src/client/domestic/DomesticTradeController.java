@@ -114,28 +114,44 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	@Override
 	public void startTrade() {
 		System.out.println("DomesticTradeController startTrade()");
-
-		if(init)
-			initPlayers();
 		
-		//How much of each resource the player has
-		numWood = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.WOOD);
-		numWheat = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.WHEAT);
-		numSheep = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.SHEEP);
-		numOre = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.ORE);
-		numBrick = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.BRICK);
+		int userID = Client.getInstance().getUserId();
+		this.game = Client.getInstance().getGame();
 		
-		//keep track as a player increases/decreases so we can compare with the players hand
-		totalWood = 0;
-		totalSheep = 0;
-		totalOre = 0;
-		totalWheat = 0;
-		totalBrick = 0;
 		
-		getTradeOverlay().setPlayerSelectionEnabled(true);
-		getTradeOverlay().setResourceSelectionEnabled(true);
-		getTradeOverlay().setStateMessage("set the trade you want");
-		getTradeOverlay().showModal();
+		if(game.isPlayersTurn(userID)){
+			System.out.println("Legitimate trade initiated.");
+		
+			
+			if(init)
+				initPlayers();
+			
+			//How much of each resource the player has
+			numWood = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.WOOD);
+			numWheat = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.WHEAT);
+			numSheep = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.SHEEP);
+			numOre = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.ORE);
+			numBrick = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.BRICK);
+			
+			//keep track as a player increases/decreases so we can compare with the players hand
+			totalWood = 0;
+			totalSheep = 0;
+			totalOre = 0;
+			totalWheat = 0;
+			totalBrick = 0;
+			
+			getTradeOverlay().setPlayerSelectionEnabled(true);
+			getTradeOverlay().setResourceSelectionEnabled(true);
+			getTradeOverlay().setStateMessage("set the trade you want");
+			getTradeOverlay().showModal();
+		
+		}else{
+			System.out.println("Trade initiated when it is not player's turn.");
+			getTradeOverlay().setPlayerSelectionEnabled(false);
+			getTradeOverlay().setResourceSelectionEnabled(false);
+			getTradeOverlay().setStateMessage("it's not your turn");
+			getTradeOverlay().showModal();
+		}
 	}
 
 	@Override
@@ -379,13 +395,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			}
 		}
 		//Is it the players turn?
-		if(game.isPlayersTurn(userID)){
-			startTrade();
-		}else{
-			getTradeOverlay().setPlayerSelectionEnabled(false);
-			getTradeOverlay().setResourceSelectionEnabled(false);
-			getTradeOverlay().setStateMessage("it's not your turn");
-		}
+		
 	}
 
 }

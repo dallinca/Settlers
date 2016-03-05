@@ -53,7 +53,7 @@ public class RollController extends Controller implements IRollController, Obser
 	@Override
 	public void rollDice() {
 		rollTimer.cancel();
-		getRollView().closeModal();
+	
 		System.out.println("RollController rollDice()");
 		int rollValue = 0;
 		try {
@@ -84,13 +84,14 @@ public class RollController extends Controller implements IRollController, Obser
 			getRollView().showModal();
 		
 			int interval = 10000;
-			getRollView().setMessage("Rolling automatically in..."+10+" seconds");
+			getRollView().setMessage("Rolling automatically in...10 seconds");
 			rollTimer.scheduleAtFixedRate(new timedPoll(), interval, 1000);
 		}
 	}
 			
 	class timedPoll extends TimerTask {
 		public void run() {
+			getRollView().closeModal();
 			rollDice();
 		}
 	}
