@@ -272,6 +272,8 @@ public class PlayerPieces {
 	  * @param edge
 	  */
 	   public void placeRoad(Edge edge) throws AllPiecesPlayedException {
+		   System.out.println("\n\nPlayerPieces placeRoad()");
+		   System.out.println("num unplayed road: " + getNumberUnplayedRoads() + "\n\n");
 		   if(hasAvailableRoad() == false) {
 			   throw new AllPiecesPlayedException("All the Roads have already been placed");
 		   }
@@ -282,6 +284,7 @@ public class PlayerPieces {
 				   break; // leave for loop
 			   }
 		   }
+		   System.out.println("num unplayed road: " + getNumberUnplayedRoads() + "\n\n");
 	   }
 
 	   /**

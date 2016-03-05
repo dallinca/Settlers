@@ -202,8 +202,8 @@ public class MapController extends Controller implements IMapController, Observe
 	public void placeRoad(EdgeLocation edgeLoc) {
 		System.out.println("MapController placeRoad()");
 		try {
-			Client.getInstance().getGame().placeRoadOnEdge( Client.getInstance().getUserId(), edgeLoc);
 			ActionManager.getInstance().doBuild(ActionType.PURCHASE_ROAD, edgeLoc);
+			//Client.getInstance().getGame().placeRoadOnEdge( Client.getInstance().getUserId(), edgeLoc);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -219,7 +219,8 @@ public class MapController extends Controller implements IMapController, Observe
 	public void placeSettlement(VertexLocation vertLoc) {
 		System.out.println("MapController placeSettlement()");
 		try {
-			Client.getInstance().getGame().placeSettlementOnVertex(Client.getInstance().getUserId(), vertLoc);
+			ActionManager.getInstance().doBuild(ActionType.PURCHASE_SETTLEMENT, vertLoc);
+			//Client.getInstance().getGame().placeSettlementOnVertex(Client.getInstance().getUserId(), vertLoc);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -330,15 +331,13 @@ public class MapController extends Controller implements IMapController, Observe
 		if(Client.getInstance().getGame() == null) {
 			return;
 		}
-		Client ZeClieeent = (Client) o;
-		System.out.println("Roads unbuilt: " + ZeClieeent.getGame().getCurrentPlayer().getNumberUnplayedRoads());
 		//store current Game in controller
 		//this.game = (Game)arg;
-		if(init) {
+		//if(init) {
 			initFromModel();
-			init = false;
-			return;
-		}
+		//	init = false;
+		//	return;
+		//}
 		
 	}
 	
