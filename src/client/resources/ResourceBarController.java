@@ -5,7 +5,9 @@ import java.util.*;
 import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
 import shared.model.Game;
+import shared.model.turn.ActionManager;
 import client.Client;
+import client.ClientFacade;
 import client.base.*;
 
 
@@ -160,12 +162,15 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 		System.out.println("status: " + Client.getInstance().getGame().getStatus());
 		System.out.println("turnNumber: " + Client.getInstance().getGame().getTurnNumber());
 		System.out.println("canDoPlayerBuildRoad: " + Client.getInstance().getGame().canDoPlayerBuildRoad(Client.getInstance().getUserId()));
-		if(Client.getInstance().getGame().getTurnNumber() < 2 && Client.getInstance().getGame().canDoPlayerBuildRoad(Client.getInstance().getUserId())) {
+		if(Client.getInstance().getGame().getTurnNumber() < 2 && Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getUserId())) {
 			System.out.println("\n\nWe should put up the Building Modal!\n\n");
 			if(Client.getInstance().getGame().canDoPlayerBuildRoad(Client.getInstance().getUserId())) {
 				buildRoad();
-			} else {
+			} else if(Client.getInstance().getGame().canDoPlayerBuildSettlement(Client.getInstance().getUserId())) {
 				buildSettlement();
+			} else {
+				// We must end the turn!
+				ClientFacade.getInstance().finishTurn();
 			}
 		}
 	}
