@@ -188,7 +188,10 @@ public class Board {
 				Edge[] edges = sides[i].getEdges();
 				for(int j = 0; j < edges.length; j++) {
 					// there is an adjacent edge that has a road owned by the player wanting to place a road
-					if(edges[j].hasRoad() && edges[j].getRoad().getPlayer().getPlayerId() == player.getPlayerId()) {
+					if (edges[j]==null){
+						return false;
+					}
+					else if(edges[j].hasRoad() && edges[j].getRoad().getPlayer().getPlayerId() == player.getPlayerId()) {
 						return true; // We found a case that makes it possible to place a road
 					}
 				}

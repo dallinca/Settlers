@@ -71,7 +71,7 @@ public class ClientFacade {
 	
 	
 	protected ClientFacade(){
-		System.out.println("ClientFacade ClientFacade()");
+		//System.out.println("ClientFacade ClientFacade()");
 		sp = new ServerProxy();
 		//this.c = Client.getInstance();
 	}
@@ -186,7 +186,7 @@ public class ClientFacade {
 	 * @post Communicator will return usable PollServer_Result.
 	 */
 	public GetVersion_Result getVersion()  {
-		System.out.println("ClientFacade getVersion()");
+		//System.out.println("ClientFacade getVersion()");
 		GetVersion_Params request;
 		GetVersion_Result result; 
 		
@@ -201,12 +201,12 @@ public class ClientFacade {
 			result = sp.getVersion(request);
 			if(!result.isUpToDate()){
 				if(result.getGame() != null) {
-					System.out.println("UPDATING GAME");
+				//	System.out.println("UPDATING GAME");
 					updateGame(result.getGame());
 				}
 			}
 			else{
-				System.out.println("Up to date.");
+				//System.out.println("Up to date.");
 			}
 
 		} catch (ClientException e) {			

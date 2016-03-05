@@ -6,6 +6,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
 
 import shared.model.Game;
 import client.Client;
@@ -53,14 +54,16 @@ public class RollController extends Controller implements IRollController, Obser
 	@Override
 	public void rollDice() {
 		rollTimer.cancel();
-	
+		rollTimer = new Timer();
+
 		System.out.println("RollController rollDice()");
 		int rollValue = 0;
 		try {
 			rollValue = Client.getInstance().getGame().RollDice(Client.getInstance().getUserId());
 			ClientFacade.getInstance().rollNumber(rollValue);
 			this.resultView.setRollValue(rollValue);
-			getResultView().showModal();
+			getRollView().closeModal();
+			getResultView().showModal();			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -73,25 +76,25 @@ public class RollController extends Controller implements IRollController, Obser
 		System.out.println("RollController update()");
 		// If the game is null just return
 		Game game = Client.getInstance().getGame();
+		int userid = Client.getInstance().getUserId();
+		
 		if(game == null) {
 			return;
-		}
+		} else if(game.canDoRollDice(userid)){
+			
+			rollTimer.schedule(new timedRollDice(), 5000);
 
-		//Client client = (Client) o;
-		int userid = Client.getInstance().getUserId();
-		if(game.canDoRollDice(userid)){
-
-			getRollView().showModal();
-		
-			int interval = 10000;
-			getRollView().setMessage("Rolling automatically in...10 seconds");
-			rollTimer.scheduleAtFixedRate(new timedPoll(), interval, 1000);
+			getRollView().setMessage("Rolling automatically in 5 seconds");
+			if (getRollView().isModalShowing()==false){
+				System.out.println("Roll view displayed!");
+				getRollView().showModal();
+			}						
+			
 		}
 	}
-			
-	class timedPoll extends TimerTask {
+
+	class timedRollDice extends TimerTask {
 		public void run() {
-			getRollView().closeModal();
 			rollDice();
 		}
 	}

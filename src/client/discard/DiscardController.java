@@ -268,23 +268,19 @@ public class DiscardController extends Controller implements IDiscardController,
 	public void update(Observable o, Object arg) {
 		System.out.println("DiscardController update()");
 		// If the game is null just return
-		if(Client.getInstance().getGame() == null) {
-			return;
-		}
-		
 		Game game = Client.getInstance().getGame();
-		Player cp = game.getPlayerByID(Client.getInstance().getUserId());
-		//int userID = Client.getInstance().getUserId();
 		
 		if(game == null) {
 			return;
-		}
-		else if (game.getStatus().equals("Discarding")){
+		}else if (game.getStatus().equals("Discarding")){
+			
+			Player cp = game.getPlayerByID(Client.getInstance().getUserId());
+			
 			System.out.println("Satus discarded");
+			
 			if (cp.isHasDiscarded()){
 				getWaitView().showModal();
-			}
-			if (cp.getResourceCardHandSize()>7){
+			} else if (cp.getResourceCardHandSize()>7){
 				System.out.println("Player target for discard.");
 				init();			
 				getDiscardView().showModal();	
