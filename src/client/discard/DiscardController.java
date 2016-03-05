@@ -71,7 +71,7 @@ public class DiscardController extends Controller implements IDiscardController,
 		if( resource == ResourceType.BRICK){
 			brick.add(resource);
 			getDiscardView().setResourceDiscardAmount(resource, brick.size());
-			if(brick.size() >= numWood){
+			if(brick.size() >= numBrick){
 				getDiscardView().setResourceAmountChangeEnabled(resource, false, true);
 			}else{
 				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
@@ -114,12 +114,12 @@ public class DiscardController extends Controller implements IDiscardController,
 			}
 		}
 		
-		if(amountToDiscard == totalToDiscard){
-			getDiscardView().setResourceAmountChangeEnabled(resource.BRICK, false, true);
-			getDiscardView().setResourceAmountChangeEnabled(resource.ORE, false, true);
-			getDiscardView().setResourceAmountChangeEnabled(resource.SHEEP, false, true);
-			getDiscardView().setResourceAmountChangeEnabled(resource.WHEAT, false, true);
-			getDiscardView().setResourceAmountChangeEnabled(resource.WOOD, false, true);
+		if(amountToDiscard == (totalToDiscard/2)){
+			getDiscardView().setResourceAmountChangeEnabled(resource.BRICK, false, !brick.isEmpty());
+			getDiscardView().setResourceAmountChangeEnabled(resource.ORE, false, !ore.isEmpty());
+			getDiscardView().setResourceAmountChangeEnabled(resource.SHEEP, false, !sheep.isEmpty());
+			getDiscardView().setResourceAmountChangeEnabled(resource.WHEAT, false, !wheat.isEmpty());
+			getDiscardView().setResourceAmountChangeEnabled(resource.WOOD, false, !wood.isEmpty());
 			getDiscardView().setDiscardButtonEnabled(true);
 		}else{
 			getDiscardView().setDiscardButtonEnabled(false);
