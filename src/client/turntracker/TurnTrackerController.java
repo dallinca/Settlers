@@ -92,7 +92,6 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 					longestRoad = true;
 					//players[i].setHasLongestRoad(true);
 				}
-
 				getView().updatePlayer(players[i].getPlayerIndex(), players[i].getVictoryPoints(), highlight,
 						largestArmy, longestRoad);
 			}
