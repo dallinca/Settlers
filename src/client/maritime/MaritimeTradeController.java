@@ -72,12 +72,10 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 		System.out.println("MaritimeTradeController startTrade()");
 		
 		boolean canTrade = ActionManager.getInstance().canDoPurchase(ActionType.TRADE_BANK);
-		boolean isPlayersTurn = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).isPlayersTurn();
+		boolean isPlayersTurn = Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getPlayerIndex());
 		ArrayList<ResourceType> resourceArray = new ArrayList<ResourceType>();
 		
 		if(isPlayersTurn){
-			
-			
 			
 			if (canTrade) {
 				
