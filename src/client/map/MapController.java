@@ -128,7 +128,7 @@ public class MapController extends Controller implements IMapController, Observe
 		// Init all the roads, settlements, and cities!
 		for(Player player: Client.getInstance().getGame().getAllPlayers()) {
 			for(Road road: player.getPlayerPieces().getRoads()) {
-				// Only place the peice on the map on the gui if it is assigned a location in the model
+				// Only place the piece on the map on the gui if it is assigned a location in the model
 				if(road.getEdge() != null) {
 					HexLocation hx = new HexLocation(road.getEdge().getTheirX_coord(), road.getEdge().getTheirY_coord());
 					EdgeLocation el = new EdgeLocation(hx, road.getEdge().getTheirEdgeDirection());
@@ -137,7 +137,7 @@ public class MapController extends Controller implements IMapController, Observe
 			}
 			for(Settlement settlement: player.getPlayerPieces().getSettlements()) {
 				if(settlement.getVertex() != null) {
-					// Only place the peice on the map on the gui if it is assigned a location in the model
+					// Only place the piece on the map on the gui if it is assigned a location in the model
 					HexLocation hx = new HexLocation(settlement.getVertex().getTheirX_coord_ver(), settlement.getVertex().getTheirY_coord_ver());
 					VertexLocation vl = new VertexLocation(hx, settlement.getVertex().getTheirVertexDirection());
 					getView().placeSettlement(vl, settlement.getPlayer().getPlayerColor());
@@ -146,7 +146,7 @@ public class MapController extends Controller implements IMapController, Observe
 			}
 			for(City city: player.getPlayerPieces().getCities()) {
 				if(city.getVertex() != null) {
-					// Only place the peice on the map on the gui if it is assigned a location in the model
+					// Only place the piece on the map on the gui if it is assigned a location in the model
 					HexLocation hx = new HexLocation(city.getVertex().getTheirX_coord_ver(), city.getVertex().getTheirY_coord_ver());
 					VertexLocation vl = new VertexLocation(hx, city.getVertex().getTheirVertexDirection());
 					getView().placeCity(vl, city.getPlayer().getPlayerColor());
