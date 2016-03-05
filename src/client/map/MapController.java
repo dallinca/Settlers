@@ -268,7 +268,7 @@ public class MapController extends Controller implements IMapController, Observe
 				//getView().placeRobber(hexLoc);
 
 				//getRobView().closeModal();
-				Set<RobPlayerInfo> victims = new HashSet<RobPlayerInfo>();
+				LinkedList<RobPlayerInfo> victims = new LinkedList<RobPlayerInfo>();
 
 				Vertex[] vertices = game.getBoard().getHex(hexLoc).getAdjacentVertices();
 
@@ -287,8 +287,16 @@ public class MapController extends Controller implements IMapController, Observe
 								p.getNumberResourcesOfType(ResourceType.WOOD);
 						rbi.setNumCards(numCards);
 						rbi.setPlayerIndex(p.getPlayerIndex());
+						
+						boolean accountedFor = false;
+						for (RobPlayerInfo current : victims){
+							if (rbi.getColor() == current.getColor()){
+								accountedFor = true;
+								break;
+							}
+						}
 
-						if (!victims.contains(rbi)){
+						if (!accountedFor){
 							victims.add(rbi);
 						}
 					}
@@ -394,6 +402,7 @@ public class MapController extends Controller implements IMapController, Observe
 		initFromModel();
 
 		if (game.getStatus().equals("Robbing")&&game.isPlayersTurn(Client.getInstance().getUserId())){
+			System.out.println("Robber time!");
 			startMove(PieceType.ROBBER, true, true);
 		}
 		return;

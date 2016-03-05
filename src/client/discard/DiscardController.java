@@ -1,10 +1,12 @@
 package client.discard;
 
 import shared.definitions.*;
+import shared.model.Game;
 
 import java.util.*;
 
 import client.Client;
+import client.ClientFacade;
 import client.base.*;
 import client.misc.*;
 
@@ -19,6 +21,7 @@ public class DiscardController extends Controller implements IDiscardController,
 	private ArrayList<ResourceType> wood, sheep, ore, brick, wheat;
 	
 	private int numWood, numWheat, numSheep, numOre, numBrick; 
+	private boolean doneDiscarding;
 	
 	/**
 	 * DiscardController constructor
@@ -38,6 +41,9 @@ public class DiscardController extends Controller implements IDiscardController,
 		 ore = new ArrayList<ResourceType>();
 		 brick = new ArrayList<ResourceType>();
 		 wheat = new ArrayList<ResourceType>();
+		
+		//int woodCount, sheepCount, oreCount, brickCount, wheatCount;
+		
 	}
 
 	public IDiscardView getDiscardView() {
@@ -185,7 +191,7 @@ public class DiscardController extends Controller implements IDiscardController,
 	}
 	
 	public void init(){
-		
+
 		numWood = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.WOOD);
 		numWheat = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.WHEAT);
 		numSheep = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.SHEEP);
@@ -229,10 +235,13 @@ public class DiscardController extends Controller implements IDiscardController,
 	public void discard() {
 		System.out.println("DiscardController discard()");
 		
-		init();	
+		//init();
 		
 		if(amountToDiscard == totalToDiscard){
-			//getDiscardView().closeModal();
+			getDiscardView().closeModal();
+			getWaitView().showModal();
+			ClientFacade.getInstance().discardCards(brick.size(), ore.size(), sheep.size(), wheat.size(), wood.size());
+			doneDiscarding = true;
 		}
 	}
 
@@ -240,10 +249,26 @@ public class DiscardController extends Controller implements IDiscardController,
 	public void update(Observable o, Object arg) {
 		System.out.println("DiscardController update()");
 		// If the game is null just return
-		if(Client.getInstance().getGame() == null) {
+		
+		Game game = Client.getInstance().getGame();
+		//int userID = Client.getInstance().getUserId();
+		if(game == null) {
 			return;
+		}else if (game.getStatus().equals("Discarding")){
+			if (Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getResourceCardHandSize()>7
+					 && !doneDiscarding){
+				init();			
+				getDiscardView().showModal();	
+			}
+			else{
+				getWaitView().showModal();
+				doneDiscarding = true;
+			}						
 		}
-		// TODO Auto-generated method stub
+		else{
+			getWaitView().closeModal();
+			doneDiscarding = false;
+		}
 	}
 
 }

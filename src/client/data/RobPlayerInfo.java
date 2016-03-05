@@ -39,21 +39,6 @@ public class RobPlayerInfo extends PlayerInfo
 		int result = super.hashCode();
 		result = prime * result + numCards;
 		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		RobPlayerInfo other = (RobPlayerInfo) obj;
-		if (this.getId() != other.getId())
-			return false;		
-		return true;
-	}
-	
+	}	
 }
 
