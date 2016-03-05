@@ -399,6 +399,7 @@ public class ClientFacade {
 		System.out.println("ClientFacade buildRoad()");
 		
 		int playerIndex = Client.getInstance().getPlayerIndex();
+		System.out.println("\n\nPlayer Index: " + playerIndex + "\n\n");
 		boolean free = Client.getInstance().getGame().isInSetUpPhase();
 		
 		BuildRoad_Result result; 

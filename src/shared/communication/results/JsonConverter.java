@@ -149,6 +149,9 @@ public class JsonConverter {
 			if(mPlayer.getPlayerIndex() == model.turnTracker.currentTurn) {
 				player.setPlayersTurn(true);
 			}
+			if(mPlayer.getPlayerID() == Client.getInstance().getUserId()) {
+				Client.getInstance().setPlayerIndex(mPlayer.getPlayerIndex());
+			}
 		}
 
 		// Init the BOARD
