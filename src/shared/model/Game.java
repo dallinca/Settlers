@@ -3,6 +3,8 @@ package shared.model;
 import java.util.ArrayList;
 import java.util.Random;
 
+import client.data.TradeInfo;
+import shared.communication.results.ClientModel;
 import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
 import shared.definitions.PortType;
@@ -27,7 +29,7 @@ import shared.model.board.Vertex;
  * It also keeps track of how many players there are, who is next, and who is the current player.
  */
 public class Game {
-	
+
 	//private boolean inSetUpPhase = true; // This is a state boolean for the first two setup rounds
 	private Player[] players = null;
 	private Player currentPlayer = null;
@@ -44,9 +46,11 @@ public class Game {
 	private Line[] history;
 	private int winner = -1;
 	
+	private TradeInfo tradeOffer;
+
 	// CONSTRUCTORS
 	//////////////////////////////////////////
-	
+
 	/**
 	 * For testing use, self initializing
 	 * 
@@ -81,7 +85,7 @@ public class Game {
 		players[1] = two;
 		players[2] = three;
 		players[3] = four;
-		
+
 		currentPlayer = players[0];
 		this.board = board;
 		System.out.println("Game constructor 2 was called");
@@ -98,12 +102,12 @@ public class Game {
 		players[1] = two;
 		players[2] = three;
 		players[3] = four;
-		
+
 		currentPlayer = players[0];
 		bank = new Bank();
 		board = board1;
 	}
-	
+
 	/**
 	 * @pre the player objects passed in are not null, neither is the Board.
 	 * 
@@ -111,7 +115,7 @@ public class Game {
 	 */
 	public Game(Player[] players, Board board, Bank bank) {
 		this.players = players;
-		
+
 		this.bank = bank;
 		this.board = board;
 	}
@@ -125,7 +129,7 @@ public class Game {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Returns whether it is currently the players turn or not
 	 * 
@@ -138,7 +142,7 @@ public class Game {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * This method will cycle through the array of players and will rotate them through the currentPlayer so the turns can proceed.
 	 * This will be helpful when the index of the player array is [3] and we need to bring it back to [0] showing that that person is next.
@@ -191,8 +195,8 @@ public class Game {
 			}
 		}
 	}
-	
-	
+
+
 	/**
 	 * This method may be beneficial in the event of some other aspect of the game asking which player's turn it is. Perhaps whether or not to enable the starting of a trade on a players turn.
 	 * 
@@ -203,7 +207,7 @@ public class Game {
 	public Player getCurrentPlayer() {
 		return currentPlayer;
 	}
-	
+
 	/**
 	 * Every time a turn starts, this method is called.
 	 * 
@@ -217,7 +221,7 @@ public class Game {
 
 	// ROLL CALLS
 	//////////////////////////////////////////
-	
+
 	/**
 	 * Checks to see if the specified player can roll the dice
 	 * 
@@ -235,7 +239,7 @@ public class Game {
 
 		return false;
 	}
-	
+
 	/**
 	 * Rolls the Dice
 	 * 
@@ -257,7 +261,7 @@ public class Game {
 		// If the roll is a seven, tell the client and wait for attempts to move the robber
 		return rollValue;
 	}
-	
+
 	/**
 	 * The players all collect resources on the specified rollValue, from the given Bank
 	 * 
@@ -272,41 +276,41 @@ public class Game {
 			player.collectResources(rollValue, bank);
 		}
 	}
-	
-	
+
+
 	// RESOURCE BAR CAN-DO CALLS
 	//////////////////////////////////////////
 
-	   /**
-	    * Returns the number of unplayed roads for the specified user, for the gui count.<br>
-	    * return 0 if the given id is not found in the game
-	    * 
-	    * @return the number of unplayed roads, for the gui count
-	    */
-	   public int getNumberUnplayedRoads(int UserId) {
-		   return getPlayerByID(UserId).getNumberUnplayedRoads();
-	   }
+	/**
+	 * Returns the number of unplayed roads for the specified user, for the gui count.<br>
+	 * return 0 if the given id is not found in the game
+	 * 
+	 * @return the number of unplayed roads, for the gui count
+	 */
+	public int getNumberUnplayedRoads(int UserId) {
+		return getPlayerByID(UserId).getNumberUnplayedRoads();
+	}
 
-	   /**
-	    * Returns the number of unplayed cities for the specified user, for the gui count.<br>
-	    * return 0 if the given id is not found in the game
-	    * 
-	    * @return the number of unplayed cities, for the gui count
-	    */
-	   public int getNumberUnplayedCities(int UserId) {
-		   return getPlayerByID(UserId).getNumberUnplayedCities();
-	   }	
+	/**
+	 * Returns the number of unplayed cities for the specified user, for the gui count.<br>
+	 * return 0 if the given id is not found in the game
+	 * 
+	 * @return the number of unplayed cities, for the gui count
+	 */
+	public int getNumberUnplayedCities(int UserId) {
+		return getPlayerByID(UserId).getNumberUnplayedCities();
+	}	
 
-	   /**
-	    * Returns the number of unplayed settlements for the specified user, for the gui count.<br>
-	    * return 0 if the given id is not found in the game
-	    * 
-	    * @return the number of unplayed settlements, for the gui count
-	    */
-	   public int getNumberUnplayedSettlements(int UserId) {
-		   return getPlayerByID(UserId).getNumberUnplayedSettlements();
-	   }
-	
+	/**
+	 * Returns the number of unplayed settlements for the specified user, for the gui count.<br>
+	 * return 0 if the given id is not found in the game
+	 * 
+	 * @return the number of unplayed settlements, for the gui count
+	 */
+	public int getNumberUnplayedSettlements(int UserId) {
+		return getPlayerByID(UserId).getNumberUnplayedSettlements();
+	}
+
 	/**
 	 * This method polls the player to see if the player can build a road and then returns the result to that which called it (most likely the client)
 	 * @return a true or false to if the player can build a road there.
@@ -329,7 +333,7 @@ public class Game {
 			return currentPlayer.canDoBuyRoad();
 		}
 	}
-	
+
 	/**
 	 * Asks the player if he or she can build a settlement and tells the client that.
 	 * @return
@@ -344,7 +348,7 @@ public class Game {
 		}
 		return currentPlayer.canDoBuySettlement();
 	}
-	
+
 	/**
 	 * Asks the player if he or she can build a city and tells the client that.
 	 * @return
@@ -355,7 +359,7 @@ public class Game {
 		}
 		return currentPlayer.canDoBuyCity();
 	}
-	
+
 	/**
 	 * Asks the player if he or she can buy a development card and tells the client that.
 	 * @return
@@ -369,7 +373,7 @@ public class Game {
 
 	// DEVELOPMENT CARD ACTION CALLS
 	//////////////////////////////////////////
-	
+
 	/**
 	 * TODO Javadoc and Implement
 	 * 
@@ -381,7 +385,7 @@ public class Game {
 			currentPlayer.buyDevelopmentCard(bank);
 		}
 	}
-	
+
 	/**
 	 * This method stands to show if the player CAN use one of his/her un-used dev Cards of the type you ask it about.
 	 * @param devCardType
@@ -394,7 +398,7 @@ public class Game {
 		} 
 		return false;
 	}
-	
+
 	/**
 	 * This method counts up and returns how many unused cards the player has of the specified devCardType
 	 * 
@@ -403,8 +407,8 @@ public class Game {
 	public int numberUnplayedDevCards(int userID, DevCardType devCardType) {
 		return currentPlayer.numberUnplayedDevCards(devCardType);
 	}
-	
-	
+
+
 	/**
 	 * This card is special because it is the only development card that references the bank, so additional checks need to be made, and so for security reasons it gets its own method to do so.
 	 */
@@ -422,11 +426,11 @@ public class Game {
 				}
 			}
 			return currentPlayer.canDoPlayDevelopmentCard(turnNumber, DevCardType.YEAR_OF_PLENTY);
-			
+
 		}
 		return false;
 	}
-	
+
 	/**
 	 * TODO Javadoc and Implement
 	 * 
@@ -436,58 +440,58 @@ public class Game {
 	 * @throws Exception
 	 */
 	public boolean useDevelopmentCard(int userID, DevCardType devCardType, ResourceType[] resourceType) throws Exception {
-		
+
 		if (currentPlayer.getPlayerId() == userID) {
-		
+
 			if (currentPlayer.canDoPlayDevelopmentCard(turnNumber, devCardType)) {
 				switch (devCardType) {
-					case MONOPOLY:
-						if (resourceType == null || resourceType.length > 1) {
-							throw new Exception("Trying to use monopoly on more than one resource!");
+				case MONOPOLY:
+					if (resourceType == null || resourceType.length > 1) {
+						throw new Exception("Trying to use monopoly on more than one resource!");
+					}
+					//Declare a Resource the player wants, and then extract it from all players who have it.
+					for (int i = 0; i < players.length; i++) {
+						if (players[i] != currentPlayer) {
+							//If not the current player, ask the player for an Array list of it's resource card of that type
+							currentPlayer.conformToMonopoly(resourceType[0]).addAll(players[i].conformToMonopoly(resourceType[0]));
+							players[i].conformToMonopoly(resourceType[0]).clear();
 						}
-						//Declare a Resource the player wants, and then extract it from all players who have it.
-						for (int i = 0; i < players.length; i++) {
-							if (players[i] != currentPlayer) {
-								//If not the current player, ask the player for an Array list of it's resource card of that type
-								currentPlayer.conformToMonopoly(resourceType[0]).addAll(players[i].conformToMonopoly(resourceType[0]));
-								players[i].conformToMonopoly(resourceType[0]).clear();
+					}
+					setVersionNumber(versionNumber++);
+					return doWeHaveAWinner();
+				case YEAR_OF_PLENTY:
+					if (canDoPlayerUseYearOfPlenty(resourceType, userID)) {
+						//Add two resources of the types specified to the currentPlayers hand
+						if (resourceType.length == 1) {
+							ResourceCard resource = bank.playerTakeResource(resourceType[0]);
+							//some sneaky idea that realizes conformToMonopoly returns the arraylist of that players cards of a specified type.
+							currentPlayer.conformToMonopoly(resourceType[0]).add(resource);;
+							//repeat
+							resource = bank.playerTakeResource(resource.getResourceType());
+							currentPlayer.conformToMonopoly(resourceType[0]).add(resource);
+						}
+						else if (resourceType.length == 2) {
+							for (int g = 0; g < resourceType.length; g++) {
+								ResourceCard resource = bank.playerTakeResource(resourceType[g]);
+								//some sneaky idea that realizes conformToMonopoly returns the arraylist of that players cards of a specified type.
+								currentPlayer.conformToMonopoly(resourceType[g]).add(resource);
 							}
 						}
 						setVersionNumber(versionNumber++);
 						return doWeHaveAWinner();
-					case YEAR_OF_PLENTY:
-						if (canDoPlayerUseYearOfPlenty(resourceType, userID)) {
-							//Add two resources of the types specified to the currentPlayers hand
-							if (resourceType.length == 1) {
-								ResourceCard resource = bank.playerTakeResource(resourceType[0]);
-								//some sneaky idea that realizes conformToMonopoly returns the arraylist of that players cards of a specified type.
-								currentPlayer.conformToMonopoly(resourceType[0]).add(resource);;
-								//repeat
-								resource = bank.playerTakeResource(resource.getResourceType());
-								currentPlayer.conformToMonopoly(resourceType[0]).add(resource);
-							}
-							else if (resourceType.length == 2) {
-								for (int g = 0; g < resourceType.length; g++) {
-									ResourceCard resource = bank.playerTakeResource(resourceType[g]);
-									//some sneaky idea that realizes conformToMonopoly returns the arraylist of that players cards of a specified type.
-									currentPlayer.conformToMonopoly(resourceType[g]).add(resource);
-								}
-							}
-							setVersionNumber(versionNumber++);
-							return doWeHaveAWinner();
-						} else {
-							throw new Exception("The bank has not what you seek.");
-						}
-					default: throw new Exception("Wrong declaration for a development card of this type.");
+					} else {
+						throw new Exception("The bank has not what you seek.");
+					}
+				default: throw new Exception("Wrong declaration for a development card of this type.");
 				}
 			}
 		} else {
 			throw new Exception("You cannot use a development Card");
 		}
-		
+
 		return doWeHaveAWinner();
 	}
-	
+
 	/**
 	 * This method Uses a development card and marks it as played
 	 * 
@@ -497,23 +501,23 @@ public class Game {
 	 */
 	public boolean useDevelopmentCard(int userID, DevCardType devCardType) throws Exception {
 		if (currentPlayer.getPlayerId() == userID) {
-		
+
 			if (currentPlayer.canDoPlayDevelopmentCard(turnNumber, devCardType)) {
-			//Marks the card as played
-			currentPlayer.playDevelopmentCard(turnNumber, devCardType);
-			
-			switch (devCardType) {
+				//Marks the card as played
+				currentPlayer.playDevelopmentCard(turnNumber, devCardType);
+
+				switch (devCardType) {
 				case SOLDIER:
 					//Do they have more than three soldiers? Do they have the most soldiers? If so, award them the Largest Army award (assuming they don't already have it) and take it from the previous title holder
 					//Must move robber to a different hex
-									
+
 					boolean firstTime = true;
-					
+
 					//Initial selection of LargestArmy recipient.
 					if (currentPlayer.getNumberOfSoldiersPlayed() == 3) {
 						for (int i = 0; i < players.length; i++) {
 							if (players[i].getPlayerId() != currentPlayer.getPlayerId() && players[i].getNumberOfSoldiersPlayed() >= 3) {
-									firstTime = false;
+								firstTime = false;
 							}
 						}
 						if (firstTime) {
@@ -528,66 +532,66 @@ public class Game {
 					if (currentPlayer.getNumberOfSoldiersPlayed() >= 3 && !firstTime) {
 						if (currentPlayer.getNumberOfSoldiersPlayed() > largestArmy.getNumberOfSoldiersPlayed() && currentPlayer.getPlayerId() != largestArmy.getPlayerId()) {
 							//indexOfLargestArmy = currentPlayer.getPlayerId();
-							
+
 							for (int i = 0; i < players.length; i++) {
 								if (largestArmy.getPlayerId() == players[i].getPlayerId()) {
 									players[i].decrementVictoryPoints();
 									players[i].decrementVictoryPoints();
 								}
 							}
-						
+
 							largestArmy = currentPlayer;
 							currentPlayer.incrementVictoryPoints();
 							currentPlayer.incrementVictoryPoints();
 						}
-						
+
 					}
 					//Did the Largest Army award win the game?!
 					setVersionNumber(versionNumber++);
 					return doWeHaveAWinner();
-					
+
 				case MONUMENT:
 					//Give the player their due reward
 					currentPlayer.incrementVictoryPoints();
 					setVersionNumber(versionNumber++);
 					return doWeHaveAWinner();
-					
+
 				case ROAD_BUILD:
 					//Perhaps to avoid the cost of the roads, we can have an overridden method that asserts true on the canDoBuy and asserts true and avoids the cost. Who knows
-					
+
 					setVersionNumber(versionNumber++);
 					//Did the two extra roads with the game?!?! This may result in the longest road being awarded. 
 					return doWeHaveAWinner();
+				}
+
 			}
-			
-			}
-			
+
 			else 
 				throw new Exception("Cannot Play development card, you card doesn't exist!");
 			return doWeHaveAWinner();
 		} else
 			throw new Exception("Cannot Play development card, you are not the current Player!");
 	}
-	
-	
+
+
 	/**
 	 * This method calls two others to verify that you can do a maritime trade
 	 * @pre the resource types are valid
 	 * @post returns whether or not you can do the trade or not
 	 */
 	public boolean canDoPlayerDoMaritimeTrade(ResourceType tradeIn, ResourceType receive) {
-		
+
 		if (canDoPlayerTakeResource(receive) && canTradeResourcesToBank(tradeIn)) {
 			return true;
 		} else
 			return false;
-		
+
 		//If a player is to maritime trade, they needs to have resources to trade. They needs to have either four of that kind, or a three for one port or a two for one, and again have the proper resources
 		/*if (currentPlayer.getResourceCardHandSize() == 0)
 			return false;
 		currentPlayer.*/	
 	}
-	
+
 	/**
 	 * This method does the actual trade by interacting with the bank and the Current Player to ascertain the port type and what if they can trade or not. 
 	 * @pre the resource types it receives are valid, and that tradeIn is what the player performing the trade already has
@@ -601,9 +605,9 @@ public class Game {
 			currentPlayer.getResourceCardHand().addCard(bank.playerTakeResource(receive));
 		} else
 			throw new Exception("Cannot do Maritime Trade");
-		
+
 	}
-	
+
 	/**
 	 * This method returns a 3, 4, or 2 depending on the port type you have, if any.
 	 * @pre valid resource type
@@ -612,7 +616,7 @@ public class Game {
 	public int getTradeRate(ResourceType resourceType) {
 		return currentPlayer.getTradeRate(resourceType);	
 	}
-	
+
 	/**
 	 * Does the player have cards to trade?
 	 * @pre valid resource type
@@ -631,7 +635,7 @@ public class Game {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Can you take a resource? It calls the bank to see if it has cards to take or not
 	 * @pre valid resource type
@@ -641,7 +645,7 @@ public class Game {
 	public boolean canDoPlayerTakeResource(ResourceType resourceType) {
 		return bank.canDoPlayerTakeResource(resourceType);
 	}
-	
+
 	/**
 	 * For Year of Plenty
 	 * Retrieves whether the player can take 2 of the specified resource from the bank
@@ -669,11 +673,11 @@ public class Game {
 	public boolean canDoPlayerDoDomesticTrade(int p1id, int[] p1resources, int p2id, int[] p2resources) {
 		//Is it the Current Players turn and do they have any resources?
 		//Do they have the resources he said he would trade
-		
+
 		ResourceType resourceType = null;
-		
+
 		for (int i = 0; i < p1resources.length; i++) {
-			
+
 			if (i == 0) {
 				resourceType = ResourceType.BRICK;				
 			} else if (i == 1) {
@@ -685,14 +689,14 @@ public class Game {
 			} else if (i == 4) {
 				resourceType = ResourceType.SHEEP;
 			}
-			
+
 			if(players[p1id].getNumberResourcesOfType(resourceType) < p1resources[i]) {
 				return false;
 			}
 		}
-		
+
 		for (int g = 0; g < p1resources.length; g++) {
-			
+
 			if (g == 0) {
 				resourceType = ResourceType.BRICK;				
 			} else if (g == 1) {
@@ -704,21 +708,21 @@ public class Game {
 			} else if (g == 4) {
 				resourceType = ResourceType.SHEEP;
 			}
-			
+
 			if(players[p2id].getNumberResourcesOfType(resourceType) < p2resources[g]) {
 				return false;
 			}
 		}
-		
-		
+
+
 		int p1size = 0;
-		
+
 		p1size += players[p1id].getNumberResourcesOfType(ResourceType.BRICK);
 		p1size += players[p1id].getNumberResourcesOfType(ResourceType.WOOD);
 		p1size += players[p1id].getNumberResourcesOfType(ResourceType.ORE);
 		p1size += players[p1id].getNumberResourcesOfType(ResourceType.SHEEP);
 		p1size += players[p1id].getNumberResourcesOfType(ResourceType.WHEAT);
-		
+
 		int p2size = 0;
 
 		p2size += players[p2id].getNumberResourcesOfType(ResourceType.BRICK);
@@ -726,14 +730,14 @@ public class Game {
 		p2size += players[p2id].getNumberResourcesOfType(ResourceType.ORE);
 		p2size += players[p2id].getNumberResourcesOfType(ResourceType.SHEEP);
 		p2size += players[p2id].getNumberResourcesOfType(ResourceType.WHEAT);
-		
+
 		if (p1size == 0 || p2size == 0)
 			return false;
 		else
 			return true;
-			
+
 	}
-	 
+
 
 	/**
 	 * Does the actual Domestic trade
@@ -754,52 +758,52 @@ public class Game {
 			ResourceType resourceType = null;
 			for (int i = 0; i < p1resources.length; i++) {
 				if (p1resources[i] > 0) {
-						if (i == 0)
-							resourceType = ResourceType.BRICK;
-						else if (i == 1)
-							resourceType = ResourceType.WOOD;
-						else if (i == 2)
-							resourceType = ResourceType.WHEAT;
-						else if (i == 3)
-							resourceType = ResourceType.ORE;
-						else if (i == 4)
-							resourceType = ResourceType.SHEEP;
-						ResourceCard[] trade = players[p1id].preparePlayerTrade(resourceType, p1resources[i]);
-						
-						for (int g = 0; g < p1resources[i]; g++) {
-							players[p2id].getResourceCardHand().addCard(trade[g]);
-						}
+					if (i == 0)
+						resourceType = ResourceType.BRICK;
+					else if (i == 1)
+						resourceType = ResourceType.WOOD;
+					else if (i == 2)
+						resourceType = ResourceType.WHEAT;
+					else if (i == 3)
+						resourceType = ResourceType.ORE;
+					else if (i == 4)
+						resourceType = ResourceType.SHEEP;
+					ResourceCard[] trade = players[p1id].preparePlayerTrade(resourceType, p1resources[i]);
+
+					for (int g = 0; g < p1resources[i]; g++) {
+						players[p2id].getResourceCardHand().addCard(trade[g]);
+					}
 				}
 			}
-			
+
 			for (int t = 0; t < p2resources.length; t++) {
 				if (p2resources[t] > 0) {
-						if (t == 0)
-							resourceType = ResourceType.BRICK;
-						else if (t == 1)
-							resourceType = ResourceType.WOOD;
-						else if (t == 2)
-							resourceType = ResourceType.WHEAT;
-						else if (t == 3)
-							resourceType = ResourceType.ORE;
-						else if (t == 4)
-							resourceType = ResourceType.SHEEP;
-						ResourceCard[] trade = players[p2id].preparePlayerTrade(resourceType, p2resources[t]);
-						
-						for (int g = 0; g < p1resources[t]; g++) {
-							players[p1id].getResourceCardHand().addCard(trade[g]);
-						}
+					if (t == 0)
+						resourceType = ResourceType.BRICK;
+					else if (t == 1)
+						resourceType = ResourceType.WOOD;
+					else if (t == 2)
+						resourceType = ResourceType.WHEAT;
+					else if (t == 3)
+						resourceType = ResourceType.ORE;
+					else if (t == 4)
+						resourceType = ResourceType.SHEEP;
+					ResourceCard[] trade = players[p2id].preparePlayerTrade(resourceType, p2resources[t]);
+
+					for (int g = 0; g < p1resources[t]; g++) {
+						players[p1id].getResourceCardHand().addCard(trade[g]);
+					}
 				}
 			}
-			
+
 		} else 
 			throw new Exception("You cannot trade!!");
 	}
-	
-	
+
+
 	// MAP LOCATION PLACEMENT CALLS
 	//////////////////////////////////////////
-	
+
 	/**
 	 * TODO - Verify Completion
 	 * 
@@ -832,7 +836,7 @@ public class Game {
 			return board.canDoPlaceRoadOnEdge(getCurrentPlayer(), edgeLocation);	
 		}
 	}
-	
+
 	/**
 	 * TODO - Verify Completion
 	 * 
@@ -853,7 +857,7 @@ public class Game {
 			board.placeRoadOnEdge(getCurrentPlayer(), edgeLocation);
 		}
 	}
-	
+
 	/**
 	 * Can we place a settlement on that vertex?
 	 * @pre the vertex location is not null
@@ -867,7 +871,7 @@ public class Game {
 		}
 		return board.canDoPlaceSettlementOnVertex(currentPlayer, vertexLocation);
 	}
-	
+
 	/**
 	 * The art of placing a settlement on the vertex.
 	 * 
@@ -885,10 +889,10 @@ public class Game {
 			board.placeInitialSettlementOnVertex(currentPlayer, vertexLocation);
 		} else {
 			board.placeSettlementOnVertex(currentPlayer, vertexLocation);
-			
+
 		}
 	}
-	
+
 	/**
 	 * This method ensures we can place a city on the given vertex
 	 * 
@@ -899,7 +903,7 @@ public class Game {
 	public boolean canDoPlaceCityOnVertex(VertexLocation vertexLocation) {
 		return board.canDoPlaceCityOnVertex(currentPlayer, vertexLocation);
 	}
-	
+
 	/**
 	 * Places the beautiful city on it's designated spot.
 	 * 
@@ -929,8 +933,8 @@ public class Game {
 		}
 		return board.canDoMoveRobberToHex(hexLocation);
 	}
-	
-	
+
+
 	/**
 	 * Moves the robber to the specified HexLocation, and retrieves the players that own municipals
 	 * next to that hex, excluding those that don't have resources to steal and the player that moved
@@ -953,11 +957,13 @@ public class Game {
 		for(Vertex vertex: adjacentVertices) {
 			// If the vertex has a municipal, that municipal is not owned by the player moving the robber
 			// and the Player is not already in the list, and the Player has resources to be stolen
-			int municipalID = vertex.getMunicipal().getPlayer().getPlayerIndex();
-			Player player = vertex.getMunicipal().getPlayer();
-			if(vertex.hasMunicipal() && UserId != municipalID && !adjacentPlayerIDs.contains(municipalID) && player.getResourceCardHandSize() > 0) {
-				adjacentPlayerIDs.add(municipalID);
-				adjacentPlayers.add(player);
+			if (vertex.getMunicipal()!=null){
+				int municipalID = vertex.getMunicipal().getPlayer().getPlayerIndex();
+				Player player = vertex.getMunicipal().getPlayer();
+				if(vertex.hasMunicipal() && UserId != municipalID && !adjacentPlayerIDs.contains(municipalID) && player.getResourceCardHandSize() > 0) {
+					adjacentPlayerIDs.add(municipalID);
+					adjacentPlayers.add(player);
+				}
 			}
 		}
 		// Convert the found players into an array to return
@@ -967,7 +973,7 @@ public class Game {
 
 	// OTHER
 	//////////////////////////////////////////
-	
+
 	/**
 	 * Checks whether the Specified User can Steal from the Specified Victim
 	 * 
@@ -990,7 +996,7 @@ public class Game {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * The Specified User will Steal a Random ResourceCard from the specified Victim
 	 * 
@@ -1006,7 +1012,7 @@ public class Game {
 		}
 		currentPlayer.stealPlayerResource(getPlayerByID(victimId));
 	}
-	
+
 	/**
 	 * Retrieves the Player Object for the given playerID
 	 * 
@@ -1022,7 +1028,7 @@ public class Game {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Will return the number of the specified resource that the player currently has
 	 * 
@@ -1038,7 +1044,7 @@ public class Game {
 		}
 		return 0;
 	}
-	
+
 	/**
 	 * Checks whether the Specified User can discard the specified number of resources of the specified
 	 * ResourceType
@@ -1059,7 +1065,7 @@ public class Game {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * The Specified Player will discard the specified number of Resource Cards back to the bank
 	 * from his hand
@@ -1074,9 +1080,9 @@ public class Game {
 	 */
 	public void discardNumberOfResourceType(int UserId, int numberToDiscard, ResourceType resourceType) throws Exception {
 		getPlayerByID(UserId).discardResourcesOfType(resourceType, numberToDiscard);
-		
+
 	}
-		
+
 	/**
 	 * This method is responsible for verifying if the game has ended.
 	 * 
@@ -1094,7 +1100,7 @@ public class Game {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * This is only intended for extracting information from the hexes for the map initialization
 	 * 
@@ -1114,7 +1120,7 @@ public class Game {
 	public PortType[] getMapPorts() {
 		return board.getMapPorts();
 	}
-	
+
 	/**
 	 * This is only inteded for extracting information from the players.
 	 * 
@@ -1123,11 +1129,11 @@ public class Game {
 	public Player[] getAllPlayers() {
 		return players;
 	}
-	
+
 	public void setVersionNumber(int version) {
 		versionNumber = version;
 	}
-	
+
 	public int getVersionNumber() {
 		return versionNumber;
 	}
@@ -1138,7 +1144,7 @@ public class Game {
 		}
 		return true;
 	}
-	
+
 	public int getWinner() {
 		return winner;
 	}
@@ -1146,7 +1152,7 @@ public class Game {
 	public void setWinner(int winner) {
 		this.winner = winner;
 	}
-	
+
 	public Player getLargestArmy() {
 		return largestArmy;
 	}
@@ -1177,14 +1183,14 @@ public class Game {
 	public Line[] getChat() {
 		return chat;
 	}
-	
+
 	public void setHistory(Line[] lines) {
 		history = lines;
 	}
 	public Line[] getHistory() {
 		return history;
 	}
-	
+
 	public int getTurnNumber() {
 		return turnNumber;
 	}
@@ -1199,6 +1205,16 @@ public class Game {
 
 
 
+	public TradeInfo getTradeOffer() {
+		return tradeOffer;
+	}
+
+	public void setTradeOffer(TradeInfo tradeOffer) {
+		this.tradeOffer = tradeOffer;
+	}
+
+
+
 	/**
 	 * Hear ye, hear ye! We have a class line that is designated for the functionality of the ChatController and the GameHistoryController
 	 * its purpose is to keep track of all the message type objects we get from the server so it can be accessed and printed by the two controllers mentioned above.
@@ -1207,12 +1223,12 @@ public class Game {
 	public class Line {
 		private String message;
 		private String source;
-		
+
 		public Line() {
 			message = "";
 			source = "";
 		}
-		
+
 		public void setMessage(String chatterbox) {
 			message = chatterbox;
 		}
@@ -1226,7 +1242,7 @@ public class Game {
 			return source;
 		}
 	}
-	
-	
+
+
 	
 }

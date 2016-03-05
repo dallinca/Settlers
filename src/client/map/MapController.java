@@ -295,7 +295,7 @@ public class MapController extends Controller implements IMapController, Observe
 				}
 
 				getRobView().setPlayers((RobPlayerInfo[])victims.toArray());				
-
+				robView.showModal();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -386,7 +386,7 @@ public class MapController extends Controller implements IMapController, Observe
 			return;
 		}
 		if (game.getStatus().equals("Robbing")&&game.isPlayersTurn(Client.getInstance().getUserId())){
-			robView.showModal();
+			startMove(PieceType.ROBBER, true, true);
 		}
 		return;
 	}

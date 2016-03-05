@@ -2,6 +2,7 @@ package shared.communication.results;
 
 import java.util.ArrayList;
 
+import shared.communication.results.ClientModel.MTradeOffer;
 import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
 import shared.definitions.HexType;
@@ -14,6 +15,7 @@ import shared.locations.VertexLocation;
 import shared.model.Bank;
 import client.Client;
 import client.data.PlayerInfo;
+import client.data.TradeInfo;
 
 import com.google.gson.Gson;
 
@@ -219,6 +221,14 @@ public class JsonConverter {
 
 		// Init the GAME//-===========================================================
 		version = new Game(players, board, bank);
+		
+		//Get trade offer (if exists)
+		if (model.getTradeOffer()!=null){			
+			MTradeOffer mto = model.getTradeOffer();
+			TradeInfo tradeInfo = new TradeInfo(mto.getSender(), mto.getReceiver(), mto.getOffer());
+			
+			version.setTradeOffer(tradeInfo);
+		}
 
 		Game.Line[] historyLines = new Game.Line[model.getLog().getLines().length];
 
@@ -271,6 +281,7 @@ public class JsonConverter {
 
 		version.setChat(chatLines);
 		version.setHistory(historyLines);
+	
 
 		return version;
 	}
