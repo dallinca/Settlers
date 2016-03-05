@@ -251,10 +251,24 @@ public class Board {
 			if(sides[i].getVertex().hasMunicipal() == true) {
 				return false;
 			}
+			boolean sideVertexHasNeighborMunicipal = false;
+			// vertex does not have an adjacent vertex with any players settlement or city
+			Vertex[] adjacentVertices = sides[i].getVertex().getAdjacentVertices();
+			for(int j = 0; j < adjacentVertices.length; j++) {
+				// Use null to account for potentially nonvalid bordering vertices
+				if(adjacentVertices[j] != null && adjacentVertices[j].hasMunicipal()) {
+					sideVertexHasNeighborMunicipal = true; // Log that we found a neighboring vertex with a municipal
+				}
+			}
+			// At this point we know
+			// 1) we have legal place to build road
+			// 2) that road has a side whos vertex does not have a municipal
+			// 3) that vertex does not have any neighboring vertices with municipals
+			if(sideVertexHasNeighborMunicipal == false) {
+				return true;
+			}
 		}
-
-		// The player should be able to initialize their first two roads on any valid non-taken edge location
-		return true;
+		return false;
 	}
 
 	/**
