@@ -122,6 +122,7 @@ public class DiscardController extends Controller implements IDiscardController,
 			getDiscardView().setResourceAmountChangeEnabled(resource.WOOD, false, !wood.isEmpty());
 			getDiscardView().setDiscardButtonEnabled(true);
 		}else{
+			
 			getDiscardView().setDiscardButtonEnabled(false);
 		}
 
@@ -136,57 +137,75 @@ public class DiscardController extends Controller implements IDiscardController,
 		if( resource == ResourceType.BRICK){
 			//remove the last element
 			brick.remove(brick.size() - 1);
-			getDiscardView().setResourceDiscardAmount(resource, brick.size());
+			getDiscardView().setResourceDiscardAmount(resource, brick.size());/*
 			if(brick.size() < 1){
 				getDiscardView().setResourceAmountChangeEnabled(resource, true, false);
 			}else{
 				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
-			}
+			}*/
 		}
 		else if( resource == ResourceType.ORE){
 			//remove the last element
 			ore.remove(ore.size() - 1);
-			getDiscardView().setResourceDiscardAmount(resource, ore.size());
+			getDiscardView().setResourceDiscardAmount(resource, ore.size());/*
 			if(ore.size() < 1){
 				getDiscardView().setResourceAmountChangeEnabled(resource, true, false);
 			}else{
 				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
-			}
+			}*/
 		}
 		else if( resource == ResourceType.SHEEP){
 			//remove the last element
 			sheep.remove(sheep.size() - 1);
-			getDiscardView().setResourceDiscardAmount(resource, sheep.size());
+			getDiscardView().setResourceDiscardAmount(resource, sheep.size());/*
 			if(sheep.size() < 1){
 				getDiscardView().setResourceAmountChangeEnabled(resource, true, false);
 			}else{
 				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
-			}
+			}*/
 		}
 		else if( resource == ResourceType.WHEAT){
 			//remove the last element
 			wheat.remove(wheat.size() - 1);
-			getDiscardView().setResourceDiscardAmount(resource, wheat.size());
+			getDiscardView().setResourceDiscardAmount(resource, wheat.size());/*
 			if(wheat.size() < 1){
 				getDiscardView().setResourceAmountChangeEnabled(resource, true, false);
 			}else{
 				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
-			}
+			}*/
 		}
 		else if(resource == ResourceType.WOOD){
 			wood.remove(wood.size() - 1);
-			getDiscardView().setResourceDiscardAmount(resource, wood.size());
+			getDiscardView().setResourceDiscardAmount(resource, wood.size()); /*
 			if(wood.size() < 1){
 				getDiscardView().setResourceAmountChangeEnabled(resource, true, false);
 			}else{
 				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
-			}
+			}*/
 		}
 		
 		if(amountToDiscard <= totalToDiscard){
 			getDiscardView().setDiscardButtonEnabled(false);
 		}else{
 			getDiscardView().setDiscardButtonEnabled(true);
+		}
+		
+		if (amountToDiscard < totalToDiscard){
+			boolean bbrick=false, bore=false,bsheep=false,bwheat=false,bwood=false;
+			if(brick.size()<numBrick)bbrick=true;
+			if(ore.size()<numOre)bore=true;
+			if(sheep.size()<numSheep)bsheep=true;
+			if(wheat.size()<numWheat)bwheat=true;
+			if(wood.size()<numWood)bwood=true;
+			
+			
+			getDiscardView().setResourceAmountChangeEnabled(resource.BRICK, bbrick, !brick.isEmpty());
+			getDiscardView().setResourceAmountChangeEnabled(resource.ORE, bore, !ore.isEmpty());
+			getDiscardView().setResourceAmountChangeEnabled(resource.SHEEP, bsheep, !sheep.isEmpty());
+			getDiscardView().setResourceAmountChangeEnabled(resource.WHEAT, bwheat, !wheat.isEmpty());
+			getDiscardView().setResourceAmountChangeEnabled(resource.WOOD, bwood, !wood.isEmpty());
+			getDiscardView().setDiscardButtonEnabled(false);
+			
 		}
 	}
 	
