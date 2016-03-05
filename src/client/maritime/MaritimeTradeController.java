@@ -228,7 +228,7 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	@Override
 	public void setGiveResource(ResourceType resource) {
 		
-		if (Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getPlayerIndex())) {	
+		if (Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getUserId())) {	
 			
 			System.out.println("MaritimeTradeController setGiveResource()");
 			getTradeOverlay().setStateMessage("Choose what to get");
@@ -262,11 +262,10 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 				 }
 			}
 			
-			
 			array = new ResourceType[enabledResources.size()];
 			enabledResources.toArray(array);
 			
-			getTradeOverlay().showGetOptions(enabledResources.toArray(array));
+			getTradeOverlay().showGetOptions(array);
 			//tradein = resource;
 		} else {
 			ArrayList<ResourceType> enabledResources = new ArrayList<ResourceType>();
@@ -284,7 +283,7 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	 */
 	@Override
 	public void unsetGetValue() {
-		if (Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getPlayerIndex())) {
+		if (Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getUserId())) {
 			System.out.println("MaritimeTradeController unsetGetValue()");
 			getType = null;
 			getTradeOverlay().showGetOptions(array);
@@ -297,7 +296,7 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	 */
 	@Override
 	public void unsetGiveValue() {
-		if (Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getPlayerIndex())) {
+		if (Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getUserId())) {
 			System.out.println("MaritimeTradeController unsetGiveValue()");
 			giveType = null;
 			//getTradeOverlay().showGiveOptions();
@@ -324,7 +323,7 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 			return;
 		}
 		
-		if (Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getPlayerIndex())) {
+		if (Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getUserId())) {
 
 				getTradeView().enableMaritimeTrade(true);
 		} else {
