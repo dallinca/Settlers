@@ -293,7 +293,7 @@ public class MapController extends Controller implements IMapController, Observe
 							}
 						}
 
-						if (!accountedFor){
+						if (!accountedFor && rbi.getId()!=Client.getInstance().getUserId()){
 							victims.add(rbi);
 						}
 					}
