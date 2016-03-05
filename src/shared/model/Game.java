@@ -338,9 +338,16 @@ public class Game {
 		if(!isPlayersTurn(UserId)) {
 			return false;
 		}
-		// If we are in the first two rounds we check possibility to build initial settlement
-		if(turnNumber < 2) {
-			return currentPlayer.canDoBuildInitialSettlement();
+		if(turnNumber == 0) {
+			if(currentPlayer.getNumberUnplayedSettlements() != 5) {
+				return false;
+			}
+			return true;
+		} else if(turnNumber == 1) {
+			if(currentPlayer.getNumberUnplayedSettlements() != 4) {
+				return false;
+			}
+			return true;
 		}
 		return currentPlayer.canDoBuySettlement();
 	}
