@@ -380,11 +380,10 @@ public class MapController extends Controller implements IMapController, Observe
 		// If the game is null just return
 		if(game == null) {
 			return;
-		} else if (init){
-			initFromModel();
-			init = false;
-			return;
 		}
+		
+		initFromModel();
+		
 		if (game.getStatus().equals("Robbing")&&game.isPlayersTurn(Client.getInstance().getUserId())){
 			startMove(PieceType.ROBBER, true, true);
 		}
