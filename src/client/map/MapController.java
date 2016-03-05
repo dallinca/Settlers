@@ -6,13 +6,16 @@ import shared.definitions.*;
 import shared.locations.*;
 import shared.model.*;
 import shared.model.board.Hex;
+import shared.model.board.Vertex;
 import shared.model.items.City;
+import shared.model.items.Municipal;
 import shared.model.items.Road;
 import shared.model.items.Settlement;
 import shared.model.player.Player;
 import shared.model.turn.ActionManager;
 import shared.model.turn.ActionType;
 import client.Client;
+import client.ClientFacade;
 import client.base.*;
 import client.data.*;
 
@@ -21,30 +24,32 @@ import client.data.*;
  * Implementation for the map controller
  */
 public class MapController extends Controller implements IMapController, Observer {
-	
+
 	private boolean init = true;
 	private IRobView robView;
 	private Game game;
-	
-	
+	private boolean robVictimChosen, robHexChosen;
+	private HexLocation robHex;
+
+
 	public MapController(IMapView view, IRobView robView) {
-		
+
 		super(view);
 		System.out.println("MapController MapController()");
-		
+
 		setRobView(robView);
-		
+
 		initFromModel();
 		Client.getInstance().addObserver(this);
-		
+
 	}
-	
+
 	public IMapView getView() {
 		System.out.println("MapController getView()");
-		
+
 		return (IMapView)super.getView();
 	}
-	
+
 	private IRobView getRobView() {
 		System.out.println("MapController getRobView()");
 		return robView;
@@ -53,17 +58,17 @@ public class MapController extends Controller implements IMapController, Observe
 		System.out.println("MapController setRobView()");
 		this.robView = robView;
 	}
-	
+
 	protected void initFromModel() {
 		System.out.println("MapController initFromModel()");
-		
-		
+
+
 		// Check if there is a game to initialize from
 		if(Client.getInstance().getGame() == null) {
 			return;
 			//Client.getInstance().setGame(new Game());
 		}
-		
+
 		// Init the water Hexes
 		getView().addHex(new HexLocation(0, -3), HexType.WATER);
 		getView().addHex(new HexLocation(1, -3), HexType.WATER);
@@ -120,7 +125,7 @@ public class MapController extends Controller implements IMapController, Observe
 			getView().addPort(new EdgeLocation(new HexLocation(-3, 2), EdgeDirection.NorthEast), allPorts[7]);
 			getView().addPort(new EdgeLocation(new HexLocation(-2, 3), EdgeDirection.NorthEast), allPorts[8]);
 		}
-		
+
 		// Init all the roads, settlements, and cities!
 		for(Player player: Client.getInstance().getGame().getAllPlayers()) {
 			for(Road road: player.getPlayerPieces().getRoads()) {
@@ -138,7 +143,7 @@ public class MapController extends Controller implements IMapController, Observe
 					VertexLocation vl = new VertexLocation(hx, settlement.getVertex().getTheirVertexDirection());
 					getView().placeSettlement(vl, settlement.getPlayer().getPlayerColor());
 				}
-				
+
 			}
 			for(City city: player.getPlayerPieces().getCities()) {
 				if(city.getVertex() != null) {
@@ -149,12 +154,12 @@ public class MapController extends Controller implements IMapController, Observe
 				}
 			}
 		}
-		
+
 		//
-		
+
 	}
 
-	
+
 	int hello = 0;
 	/**
 	 * TODO
@@ -191,8 +196,9 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public boolean canPlaceRobber(HexLocation hexLoc) {
 		System.out.println("MapController canPlaceRobber()");
-		return true;
-//		return Client.getInstance().getGame().canDoMoveRobberToHex( Client.getInstance().getUserId(), hexLoc);
+		return Client.getInstance().getGame().canDoMoveRobberToHex(Client.getInstance().getUserId(), hexLoc);
+		//return true;
+		//		return Client.getInstance().getGame().canDoMoveRobberToHex( Client.getInstance().getUserId(), hexLoc);
 	}
 
 	/**
@@ -202,13 +208,13 @@ public class MapController extends Controller implements IMapController, Observe
 	public void placeRoad(EdgeLocation edgeLoc) {
 		System.out.println("MapController placeRoad()");
 		try {
-			Client.getInstance().getGame().placeRoadOnEdge( Client.getInstance().getUserId(), edgeLoc);
 			ActionManager.getInstance().doBuild(ActionType.PURCHASE_ROAD, edgeLoc);
+			//Client.getInstance().getGame().placeRoadOnEdge( Client.getInstance().getUserId(), edgeLoc);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		//getView().placeRoad(edgeLoc, Client.getInstance().getColor());
 	}
 
@@ -219,7 +225,8 @@ public class MapController extends Controller implements IMapController, Observe
 	public void placeSettlement(VertexLocation vertLoc) {
 		System.out.println("MapController placeSettlement()");
 		try {
-			Client.getInstance().getGame().placeSettlementOnVertex(Client.getInstance().getUserId(), vertLoc);
+			ActionManager.getInstance().doBuild(ActionType.PURCHASE_SETTLEMENT, vertLoc);
+			//Client.getInstance().getGame().placeSettlementOnVertex(Client.getInstance().getUserId(), vertLoc);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -248,15 +255,61 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public void placeRobber(HexLocation hexLoc) {
 		System.out.println("MapController placeRobber()");
-		try {
-			Client.getInstance().getGame().moveRobberToHex(Client.getInstance().getUserId(), hexLoc);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+		Game game = Client.getInstance().getGame();
+
+		if( game.canDoMoveRobberToHex(Client.getInstance().getUserId(), hexLoc)){
+
+			try {
+				game.moveRobberToHex(Client.getInstance().getUserId(), hexLoc);
+				robHexChosen=true;
+				robHex = hexLoc;
+
+				//getView().placeRobber(hexLoc);
+
+				//getRobView().closeModal();
+				Set<RobPlayerInfo> victims = new HashSet<RobPlayerInfo>();
+
+				Vertex[] vertices = game.getBoard().getHex(hexLoc).getAdjacentVertices();
+
+				for (int i = 0; i < vertices.length; i++){
+					Municipal m = vertices[i].getMunicipal();
+
+					if ( m !=null){
+						Player p = m.getPlayer();
+
+						RobPlayerInfo rbi = new RobPlayerInfo();
+						rbi.setColor(p.getPlayerColor());
+						rbi.setId(p.getPlayerId());
+						rbi.setName(p.getPlayerName());
+						int numCards = p.getNumberResourcesOfType(ResourceType.BRICK)+p.getNumberResourcesOfType(ResourceType.ORE)+
+								p.getNumberResourcesOfType(ResourceType.SHEEP)+p.getNumberResourcesOfType(ResourceType.WHEAT)+
+								p.getNumberResourcesOfType(ResourceType.WOOD);
+						rbi.setNumCards(numCards);
+						rbi.setPlayerIndex(p.getPlayerIndex());
+
+						if (!victims.contains(rbi)){
+							victims.add(rbi);
+						}
+					}
+				}
+
+				RobPlayerInfo[] targets = new RobPlayerInfo[victims.size()];
+				
+				int i = 0;
+				
+				for (RobPlayerInfo current : victims){
+					targets[i] = current;
+					i++;
+				}
+
+				getRobView().setPlayers(targets);				
+				robView.showModal();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		getView().placeRobber(hexLoc);
-		
-		getRobView().showModal();
 	}
 
 	/**
@@ -279,7 +332,7 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public void cancelMove() {
 		System.out.println("MapController cancelMove()");
-		
+
 	}
 
 	/**
@@ -289,9 +342,9 @@ public class MapController extends Controller implements IMapController, Observe
 	public void playSoldierCard() {	
 		System.out.println("MapController playSoldierCard()");
 		//ActionManager.getInstance().doAction(ActionType.PLAYCARD_KNIGHT);
-		
+
 		//getView();
-		
+
 		robView.showModal();
 	}
 
@@ -312,10 +365,16 @@ public class MapController extends Controller implements IMapController, Observe
 		System.out.println("MapController robPlayer()");
 
 		try {
-			Client.getInstance().getGame().stealPlayerResource(Client.getInstance().getUserId(), victim.getId());
+			//Client.getInstance().getGame().stealPlayerResource(Client.getInstance().getUserId(), victim.getId());
+			robVictimChosen = true;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+
+		if (robVictimChosen == true && robHexChosen == true){
+			ClientFacade.getInstance().robPlayer(robHex, victim.getPlayerIndex());
+			getRobView().closeModal();
 		}
 	}
 
@@ -325,22 +384,20 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
+		Game game = Client.getInstance().getGame();
 		System.out.println("MapController update()");
 		// If the game is null just return
-		if(Client.getInstance().getGame() == null) {
+		if(game == null) {
 			return;
 		}
-		Client ZeClieeent = (Client) o;
-		System.out.println("Roads unbuilt: " + ZeClieeent.getGame().getCurrentPlayer().getNumberUnplayedRoads());
-		//store current Game in controller
-		//this.game = (Game)arg;
-		if(init) {
-			initFromModel();
-			init = false;
-			return;
+
+		initFromModel();
+
+		if (game.getStatus().equals("Robbing")&&game.isPlayersTurn(Client.getInstance().getUserId())){
+			startMove(PieceType.ROBBER, true, true);
 		}
-		
+		return;
 	}
-	
+
 }
 

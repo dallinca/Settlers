@@ -225,10 +225,10 @@ public class Player {
 	public boolean canDoBuyDevelopmentCard(Bank bank) {
 		if(bank == null || resourceCardHand.canDoPayForDevelopmentCard() == false) {
 			return false;
-		}
-		if(bank.hasAvailableDevelopmentCards() == false) {
+		}else if(bank.hasAvailableDevelopmentCards() == false) {
 			return false;
 		}
+		
 		return true;
 	}
 	

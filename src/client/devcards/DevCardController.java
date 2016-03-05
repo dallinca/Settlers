@@ -89,7 +89,7 @@ public class DevCardController extends Controller implements IDevCardController,
 			 if (result) {
 				 try {	
 					 ActionManager.getInstance().doAction(ActionType.PURCHASE_DEVELOPMENT);
-					 
+					 					 
 					/* try {
 					 		//for later hahaha
 						 	//This means you bought a card and it worked ;)

@@ -3,6 +3,7 @@ package shared.model.turn;
 import client.Client;
 import client.ClientException;
 import client.ClientFacade;
+import shared.definitions.ResourceType;
 import shared.locations.EdgeLocation;
 import shared.locations.VertexLocation;
 import shared.model.Game;
@@ -33,8 +34,26 @@ public class Purchase {
 	}
 
 	public boolean canDoPurchaseDevelopmentCard(){
+		
 		System.out.println("Purchase canDoPurchaseDevelopmentCard()");
-		return Client.getInstance().getGame().canDoPlayerBuyDevelopmentCard(Client.getInstance().getUserId());
+		
+		Game g = Client.getInstance().getGame();
+		int ID = Client.getInstance().getUserId();
+		
+		if (!g.canDoPlayerBuyDevelopmentCard(ID)){
+			return false;
+		}
+		
+		int ore = g.getCurrentPlayer().getNumberResourcesOfType(ResourceType.ORE);
+		int sheep = g.getCurrentPlayer().getNumberResourcesOfType(ResourceType.SHEEP);
+		int wheat = g.getCurrentPlayer().getNumberResourcesOfType(ResourceType.WHEAT);
+		
+		if (ore>0&&sheep>0&&wheat>0){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 
 	/**
@@ -52,7 +71,7 @@ public class Purchase {
 	}
 	
 
-	public boolean canDoPurchaseSettlement(){
+	public boolean canDoPurchaseSettlement(Object l){
 		System.out.println("Purchase canDoPurchaseSettlement()");
 		return Client.getInstance().getGame().canDoPlayerBuildSettlement(Client.getInstance().getUserId());
 	}
@@ -67,12 +86,12 @@ public class Purchase {
 	 */
 	public void purchaseCity(Object l){
 		System.out.println("Purchase purchaseCity()");
-		if (canDoPurchaseCity()) {
+		if (canDoPurchaseCity(l)) {
 			VertexLocation location = (VertexLocation) l;
 		}
 	}
 
-	public boolean canDoPurchaseCity(){
+	public boolean canDoPurchaseCity(Object l){
 		System.out.println("Purchase canDoPurchaseCity()");
 		return Client.getInstance().getGame().canDoPlayerBuildCity(Client.getInstance().getUserId());
 	}
@@ -86,17 +105,18 @@ public class Purchase {
 	 * @post Player places road on the board, loses cost.
 	 */
 	public void purchaseRoad(Object l){
+		Game game = Client.getInstance().getGame();
 		System.out.println("Purchase purchaseRoad()");
-		//if (canDoPurchaseRoad()) {
+		if (canDoPurchaseRoad(l)) {
 			ClientFacade.getInstance().buildRoad((EdgeLocation)l );
 			System.out.println("Purchase purchaseRoad() Could Purchase");
 			return;
-		//}
-		//System.out.println("Purchase purchaseRoad() Could Not Purchase");
-		//return;
+		}
+		System.out.println("Purchase purchaseRoad() Could Not Purchase");
+		return;
 	}
 	
-	public boolean canDoPurchaseRoad(){
+	public boolean canDoPurchaseRoad(Object l){
 		System.out.println("Purchase canDoPurchaseRoad()");
 		return Client.getInstance().getGame().canDoPlayerBuildRoad(Client.getInstance().getUserId());
 	}

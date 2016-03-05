@@ -2,6 +2,7 @@ package shared.communication.results;
 
 import java.util.ArrayList;
 
+import shared.communication.results.ClientModel.MTradeOffer;
 import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
 import shared.definitions.HexType;
@@ -14,6 +15,7 @@ import shared.locations.VertexLocation;
 import shared.model.Bank;
 import client.Client;
 import client.data.PlayerInfo;
+import client.data.TradeInfo;
 
 import com.google.gson.Gson;
 
@@ -39,12 +41,9 @@ public class JsonConverter {
 	}
 
 	public Game parseJson(String jsonGame){
-		//System.out.println("Entering gauntlet.");
 		Gson gson = new Gson();
 
 		setModel(gson.fromJson(jsonGame, ClientModel.class));
-
-		//System.out.println(model.toString());
 
 		return getGame();
 	}	
@@ -53,7 +52,6 @@ public class JsonConverter {
 		// check to see if we are going to be updating the entire game, or just the player waiting screen
 		int counter = 0;
 		ArrayList<PlayerInfo> playersInfo = new ArrayList<PlayerInfo>();
-		System.out.println("jsonConverter1");
 		for(ClientModel.MPlayer mPlayer: model.getPlayers()) {
 			if(mPlayer != null) {
 				PlayerInfo playerInfo= new PlayerInfo();
@@ -64,16 +62,12 @@ public class JsonConverter {
 				playersInfo.add(playerInfo);
 				counter++;
 			}
-			System.out.println(counter);
 		}
-		System.out.println("jsonConverter2");
 		// Not enough players to start the real game
 		if(counter < 4) {
-			System.out.println("jsonConverter3");
 			Client.getInstance().updatePlayersInGameInfo(playersInfo);
 			return null;
 		}
-		System.out.println("jsonConverter4");
 		
 		// Init the BANK with the current amounts of resources and development cards
 
@@ -96,13 +90,6 @@ public class JsonConverter {
 		// Init the PLAYERS
 		Player[] players = new Player[4];
 		ClientModel.MPlayer[] mPlayers = model.getPlayers();
-		System.out.println(mPlayers);
-		System.out.println("About to setup XXX " + mPlayers.length + " Players");
-		
-		System.out.println("About to setup XXX " + model.turnTracker.status + " Status");
-		for(ClientModel.MPlayer mPlayer: model.getPlayers()) {
-			System.out.println(mPlayer.name);
-		}
 		
 		for(ClientModel.MPlayer mPlayer: mPlayers) {
 			// Get the resources the player should have right now
@@ -147,6 +134,9 @@ public class JsonConverter {
 			// Set the turn of the current player
 			if(mPlayer.getPlayerIndex() == model.turnTracker.currentTurn) {
 				player.setPlayersTurn(true);
+			}
+			if(mPlayer.getPlayerID() == Client.getInstance().getUserId()) {
+				Client.getInstance().setPlayerIndex(mPlayer.getPlayerIndex());
 			}
 		}
 
@@ -220,6 +210,14 @@ public class JsonConverter {
 
 		// Init the GAME//-===========================================================
 		version = new Game(players, board, bank);
+		
+		//Get trade offer (if exists)
+		if (model.getTradeOffer()!=null){			
+			MTradeOffer mto = model.getTradeOffer();
+			TradeInfo tradeInfo = new TradeInfo(mto.getSender(), mto.getReceiver(), mto.getOffer());
+			
+			version.setTradeOffer(tradeInfo);
+		}
 
 		Game.Line[] historyLines = new Game.Line[model.getLog().getLines().length];
 
@@ -252,7 +250,14 @@ public class JsonConverter {
 		version.setVersionNumber(model.getVersion());
 		version.setCurrentPlayer(players[model.turnTracker.getCurrentTurn()]);
 		version.setStatus(model.turnTracker.getStatus());
-
+		if(model.turnTracker.getStatus().equals("FirstRound")) {
+			version.setTurnNumber(0);
+		} else if(model.turnTracker.getStatus().equals("SecondRound")) {
+			version.setTurnNumber(1);
+		} else {
+			version.setTurnNumber(3);
+		}
+		
 		if (model.turnTracker.largestArmy!=-1){
 
 			version.setLargestArmy(players[model.turnTracker.largestArmy]);
@@ -264,6 +269,7 @@ public class JsonConverter {
 
 		version.setChat(chatLines);
 		version.setHistory(historyLines);
+	
 
 		return version;
 	}
@@ -316,10 +322,7 @@ public class JsonConverter {
 			return PortType.WHEAT;
 		} else if(resource.equals("ore")) {
 			return PortType.ORE;
-		} 
-		System.out.println("\n\n\n\n");
-		System.out.println("Returned null porttype");
-		System.out.println("\n\n\n\n");
+		}
 		return null;
 	}
 

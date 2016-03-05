@@ -76,7 +76,6 @@ public class RollController extends Controller implements IRollController, Obser
 
 		Client client = (Client) o;
 		int userid = Client.getInstance().getUserId();
-		System.out.println("CAN ROLL DICE"+game.canDoRollDice(userid));
 		if(game.canDoRollDice(userid)){
 			
 			getRollView().showModal();
