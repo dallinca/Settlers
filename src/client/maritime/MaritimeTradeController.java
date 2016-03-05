@@ -79,17 +79,17 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 			
 			if (canTrade) {
 				
-				int numWood = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.WOOD);
-				int numWheat = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.WHEAT);
-				int numSheep = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.SHEEP);
-				int numOre = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.ORE);
-				int numBrick = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.BRICK);
+				int numWood = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getNumberResourcesOfType(ResourceType.WOOD);
+				int numWheat = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getNumberResourcesOfType(ResourceType.WHEAT);
+				int numSheep = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getNumberResourcesOfType(ResourceType.SHEEP);
+				int numOre = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getNumberResourcesOfType(ResourceType.ORE);
+				int numBrick = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getNumberResourcesOfType(ResourceType.BRICK);
 				
-				tradeWood = Client.getInstance().getGame().getCurrentPlayer().getTradeRate(ResourceType.WOOD);
-				tradeWheat = Client.getInstance().getGame().getCurrentPlayer().getTradeRate(ResourceType.WHEAT);
-				tradeSheep = Client.getInstance().getGame().getCurrentPlayer().getTradeRate(ResourceType.SHEEP);
-				tradeOre = Client.getInstance().getGame().getCurrentPlayer().getTradeRate(ResourceType.ORE);
-				tradeBrick = Client.getInstance().getGame().getCurrentPlayer().getTradeRate(ResourceType.BRICK);
+				tradeWood = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getTradeRate(ResourceType.WOOD);
+				tradeWheat = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getTradeRate(ResourceType.WHEAT);
+				tradeSheep = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getTradeRate(ResourceType.SHEEP);
+				tradeOre = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getTradeRate(ResourceType.ORE);
+				tradeBrick = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getTradeRate(ResourceType.BRICK);
 				
 				if(numWood >= tradeWood || numWood > 3){
 					resourceArray.add(ResourceType.WOOD);
