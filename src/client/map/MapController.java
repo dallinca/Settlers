@@ -345,8 +345,8 @@ public class MapController extends Controller implements IMapController, Observe
 		//ActionManager.getInstance().doAction(ActionType.PLAYCARD_KNIGHT);
 
 		//getView();
-
-		robView.showModal();
+		startMove(PieceType.ROBBER, true, true);
+		//robView.showModal();
 	}
 
 	/**
