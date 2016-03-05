@@ -120,19 +120,25 @@ public class Game {
 	// CURRENT PLAYER CALLS
 	//////////////////////////////////////////
 	public boolean canDoPlayerEndTurn(int UserId) {	
-		if(UserId != currentPlayer.getPlayerId()) {
+		if(!isPlayersTurn(UserId)) {
 			return false;
 		}
 		return true;
 	}
 	
-	
+	/**
+	 * Returns whether it is currently the players turn or not
+	 * 
+	 * @param UserId
+	 * @return
+	 */
 	public boolean isPlayersTurn(int UserId) {	
 		if(UserId != currentPlayer.getPlayerId()) {
 			return false;
 		}
 		return true;
 	}
+	
 	/**
 	 * This method will cycle through the array of players and will rotate them through the currentPlayer so the turns can proceed.
 	 * This will be helpful when the index of the player array is [3] and we need to bring it back to [0] showing that that person is next.
@@ -220,8 +226,7 @@ public class Game {
 	 * @return whether the specified player can roll the dice
 	 */
 	public boolean canDoRollDice(int UserId) {
-		// Check if the user is the current player		
-		if(UserId != currentPlayer.getPlayerId()) {
+		if(!isPlayersTurn(UserId)) {
 			return false;
 		}
 		else if(getStatus().equals("Rolling")){
@@ -307,8 +312,7 @@ public class Game {
 	 * @return a true or false to if the player can build a road there.
 	 */
 	public boolean canDoPlayerBuildRoad(int UserId) {
-		// Check if the user is the current player
-		if(UserId != currentPlayer.getPlayerId()) {
+		if(!isPlayersTurn(UserId)) {
 			return false;
 		}
 		// If we are in the first two rounds the answer is simply "yes"
@@ -326,8 +330,7 @@ public class Game {
 	 * @return
 	 */
 	public boolean canDoPlayerBuildSettlement(int UserId) {
-		// Check if the user is the current player
-		if(UserId != currentPlayer.getPlayerId()) {
+		if(!isPlayersTurn(UserId)) {
 			return false;
 		}
 		// If we are in the first two rounds we check possibility to build initial settlement
@@ -342,8 +345,7 @@ public class Game {
 	 * @return
 	 */
 	public boolean canDoPlayerBuildCity(int UserId) {
-		// Check if the user is the current player
-		if(UserId != currentPlayer.getPlayerId()) {
+		if(!isPlayersTurn(UserId)) {
 			return false;
 		}
 		return currentPlayer.canDoBuyCity();
@@ -354,8 +356,7 @@ public class Game {
 	 * @return
 	 */
 	public boolean canDoPlayerBuyDevelopmentCard(int UserId) {
-		// Check if the user is the current player
-		if(UserId != currentPlayer.getPlayerId()) {
+		if(!isPlayersTurn(UserId)) {
 			return false;
 		}
 		return currentPlayer.canDoBuyDevelopmentCard(bank);
@@ -1181,6 +1182,10 @@ public class Game {
 
 	public void setTurnNumber(int turnNumber) {
 		this.turnNumber = turnNumber;
+	}
+
+	public Board getBoard() {
+		return board;
 	}
 
 
