@@ -56,10 +56,13 @@ public class RollController extends Controller implements IRollController, Obser
 		int rollValue = 0;
 		try {
 			rollValue = Client.getInstance().getGame().RollDice(Client.getInstance().getUserId());
-			ClientFacade.getInstance().rollNumber(rollValue);
+			
 			this.resultView.setRollValue(rollValue);
 			getRollView().closeModal();
-			getResultView().showModal();			
+			ClientFacade.getInstance().rollNumber(rollValue);
+			getResultView().showModal();
+			
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -76,20 +79,17 @@ public class RollController extends Controller implements IRollController, Obser
 		// If the game is null just return
 		if(game == null) {
 			return;
-		} else if(game.canDoRollDice(userid)){
+		} else if (game.getStatus().equals("Robbing")||game.getStatus().equals("Discarding")){
+			return;
+		} else if(game.canDoRollDice(userid)&&game.getStatus().equals("Rolling")){
 			//System.out.println("Drawing modal and setting roll timer.----------------------------");
 			getRollView().showModal();
 			rollTimer.schedule(new timedRollDice(), 5000);
-			getRollView().setMessage("Rolling automatically in 5 seconds");
-			
-			
+			getRollView().setMessage("Rolling automatically in 5 seconds");			
 		}
 	}
 
 	class timedRollDice extends TimerTask {
-		public timedRollDice(){
-			getRollView().showModal();
-		}
 		public void run() {
 			rollDice();
 		}
