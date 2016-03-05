@@ -77,7 +77,7 @@ public class RollController extends Controller implements IRollController, Obser
 		if(game == null) {
 			return;
 		} else if(game.canDoRollDice(userid)){
-			System.out.println("Drawing modal and setting roll timer.----------------------------");
+			//System.out.println("Drawing modal and setting roll timer.----------------------------");
 			getRollView().showModal();
 			rollTimer.schedule(new timedRollDice(), 5000);
 			getRollView().setMessage("Rolling automatically in 5 seconds");

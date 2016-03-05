@@ -191,7 +191,7 @@ public class MapController extends Controller implements IMapController, Observe
 	 * 
 	 */
 	public boolean canPlaceRobber(HexLocation hexLoc) {
-		System.out.println("MapController canPlaceRobber()");
+		//System.out.println("MapController canPlaceRobber()");
 		return Client.getInstance().getGame().canDoMoveRobberToHex(Client.getInstance().getUserId(), hexLoc);
 		//return true;
 		//		return Client.getInstance().getGame().canDoMoveRobberToHex( Client.getInstance().getUserId(), hexLoc);
@@ -255,15 +255,16 @@ public class MapController extends Controller implements IMapController, Observe
 		Game game = Client.getInstance().getGame();
 
 		if( game.canDoMoveRobberToHex(Client.getInstance().getUserId(), hexLoc)){
+			System.out.println("Robber placed successfully.");
+			robHexChosen=true;
+			robHex = hexLoc;
 
+			LinkedList<RobPlayerInfo> victims = new LinkedList<RobPlayerInfo>();
+
+			Vertex[] vertices;
 			try {
-				//game.moveRobberToHex(Client.getInstance().getUserId(), hexLoc);
-				robHexChosen=true;
-				robHex = hexLoc;
+				vertices = game.getBoard().getHex(hexLoc).getAdjacentVertices();
 
-				LinkedList<RobPlayerInfo> victims = new LinkedList<RobPlayerInfo>();
-
-				Vertex[] vertices = game.getBoard().getHex(hexLoc).getAdjacentVertices();
 
 				for (int i = 0; i < vertices.length; i++){
 					Municipal m = vertices[i].getMunicipal();
@@ -297,15 +298,19 @@ public class MapController extends Controller implements IMapController, Observe
 
 				RobPlayerInfo[] targets = new RobPlayerInfo[victims.size()];
 
-				int i = 0;
+				int j = 0;
 
 				for (RobPlayerInfo current : victims){
-					targets[i] = current;
-					i++;
+					targets[j] = current;
+					System.out.println("Potential victim: "+current.getName());
+					j++;
+				}
+				if (targets.length==0){
+					System.out.println("No victims in vicinity.");
 				}
 
 				getRobView().setPlayers(targets);				
-				robView.showModal();
+				getRobView().showModal();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -365,15 +370,21 @@ public class MapController extends Controller implements IMapController, Observe
 
 	/**
 	 * TODO
-	 * 
 	 */
 	public void robPlayer(RobPlayerInfo victim) {	
 		System.out.println("MapController robPlayer()");
 
 		robVictimChosen = true;
+		int victimIndex;
 		
+		if (victim==null){
+			victimIndex = -1;
+		}else{
+			victimIndex = victim.getPlayerIndex();
+		}
+
 		if (robVictimChosen == true && robHexChosen == true){
-			ClientFacade.getInstance().robPlayer(robHex, victim.getPlayerIndex());
+			ClientFacade.getInstance().robPlayer(robHex, victimIndex);
 			getRobView().closeModal();
 		}
 	}
