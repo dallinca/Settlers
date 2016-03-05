@@ -90,7 +90,6 @@ public class MapController extends Controller implements IMapController, Observe
 		getView().addHex(new HexLocation(-1, -2), HexType.WATER);
 
 		// Init the land hexes
-
 		Hex[][] allLandHexes = Client.getInstance().getGame().getMapHexes();
 		Hex robberHex = Client.getInstance().getGame().getBoard().getHexWithRobber();
 		Hex curHex = null;
@@ -154,9 +153,6 @@ public class MapController extends Controller implements IMapController, Observe
 				}
 			}
 		}
-
-		//
-
 	}
 
 
@@ -241,7 +237,7 @@ public class MapController extends Controller implements IMapController, Observe
 	public void placeCity(VertexLocation vertLoc) {
 		System.out.println("MapController placeCity()");
 		try {
-			Client.getInstance().getGame().placeCityOnVertex(vertLoc);
+			ActionManager.getInstance().doBuild(ActionType.PURCHASE_CITY, vertLoc);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
