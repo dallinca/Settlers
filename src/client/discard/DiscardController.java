@@ -2,6 +2,7 @@ package client.discard;
 
 import shared.definitions.*;
 import shared.model.Game;
+import shared.model.player.Player;
 
 import java.util.*;
 
@@ -21,7 +22,6 @@ public class DiscardController extends Controller implements IDiscardController,
 	private ArrayList<ResourceType> wood, sheep, ore, brick, wheat;
 	
 	private int numWood, numWheat, numSheep, numOre, numBrick; 
-	private boolean doneDiscarding;
 	
 	/**
 	 * DiscardController constructor
@@ -41,7 +41,7 @@ public class DiscardController extends Controller implements IDiscardController,
 		 ore = new ArrayList<ResourceType>();
 		 brick = new ArrayList<ResourceType>();
 		 wheat = new ArrayList<ResourceType>();
-		
+		Client.getInstance().addObserver(this);
 		//int woodCount, sheepCount, oreCount, brickCount, wheatCount;
 		
 	}
@@ -66,12 +66,12 @@ public class DiscardController extends Controller implements IDiscardController,
 		System.out.println("DiscardController increaseAmount()");
 		
 		amountToDiscard++;
-		getDiscardView().setStateMessage(amountToDiscard+"/"+(totalToDiscard/2));
+		getDiscardView().setStateMessage(amountToDiscard+"/"+totalToDiscard);
 		
 		if( resource == ResourceType.BRICK){
 			brick.add(resource);
 			getDiscardView().setResourceDiscardAmount(resource, brick.size());
-			if(brick.size() >= numWood){
+			if(brick.size() >= numBrick){
 				getDiscardView().setResourceAmountChangeEnabled(resource, false, true);
 			}else{
 				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
@@ -114,12 +114,12 @@ public class DiscardController extends Controller implements IDiscardController,
 			}
 		}
 		
-		if(amountToDiscard >= totalToDiscard){
-			getDiscardView().setResourceAmountChangeEnabled(resource.BRICK, false, true);
-			getDiscardView().setResourceAmountChangeEnabled(resource.ORE, false, true);
-			getDiscardView().setResourceAmountChangeEnabled(resource.SHEEP, false, true);
-			getDiscardView().setResourceAmountChangeEnabled(resource.WHEAT, false, true);
-			getDiscardView().setResourceAmountChangeEnabled(resource.WOOD, false, true);
+		if(amountToDiscard == totalToDiscard){
+			getDiscardView().setResourceAmountChangeEnabled(resource.BRICK, false, !brick.isEmpty());
+			getDiscardView().setResourceAmountChangeEnabled(resource.ORE, false, !ore.isEmpty());
+			getDiscardView().setResourceAmountChangeEnabled(resource.SHEEP, false, !sheep.isEmpty());
+			getDiscardView().setResourceAmountChangeEnabled(resource.WHEAT, false, !wheat.isEmpty());
+			getDiscardView().setResourceAmountChangeEnabled(resource.WOOD, false, !wood.isEmpty());
 			getDiscardView().setDiscardButtonEnabled(true);
 		}else{
 			getDiscardView().setDiscardButtonEnabled(false);
@@ -131,7 +131,7 @@ public class DiscardController extends Controller implements IDiscardController,
 	public void decreaseAmount(ResourceType resource) {
 		System.out.println("DiscardController decreaseAmount()");
 		amountToDiscard--;
-		getDiscardView().setStateMessage(amountToDiscard+"/"+(totalToDiscard/2));
+		getDiscardView().setStateMessage(amountToDiscard+"/"+totalToDiscard);
 		 
 		if( resource == ResourceType.BRICK){
 			//remove the last element
@@ -191,12 +191,13 @@ public class DiscardController extends Controller implements IDiscardController,
 	}
 	
 	public void init(){
+		Game game = Client.getInstance().getGame();
 
-		numWood = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.WOOD);
-		numWheat = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.WHEAT);
-		numSheep = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.SHEEP);
-		numOre = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.ORE);
-		numBrick = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.BRICK);
+		numWood = game.getPlayerByID(Client.getInstance().getUserId()).getNumberResourcesOfType(ResourceType.WOOD);
+		numWheat = game.getPlayerByID(Client.getInstance().getUserId()).getNumberResourcesOfType(ResourceType.WHEAT);
+		numSheep = game.getPlayerByID(Client.getInstance().getUserId()).getNumberResourcesOfType(ResourceType.SHEEP);
+		numOre = game.getPlayerByID(Client.getInstance().getUserId()).getNumberResourcesOfType(ResourceType.ORE);
+		numBrick = game.getPlayerByID(Client.getInstance().getUserId()).getNumberResourcesOfType(ResourceType.BRICK);
 		
 		getDiscardView().setResourceMaxAmount(ResourceType.WOOD, numWood);
 		getDiscardView().setResourceMaxAmount(ResourceType.WHEAT, numWheat);
@@ -225,8 +226,9 @@ public class DiscardController extends Controller implements IDiscardController,
 		else 
 			getDiscardView().setResourceAmountChangeEnabled(ResourceType.BRICK, false, false);
 		
-		 totalToDiscard = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getResourceCardHandSize();
-		 getDiscardView().setStateMessage(amountToDiscard+"/"+(totalToDiscard/2));
+		 int handSize = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getResourceCardHandSize();
+		 totalToDiscard = handSize/2;
+		 getDiscardView().setStateMessage(amountToDiscard+"/"+totalToDiscard);
 		 
 		 getDiscardView().setDiscardButtonEnabled(false);
 	}
@@ -239,9 +241,7 @@ public class DiscardController extends Controller implements IDiscardController,
 		
 		if(amountToDiscard == totalToDiscard){
 			getDiscardView().closeModal();
-			getWaitView().showModal();
 			ClientFacade.getInstance().discardCards(brick.size(), ore.size(), sheep.size(), wheat.size(), wood.size());
-			doneDiscarding = true;
 		}
 	}
 
@@ -249,25 +249,30 @@ public class DiscardController extends Controller implements IDiscardController,
 	public void update(Observable o, Object arg) {
 		System.out.println("DiscardController update()");
 		// If the game is null just return
+		if(Client.getInstance().getGame() == null) {
+			return;
+		}
 		
 		Game game = Client.getInstance().getGame();
+		Player cp = game.getPlayerByID(Client.getInstance().getUserId());
 		//int userID = Client.getInstance().getUserId();
+		
 		if(game == null) {
 			return;
-		}else if (game.getStatus().equals("Discarding")){
-			if (Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getResourceCardHandSize()>7
-					 && !doneDiscarding){
+		}
+		else if (game.getStatus().equals("Discarding")){
+			System.out.println("Satus discarded");
+			if (cp.isHasDiscarded()){
+				getWaitView().showModal();
+			}
+			if (cp.getResourceCardHandSize()>7){
+				System.out.println("Player target for discard.");
 				init();			
 				getDiscardView().showModal();	
-			}
-			else{
-				getWaitView().showModal();
-				doneDiscarding = true;
-			}						
+			}				
 		}
 		else{
 			getWaitView().closeModal();
-			doneDiscarding = false;
 		}
 	}
 

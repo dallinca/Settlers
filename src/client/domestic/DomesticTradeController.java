@@ -365,7 +365,6 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		System.out.println("DomesticTradeController update()");
 		
 		int userID = Client.getInstance().getUserId();
-
 		this.game = Client.getInstance().getGame();
 		
 		// If the game is null just return

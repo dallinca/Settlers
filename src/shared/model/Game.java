@@ -1165,7 +1165,13 @@ public class Game {
 	}
 
 	public void setLargestArmy(Player largestArmy) {
+		// Take the largest army away from the other player if he has it
+		if(this.largestArmy != null) {
+			this.largestArmy.setHasLargestArmy(false);
+		}
+		// Give to new player
 		this.largestArmy = largestArmy;
+		largestArmy.setHasLargestArmy(true);
 	}
 
 	public Player getLongestRoad() {
@@ -1173,7 +1179,13 @@ public class Game {
 	}
 
 	public void setLongestRoad(Player longestRoad) {
+		// Take the longest road away from the other player if he has it
+		if(this.longestRoad != null) {
+			this.longestRoad.setHasLongestRoad(false);
+		}
+		// Give to new player
 		this.longestRoad = longestRoad;
+		longestRoad.setHasLongestRoad(true);
 	}
 
 	public String getStatus() {
