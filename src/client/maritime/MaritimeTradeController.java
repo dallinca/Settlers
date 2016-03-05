@@ -329,8 +329,15 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 				getTradeView().enableMaritimeTrade(true);
 			} else {
 				//getTradeView().enableMaritimeTrade(false);
-				ArrayList<ResourceType> enabledResources = new ArrayList<ResourceType>();
-				getTradeOverlay().showGiveOptions(enabledResources.toArray(array));
+				
+				ArrayList<ResourceType> disableEverything = new ArrayList<ResourceType>();
+				
+				//Convert to array
+				ResourceType [] resourceType = new ResourceType[disableEverything.size()];
+				disableEverything.toArray(resourceType);
+				
+				//this disables everything because the array is empty at this point, but not null because it was defined earlier.
+				getTradeOverlay().showGiveOptions(resourceType);
 				getTradeOverlay().hideGetOptions();
 				
 			}
