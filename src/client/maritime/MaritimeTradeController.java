@@ -319,25 +319,26 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 		// If the game is null just return
 		if(Client.getInstance().getGame() == null) {
 			return;
+		} else if (Client.getInstance().getGame().getStatus().equals("Robbing")) {
+			return;
 		}
-		else {
-			if (Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getPlayerIndex())) {
+		
+		if (Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getPlayerIndex())) {
 
 				getTradeView().enableMaritimeTrade(true);
-			} else {
-				//getTradeView().enableMaritimeTrade(false);
+		} else {
+			//getTradeView().enableMaritimeTrade(false);
+			
+			ArrayList<ResourceType> disableEverything = new ArrayList<ResourceType>();
+			
+			//Convert to array
+			ResourceType [] resourceType = new ResourceType[disableEverything.size()];
+			disableEverything.toArray(resourceType);
+			
+			//this disables everything because the array is empty at this point, but not null because it was defined earlier.
+			getTradeOverlay().showGiveOptions(resourceType);
+			getTradeOverlay().hideGetOptions();
 				
-				ArrayList<ResourceType> disableEverything = new ArrayList<ResourceType>();
-				
-				//Convert to array
-				ResourceType [] resourceType = new ResourceType[disableEverything.size()];
-				disableEverything.toArray(resourceType);
-				
-				//this disables everything because the array is empty at this point, but not null because it was defined earlier.
-				getTradeOverlay().showGiveOptions(resourceType);
-				getTradeOverlay().hideGetOptions();
-				
-			}
 		}
 		
 	
