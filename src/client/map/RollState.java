@@ -34,14 +34,19 @@ public class RollState implements MapState {
 
 	@Override
 	public MapState getState() {
-		// TODO Auto-generated method stub
-		return null;
+		return this;
 	}
 
 	@Override
 	public void initFromModel() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public int getTurnNumber() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }
