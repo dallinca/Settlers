@@ -315,14 +315,19 @@ public class Game {
 		if(!isPlayersTurn(UserId)) {
 			return false;
 		}
-		// If we are in the first two rounds the answer is simply "yes"
-		if(turnNumber < 2) {
-			if(currentPlayer.getNumberUnplayedRoads() - 13 < currentPlayer.getNumberUnplayedSettlements() - 3) {
+		if(turnNumber == 0) {
+			if(currentPlayer.getNumberUnplayedRoads() != 15 ) {
 				return false;
 			}
 			return true;
+		} else if(turnNumber == 1) {
+			if(currentPlayer.getNumberUnplayedRoads() != 14 ) {
+				return false;
+			}
+			return true;
+		} else {
+			return currentPlayer.canDoBuyRoad();
 		}
-		return currentPlayer.canDoBuyRoad();	
 	}
 	
 	/**
