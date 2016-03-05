@@ -265,7 +265,7 @@ public class MapController extends Controller implements IMapController, Observe
 				robHexChosen=true;
 				robHex = hexLoc;
 
-				getView().placeRobber(hexLoc);
+				//getView().placeRobber(hexLoc);
 
 				//getRobView().closeModal();
 				Set<RobPlayerInfo> victims = new HashSet<RobPlayerInfo>();
