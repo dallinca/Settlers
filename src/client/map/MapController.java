@@ -208,8 +208,8 @@ public class MapController extends Controller implements IMapController, Observe
 	public void placeRoad(EdgeLocation edgeLoc) {
 		System.out.println("MapController placeRoad()");
 		try {
-			Client.getInstance().getGame().placeRoadOnEdge( Client.getInstance().getUserId(), edgeLoc);
 			ActionManager.getInstance().doBuild(ActionType.PURCHASE_ROAD, edgeLoc);
+			//Client.getInstance().getGame().placeRoadOnEdge( Client.getInstance().getUserId(), edgeLoc);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -225,7 +225,8 @@ public class MapController extends Controller implements IMapController, Observe
 	public void placeSettlement(VertexLocation vertLoc) {
 		System.out.println("MapController placeSettlement()");
 		try {
-			Client.getInstance().getGame().placeSettlementOnVertex(Client.getInstance().getUserId(), vertLoc);
+			ActionManager.getInstance().doBuild(ActionType.PURCHASE_SETTLEMENT, vertLoc);
+			//Client.getInstance().getGame().placeSettlementOnVertex(Client.getInstance().getUserId(), vertLoc);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -268,25 +269,25 @@ public class MapController extends Controller implements IMapController, Observe
 
 				//getRobView().closeModal();
 				Set<RobPlayerInfo> victims = new HashSet<RobPlayerInfo>();
-				
+
 				Vertex[] vertices = game.getBoard().getHex(hexLoc).getAdjacentVertices();
-				
+
 				for (int i = 0; i < vertices.length; i++){
 					Municipal m = vertices[i].getMunicipal();
-					
+
 					if ( m !=null){
 						Player p = m.getPlayer();
-						
+
 						RobPlayerInfo rbi = new RobPlayerInfo();
 						rbi.setColor(p.getPlayerColor());
 						rbi.setId(p.getPlayerId());
 						rbi.setName(p.getPlayerName());
 						int numCards = p.getNumberResourcesOfType(ResourceType.BRICK)+p.getNumberResourcesOfType(ResourceType.ORE)+
-						p.getNumberResourcesOfType(ResourceType.SHEEP)+p.getNumberResourcesOfType(ResourceType.WHEAT)+
-						p.getNumberResourcesOfType(ResourceType.WOOD);
+								p.getNumberResourcesOfType(ResourceType.SHEEP)+p.getNumberResourcesOfType(ResourceType.WHEAT)+
+								p.getNumberResourcesOfType(ResourceType.WOOD);
 						rbi.setNumCards(numCards);
 						rbi.setPlayerIndex(p.getPlayerIndex());
-						
+
 						if (!victims.contains(rbi)){
 							victims.add(rbi);
 						}
@@ -379,20 +380,14 @@ public class MapController extends Controller implements IMapController, Observe
 		// If the game is null just return
 		if(game == null) {
 			return;
-		}
-		/*Client ZeClieeent = (Client) o;
-		System.out.println("Roads unbuilt: " + game.getCurrentPlayer().getNumberUnplayedRoads());*/
-		//store current Game in controller
-		//this.game = (Game)arg;
-		if(init) {
+		} else if (init){
 			initFromModel();
 			init = false;
-			return;
 		}
 		if (game.getStatus().equals("Robbing")&&game.isPlayersTurn(Client.getInstance().getUserId())){
 			robView.showModal();
 		}
-
+		return;
 	}
 
 }

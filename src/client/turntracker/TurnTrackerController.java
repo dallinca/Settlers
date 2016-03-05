@@ -97,7 +97,7 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 		}
 		
 		//Is it the players turn
-		if(game.isPlayersTurn(game.getCurrentPlayer().getPlayerId())){
+		if(game.isPlayersTurn(Client.getInstance().getUserId())){
 			//If game state is playing then, button enabled, else disabled
 			if(game.getStatus().equals("Playing"))
 				getView().updateGameState("Finish Turn", true);
