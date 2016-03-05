@@ -227,10 +227,10 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	 */
 	@Override
 	public void setGiveResource(ResourceType resource) {
+		System.out.println("MaritimeTradeController setGiveResource()");
 		
-		if (Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getPlayerIndex())) {	
+		if (Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getUserId())) {	
 			
-			System.out.println("MaritimeTradeController setGiveResource()");
 			getTradeOverlay().setStateMessage("Choose what to get");
 					
 			giveType = resource;
