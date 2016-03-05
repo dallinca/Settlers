@@ -356,6 +356,11 @@ public class MapController extends Controller implements IMapController, Observe
 	public void playRoadBuildingCard() {
 		System.out.println("MapController playRoadBuildingCard()");	
 		ActionManager.getInstance().doAction(ActionType.PLAYCARD_BUILDROADS);
+		CatanColor color = Client.getInstance().getGame().getAllPlayers()[Client.getInstance().getPlayerIndex()].getPlayerColor();
+    	
+		//Build two roads
+		getView().startDrop(PieceType.ROAD, color, false);
+    	getView().startDrop(PieceType.ROAD, color, false);
 	}
 
 	/**
