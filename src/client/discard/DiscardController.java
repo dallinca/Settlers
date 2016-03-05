@@ -2,6 +2,7 @@ package client.discard;
 
 import shared.definitions.*;
 import shared.model.Game;
+import shared.model.player.Player;
 
 import java.util.*;
 
@@ -21,7 +22,6 @@ public class DiscardController extends Controller implements IDiscardController,
 	private ArrayList<ResourceType> wood, sheep, ore, brick, wheat;
 	
 	private int numWood, numWheat, numSheep, numOre, numBrick; 
-	private boolean doneDiscarding;
 	
 	/**
 	 * DiscardController constructor
@@ -114,7 +114,7 @@ public class DiscardController extends Controller implements IDiscardController,
 			}
 		}
 		
-		if(amountToDiscard >= totalToDiscard){
+		if(amountToDiscard == totalToDiscard){
 			getDiscardView().setResourceAmountChangeEnabled(resource.BRICK, false, true);
 			getDiscardView().setResourceAmountChangeEnabled(resource.ORE, false, true);
 			getDiscardView().setResourceAmountChangeEnabled(resource.SHEEP, false, true);
@@ -239,9 +239,7 @@ public class DiscardController extends Controller implements IDiscardController,
 		
 		if(amountToDiscard == totalToDiscard){
 			getDiscardView().closeModal();
-			getWaitView().showModal();
 			ClientFacade.getInstance().discardCards(brick.size(), ore.size(), sheep.size(), wheat.size(), wood.size());
-			doneDiscarding = true;
 		}
 	}
 
@@ -251,23 +249,25 @@ public class DiscardController extends Controller implements IDiscardController,
 		// If the game is null just return
 		
 		Game game = Client.getInstance().getGame();
+		Player cp = game.getPlayerByID(Client.getInstance().getUserId());
 		//int userID = Client.getInstance().getUserId();
+		
 		if(game == null) {
 			return;
-		}else if (game.getStatus().equals("Discarding")){
-			if (Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getResourceCardHandSize()>7
-					 && !doneDiscarding){
+		}
+		else if (game.getStatus().equals("Discarding")){
+			System.out.println("Satus discarded");
+			if (cp.isHasDiscarded()){
+				getWaitView().showModal();
+			}
+			if (cp.getResourceCardHandSize()>7){
+				System.out.println("Player target for discard.");
 				init();			
 				getDiscardView().showModal();	
-			}
-			else{
-				getWaitView().showModal();
-				doneDiscarding = true;
-			}						
+			}				
 		}
 		else{
 			getWaitView().closeModal();
-			doneDiscarding = false;
 		}
 	}
 
