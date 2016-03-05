@@ -92,7 +92,7 @@ public class MapController extends Controller implements IMapController, Observe
 		// Init the land hexes
 
 		Hex[][] allLandHexes = Client.getInstance().getGame().getMapHexes();
-
+		Hex robberHex = Client.getInstance().getGame().getBoard().getHexWithRobber();
 		Hex curHex = null;
 		for(int i = 0; i < allLandHexes.length; i++) {
 			for(int j = 0; j < allLandHexes.length; j++) {
@@ -104,8 +104,8 @@ public class MapController extends Controller implements IMapController, Observe
 					if(curHex.getRollValue() > 0) {
 						getView().addNumber(new HexLocation(curHex.getTheirX_coord_hex(), curHex.getTheirY_coord_hex()), curHex.getRollValue());
 						//System.out.println(" Roll value: " + curHex.getRollValue());
-					} else {
-						//System.out.println("   Placing robber here!");
+					}
+					if(robberHex.getX_coord_hex() == curHex.getX_coord_hex() && robberHex.getY_coord_hex() == curHex.getY_coord_hex()) {
 						getView().placeRobber(new HexLocation(curHex.getTheirX_coord_hex(), curHex.getTheirY_coord_hex()));
 					}
 				}
