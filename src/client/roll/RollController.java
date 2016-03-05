@@ -50,18 +50,18 @@ public class RollController extends Controller implements IRollController, Obser
 
 	@Override
 	public void rollDice() {
-		System.out.println("RollController rollDice()");
 		rollTimer.cancel();
+		System.out.println("RollController rollDice()");
 		int rollValue = 0;
 		try {
 			rollValue = Client.getInstance().getGame().RollDice(Client.getInstance().getUserId());
 			ClientFacade.getInstance().rollNumber(rollValue);
+			this.resultView.setRollValue(rollValue);
+			getResultView().showModal();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		this.resultView.setRollValue(rollValue);
-		getResultView().showModal();
 	}
 
 	@Override
@@ -74,14 +74,14 @@ public class RollController extends Controller implements IRollController, Obser
 			return;
 		}
 
-		Client client = (Client) o;
+		//Client client = (Client) o;
 		int userid = Client.getInstance().getUserId();
 		if(game.canDoRollDice(userid)){
-			
+
 			getRollView().showModal();
 			getRollView().setMessage("Rolling automatically in... 10 seconds");
 			int interval = 10000;
-			rollTimer.scheduleAtFixedRate(new timedPoll(), interval, 1);
+			rollTimer.scheduleAtFixedRate(new timedPoll(), interval, 1000);
 		}
 	}
 

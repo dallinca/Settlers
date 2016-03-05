@@ -92,7 +92,7 @@ public class MapController extends Controller implements IMapController, Observe
 		// Init the land hexes
 
 		Hex[][] allLandHexes = Client.getInstance().getGame().getMapHexes();
-
+		Hex robberHex = Client.getInstance().getGame().getBoard().getHexWithRobber();
 		Hex curHex = null;
 		for(int i = 0; i < allLandHexes.length; i++) {
 			for(int j = 0; j < allLandHexes.length; j++) {
@@ -104,8 +104,8 @@ public class MapController extends Controller implements IMapController, Observe
 					if(curHex.getRollValue() > 0) {
 						getView().addNumber(new HexLocation(curHex.getTheirX_coord_hex(), curHex.getTheirY_coord_hex()), curHex.getRollValue());
 						//System.out.println(" Roll value: " + curHex.getRollValue());
-					} else {
-						//System.out.println("   Placing robber here!");
+					}
+					if(robberHex.getX_coord_hex() == curHex.getX_coord_hex() && robberHex.getY_coord_hex() == curHex.getY_coord_hex()) {
 						getView().placeRobber(new HexLocation(curHex.getTheirX_coord_hex(), curHex.getTheirY_coord_hex()));
 					}
 				}
@@ -261,14 +261,11 @@ public class MapController extends Controller implements IMapController, Observe
 		if( game.canDoMoveRobberToHex(Client.getInstance().getUserId(), hexLoc)){
 
 			try {
-				game.moveRobberToHex(Client.getInstance().getUserId(), hexLoc);
+				//game.moveRobberToHex(Client.getInstance().getUserId(), hexLoc);
 				robHexChosen=true;
 				robHex = hexLoc;
 
-				//getView().placeRobber(hexLoc);
-
-				//getRobView().closeModal();
-				Set<RobPlayerInfo> victims = new HashSet<RobPlayerInfo>();
+				LinkedList<RobPlayerInfo> victims = new LinkedList<RobPlayerInfo>();
 
 				Vertex[] vertices = game.getBoard().getHex(hexLoc).getAdjacentVertices();
 
@@ -288,16 +285,24 @@ public class MapController extends Controller implements IMapController, Observe
 						rbi.setNumCards(numCards);
 						rbi.setPlayerIndex(p.getPlayerIndex());
 
-						if (!victims.contains(rbi)){
+						boolean accountedFor = false;
+						for (RobPlayerInfo current : victims){
+							if (rbi.getColor() == current.getColor()){
+								accountedFor = true;
+								break;
+							}
+						}
+
+						if (!accountedFor && rbi.getId()!=Client.getInstance().getUserId()){
 							victims.add(rbi);
 						}
 					}
 				}
 
 				RobPlayerInfo[] targets = new RobPlayerInfo[victims.size()];
-				
+
 				int i = 0;
-				
+
 				for (RobPlayerInfo current : victims){
 					targets[i] = current;
 					i++;
@@ -364,20 +369,13 @@ public class MapController extends Controller implements IMapController, Observe
 	public void robPlayer(RobPlayerInfo victim) {	
 		System.out.println("MapController robPlayer()");
 
-		try {
-			//Client.getInstance().getGame().stealPlayerResource(Client.getInstance().getUserId(), victim.getId());
-			robVictimChosen = true;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		robVictimChosen = true;
+		
 		if (robVictimChosen == true && robHexChosen == true){
 			ClientFacade.getInstance().robPlayer(robHex, victim.getPlayerIndex());
 			getRobView().closeModal();
 		}
 	}
-
 	/**
 	 * TODO
 	 * 
@@ -394,6 +392,7 @@ public class MapController extends Controller implements IMapController, Observe
 		initFromModel();
 
 		if (game.getStatus().equals("Robbing")&&game.isPlayersTurn(Client.getInstance().getUserId())){
+			System.out.println("Robber time!");
 			startMove(PieceType.ROBBER, true, true);
 		}
 		return;
