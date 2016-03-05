@@ -383,6 +383,7 @@ public class MapController extends Controller implements IMapController, Observe
 		} else if (init){
 			initFromModel();
 			init = false;
+			return;
 		}
 		if (game.getStatus().equals("Robbing")&&game.isPlayersTurn(Client.getInstance().getUserId())){
 			robView.showModal();
