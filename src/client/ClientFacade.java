@@ -77,7 +77,7 @@ public class ClientFacade {
 	}
 	
 	public static ClientFacade getInstance(){
-		System.out.println("ClientFacade ClientFacade()");
+	//	System.out.println("ClientFacade ClientFacade()");
 		if (SINGLETON == null){
 			SINGLETON = new ClientFacade();
 		}
@@ -201,7 +201,9 @@ public class ClientFacade {
 			result = sp.getVersion(request);
 			if(!result.isUpToDate()){
 				if(result.getGame() != null) {
-				//	System.out.println("UPDATING GAME");
+					System.out.println("--------------------------UPDATING GAME---------------------------");
+					System.out.println("-------------------------------------------------------------------");
+					System.out.println("--------------------------------------------------------------------");
 					updateGame(result.getGame());
 				}
 			}

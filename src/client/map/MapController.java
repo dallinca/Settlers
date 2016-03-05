@@ -388,7 +388,7 @@ public class MapController extends Controller implements IMapController, Observe
 		initFromModel();
 
 		if (game.getStatus().equals("Robbing")&&game.isPlayersTurn(Client.getInstance().getUserId())){
-			System.out.println("Robber time!");
+			//System.out.println("Robber time!");
 			startMove(PieceType.ROBBER, true, true);
 		}
 		return;

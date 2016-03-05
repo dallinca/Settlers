@@ -1,13 +1,9 @@
 package client.roll;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ExecutorService;
-
 import shared.model.Game;
 import client.Client;
 import client.ClientFacade;
@@ -72,28 +68,28 @@ public class RollController extends Controller implements IRollController, Obser
 
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
 		System.out.println("RollController update()");
-		// If the game is null just return
+	
 		Game game = Client.getInstance().getGame();
 		int userid = Client.getInstance().getUserId();
 		
+		// If the game is null just return
 		if(game == null) {
 			return;
 		} else if(game.canDoRollDice(userid)){
-			
+			System.out.println("Drawing modal and setting roll timer.----------------------------");
+			getRollView().showModal();
 			rollTimer.schedule(new timedRollDice(), 5000);
-
 			getRollView().setMessage("Rolling automatically in 5 seconds");
-			if (getRollView().isModalShowing()==false){
-				System.out.println("Roll view displayed!");
-				getRollView().showModal();
-			}						
+			
 			
 		}
 	}
 
 	class timedRollDice extends TimerTask {
+		public timedRollDice(){
+			getRollView().showModal();
+		}
 		public void run() {
 			rollDice();
 		}
