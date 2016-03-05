@@ -64,7 +64,7 @@ public class ActionManager {
 				e.printStackTrace();
 			}	
 
-		Client.getInstance().notifyAll();
+		//Client.getInstance().notifyAll();
 	}
 
 	/**
