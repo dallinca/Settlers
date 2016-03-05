@@ -1,5 +1,7 @@
 package client.roll;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Timer;
@@ -79,12 +81,13 @@ public class RollController extends Controller implements IRollController, Obser
 		if(game.canDoRollDice(userid)){
 
 			getRollView().showModal();
-			getRollView().setMessage("Rolling automatically in... 10 seconds");
+		
 			int interval = 10000;
+			getRollView().setMessage("Rolling automatically in..."+10+" seconds");
 			rollTimer.scheduleAtFixedRate(new timedPoll(), interval, 1000);
 		}
 	}
-
+			
 	class timedPoll extends TimerTask {
 		public void run() {
 			getRollView().closeModal();

@@ -86,16 +86,17 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 				}
 				if(players[i].isHasLargestArmy()){
 					largestArmy = true;
+					//players[i].setHasLargestArmy(true);
 				}
 				if(players[i].isHasLongestRoad()){
 					longestRoad = true;
+					//players[i].setHasLongestRoad(true);
 				}
-		
 				getView().updatePlayer(players[i].getPlayerIndex(), players[i].getVictoryPoints(), highlight,
 						  largestArmy, longestRoad);
 			}
 		}
-		
+
 		//Is it the players turn
 		if(game.isPlayersTurn(Client.getInstance().getUserId())){
 			//If game state is playing then, button enabled, else disabled

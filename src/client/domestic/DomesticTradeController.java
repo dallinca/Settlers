@@ -10,6 +10,7 @@ import client.Client;
 import client.ClientFacade;
 import client.base.*;
 import client.data.PlayerInfo;
+import client.data.TradeInfo;
 import client.misc.*;
 
 
@@ -24,6 +25,9 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	private boolean init, chooseSend, choosePlayer;
 	private int totalWood, totalSheep, totalOre, totalWheat, totalBrick;
 	private int tradeIndex;
+	private TradeInfo tradeinfo;
+	private Game game;
+	private boolean acceptButtonEnabled;
 
 	private int numWood, numWheat, numSheep, numOre, numBrick;
 	
@@ -147,11 +151,6 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 
 		System.out.println("DomesticTradeController increaseResourceAmount");
 
-
-
-
-
-
 		if(!choosePlayer)
 			getTradeOverlay().setStateMessage("who do you want to trade with");
 
@@ -173,15 +172,22 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		getTradeOverlay().closeModal();
 		getWaitOverlay().showModal();
 		getWaitOverlay().setMessage("trade transaction in progress...");
-		//send ints
+
 		ClientFacade.getInstance().offerTrade(totalBrick, totalOre, totalSheep, totalWheat, totalWood, tradeIndex);
 	}
 
 	@Override
 	public void setPlayerToTradeWith(int playerIndex) {
 		System.out.println("DomesticTradeController setPlayerToTradeWith()");
-		if (playerIndex==-1){
+		
+		if (playerIndex == -1){
 			choosePlayer=false;
+			if(!chooseSend)
+				getTradeOverlay().setStateMessage("set the trade you want");
+			else
+				getTradeOverlay().setStateMessage("who do you want to trade with");
+			getTradeOverlay().setTradeEnabled(false);
+				
 		}else if ((playerIndex > -1) && (playerIndex < 4)){
 			tradeIndex = playerIndex;
 			choosePlayer=true;
@@ -199,15 +205,19 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		switch(resource){
 		case WOOD: 
 			totalWood--;
-			if (numWood > totalWood){
+			if (numWood > totalWood && totalWood > 0){
 				tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WOOD, true,true);
 			}
+			else if(numWood > totalWood && totalWood == 0)
+				tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WOOD, true,false);
 			break;
 		case BRICK:
 			totalBrick--;
 			if (numBrick > totalBrick){
 				tradeOverlay.setResourceAmountChangeEnabled(ResourceType.BRICK, true,true);
 			}
+			else if(numWood > totalWood && totalWood == 0)
+				tradeOverlay.setResourceAmountChangeEnabled(ResourceType.BRICK, true,false);
 			break;	
 		}
 	}
@@ -273,7 +283,6 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		getTradeOverlay().setStateMessage("set the trade you want");
 		getTradeOverlay().setTradeEnabled(false);
 		chooseSend = false; 
-		choosePlayer = false;
 	}
 
 	@Override
@@ -285,24 +294,93 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	@Override
 	public void acceptTrade(boolean willAccept) {
 		System.out.println("DomesticTradeController willAccept()");	
-		//getAcceptOverlay().showModal();
 		getAcceptOverlay().closeModal();
+		ClientFacade.getInstance().acceptTrade(willAccept);
 	}
-
+	
+	private void offer(ResourceType resource, int offer ){
+		//The resource wasn't offered
+		if(offer == 0)
+			return;
+		//the resources getting
+		else if(offer > 0)
+			getAcceptOverlay().addGetResource(resource, offer);
+		//the resources giving
+		else if(offer < 0)
+			getAcceptOverlay().addGiveResource(resource, offer);
+	}
+	
+	private void buttonEnabled(int offer, int receiverResource){
+		if(receiverResource >= offer){
+			getAcceptOverlay().setAcceptEnabled(true);
+			acceptButtonEnabled = true;
+		}
+		else if(!acceptButtonEnabled)
+			getAcceptOverlay().setAcceptEnabled(false);
+	}
+	
+	private void acceptTradeWindow(){
+		
+		Player sender = game.getAllPlayers()[tradeinfo.getSender()];
+		Player receiver = game.getAllPlayers()[tradeinfo.getReceiver()];
+		
+		//set the name of the player offering the trade
+		getAcceptOverlay().setPlayerName(sender.getPlayerName());
+		
+		int brickOffer = tradeinfo.getOffer().getBrick();
+		int oreOffer = tradeinfo.getOffer().getOre();
+		int sheepOffer = tradeinfo.getOffer().getSheep();
+		int wheatOffer = tradeinfo.getOffer().getWheat();
+		int woodOffer = tradeinfo.getOffer().getWood();
+		
+		//display what the player is offering
+		offer(ResourceType.BRICK, brickOffer);
+		offer(ResourceType.ORE, oreOffer);
+		offer(ResourceType.SHEEP, sheepOffer);
+		offer(ResourceType.WHEAT, wheatOffer);
+		offer(ResourceType.WOOD, woodOffer );
+		
+		int recieverBrick = receiver.getNumberResourcesOfType(ResourceType.BRICK);
+		int recieverOre = receiver.getNumberResourcesOfType(ResourceType.ORE);
+		int recieverSheep = receiver.getNumberResourcesOfType(ResourceType.SHEEP);
+		int recieverWheat = receiver.getNumberResourcesOfType(ResourceType.WHEAT);
+		int recieverWood = receiver.getNumberResourcesOfType(ResourceType.WOOD);
+		
+		/*Each resource calls buttonEnabled method. This boolean prevents the overlay 
+		from disabling the button once it has been set to true.*/
+		acceptButtonEnabled = false;
+		//Does the receiver have enough resource cards to accept the offer 
+		buttonEnabled(brickOffer, recieverBrick);
+		buttonEnabled(oreOffer, recieverOre);
+		buttonEnabled(sheepOffer, recieverSheep);
+		buttonEnabled(wheatOffer, recieverWheat);
+		buttonEnabled(woodOffer, recieverWood);
+		
+		getAcceptOverlay().showModal();
+	}
+	
 	@Override
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
 		System.out.println("DomesticTradeController update()");
+		
+		int userID = Client.getInstance().getUserId();
 
-		Game game = Client.getInstance().getGame();
+		this.game = Client.getInstance().getGame();
 		
 		// If the game is null just return
 		if(game == null) {
 			return;
 		}
 		
+		if(game.getTradeOffer() != null){
+			this.tradeinfo = game.getTradeOffer();
+			if(game.getPlayerByID(userID).getPlayerIndex() == tradeinfo.getReceiver()){
+				acceptTradeWindow();
+			}
+		}
 		//Is it the players turn?
-		if(game.isPlayersTurn(Client.getInstance().getUserId())){
+		if(game.isPlayersTurn(userID)){
 			startTrade();
 		}else{
 			getTradeOverlay().setPlayerSelectionEnabled(false);
