@@ -70,51 +70,50 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	@Override
 	public void startTrade() {
 		System.out.println("MaritimeTradeController startTrade()");
-		
-		boolean canTrade = ActionManager.getInstance().canDoPurchase(ActionType.TRADE_BANK);
-		boolean isPlayersTurn = Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getPlayerIndex());
+		boolean isPlayersTurn = Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getUserId());
 		ArrayList<ResourceType> resourceArray = new ArrayList<ResourceType>();
 		
 		if(isPlayersTurn){
+			//This used to check the canDoTrade by calling the Action Manager, but that applies to the get options, in the selectGetType, which has been delegated to
+			//The Client to check. So that's why it is not here.
 			
-			if (canTrade) {
-				
-				int numWood = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getNumberResourcesOfType(ResourceType.WOOD);
-				int numWheat = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getNumberResourcesOfType(ResourceType.WHEAT);
-				int numSheep = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getNumberResourcesOfType(ResourceType.SHEEP);
-				int numOre = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getNumberResourcesOfType(ResourceType.ORE);
-				int numBrick = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getNumberResourcesOfType(ResourceType.BRICK);
-				
-				tradeWood = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getTradeRate(ResourceType.WOOD);
-				tradeWheat = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getTradeRate(ResourceType.WHEAT);
-				tradeSheep = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getTradeRate(ResourceType.SHEEP);
-				tradeOre = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getTradeRate(ResourceType.ORE);
-				tradeBrick = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getTradeRate(ResourceType.BRICK);
-				
-				if(numWood >= tradeWood || numWood > 3){
-					resourceArray.add(ResourceType.WOOD);
-				}
-				if(numWheat >= tradeWheat || numWheat > 3){
-					resourceArray.add(ResourceType.WHEAT);
-				}
-				if(numSheep >= tradeSheep || numSheep > 3){
-					resourceArray.add(ResourceType.SHEEP);
-				}
-				if(numOre >= tradeOre || numOre > 3){
-					resourceArray.add(ResourceType.ORE);
-				}
-				if(numBrick >= tradeBrick || numBrick > 3){
-					resourceArray.add(ResourceType.BRICK);
-				}
-				if(resourceArray.size() > 0){
-					ResourceType [] resourceType = new ResourceType[resourceArray.size()];
-					resourceArray.toArray(resourceType);
-					getTradeOverlay().showGiveOptions(resourceType);
-					getTradeOverlay().setStateMessage("Choose what to give up");
-					getTradeOverlay().setTradeEnabled(true);
-					//getTradeOverlay().showGetOptions(enabledResources);
-				}
-			} else {
+			int numWood = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getNumberResourcesOfType(ResourceType.WOOD);
+			int numWheat = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getNumberResourcesOfType(ResourceType.WHEAT);
+			int numSheep = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getNumberResourcesOfType(ResourceType.SHEEP);
+			int numOre = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getNumberResourcesOfType(ResourceType.ORE);
+			int numBrick = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getNumberResourcesOfType(ResourceType.BRICK);
+			
+			tradeWood = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getTradeRate(ResourceType.WOOD);
+			tradeWheat = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getTradeRate(ResourceType.WHEAT);
+			tradeSheep = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getTradeRate(ResourceType.SHEEP);
+			tradeOre = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getTradeRate(ResourceType.ORE);
+			tradeBrick = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getTradeRate(ResourceType.BRICK);
+			
+			if(numWood >= tradeWood || numWood > 3){
+				resourceArray.add(ResourceType.WOOD);
+			}
+			if(numWheat >= tradeWheat || numWheat > 3){
+				resourceArray.add(ResourceType.WHEAT);
+			}
+			if(numSheep >= tradeSheep || numSheep > 3){
+				resourceArray.add(ResourceType.SHEEP);
+			}
+			if(numOre >= tradeOre || numOre > 3){
+				resourceArray.add(ResourceType.ORE);
+			}
+			if(numBrick >= tradeBrick || numBrick > 3){
+				resourceArray.add(ResourceType.BRICK);
+			}
+			if(resourceArray.size() > 0){
+
+				ResourceType [] resourceType = new ResourceType[resourceArray.size()];
+				resourceArray.toArray(resourceType);
+				getTradeOverlay().showGiveOptions(resourceType);
+				getTradeOverlay().setStateMessage("Choose what to give up");
+				getTradeOverlay().setTradeEnabled(true);
+				//getTradeOverlay().showGetOptions(enabledResources);
+			}
+			else {
 				//set message
 				getTradeOverlay().setStateMessage("You don't have enough resources");
 				ResourceType [] resourceType = new ResourceType[resourceArray.size()];
