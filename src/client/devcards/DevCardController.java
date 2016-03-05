@@ -68,7 +68,7 @@ public class DevCardController extends Controller implements IDevCardController,
 		boolean canBuy = ActionManager.getInstance().canDoPurchase(ActionType.PURCHASE_DEVELOPMENT);
 		
 		if (canBuy) {
-			getBuyCardView().showModal();
+			buyCardView.showModal();
 		} else {
 			 //throw new Exception
 		}		
@@ -77,7 +77,7 @@ public class DevCardController extends Controller implements IDevCardController,
 	@Override
 	public void cancelBuyCard() {
 		System.out.println("DevCardController cancelBuyCard()");
-		getBuyCardView().closeModal();
+		buyCardView.closeModal();
 	}
 
 	@Override
@@ -114,6 +114,12 @@ public class DevCardController extends Controller implements IDevCardController,
 
 	@Override
 	public void startPlayCard() {
+		
+		//And as we check to see if any are playable, if we find at least one that is, we pass the view that information and the type it is. So we have to iterate through all of these cards.
+		//If we find none, then our boolean in the method call will be false: setCardEnabled(DevCardType cardType, boolean enabled)
+		//And if we find any at all, regardless of playable or not, we will call this method setCardAmount(DevCardType cardType, int amount)
+		//this is done in the start play
+		
 		System.out.println("DevCardController startPlayCard()");
 		DevCardType[] types = {DevCardType.YEAR_OF_PLENTY, DevCardType.SOLDIER, DevCardType.MONOPOLY, DevCardType.MONUMENT, DevCardType.ROAD_BUILD};
 		
@@ -242,17 +248,7 @@ public class DevCardController extends Controller implements IDevCardController,
 		// If the game is null just return
 		if(Client.getInstance().getGame() == null) {
 			return;
-		}
-		// TODO Auto-generated method stub
-		//Should we check and see if we've even begun? Basically that round 1 and 2 have passed?
-		
-		//This method needs to figure out how many cards the current player has, how many are playable, and what types they are. We need to get those three things from the server.
-		//So it would appear that it would follow that we should create three lists that have this information in them, or check and see if the Facade has the functionality to send them to us at this point
-		
-		
-		//And as we check to see if any are playable, if we find at least one that is, we pass the view that information and the type it is. So we have to iterate through all of these cards.
-		//If we find none, then our boolean in the method call will be false: setCardEnabled(DevCardType cardType, boolean enabled)
-		//And if we find any at all, regardless of playable or not, we will call this method setCardAmount(DevCardType cardType, int amount)
+		}	
 		
 	}
 

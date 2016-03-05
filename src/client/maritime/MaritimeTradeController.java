@@ -292,7 +292,8 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 
 	/**
 	 * TODO
-	 * WHAT IS HAPPENING AHHHHHHHH! 
+	 * This method is called when you click the reset button and then it returns you to previous view.
+	 * The turn thing is technically not needed, but I believe it adds security to our code. Less breaks this way if something goes awry  
 	 */
 	@Override
 	public void unsetGiveValue() {
@@ -321,22 +322,9 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 			return;
 		} 
 		
-		/*else if (Client.getInstance().getGame().getStatus().equals("Robbing")) {
-			return;
-		} else if (!Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getUserId())) {
-			//getTradeView().enableMaritimeTrade(false);
-			
-			ArrayList<ResourceType> disableEverything = new ArrayList<ResourceType>();
-			
-			//Convert to array
-			ResourceType [] resourceType = new ResourceType[disableEverything.size()];
-			disableEverything.toArray(resourceType);
-			
-			//this disables everything because the array is empty at this point, but not null because it was defined earlier.
-			getTradeOverlay().showGiveOptions(resourceType);
-			getTradeOverlay().hideGetOptions();
-				
-		}*/
+		if (Client.getInstance().getGame().getTurnNumber() < 2) {
+			getTradeView().enableMaritimeTrade(false);
+		}
 		
 	
 	}
