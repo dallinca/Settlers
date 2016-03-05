@@ -679,7 +679,6 @@ public class MapComponent extends JComponent
 	private void
 			drawRoad(Graphics2D g2, EdgeLocation edgeLoc, CatanColor color)
 	{
-		System.out.println("CatanColor: " + color);
 		Point2D edgePoint = getEdgePoint(edgeLoc);
 		
 		List<Point2D> roadShape = translateShape(ROADS.get(edgeLoc.getDir()),
