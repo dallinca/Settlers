@@ -41,12 +41,9 @@ public class JsonConverter {
 	}
 
 	public Game parseJson(String jsonGame){
-		//System.out.println("Entering gauntlet.");
 		Gson gson = new Gson();
 
 		setModel(gson.fromJson(jsonGame, ClientModel.class));
-
-		//System.out.println(model.toString());
 
 		return getGame();
 	}	
@@ -55,7 +52,6 @@ public class JsonConverter {
 		// check to see if we are going to be updating the entire game, or just the player waiting screen
 		int counter = 0;
 		ArrayList<PlayerInfo> playersInfo = new ArrayList<PlayerInfo>();
-		System.out.println("jsonConverter1");
 		for(ClientModel.MPlayer mPlayer: model.getPlayers()) {
 			if(mPlayer != null) {
 				PlayerInfo playerInfo= new PlayerInfo();
@@ -66,16 +62,12 @@ public class JsonConverter {
 				playersInfo.add(playerInfo);
 				counter++;
 			}
-			System.out.println(counter);
 		}
-		System.out.println("jsonConverter2");
 		// Not enough players to start the real game
 		if(counter < 4) {
-			System.out.println("jsonConverter3");
 			Client.getInstance().updatePlayersInGameInfo(playersInfo);
 			return null;
 		}
-		System.out.println("jsonConverter4");
 		
 		// Init the BANK with the current amounts of resources and development cards
 
@@ -98,12 +90,6 @@ public class JsonConverter {
 		// Init the PLAYERS
 		Player[] players = new Player[4];
 		ClientModel.MPlayer[] mPlayers = model.getPlayers();
-		System.out.println(mPlayers);
-		System.out.println("About to setup XXX " + mPlayers.length + " Players");
-		
-		for(ClientModel.MPlayer mPlayer: model.getPlayers()) {
-			System.out.println(mPlayer.name);
-		}
 		
 		for(ClientModel.MPlayer mPlayer: mPlayers) {
 			// Get the resources the player should have right now
@@ -264,7 +250,6 @@ public class JsonConverter {
 		version.setVersionNumber(model.getVersion());
 		version.setCurrentPlayer(players[model.turnTracker.getCurrentTurn()]);
 		version.setStatus(model.turnTracker.getStatus());
-		System.out.println("About to setup XXX " + model.turnTracker.status + " Status");
 		if(model.turnTracker.getStatus().equals("FirstRound")) {
 			version.setTurnNumber(0);
 		} else if(model.turnTracker.getStatus().equals("SecondRound")) {
@@ -337,10 +322,7 @@ public class JsonConverter {
 			return PortType.WHEAT;
 		} else if(resource.equals("ore")) {
 			return PortType.ORE;
-		} 
-		System.out.println("\n\n\n\n");
-		System.out.println("Returned null porttype");
-		System.out.println("\n\n\n\n");
+		}
 		return null;
 	}
 
