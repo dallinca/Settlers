@@ -294,7 +294,16 @@ public class MapController extends Controller implements IMapController, Observe
 					}
 				}
 
-				getRobView().setPlayers((RobPlayerInfo[])victims.toArray());				
+				RobPlayerInfo[] targets = new RobPlayerInfo[victims.size()];
+				
+				int i = 0;
+				
+				for (RobPlayerInfo current : victims){
+					targets[i] = current;
+					i++;
+				}
+
+				getRobView().setPlayers(targets);				
 				robView.showModal();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -381,9 +390,9 @@ public class MapController extends Controller implements IMapController, Observe
 		if(game == null) {
 			return;
 		}
-		
+
 		initFromModel();
-		
+
 		if (game.getStatus().equals("Robbing")&&game.isPlayersTurn(Client.getInstance().getUserId())){
 			startMove(PieceType.ROBBER, true, true);
 		}
