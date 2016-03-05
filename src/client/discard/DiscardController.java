@@ -66,7 +66,7 @@ public class DiscardController extends Controller implements IDiscardController,
 		System.out.println("DiscardController increaseAmount()");
 		
 		amountToDiscard++;
-		getDiscardView().setStateMessage(amountToDiscard+"/"+(totalToDiscard/2));
+		getDiscardView().setStateMessage(amountToDiscard+"/"+totalToDiscard);
 		
 		if( resource == ResourceType.BRICK){
 			brick.add(resource);
@@ -114,7 +114,7 @@ public class DiscardController extends Controller implements IDiscardController,
 			}
 		}
 		
-		if(amountToDiscard == (totalToDiscard/2)){
+		if(amountToDiscard == totalToDiscard){
 			getDiscardView().setResourceAmountChangeEnabled(resource.BRICK, false, !brick.isEmpty());
 			getDiscardView().setResourceAmountChangeEnabled(resource.ORE, false, !ore.isEmpty());
 			getDiscardView().setResourceAmountChangeEnabled(resource.SHEEP, false, !sheep.isEmpty());
@@ -131,7 +131,7 @@ public class DiscardController extends Controller implements IDiscardController,
 	public void decreaseAmount(ResourceType resource) {
 		System.out.println("DiscardController decreaseAmount()");
 		amountToDiscard--;
-		getDiscardView().setStateMessage(amountToDiscard+"/"+(totalToDiscard/2));
+		getDiscardView().setStateMessage(amountToDiscard+"/"+totalToDiscard);
 		 
 		if( resource == ResourceType.BRICK){
 			//remove the last element
@@ -226,8 +226,9 @@ public class DiscardController extends Controller implements IDiscardController,
 		else 
 			getDiscardView().setResourceAmountChangeEnabled(ResourceType.BRICK, false, false);
 		
-		 totalToDiscard = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getResourceCardHandSize();
-		 getDiscardView().setStateMessage(amountToDiscard+"/"+(totalToDiscard/2));
+		 int handSize = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getResourceCardHandSize();
+		 totalToDiscard = handSize/2;
+		 getDiscardView().setStateMessage(amountToDiscard+"/"+totalToDiscard);
 		 
 		 getDiscardView().setDiscardButtonEnabled(false);
 	}
