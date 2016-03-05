@@ -73,10 +73,11 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 		
 		boolean canTrade = ActionManager.getInstance().canDoPurchase(ActionType.TRADE_BANK);
 		boolean isPlayersTurn = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).isPlayersTurn();
+		ArrayList<ResourceType> resourceArray = new ArrayList<ResourceType>();
 		
 		if(isPlayersTurn){
 			
-			ArrayList<ResourceType> resourceArray = new ArrayList<ResourceType>();
+			
 			
 			if (canTrade) {
 				
@@ -118,10 +119,9 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 			} else {
 				//set message
 				getTradeOverlay().setStateMessage("You don't have enough resources");
-				
-				//Convert to array
 				ResourceType [] resourceType = new ResourceType[resourceArray.size()];
 				resourceArray.toArray(resourceType);
+				getTradeOverlay().showGiveOptions(resourceType);
 				
 				//this disables everything because the array is empty at this point, but not null because it was defined earlier.
 				getTradeOverlay().showGiveOptions(resourceType);
@@ -130,11 +130,21 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 			}
 		} else {
 			
+			ArrayList<ResourceType> disableEverything = new ArrayList<ResourceType>();
+			
+			//Convert to array
+			ResourceType [] resourceType = new ResourceType[disableEverything.size()];
+			disableEverything.toArray(resourceType);
+			
+			//this disables everything because the array is empty at this point, but not null because it was defined earlier.
+			getTradeOverlay().showGiveOptions(resourceType);
+			
+			getTradeOverlay().showGetOptions(resourceType);			
 			getTradeOverlay().setStateMessage("Not your turn");
-			getTradeOverlay().hideGiveOptions();
+			//getTradeOverlay().hideGiveOptions();
 			getTradeOverlay().setTradeEnabled(false);
+			getTradeOverlay().hideGetOptions();
 		}
-		
 		
 		getTradeOverlay().showModal();
 	}
@@ -220,42 +230,54 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	 */
 	@Override
 	public void setGiveResource(ResourceType resource) {
-		System.out.println("MaritimeTradeController setGiveResource()");
-		getTradeOverlay().setStateMessage("Choose what to get");
-				
-		giveType = resource;
 		
-		int tradeRate = 4;
-		if( resource == ResourceType.BRICK){
-			tradeRate = tradeBrick;
-		}
-		else if(resource == ResourceType.ORE){
-			tradeRate = tradeOre;
-		}
-		else if(resource == ResourceType.SHEEP){
-			tradeRate = tradeSheep;
-		}
-		else if(resource == ResourceType.WHEAT){
-			tradeRate = tradeWheat;
-		}
-		else if(resource == ResourceType.WOOD){
-			tradeRate = tradeWood;
-		}
+		if (Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getPlayerIndex())) {
 		
-		getTradeOverlay().selectGiveOption(resource, tradeRate);
-		ResourceType[] checking = {ResourceType.BRICK, ResourceType.WHEAT, ResourceType.SHEEP, ResourceType.WOOD, ResourceType.ORE};
-		ArrayList<ResourceType> enabledResources = new ArrayList<ResourceType>();
-		
-		for (int i = 0; i < checking.length; i++) {
-			 if( Client.getInstance().getGame().canDoPlayerDoMaritimeTrade(giveType, checking[i]) == true) {
-				 enabledResources.add(checking[i]);
-			 }
+			
+			System.out.println("MaritimeTradeController setGiveResource()");
+			getTradeOverlay().setStateMessage("Choose what to get");
+					
+			giveType = resource;
+			
+			int tradeRate = 4;
+			if( resource == ResourceType.BRICK){
+				tradeRate = tradeBrick;
+			}
+			else if(resource == ResourceType.ORE){
+				tradeRate = tradeOre;
+			}
+			else if(resource == ResourceType.SHEEP){
+				tradeRate = tradeSheep;
+			}
+			else if(resource == ResourceType.WHEAT){
+				tradeRate = tradeWheat;
+			}
+			else if(resource == ResourceType.WOOD){
+				tradeRate = tradeWood;
+			}
+			
+			getTradeOverlay().selectGiveOption(resource, tradeRate);
+			ResourceType[] checking = {ResourceType.BRICK, ResourceType.WHEAT, ResourceType.SHEEP, ResourceType.WOOD, ResourceType.ORE};
+			ArrayList<ResourceType> enabledResources = new ArrayList<ResourceType>();
+			
+			for (int i = 0; i < checking.length; i++) {
+				 if( Client.getInstance().getGame().canDoPlayerDoMaritimeTrade(giveType, checking[i]) == true) {
+					 enabledResources.add(checking[i]);
+				 }
+			}
+			
+			array = new ResourceType[enabledResources.size()];
+			
+			getTradeOverlay().showGetOptions(enabledResources.toArray(array));
+			//tradein = resource;
+		} else {
+			ArrayList<ResourceType> enabledResources = new ArrayList<ResourceType>();
+			
+			ResourceType [] resourceType = new ResourceType[enabledResources.size()];
+			enabledResources.toArray(resourceType);
+			
+			getTradeOverlay().showGetOptions(resourceType);
 		}
-		
-		array = new ResourceType[enabledResources.size()];
-		
-		getTradeOverlay().showGetOptions(enabledResources.toArray(array));
-		//tradein = resource;
 	}
 
 	/**
@@ -264,9 +286,11 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	 */
 	@Override
 	public void unsetGetValue() {
-		System.out.println("MaritimeTradeController unsetGetValue()");
-		getType = null;
-		getTradeOverlay().showGetOptions(array);
+		if (Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getPlayerIndex())) {
+			System.out.println("MaritimeTradeController unsetGetValue()");
+			getType = null;
+			getTradeOverlay().showGetOptions(array);
+		}
 	}
 
 	/**
@@ -275,12 +299,14 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	 */
 	@Override
 	public void unsetGiveValue() {
-		System.out.println("MaritimeTradeController unsetGiveValue()");
-		giveType = null;
-		//getTradeOverlay().showGiveOptions();
-		getTradeOverlay().closeModal();
-		startTrade();
-		//getTradeOverlay().hideGiveOptions();
+		if (Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getPlayerIndex())) {
+			System.out.println("MaritimeTradeController unsetGiveValue()");
+			giveType = null;
+			//getTradeOverlay().showGiveOptions();
+			getTradeOverlay().closeModal();
+			startTrade();
+			//getTradeOverlay().hideGiveOptions();
+		}
 	}
 
 	/**
@@ -298,10 +324,14 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 			return;
 		}
 		else {
-			if (Client.getInstance().getGame().getPlayerByID(Client.getInstance().getPlayerIndex()).isPlayersTurn()) {
+			if (Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getPlayerIndex())) {
 				getTradeView().enableMaritimeTrade(true);
 			} else {
-				getTradeView().enableMaritimeTrade(false);
+				//getTradeView().enableMaritimeTrade(false);
+				ArrayList<ResourceType> enabledResources = new ArrayList<ResourceType>();
+				getTradeOverlay().showGiveOptions(enabledResources.toArray(array));
+				getTradeOverlay().hideGetOptions();
+				
 			}
 		}
 		
