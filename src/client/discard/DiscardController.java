@@ -249,6 +249,9 @@ public class DiscardController extends Controller implements IDiscardController,
 	public void update(Observable o, Object arg) {
 		System.out.println("DiscardController update()");
 		// If the game is null just return
+		if(Client.getInstance().getGame() == null) {
+			return;
+		}
 		
 		Game game = Client.getInstance().getGame();
 		Player cp = game.getPlayerByID(Client.getInstance().getUserId());
