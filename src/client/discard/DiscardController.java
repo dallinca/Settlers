@@ -191,12 +191,13 @@ public class DiscardController extends Controller implements IDiscardController,
 	}
 	
 	public void init(){
+		Game game = Client.getInstance().getGame();
 
-		numWood = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.WOOD);
-		numWheat = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.WHEAT);
-		numSheep = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.SHEEP);
-		numOre = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.ORE);
-		numBrick = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.BRICK);
+		numWood = game.getAllPlayers()[Client.getInstance().getUserId()].getNumberResourcesOfType(ResourceType.WOOD);
+		numWheat = game.getAllPlayers()[Client.getInstance().getUserId()].getNumberResourcesOfType(ResourceType.WHEAT);
+		numSheep = game.getAllPlayers()[Client.getInstance().getUserId()].getNumberResourcesOfType(ResourceType.SHEEP);
+		numOre = game.getAllPlayers()[Client.getInstance().getUserId()].getNumberResourcesOfType(ResourceType.ORE);
+		numBrick = game.getAllPlayers()[Client.getInstance().getUserId()].getNumberResourcesOfType(ResourceType.BRICK);
 		
 		getDiscardView().setResourceMaxAmount(ResourceType.WOOD, numWood);
 		getDiscardView().setResourceMaxAmount(ResourceType.WHEAT, numWheat);
