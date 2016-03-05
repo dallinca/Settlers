@@ -384,8 +384,22 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		this.game = Client.getInstance().getGame();
 		
 		// If the game is null just return
-		if(game == null) {
+		if(Client.getInstance().getGame() == null) {
 			return;
+		}
+		else {
+			if (Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getPlayerIndex())) {
+				//getTradeView().enableDomesticTrade(true);
+				//startTrade();
+				
+				
+			} else {
+				//We need to set the values all to disabled inside of the trade
+				//getTradeView().enableDomesticTrade(false);
+				getTradeOverlay().setPlayerSelectionEnabled(false);
+				getTradeOverlay().setResourceSelectionEnabled(false);
+				getTradeOverlay().setStateMessage("it's not your turn");
+			}
 		}
 		
 		if(game.getTradeOffer() != null){
@@ -394,8 +408,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 				acceptTradeWindow();
 			}
 		}
-		//Is it the players turn?
-		
+
 	}
 
 }
