@@ -115,7 +115,6 @@ public class DevCardController extends Controller implements IDevCardController,
 	@Override
 	public void startPlayCard() {
 		System.out.println("DevCardController startPlayCard()");
-		
 		DevCardType[] types = {DevCardType.YEAR_OF_PLENTY, DevCardType.SOLDIER, DevCardType.MONOPOLY, DevCardType.MONUMENT, DevCardType.ROAD_BUILD};
 		
 		for (int i = 0; i < types.length; i++) {
@@ -131,8 +130,6 @@ public class DevCardController extends Controller implements IDevCardController,
 			//forSoldiertest:
 			//getPlayCardView().setCardEnabled(DevCardType.SOLDIER, true);
 		}
-		
-		
 		getPlayCardView().showModal();
 	}
 
@@ -257,13 +254,6 @@ public class DevCardController extends Controller implements IDevCardController,
 		//If we find none, then our boolean in the method call will be false: setCardEnabled(DevCardType cardType, boolean enabled)
 		//And if we find any at all, regardless of playable or not, we will call this method setCardAmount(DevCardType cardType, int amount)
 		
-		DevCardType[] types = {DevCardType.YEAR_OF_PLENTY, DevCardType.SOLDIER, DevCardType.MONOPOLY, DevCardType.MONUMENT, DevCardType.ROAD_BUILD};
-		
-		for (int i = 0; i < types.length; i++) {
-			boolean enableOrNot = Client.getInstance().getGame().canDoPlayerUseDevelopmentCard(Client.getInstance().getUserId(), types[i]);
-			getPlayCardView().setCardAmount(types[i], Client.getInstance().getGame().numberUnplayedDevCards(Client.getInstance().getUserId(), types[i]));
-			getPlayCardView().setCardEnabled(types[i], enableOrNot);
-		}
 	}
 
 }
