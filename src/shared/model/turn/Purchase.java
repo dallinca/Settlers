@@ -105,6 +105,7 @@ public class Purchase {
 	 * @post Player places road on the board, loses cost.
 	 */
 	public void purchaseRoad(Object l){
+		Game game = Client.getInstance().getGame();
 		System.out.println("Purchase purchaseRoad()");
 		if (canDoPurchaseRoad(l)) {
 			ClientFacade.getInstance().buildRoad((EdgeLocation)l );
