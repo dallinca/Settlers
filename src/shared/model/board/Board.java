@@ -292,6 +292,18 @@ public class Board {
 		player.buildInitialRoad(edge);
 	}
 	
+
+	public void placeRoadBuildRoadOnEdge(Player player, EdgeLocation edgeLocation) throws Exception {
+		if(canDoPlaceRoadOnEdge(player, edgeLocation) == false) {
+			throw new PlaceRoadOnEdgeException("canDoPlaceRoadOnEdge = false");
+		}
+		// Use the edgeLocation to find that Edge in our data Structure
+		Edge edge = getEdge(edgeLocation);
+		
+		// Place the INITIAL road on the edge
+		player.buildRoadBuildRoad(edge);
+	}
+	
 	/**
 	 * Determine whether a specified player's settlement can be placed on a specified vertexLocation
 	 * This call should be happening after the player has already verified ability to purchase a settlement

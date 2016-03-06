@@ -329,6 +329,11 @@ public class Player {
 		   playerPieces.placeRoad(edge);
 	   }
 	   
+
+	   public void buildRoadBuildRoad(Edge edge) throws CannotBuyException, InsufficientPlayerResourcesException, AllPiecesPlayedException {
+		   playerPieces.placeRoad(edge);
+	   }
+	   
 	 /**
 	  * checks if the player can buy a settlement
 	  *   
