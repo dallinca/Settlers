@@ -5,13 +5,14 @@ import shared.definitions.ResourceType;
 import shared.model.turn.ActionManager;
 import shared.model.turn.ActionType;
 
+import java.io.File;
 //import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
 
-/*import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;*/
+import javax.sound.sampled.Clip;
 
 import client.Client;
 import client.base.*;
@@ -90,17 +91,17 @@ public class DevCardController extends Controller implements IDevCardController,
 				 try {	
 					 ActionManager.getInstance().doAction(ActionType.PURCHASE_DEVELOPMENT);
 					 					 
-					/* try {
+					try {
 					 		//for later hahaha
 						 	//This means you bought a card and it worked ;)
-					        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Purchased.wav").getAbsoluteFile());
+					        /*AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Purchased.wav").getAbsoluteFile());
 					        Clip clip = AudioSystem.getClip();
 					        clip.open(audioInputStream);
-					        clip.start();
+					        clip.start();*/
 					    } catch(Exception ex) {
 					        System.out.println("Error with playing sound.");
 					        ex.printStackTrace();
-					    }*/
+					    }
 				 } catch(Exception ex) {
 				        System.out.println("Error with Buying a Card.");
 				        ex.printStackTrace();
@@ -200,7 +201,7 @@ public class DevCardController extends Controller implements IDevCardController,
 		soldierAction.execute();
 		
 		
-		boolean result = ActionManager.getInstance().canDoPlay(ActionType.PLAYCARD_KNIGHT);
+		/*boolean result = ActionManager.getInstance().canDoPlay(ActionType.PLAYCARD_KNIGHT);
 		if (result) {
 			//soldierAction.execute();
 			
@@ -209,7 +210,7 @@ public class DevCardController extends Controller implements IDevCardController,
 			} catch (Exception e) {
 				System.out.println("Something went wrong while trying to play a Soldier card");
 			}			
-		}
+		}*/
 		
 		
 		

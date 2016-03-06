@@ -179,6 +179,9 @@ public class Player {
 	 */
 
 	public boolean canDoPlayDevelopmentCard(int turnNumber, DevCardType devCardType) {
+		if(hasPlayedDevCardThisTurn == true) {
+			return false;
+		}
 		return developmentCardHand.canDoPlayDevelopmentCard(turnNumber, devCardType);
 	}
 	

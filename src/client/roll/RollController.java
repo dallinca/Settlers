@@ -56,13 +56,13 @@ public class RollController extends Controller implements IRollController, Obser
 		int rollValue = 0;
 		try {
 			rollValue = Client.getInstance().getGame().RollDice(Client.getInstance().getUserId());
-			
+
 			this.resultView.setRollValue(rollValue);
 			getRollView().closeModal();
 			ClientFacade.getInstance().rollNumber(rollValue);
 			getResultView().showModal();
-			
-			
+
+
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -72,14 +72,17 @@ public class RollController extends Controller implements IRollController, Obser
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("RollController update()");
-	
+
 		Game game = Client.getInstance().getGame();
 		int userid = Client.getInstance().getUserId();
-		
+
 		// If the game is null just return
 		if(game == null) {
 			return;
-		} else if (game.getStatus().equals("Robbing")||game.getStatus().equals("Discarding")){
+		} else if (game.getStatus().equals("First round") || game.getStatus().equals("Second round")){
+			return;
+		}
+		else if (game.getStatus().equals("Robbing")||game.getStatus().equals("Discarding")){
 			return;
 		} else if(game.canDoRollDice(userid)&&game.getStatus().equals("Rolling")){
 			//System.out.println("Drawing modal and setting roll timer.----------------------------");
