@@ -226,7 +226,7 @@ public class PlayerPieces {
 						   Edge[] edges = side.getEdges();
 						   for(Edge edge: edges) {
 							   // if there is an edge that doesn't have a road on it, then the player can place a road in least one place on the map.
-							   if(edge.hasRoad() == false) {
+							   if(edge != null && edge.hasRoad() == false) {
 								   return true;
 							   }
 						   }
