@@ -56,7 +56,6 @@ public class Game {
 	 * 
 	 */
 	public Game() {
-		System.out.println("WHERE THE HECK AM I BEING CALLED FROM???????????????");
 		// init bank
 		bank = new Bank();
 		// init players
@@ -88,7 +87,6 @@ public class Game {
 
 		currentPlayer = players[0];
 		this.board = board;
-		System.out.println("Game constructor 2 was called");
 	}
 
 	/**
@@ -879,7 +877,7 @@ public class Game {
 		}
 		// If we are in the setup phase, the rules for placing a road are slightly different
 		if(usingRoadBuilder == true) {
-			board.placeInitialRoadOnEdge(getCurrentPlayer(), edgeLocation);
+			board.placeRoadBuildRoadOnEdge(getCurrentPlayer(), edgeLocation);
 		} else {
 			board.placeRoadOnEdge(getCurrentPlayer(), edgeLocation);
 		}

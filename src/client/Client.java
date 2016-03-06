@@ -4,6 +4,7 @@ import java.util.*;
 import client.data.GameInfo;
 import client.data.PlayerInfo;
 import shared.definitions.CatanColor;
+import shared.locations.EdgeLocation;
 import shared.model.Game;
 import shared.model.board.Hex;
 
@@ -15,6 +16,11 @@ public class Client extends Observable {
 	private String name;
 	private CatanColor color;
 	private int playerIndex;
+	
+	// the following three vars are for road building
+	private boolean inRoadBuilding = false;
+	private boolean chosenFirstRoadBuildingRoad = false;
+	private EdgeLocation firstRoadBuildLocation;
 	
 	private ServerPoller myServerPoller;
 	
@@ -130,6 +136,36 @@ public class Client extends Observable {
 
 	protected void setMyServerPoller(ServerPoller myServerPoller) {
 		this.myServerPoller = myServerPoller;
+	}
+
+
+	public boolean isInRoadBuilding() {
+		return inRoadBuilding;
+	}
+
+
+	public void setInRoadBuilding(boolean inRoadBuilding) {
+		this.inRoadBuilding = inRoadBuilding;
+	}
+
+
+	public EdgeLocation getFirstRoadBuildLocation() {
+		return firstRoadBuildLocation;
+	}
+
+
+	public void setFirstRoadBuildLocation(EdgeLocation firstRoadBuildLocation) {
+		this.firstRoadBuildLocation = firstRoadBuildLocation;
+	}
+
+
+	public boolean isChosenFirstRoadBuildingRoad() {
+		return chosenFirstRoadBuildingRoad;
+	}
+
+
+	public void setChosenFirstRoadBuildingRoad(boolean chosenFirstRoadBuildingRoad) {
+		this.chosenFirstRoadBuildingRoad = chosenFirstRoadBuildingRoad;
 	}
 
 

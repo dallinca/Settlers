@@ -203,14 +203,35 @@ public class MapController extends Controller implements IMapController, Observe
 	 */
 	public void placeRoad(EdgeLocation edgeLoc) {
 		System.out.println("MapController placeRoad()");
-		try {
-			ActionManager.getInstance().doBuild(ActionType.PURCHASE_ROAD, edgeLoc);
-			//Client.getInstance().getGame().placeRoadOnEdge( Client.getInstance().getUserId(), edgeLoc);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		// if we are doing road builder
+		if(Client.getInstance().isInRoadBuilding()) {
+			// If we are choosing the first road
+			if(!Client.getInstance().isChosenFirstRoadBuildingRoad()) {
+				Client.getInstance().setFirstRoadBuildLocation(edgeLoc);
+				Client.getInstance().setChosenFirstRoadBuildingRoad(true);
+				try {
+					Client.getInstance().getGame().placeRoadOnEdge(Client.getInstance().getUserId(), edgeLoc, true);
+					getView().placeRoad(edgeLoc, Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getPlayerColor());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} // If we are choosing the second road
+			else {
+				ClientFacade.getInstance().playRoadBuilding(Client.getInstance().getFirstRoadBuildLocation(), edgeLoc);
+				Client.getInstance().setFirstRoadBuildLocation(null);
+				Client.getInstance().setChosenFirstRoadBuildingRoad(false);
+				Client.getInstance().setInRoadBuilding(false);
+			}
+			
+		} else {
+			try {
+				ActionManager.getInstance().doBuild(ActionType.PURCHASE_ROAD, edgeLoc);
+				//Client.getInstance().getGame().placeRoadOnEdge( Client.getInstance().getUserId(), edgeLoc);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-
 		//getView().placeRoad(edgeLoc, Client.getInstance().getColor());
 	}
 
