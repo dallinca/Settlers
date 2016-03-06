@@ -224,6 +224,12 @@ public class DiscardController extends Controller implements IDiscardController,
 		getDiscardView().setResourceMaxAmount(ResourceType.ORE, numOre);
 		getDiscardView().setResourceMaxAmount(ResourceType.BRICK, numBrick);
 		
+		getDiscardView().setResourceDiscardAmount(ResourceType.WOOD, 0);
+		getDiscardView().setResourceDiscardAmount(ResourceType.WHEAT, 0);
+		getDiscardView().setResourceDiscardAmount(ResourceType.SHEEP, 0);
+		getDiscardView().setResourceDiscardAmount(ResourceType.ORE, 0);
+		getDiscardView().setResourceDiscardAmount(ResourceType.BRICK, 0);
+		
 		if(numWood > 0)
 			getDiscardView().setResourceAmountChangeEnabled(ResourceType.WOOD, true, false);
 		else
