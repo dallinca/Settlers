@@ -322,9 +322,9 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 			return;
 		} 
 		
-		if (Client.getInstance().getGame().getTurnNumber() < 2) {
+		/*if (Client.getInstance().getGame().getTurnNumber() < 2) {
 			getTradeView().enableMaritimeTrade(false);
-		}
+		}*/
 		
 	
 	}
