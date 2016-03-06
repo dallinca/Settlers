@@ -45,7 +45,7 @@ public class MapController extends Controller implements IMapController, Observe
 	}
 
 	public IMapView getView() {
-		System.out.println("MapController getView()");
+		System.out.print(".");
 
 		return (IMapView)super.getView();
 	}
