@@ -71,8 +71,8 @@ public class ChatController extends Controller implements IChatController, Obser
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		// So we know in the console which method was called:
 		System.out.println("ChatController update()");
+		
 		// If the game is null just return
 		if(Client.getInstance().getGame() == null) {
 			return;
@@ -112,6 +112,6 @@ public class ChatController extends Controller implements IChatController, Obser
 		*/ 
 		this.getView().setEntries(entries);
 		 
-		 	}
+	}
 
 }

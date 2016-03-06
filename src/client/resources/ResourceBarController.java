@@ -75,7 +75,6 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 		boolean isPlayersTurn = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).isPlayersTurn();
 		if (isPlayersTurn) {
 			getView().setElementEnabled(ResourceBarElement.PLAY_CARD, true);
-			executeElementAction(ResourceBarElement.BUY_CARD);
 		} else {
 			getView().setElementEnabled(ResourceBarElement.BUY_CARD, false);
 		}
