@@ -34,38 +34,30 @@ public class GameHistoryController extends Controller implements IGameHistoryCon
 		if (Client.getInstance().getGame() != null) {
 			Game.Line[] history = Client.getInstance().getGame().getHistory();
 				
-		for (int i = 0; i < history.length; i++) {  
-			//Get color or user, if user than we can call the color method in the client or something...?
-			 String user = history[i].getSource();
-			 String action = history[i].getMessage(); 
-						 
-			 CatanColor color = null;
-						 
-			 //Now we have to acertain the color of the player based on the sender:
-			 for (int g = 0; g < Client.getInstance().getGame().getAllPlayers().length; g++) {
-				 if (Client.getInstance().getGame().getAllPlayers()[g].getPlayerName().equals(user)) {
-					 color = Client.getInstance().getGame().getAllPlayers()[g].getPlayerColor();
+			for (int i = 0; i < history.length; i++) {  
+				//Get color or user, if user than we can call the color method in the client or something...?
+				 String user = history[i].getSource();
+				 String action = history[i].getMessage(); 
+							 
+				 CatanColor color = null;
+							 
+				 //Now we have to acertain the color of the player based on the sender:
+				 for (int g = 0; g < Client.getInstance().getGame().getAllPlayers().length; g++) {
+					 if (Client.getInstance().getGame().getAllPlayers()[g].getPlayerName().equals(user)) {
+						 color = Client.getInstance().getGame().getAllPlayers()[g].getPlayerColor();
+					 }
 				 }
-			 }
-						 
-			// String message = user + " " + action;
-			 LogEntry entry = new LogEntry(color, action);
-			 //Then add it to our list we will set in the view:
-			 entries.add(entry); 
+							 
+				// String message = user + " " + action;
+				 LogEntry entry = new LogEntry(color, action);
+				 //Then add it to our list we will set in the view:
+				 entries.add(entry); 
+			}
 		}
-		}
-		getView().setEntries(entries);
-
-		/*
-		entries.add(new LogEntry(CatanColor.BROWN, "Dallin Andersen was here."));
-		entries.add(new LogEntry(CatanColor.RED, "Wassup g's?"));
-		entries.add(new LogEntry(CatanColor.BROWN, "This is a brown message"));
-		entries.add(new LogEntry(CatanColor.BLUE, "I've got the bluesssss!!"));
-		*/
 		
-		getView().setEntries(entries);
-		//</temp>
-		System.out.println("GameHistoryController initFromModel()");
+		if (entries != null) {
+			getView().setEntries(entries);
+		}
 	}
 
 	@Override
@@ -90,20 +82,21 @@ public class GameHistoryController extends Controller implements IGameHistoryCon
 				 
 				 //Now we have to acertain the color of the player based on the sender:
 				 for (int g = 0; g < Client.getInstance().getGame().getAllPlayers().length; g++) {
-					 if (Client.getInstance().getGame().getAllPlayers()[g].getPlayerName() == user) {
+					 if (Client.getInstance().getGame().getAllPlayers()[g].getPlayerName().equals(user)) {
 						 color = Client.getInstance().getGame().getAllPlayers()[g].getPlayerColor();
 					 }
 				 }
 				 
-				 String message = user + " " + action;
+				 String message = /*user +*/ " " + action;
 				 LogEntry entry = new LogEntry(color, message);
 				 
 				 //Then add it to our list we will set in the view:
 				 entries.add(entry); 
 				
 		}
-		
-		getView().setEntries(entries);
+		if (entries != null) {
+			getView().setEntries(entries);
+		}
 	}
 	
 }
