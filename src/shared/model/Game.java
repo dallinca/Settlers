@@ -1273,7 +1273,7 @@ public class Game {
 			return message;
 		}
 		public void setSource(String name) {
-			message = name;
+			source = name;
 		}
 		public String getSource() {
 			return source;

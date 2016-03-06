@@ -45,7 +45,7 @@ public class MapController extends Controller implements IMapController, Observe
 	}
 
 	public IMapView getView() {
-		System.out.println("MapController getView()");
+		System.out.print(".");
 
 		return (IMapView)super.getView();
 	}
@@ -388,6 +388,7 @@ public class MapController extends Controller implements IMapController, Observe
     	
 		//Build two roads
 		getView().startDrop(PieceType.ROAD, color, false);
+		
     	getView().startDrop(PieceType.ROAD, color, false);
 	}
 

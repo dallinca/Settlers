@@ -24,6 +24,7 @@ public class ChatController extends Controller implements IChatController, Obser
 		super(view);
 		System.out.println("ChatController ChatController()");
 		//messageBox = new PlaceholderTextField();
+		Client.getInstance().addObserver(this);
 	}
 	
 	@Override
@@ -42,21 +43,6 @@ public class ChatController extends Controller implements IChatController, Obser
 		//testing the GUI
 		
 		//Put this in the update function, it works!!! Hooray! but we need to iterate through all the messages and write them all, so put it in a for loop
-		List<LogEntry> entries = new ArrayList<LogEntry>();
-		int myId = Client.getInstance().getUserId();
-		System.out.println(myId);
-		int index = -1;
-		
-		for (int i = 0; i < Client.getInstance().getGame().getAllPlayers().length; i++) {
-			if (myId == Client.getInstance().getGame().getAllPlayers()[i].getPlayerId()) {
-				index = i;
-			}
-		}
-		
-		CatanColor color = Client.getInstance().getGame().getAllPlayers()[index].getPlayerColor();
-		LogEntry entry = new LogEntry(color, message); 
-		entries.add(entry);
-		this.getView().setEntries(entries);
 		
 		
 		/*String bip = "duelOfTheFates.mp3";
@@ -65,7 +51,7 @@ public class ChatController extends Controller implements IChatController, Obser
 		mediaPlayer.play();
 		*/
 		
-			ClientFacade.getInstance().sendChat(message);
+		ClientFacade.getInstance().sendChat(message);
 	}
 
 
@@ -84,7 +70,13 @@ public class ChatController extends Controller implements IChatController, Obser
 		Game.Line[] chat = Client.getInstance().getGame().getChat();
 		 
 		 //Client.getInstance().getGame().getMessages();
-		 
+		
+		System.out.println("Chat messages-------------------------------");
+		for (int j = 0; j < chat.length; j++){
+			System.out.println("Chat message: "+chat[j].getMessage());
+			System.out.println("Chat source: " +chat[j].getSource());
+		}
+	
 		 for (int i = 0; i < chat.length; i++) {
 		  
 			 
@@ -94,8 +86,9 @@ public class ChatController extends Controller implements IChatController, Obser
 			 
 			 //Now we have to acertain the color of the player based on the sender:
 			 for (int g = 0; g < Client.getInstance().getGame().getAllPlayers().length; g++) {
-				 if (Client.getInstance().getGame().getAllPlayers()[g].getPlayerName() == source) {
+				 if (Client.getInstance().getGame().getAllPlayers()[g].getPlayerName().equals(source)) {
 					 color = Client.getInstance().getGame().getAllPlayers()[g].getPlayerColor();
+					 System.out.println(color);
 				 }
 			 }
 			 //Compile the two together and send them off to the client!
