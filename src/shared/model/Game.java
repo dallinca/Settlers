@@ -381,6 +381,14 @@ public class Game {
 	// DEVELOPMENT CARD ACTION CALLS
 	//////////////////////////////////////////
 
+	public int getNumberOfSoldiersPlayed(int userID) {
+		Player player = getPlayerByID(userID);
+		if(player == null) {
+			return -1;
+		}
+		return player.getNumberOfSoldiersPlayed();
+	}
+	
 	/**
 	 * TODO Javadoc and Implement
 	 * 
@@ -839,7 +847,6 @@ public class Game {
 			}
 			return board.canDoPlaceInitialRoadOnEdge(getCurrentPlayer(), edgeLocation);
 		} else {
-			System.out.println("Game3: " + board.canDoPlaceInitialRoadOnEdge(getCurrentPlayer(), edgeLocation));
 			return board.canDoPlaceRoadOnEdge(getCurrentPlayer(), edgeLocation);	
 		}
 	}
@@ -859,6 +866,19 @@ public class Game {
 		}
 		// If we are in the setup phase, the rules for placing a road are slightly different
 		if(turnNumber < 2) {
+			board.placeInitialRoadOnEdge(getCurrentPlayer(), edgeLocation);
+		} else {
+			board.placeRoadOnEdge(getCurrentPlayer(), edgeLocation);
+		}
+	}
+	
+
+	public void placeRoadOnEdge(int UserId, EdgeLocation edgeLocation, boolean usingRoadBuilder) throws Exception {
+		if(canDoPlaceRoadOnEdge(UserId, edgeLocation) == false) {
+			throw new Exception("Specified Player cannot place a road on the given edgeLocation");
+		}
+		// If we are in the setup phase, the rules for placing a road are slightly different
+		if(usingRoadBuilder == true) {
 			board.placeInitialRoadOnEdge(getCurrentPlayer(), edgeLocation);
 		} else {
 			board.placeRoadOnEdge(getCurrentPlayer(), edgeLocation);
