@@ -84,6 +84,12 @@ public class ChatController extends Controller implements IChatController, Obser
 		Game.Line[] chat = Client.getInstance().getGame().getChat();
 		 
 		 //Client.getInstance().getGame().getMessages();
+		
+		System.out.println("Chat messages-------------------------------");
+		for (int j = 0; j < chat.length; j++){
+			System.out.println("Chat message: "+chat[j].getMessage());
+			System.out.println("Chat source: " +chat[j].getSource());
+		}
 		 
 		 for (int i = 0; i < chat.length; i++) {
 		  
