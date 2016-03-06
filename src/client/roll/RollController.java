@@ -79,7 +79,7 @@ public class RollController extends Controller implements IRollController, Obser
 		// If the game is null just return
 		if(game == null) {
 			return;
-		} else if (game.getStatus().equals("First round") || game.getStatus().equals("First round")){
+		} else if (game.getStatus().equals("First round") || game.getStatus().equals("Second round")){
 			return;
 		}
 		else if (game.getStatus().equals("Robbing")||game.getStatus().equals("Discarding")){
