@@ -152,7 +152,8 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 		getView().setElementAmount(ResourceBarElement.CITY, Client.getInstance().getGame().getNumberUnplayedCities(Client.getInstance().getUserId()));
 		getView().setElementAmount(ResourceBarElement.ROAD, Client.getInstance().getGame().getNumberUnplayedRoads(Client.getInstance().getUserId()));
 	
-	
+		// Set number of soldiers played
+		getView().setElementAmount(ResourceBarElement.SOLDIERS, Client.getInstance().getGame().getNumberOfSoldiersPlayed((Client.getInstance().getUserId())));
 	
 		
 		
