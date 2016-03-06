@@ -181,6 +181,7 @@ public class DevCardController extends Controller implements IDevCardController,
 	@Override
 	public void playRoadBuildCard() {
 		System.out.println("DevCardController playRoadBuildCard()");
+		Client.getInstance().setInRoadBuilding(true);
 		boolean result = ActionManager.getInstance().canDoPlay(ActionType.PLAYCARD_BUILDROADS);
 		if (result) {
 			try {
@@ -250,7 +251,19 @@ public class DevCardController extends Controller implements IDevCardController,
 		if(Client.getInstance().getGame() == null) {
 			return;
 		}	
-		
+
+		/*getPlayCardView().setCardAmount(DevCardType.YEAR_OF_PLENTY, Client.getInstance().getGame().numberUnplayedDevCards(Client.getInstance().getUserId(), DevCardType.YEAR_OF_PLENTY));
+		getPlayCardView().setCardAmount(DevCardType.SOLDIER, Client.getInstance().getGame().numberUnplayedDevCards(Client.getInstance().getUserId(), DevCardType.SOLDIER));
+		getPlayCardView().setCardAmount(DevCardType.MONOPOLY, Client.getInstance().getGame().numberUnplayedDevCards(Client.getInstance().getUserId(), DevCardType.MONOPOLY));
+		getPlayCardView().setCardAmount(DevCardType.MONUMENT, Client.getInstance().getGame().numberUnplayedDevCards(Client.getInstance().getUserId(), DevCardType.MONUMENT));
+		getPlayCardView().setCardAmount(DevCardType.ROAD_BUILD, Client.getInstance().getGame().numberUnplayedDevCards(Client.getInstance().getUserId(), DevCardType.ROAD_BUILD));
+
+		getPlayCardView().setCardEnabled(DevCardType.YEAR_OF_PLENTY, Client.getInstance().getGame().canDoPlayerUseDevelopmentCard(Client.getInstance().getUserId(), DevCardType.YEAR_OF_PLENTY));
+		getPlayCardView().setCardEnabled(DevCardType.SOLDIER, Client.getInstance().getGame().canDoPlayerUseDevelopmentCard(Client.getInstance().getUserId(), DevCardType.SOLDIER));
+		getPlayCardView().setCardEnabled(DevCardType.MONOPOLY, Client.getInstance().getGame().canDoPlayerUseDevelopmentCard(Client.getInstance().getUserId(), DevCardType.MONOPOLY));
+		getPlayCardView().setCardEnabled(DevCardType.MONUMENT, Client.getInstance().getGame().canDoPlayerUseDevelopmentCard(Client.getInstance().getUserId(), DevCardType.MONUMENT));
+		getPlayCardView().setCardEnabled(DevCardType.ROAD_BUILD, Client.getInstance().getGame().canDoPlayerUseDevelopmentCard(Client.getInstance().getUserId(), DevCardType.ROAD_BUILD));
+		*/
 	}
 
 }
