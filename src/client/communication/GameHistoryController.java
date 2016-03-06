@@ -16,7 +16,7 @@ public class GameHistoryController extends Controller implements IGameHistoryCon
 		
 		super(view);
 		System.out.println("GameHistoryController GameHistoryController()");
-		Client.getInstance().addObserver(this);
+		//Client.getInstance().addObserver(this);
 		initFromModel();
 	}
 	
