@@ -184,7 +184,8 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 			//e.printStackTrace();
 			//System.out.println("Something went wrong with the trade.");
 		//}
-		
+		getTradeOverlay().hideGetOptions();
+		getTradeOverlay().hideGiveOptions();
 		getTradeOverlay().closeModal();
 	}
 
