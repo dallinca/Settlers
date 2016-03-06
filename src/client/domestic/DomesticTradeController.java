@@ -22,16 +22,19 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	private IDomesticTradeOverlay tradeOverlay;
 	private IWaitView waitOverlay;
 	private IAcceptTradeOverlay acceptOverlay;
+	
 	private boolean init, chooseSend, choosePlayer;
-	private int totalWood, totalSheep, totalOre, totalWheat, totalBrick;
+	private boolean acceptButtonEnabled;
+	private boolean toSend, toRecieve;
+	private boolean receiveTosendWood,receiveTosendSheep, receiveTosendOre, receiveTosendWheat, receiveTosendBrick;
+	
+	private int decreaseWood, decreaseSheep, decreaseOre, decreaseWheat, decreaseBrick;
+	private int woodToSend, sheepToSend, oreToSend, wheatToSend, brickToSend;
+	private int playersWood, playersWheat, playersSheep, playersOre, playersBrick;
+	
 	private int tradeIndex;
 	private TradeInfo tradeinfo;
 	private Game game;
-	private boolean acceptButtonEnabled;
-
-	private int numWood, numWheat, numSheep, numOre, numBrick;
-	
-	
 	
 	/**
 	 * DomesticTradeController constructor
@@ -127,18 +130,28 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 				initPlayers();
 			
 			//How much of each resource the player has
-			numWood = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.WOOD);
-			numWheat = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.WHEAT);
-			numSheep = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.SHEEP);
-			numOre = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.ORE);
-			numBrick = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.BRICK);
+			playersWood = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.WOOD);
+			playersWheat = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.WHEAT);
+			playersSheep = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.SHEEP);
+			playersOre = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.ORE);
+			playersBrick = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.BRICK);
 			
-			//keep track as a player increases/decreases so we can compare with the players hand
-			totalWood = 0;
-			totalSheep = 0;
-			totalOre = 0;
-			totalWheat = 0;
-			totalBrick = 0;
+			
+			/*keep track as a player increases/decreases so we can compare with the players hand so 
+			  that he can't send more than he has*/
+			woodToSend = 0;
+			sheepToSend = 0;
+			oreToSend = 0;
+			wheatToSend = 0;
+			brickToSend = 0;
+			
+			/*keep track as a player increases/decreases such that a resource cannot be decreased beyond 0.
+			  used to enable and disable down arrow.*/
+			decreaseWood = 0;
+			decreaseSheep = 0;
+			decreaseOre = 0;
+			decreaseWheat = 0;
+			decreaseBrick = 0;
 			
 			getTradeOverlay().setPlayerSelectionEnabled(true);
 			getTradeOverlay().setResourceSelectionEnabled(true);
@@ -154,11 +167,170 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		}
 	}
 
-	@Override
-	public void decreaseResourceAmount(ResourceType resource) {
-		System.out.println("DomesticTradeController decreaseResourceAmount()");
-
+	
+	
+	private void increaseResourceAmountSend(ResourceType resource){
+		switch(resource){
+			//if players has at least 1 or more of the type of this resource.
+			case WOOD: if (playersWood >= (woodToSend+1)){ 
+				woodToSend++;
+				//you can't send more wood than you have
+				if (playersWood == woodToSend){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WOOD, false,true);
+				}else{
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WOOD, true,true);
+				}
+			}
+			break;		
+			case SHEEP: if (playersSheep >= (sheepToSend+1)){ 
+				sheepToSend++;
+				if (playersSheep == sheepToSend){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.SHEEP, false,true);
+				}else{
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.SHEEP, true,true);
+				}
+			}
+			break;		
+			case ORE: if (playersOre >= (oreToSend+1)){ 
+				oreToSend++;
+				if (playersOre == oreToSend){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.ORE, false,true);
+				}else{
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.ORE, true,true);
+				}
+			}
+			break;		
+			case WHEAT: if (playersWheat >= (wheatToSend+1)){ 
+				wheatToSend++;
+				if (playersWheat == wheatToSend){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WHEAT, false,true);
+				}else{
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WHEAT, true,true);
+				}
+			}
+			break;		
+			case BRICK: if (playersBrick >= (wheatToSend+1)){ 
+				wheatToSend++;
+				if (playersBrick == wheatToSend){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.BRICK, false,true);
+				}else{
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.BRICK, true,true);
+				}
+			}
+			break;						
+		}
 	}
+	
+	private void decreaseResourceAmountSend(ResourceType resource){
+		System.out.println("    sw  "+woodToSend + "    ss   " + sheepToSend 
+				+ "    so  "+oreToSend+ "   swh  "+ wheatToSend+ "    sb " + brickToSend);
+		switch(resource){
+			case WOOD: 
+				woodToSend--;
+				//you can't decrease less than 0
+				if (0 == woodToSend){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WOOD, true, false);
+				}else{
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WOOD, true, true);
+				}
+			break;		
+			case SHEEP:
+				sheepToSend--;
+				if (0 == sheepToSend){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.SHEEP, true,false);
+				}else{
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.SHEEP, true, true);
+				}
+			break;		
+			case ORE:
+				oreToSend--;
+				if (0 == oreToSend){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.ORE, true,false);
+				}else{
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.ORE, true, true);
+				}
+			
+			break;		
+			case WHEAT: 
+				wheatToSend--;
+				if (0 == wheatToSend){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WHEAT, true,false);
+				}else{
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WHEAT, true, true);
+				}
+			break;		
+			case BRICK: 
+				wheatToSend--;
+				if (0 == wheatToSend){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.BRICK, true,false);
+				}else{
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.BRICK, true, true);
+				}
+			break;						
+		}
+	}
+	
+	private void increaseResourceAmountRecieve(ResourceType resource){
+		switch(resource){
+			case WOOD: 
+				decreaseWood++;
+				tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WOOD, true, true);
+			break;		
+			case SHEEP:
+				decreaseSheep++;
+				tradeOverlay.setResourceAmountChangeEnabled(ResourceType.SHEEP, true, true);
+			break;		
+			case ORE:
+				decreaseOre++;
+				tradeOverlay.setResourceAmountChangeEnabled(ResourceType.ORE, true, true);
+			break;		
+			case WHEAT: 
+				decreaseWheat++;
+			    tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WHEAT, true, true);
+			break;		
+			case BRICK: 
+				decreaseBrick++;
+				tradeOverlay.setResourceAmountChangeEnabled(ResourceType.BRICK, true, true);
+			break;						
+		}
+	}
+	
+	private void decreaseResourceAmountRecieve(ResourceType resource){
+		switch(resource){
+			case WOOD: 
+				decreaseWood--;
+				//you can't decrease less than 0
+				if (0 == decreaseWood){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WOOD, true, false);
+				}
+			break;		
+			case SHEEP:
+				decreaseSheep--;
+				if (0 == decreaseSheep){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.SHEEP, true, false);
+				}
+			break;		
+			case ORE:
+				decreaseOre--;
+				if (0 == decreaseOre){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.ORE, true, false);
+				}
+			break;		
+			case WHEAT: 
+				decreaseWheat--;
+				if (0 == decreaseWheat){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WHEAT, true, false);
+				}
+			break;		
+			case BRICK: 
+				decreaseBrick--;
+				if (0 == decreaseBrick){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.BRICK, true, false);
+				}
+			break;						
+		}
+	}
+	
 	/***
 	 * the "send" button, A player can only increase a resource type if he has greater than or equal to amount of increase
 	 */
@@ -166,14 +338,44 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	public void increaseResourceAmount(ResourceType resource) {
 
 		System.out.println("DomesticTradeController increaseResourceAmount");
-
+		
+		if(toSend)
+			increaseResourceAmountSend(resource);
+		else
+			increaseResourceAmountRecieve(resource);
+			
 		if(!choosePlayer)
 			getTradeOverlay().setStateMessage("who do you want to trade with");
-
-		chooseSend = true;
+		
+		if(woodToSend > 0 || sheepToSend > 0 || oreToSend > 0 || wheatToSend > 0 || brickToSend > 0)
+			chooseSend = true;
+		else{
+			chooseSend = false;
+			getTradeOverlay().setStateMessage("set the trade you want");
+			getTradeOverlay().setTradeEnabled(false);
+		}
+		
 		if(chooseSend && choosePlayer){
 			getTradeOverlay().setStateMessage("Trade!");
 			getTradeOverlay().setTradeEnabled(true);
+		}
+	}
+	
+	@Override
+	public void decreaseResourceAmount(ResourceType resource) {
+		System.out.println("DomesticTradeController decreaseResourceAmount()");
+		
+		if(toSend)
+			decreaseResourceAmountSend(resource);
+		else
+			decreaseResourceAmountRecieve(resource);
+		//check if he is sending a resource, this is a special case.
+		if(woodToSend > 0 || sheepToSend > 0 || oreToSend > 0 || wheatToSend > 0 || brickToSend > 0)
+			chooseSend = true;
+		else{
+			chooseSend = false;
+			getTradeOverlay().setStateMessage("set the trade you want");
+			getTradeOverlay().setTradeEnabled(false);
 		}
 	}
 
@@ -186,10 +388,11 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		System.out.println("DomesticTradeController sendTradeOffer()");
 
 		getTradeOverlay().closeModal();
-		getWaitOverlay().showModal();
+		
 		getWaitOverlay().setMessage("trade transaction in progress...");
-
-		ClientFacade.getInstance().offerTrade(totalBrick, totalOre, totalSheep, totalWheat, totalWood, tradeIndex);
+		getWaitOverlay().showModal();
+		
+		ClientFacade.getInstance().offerTrade(decreaseBrick, decreaseOre, decreaseSheep, decreaseWheat, decreaseWood, tradeIndex);
 	}
 
 	@Override
@@ -218,23 +421,42 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	public void setResourceToReceive(ResourceType resource) {
 		System.out.println("DomesticTradeController setResourceToReceive()");
 		
+		//these booleans are needed in the decrease and increase function
+		toSend = false;
+		
 		switch(resource){
-		case WOOD: 
-			totalWood--;
-			if (numWood > totalWood && totalWood > 0){
-				tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WOOD, true,true);
-			}
-			else if(numWood > totalWood && totalWood == 0)
-				tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WOOD, true,false);
-			break;
-		case BRICK:
-			totalBrick--;
-			if (numBrick > totalBrick){
-				tradeOverlay.setResourceAmountChangeEnabled(ResourceType.BRICK, true,true);
-			}
-			else if(numWood > totalWood && totalWood == 0)
-				tradeOverlay.setResourceAmountChangeEnabled(ResourceType.BRICK, true,false);
-			break;	
+			case WOOD: 
+				//if resource is at 0, disable decrease button
+				if (0 == decreaseWood){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WOOD, true,false);
+				}
+				//prevents errors: if you click on receive and then later click on send.
+				receiveTosendWood = true; 
+			break;		
+			case SHEEP: 
+				if (0 == decreaseSheep){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.SHEEP, true,false);
+				}
+				receiveTosendSheep = true; 
+			break;		
+			case ORE:
+				if (0 == decreaseOre){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.ORE, true,false);
+				}
+				receiveTosendOre = true; 
+			break;		
+			case WHEAT: 
+				if (0 == decreaseWheat){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WHEAT, true,false);
+				}
+				receiveTosendWheat = true; 
+			break;		
+			case BRICK: 
+				if (0 == decreaseBrick){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.BRICK, true,false);
+				}
+				receiveTosendBrick = true;
+			break;						
 		}
 	}
 
@@ -242,63 +464,113 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	public void setResourceToSend(ResourceType resource) {
 		System.out.println("DomesticTradeController setResourceToSend()");
 		
+		toSend = true;
+		
+		System.out.println("    pw  "+playersWood + "    ps   " + playersSheep 
+				+ "    po  "+playersOre+ "   pwh  "+ playersWheat+ "    pb " + playersBrick);
+		
+		System.out.println("    sw  "+woodToSend + "    ss   " + sheepToSend 
+				+ "    so  "+oreToSend+ "   swh  "+ wheatToSend+ "    sb " + brickToSend);
+		
 		switch(resource){
 			//if players has at least 1 or more of the type of this resource.
-			case WOOD: if (numWood >= (totalWood+1)){ 
-				totalWood++;
-				if (numWood == totalWood){
-					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WOOD, false,true);
+			case WOOD: if (playersWood >= (woodToSend+1)){ 
+				//if resource is at 0, disable decrease button
+				if (0 == woodToSend){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WOOD, true,false);
 				}
-				}else{
-					//player doesn't have any of the type of this resource. disable increase/decrease
-					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WOOD, false, false);
+				//if a player switches from the receive button to the send button
+				if(receiveTosendWood){
+					
+					//if the amount they want to receive is higher than their wood, set to max cards in their hand
+					if(decreaseWood > playersWood){
+						woodToSend = playersWood;
+						String pw = Integer.toString(playersWood);
+						tradeOverlay.setResourceAmount(ResourceType.WOOD,pw);
+					}else{
+						woodToSend = decreaseWood;
+					}
+					//reset receive parameters
+					receiveTosendWood = false; 
+					decreaseWood = 0;
 				}
-				break;		
-			case SHEEP: if (numSheep >= (totalSheep+1)){ 
-				totalSheep++;
-				if (numSheep == totalSheep){
-					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.SHEEP, false,true);
+			//player doesn't have any of the type of this resource. disable increase/decrease
+			}else{
+				tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WOOD, false, false);
+			}
+			break;		
+			case SHEEP: if (playersSheep >= (sheepToSend+1)){ 
+				if (0 == sheepToSend){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.SHEEP, true,false);
 				}
-				}else{
-					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.SHEEP, false, false);
+			}else{
+				tradeOverlay.setResourceAmountChangeEnabled(ResourceType.SHEEP, false, false);
+			}
+			break;		
+			case ORE: if (playersOre >= (oreToSend+1)){ 
+				if (0 == oreToSend){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.ORE, true,false);
 				}
-				break;		
-			case ORE: if (numOre >= (totalOre+1)){ 
-				totalOre++;
-				if (numOre == totalOre){
-					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.ORE, false,true);
+			}else{
+				tradeOverlay.setResourceAmountChangeEnabled(ResourceType.ORE, false, false);
+			}
+			break;		
+			case WHEAT: if (playersWheat >= (wheatToSend+1)){ 
+				if (0 == wheatToSend){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WHEAT, true,false);
 				}
-				}else{
-					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.ORE, false, false);
+			}else{
+				tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WHEAT, false, false);
+			}
+			break;		
+			case BRICK: if (playersBrick >= (brickToSend+1)){ 
+				decreaseBrick++;
+				if (0 == brickToSend){
+					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.BRICK, true, false);
 				}
-				break;		
-			case WHEAT: if (numWheat >= (totalWheat+1)){ 
-				totalWheat++;
-				if (numWheat ==totalWheat){
-					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WHEAT, false,true);
-				}
-				}else{
-					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WHEAT, false, false);
-				}
-				break;		
-			case BRICK: if (numBrick >= (totalBrick+1)){ 
-				totalBrick++;
-				if (numBrick == totalBrick){
-					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.BRICK, false,true);
-				}
-				}else{
-					tradeOverlay.setResourceAmountChangeEnabled(ResourceType.BRICK, false, false);
-				}
-				break;						
+			}else{
+				tradeOverlay.setResourceAmountChangeEnabled(ResourceType.BRICK, false, false);
+			}
+			break;						
 		}
 	}
 
 	@Override
 	public void unsetResource(ResourceType resource) {
 		System.out.println("DomesticTradeController unsetResource()");
-		getTradeOverlay().setStateMessage("set the trade you want");
-		getTradeOverlay().setTradeEnabled(false);
-		chooseSend = false; 
+		
+		//reset resource
+		switch(resource){
+			case WOOD: 
+				woodToSend = 0;
+				decreaseWood = 0;
+			break;		
+			case SHEEP: 
+				sheepToSend = 0;
+				decreaseSheep = 0;
+			break;		
+			case ORE: 
+				oreToSend = 0;
+				decreaseOre = 0;
+			break;		
+			case WHEAT: 
+				wheatToSend = 0;
+				decreaseWheat = 0;
+			break;		
+			case BRICK: 
+				brickToSend = 0;
+				decreaseBrick = 0;
+			break;						
+		}
+		//check if he is sending a resource
+		if(woodToSend > 0 || sheepToSend > 0 || oreToSend > 0 || wheatToSend > 0 || brickToSend > 0)
+			return;
+		//He is sending nothing, so disable trade
+		else{
+			getTradeOverlay().setStateMessage("set the trade you want");
+			getTradeOverlay().setTradeEnabled(false);
+			chooseSend = false; 
+		}
 	}
 
 	@Override
@@ -402,9 +674,12 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			}
 		}
 		
+
 		if(game.getTradeOffer() != null){
+			System.out.println("DomesticTradeController update() TRADDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDE");
 			this.tradeinfo = game.getTradeOffer();
 			if(game.getPlayerByID(userID).getPlayerIndex() == tradeinfo.getReceiver()){
+				System.out.println("DomesticTradeController update() INSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSIDEE");
 				acceptTradeWindow();
 			}
 		}
