@@ -45,7 +45,7 @@ public class Game {
 	private Line[] chat;
 	private Line[] history;
 	private int winner = -1;
-	
+
 	private TradeInfo tradeOffer;
 
 	// CONSTRUCTORS
@@ -1263,5 +1263,5 @@ public class Game {
 	}
 
 
-	
+
 }
