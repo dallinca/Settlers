@@ -367,6 +367,7 @@ public class MapController extends Controller implements IMapController, Observe
     	
 		//Build two roads
 		getView().startDrop(PieceType.ROAD, color, false);
+		
     	getView().startDrop(PieceType.ROAD, color, false);
 	}
 

@@ -43,7 +43,7 @@ public class GameHistoryController extends Controller implements IGameHistoryCon
 						 
 			 //Now we have to acertain the color of the player based on the sender:
 			 for (int g = 0; g < Client.getInstance().getGame().getAllPlayers().length; g++) {
-				 if (Client.getInstance().getGame().getAllPlayers()[g].getPlayerName() == user) {
+				 if (Client.getInstance().getGame().getAllPlayers()[g].getPlayerName().equals(user)) {
 					 color = Client.getInstance().getGame().getAllPlayers()[g].getPlayerColor();
 				 }
 			 }
