@@ -24,6 +24,7 @@ public class ChatController extends Controller implements IChatController, Obser
 		super(view);
 		System.out.println("ChatController ChatController()");
 		//messageBox = new PlaceholderTextField();
+		Client.getInstance().addObserver(this);
 	}
 	
 	@Override
@@ -65,7 +66,7 @@ public class ChatController extends Controller implements IChatController, Obser
 		mediaPlayer.play();
 		*/
 		
-			ClientFacade.getInstance().sendChat(message);
+		ClientFacade.getInstance().sendChat(message);
 	}
 
 

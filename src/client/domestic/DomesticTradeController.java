@@ -54,7 +54,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		setTradeOverlay(tradeOverlay);
 		setWaitOverlay(waitOverlay);
 		setAcceptOverlay(acceptOverlay);
-
+		Client.getInstance().addObserver(this);
 		init = true;
 	}
 
@@ -121,11 +121,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		int userID = Client.getInstance().getUserId();
 		this.game = Client.getInstance().getGame();
 		
-		
 		if(game.isPlayersTurn(userID)){
-			System.out.println("Legitimate trade initiated.");
-		
-			
 			if(init)
 				initPlayers();
 			
@@ -135,7 +131,6 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			playersSheep = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.SHEEP);
 			playersOre = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.ORE);
 			playersBrick = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.BRICK);
-			
 			
 			/*keep track as a player increases/decreases so we can compare with the players hand so 
 			  that he can't send more than he has*/
@@ -379,22 +374,6 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		}
 	}
 
-	/***
-	 * A player may only send offers on his turn
-	 * 
-	 */
-	@Override
-	public void sendTradeOffer() {
-		System.out.println("DomesticTradeController sendTradeOffer()");
-
-		getTradeOverlay().closeModal();
-		
-		getWaitOverlay().setMessage("trade transaction in progress...");
-		getWaitOverlay().showModal();
-		
-		ClientFacade.getInstance().offerTrade(decreaseBrick, decreaseOre, decreaseSheep, decreaseWheat, decreaseWood, tradeIndex);
-	}
-
 	@Override
 	public void setPlayerToTradeWith(int playerIndex) {
 		System.out.println("DomesticTradeController setPlayerToTradeWith()");
@@ -572,6 +551,21 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			chooseSend = false; 
 		}
 	}
+	
+	/***
+	 * A player may only send offers on his turn
+	 * 
+	 */
+	@Override
+	public void sendTradeOffer() {
+		System.out.println("DomesticTradeController sendTradeOffer()");
+
+		getWaitOverlay().showModal();
+		getWaitOverlay().setMessage("trade transaction in progress...");
+
+		ClientFacade.getInstance().offerTrade(brickToSend, oreToSend, sheepToSend, wheatToSend, woodToSend, tradeIndex);
+		getTradeOverlay().closeModal();
+	}
 
 	@Override
 	public void cancelTrade() {
@@ -587,19 +581,21 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	}
 	
 	private void offer(ResourceType resource, int offer ){
+		System.out.println("DomesticTradeController offer()");
 		//The resource wasn't offered
 		if(offer == 0)
 			return;
 		//the resources getting
 		else if(offer > 0)
 			getAcceptOverlay().addGetResource(resource, offer);
-		//the resources giving
+		//the resources giving 
 		else if(offer < 0)
 			getAcceptOverlay().addGiveResource(resource, offer);
 	}
 	
 	private void buttonEnabled(int offer, int receiverResource){
-		if(receiverResource >= offer){
+		System.out.println("DomesticTradeController buttonEnabled()");
+		if(receiverResource >= offer && offer > 0){
 			getAcceptOverlay().setAcceptEnabled(true);
 			acceptButtonEnabled = true;
 		}
@@ -608,6 +604,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	}
 	
 	private void acceptTradeWindow(){
+		System.out.println("DomesticTradeController acceptTradeWindow()");
 		
 		Player sender = game.getAllPlayers()[tradeinfo.getSender()];
 		Player receiver = game.getAllPlayers()[tradeinfo.getReceiver()];
@@ -620,6 +617,8 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		int sheepOffer = tradeinfo.getOffer().getSheep();
 		int wheatOffer = tradeinfo.getOffer().getWheat();
 		int woodOffer = tradeinfo.getOffer().getWood();
+		
+		System.out.println(" brickO"+brickOffer+" oreO"+oreOffer+" sheepO"+sheepOffer+" wheatO"+wheatOffer+" woodOffer"+woodOffer);
 		
 		//display what the player is offering
 		offer(ResourceType.BRICK, brickOffer);
@@ -674,12 +673,10 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			}
 		}
 		
-
 		if(game.getTradeOffer() != null){
-			System.out.println("DomesticTradeController update() TRADDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDE");
 			this.tradeinfo = game.getTradeOffer();
+			//if a player has an offer
 			if(game.getPlayerByID(userID).getPlayerIndex() == tradeinfo.getReceiver()){
-				System.out.println("DomesticTradeController update() INSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSIDEE");
 				acceptTradeWindow();
 			}
 		}
