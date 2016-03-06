@@ -200,7 +200,7 @@ public class DevCardController extends Controller implements IDevCardController,
 		soldierAction.execute();
 		
 		
-		boolean result = ActionManager.getInstance().canDoPlay(ActionType.PLAYCARD_KNIGHT);
+		/*boolean result = ActionManager.getInstance().canDoPlay(ActionType.PLAYCARD_KNIGHT);
 		if (result) {
 			//soldierAction.execute();
 			
@@ -209,7 +209,7 @@ public class DevCardController extends Controller implements IDevCardController,
 			} catch (Exception e) {
 				System.out.println("Something went wrong while trying to play a Soldier card");
 			}			
-		}
+		}*/
 		
 		
 		
