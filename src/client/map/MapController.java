@@ -385,7 +385,7 @@ public class MapController extends Controller implements IMapController, Observe
 			victimIndex = victim.getPlayerIndex();
 		}
 
-		if (robVictimChosen == true && robHexChosen == true 
+		if (robVictimChosen == true && robHexChosen == true
 				&& Client.getInstance().getGame().getStatus().equals("Robbing")){
 			ClientFacade.getInstance().robPlayer(robHex, victimIndex);
 			getRobView().closeModal();
