@@ -227,10 +227,10 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	 */
 	@Override
 	public void setGiveResource(ResourceType resource) {
+		System.out.println("MaritimeTradeController setGiveResource()");
 		
-		if (Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getPlayerIndex())) {	
+		if (Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getUserId())) {	
 			
-			System.out.println("MaritimeTradeController setGiveResource()");
 			getTradeOverlay().setStateMessage("Choose what to get");
 					
 			giveType = resource;
@@ -262,11 +262,10 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 				 }
 			}
 			
-			
 			array = new ResourceType[enabledResources.size()];
 			enabledResources.toArray(array);
 			
-			getTradeOverlay().showGetOptions(enabledResources.toArray(array));
+			getTradeOverlay().showGetOptions(array);
 			//tradein = resource;
 		} else {
 			ArrayList<ResourceType> enabledResources = new ArrayList<ResourceType>();
@@ -284,7 +283,7 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	 */
 	@Override
 	public void unsetGetValue() {
-		if (Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getPlayerIndex())) {
+		if (Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getUserId())) {
 			System.out.println("MaritimeTradeController unsetGetValue()");
 			getType = null;
 			getTradeOverlay().showGetOptions(array);
@@ -293,11 +292,12 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 
 	/**
 	 * TODO
-	 * WHAT IS HAPPENING AHHHHHHHH! 
+	 * This method is called when you click the reset button and then it returns you to previous view.
+	 * The turn thing is technically not needed, but I believe it adds security to our code. Less breaks this way if something goes awry  
 	 */
 	@Override
 	public void unsetGiveValue() {
-		if (Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getPlayerIndex())) {
+		if (Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getUserId())) {
 			System.out.println("MaritimeTradeController unsetGiveValue()");
 			giveType = null;
 			//getTradeOverlay().showGiveOptions();
@@ -320,27 +320,11 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 		// If the game is null just return
 		if(Client.getInstance().getGame() == null) {
 			return;
-		} else if (Client.getInstance().getGame().getStatus().equals("Robbing")) {
-			return;
-		}
+		} 
 		
-		if (Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getPlayerIndex())) {
-
-				getTradeView().enableMaritimeTrade(true);
-		} else {
-			//getTradeView().enableMaritimeTrade(false);
-			
-			ArrayList<ResourceType> disableEverything = new ArrayList<ResourceType>();
-			
-			//Convert to array
-			ResourceType [] resourceType = new ResourceType[disableEverything.size()];
-			disableEverything.toArray(resourceType);
-			
-			//this disables everything because the array is empty at this point, but not null because it was defined earlier.
-			getTradeOverlay().showGiveOptions(resourceType);
-			getTradeOverlay().hideGetOptions();
-				
-		}
+		/*if (Client.getInstance().getGame().getTurnNumber() < 2) {
+			getTradeView().enableMaritimeTrade(false);
+		}*/
 		
 	
 	}
