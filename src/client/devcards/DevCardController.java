@@ -128,7 +128,7 @@ public class DevCardController extends Controller implements IDevCardController,
 			boolean enableOrNot = Client.getInstance().getGame().canDoPlayerUseDevelopmentCard(Client.getInstance().getUserId(), types[i]);
 			
 			
-			System.out.println("Can I play a dev card this turn? " + Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).isHasPlayedDevCardThisTurn());
+			System.out.println("Have I played a dev card this turn? " + Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).isHasPlayedDevCardThisTurn());
 			
 			getPlayCardView().setCardAmount(types[i], Client.getInstance().getGame().numberUnplayedDevCards(Client.getInstance().getUserId(), types[i]));
 			

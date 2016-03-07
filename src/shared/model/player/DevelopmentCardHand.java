@@ -56,10 +56,18 @@ public class DevelopmentCardHand {
 			ArrayList<DevelopmentCard> roadBuilder, ArrayList<DevelopmentCard> monument)
 	{
 		this.soldierCards = soldiers;
-		this.victoryPointCards = monopoly;
-		this.roadBuilderCards = yearOfPlenty;
-		this.monopolyCards = roadBuilder;
-		this.yearOfPlentyCards = monument;
+		
+		//used to say monopoly for some reason
+		this.victoryPointCards = monument;
+		
+		//used to say yearOfPlenty for some reason
+		this.roadBuilderCards = roadBuilder;
+		
+		//used to say roadBuilder for some reason
+		this.monopolyCards = monopoly;
+		
+		//used to say monument for some reason
+		this.yearOfPlentyCards = yearOfPlenty;
 		
 	}
 	

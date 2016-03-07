@@ -454,6 +454,7 @@ public class ClientFacade {
 
 			result = sp.buyDevCard(request);
 			updateGame(result.getGame());
+			
 
 		} catch (ClientException e) {			
 			result = new BuyDevCard_Result();

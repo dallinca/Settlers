@@ -113,13 +113,15 @@ public class JsonConverter {
 			for(int i = 0; i < mPlayer.getNewDevCards().getMonopoly(); i++) 	{ monopolyCards.add(new DevelopmentCard(DevCardType.MONOPOLY, 3, false)); }
 			for(int i = 0; i < mPlayer.getNewDevCards().getYearOfPlenty(); i++) { yearOfPlentyCards.add(new DevelopmentCard(DevCardType.YEAR_OF_PLENTY, 3, false)); }
 			for(int i = 0; i < mPlayer.getNewDevCards().getRoadBuilding(); i++) { roadBuilderCards.add(new DevelopmentCard(DevCardType.ROAD_BUILD, 3, false)); }
-			for(int i = 0; i < mPlayer.getNewDevCards().getMonopoly(); i++) 	{ monumentCards.add(new DevelopmentCard(DevCardType.MONOPOLY, 3, false)); }
+			for(int i = 0; i < mPlayer.getNewDevCards().getMonument(); i++) 	{ monumentCards.add(new DevelopmentCard(DevCardType.MONUMENT, 3, false)); }
 			// Make the Dev cards that are not played that were bought on a previous turn
 			for(int i = 0; i < mPlayer.getOldDevCards().getSoldier(); i++) 		{ soldierCards.add(new DevelopmentCard(DevCardType.SOLDIER, 2, false)); }
 			for(int i = 0; i < mPlayer.getOldDevCards().getMonopoly(); i++) 	{ monopolyCards.add(new DevelopmentCard(DevCardType.MONOPOLY, 2, false)); }
 			for(int i = 0; i < mPlayer.getOldDevCards().getYearOfPlenty(); i++) { yearOfPlentyCards.add(new DevelopmentCard(DevCardType.YEAR_OF_PLENTY, 2, false)); }
 			for(int i = 0; i < mPlayer.getOldDevCards().getRoadBuilding(); i++) { roadBuilderCards.add(new DevelopmentCard(DevCardType.ROAD_BUILD, 2, false)); }
-			for(int i = 0; i < mPlayer.getOldDevCards().getMonopoly(); i++) 	{ monumentCards.add(new DevelopmentCard(DevCardType.MONOPOLY, 2, false)); }
+			
+			//found a bug!!!! this used to be for monopoly and monument. #typos. ooooohhhh yeeeeeaaaaaahhhh!!!!!!!
+			for(int i = 0; i < mPlayer.getOldDevCards().getMonument(); i++) 	{ monumentCards.add(new DevelopmentCard(DevCardType.MONUMENT, 2, false)); }
 
 			// Create the player giving him his index, bank, and the cards he starts with
 			Player player = new Player(mPlayer.getPlayerIndex(), bank, brick, wheat, ore, sheep, wood, soldierCards, monopolyCards, yearOfPlentyCards, roadBuilderCards, monumentCards);
