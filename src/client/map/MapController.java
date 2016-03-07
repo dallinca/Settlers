@@ -391,7 +391,11 @@ public class MapController extends Controller implements IMapController, Observe
 	}
 
 	/**
-	 * TODO
+	 * Function that is called when a move is started. Depending on which stated we are in, 
+	 * different overlays are used.
+	 * 
+	 * @pre state variable is set
+	 * @post Correct overlays will be displayed based off game state
 	 * 
 	 */
 	public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {	
