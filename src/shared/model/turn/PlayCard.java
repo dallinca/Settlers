@@ -47,6 +47,7 @@ public class PlayCard {
 	 */
 	public boolean canDoPlayMonument() {
 		System.out.println("PlayCard canDoPlayMonument()");
+		System.out.println(Client.getInstance().getGame().canDoPlayerUseDevelopmentCard(Client.getInstance().getUserId(), DevCardType.MONUMENT));
 		return Client.getInstance().getGame().canDoPlayerUseDevelopmentCard(Client.getInstance().getUserId(), DevCardType.MONUMENT);
 		
 	}
@@ -94,9 +95,15 @@ public class PlayCard {
 			if (toPassIn.length == 1) {
 				resource1 = toPassIn[0];
 				resource2 = resource1;
+				
+				System.out.println(resource1 + " is what we first asked for and " + resource2 + "is the second one");
+				
 			} else if (toPassIn.length == 2) {
 				resource1 = toPassIn[0];
 				resource2 = toPassIn[1];
+				
+				System.out.println(resource1 + " is what we first asked for and " + resource2 + "is the second one");
+				
 			} else throw new Exception("Array Too large or non-existant!");
 			
 			try {
