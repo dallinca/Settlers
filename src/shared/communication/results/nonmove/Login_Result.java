@@ -1,5 +1,10 @@
 package shared.communication.results.nonmove;
 
+/**
+ * 
+ * Response object from login command.
+ *
+ */
 public class Login_Result {
 
 	private boolean valid;

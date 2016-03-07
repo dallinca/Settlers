@@ -57,137 +57,136 @@ public class DiscardController extends Controller implements IDiscardController,
 		return waitView;
 	}
 
-	/***
+	/**
 	 * increases the resource amount to discard. Disables up arrow of a resource if discard amount is
 	 * greater than player has in hand. Disables all up arrows if  total discard amount is reached
 	 */
 	@Override
 	public void increaseAmount(ResourceType resource) {
 		System.out.println("DiscardController increaseAmount()");
+		
+		IDiscardView view = getDiscardView();
 
 		amountToDiscard++;
-		getDiscardView().setStateMessage(amountToDiscard+"/"+totalToDiscard);
+		view.setStateMessage(amountToDiscard+"/"+totalToDiscard);
 
 		if( resource == ResourceType.BRICK){
+			
 			brick.add(resource);
-			getDiscardView().setResourceDiscardAmount(resource, brick.size());
+			view.setResourceDiscardAmount(resource, brick.size());
 			if(brick.size() >= numBrick){
-				getDiscardView().setResourceAmountChangeEnabled(resource, false, true);
+				view.setResourceAmountChangeEnabled(resource, false, true);
 			}else{
-				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
+				view.setResourceAmountChangeEnabled(resource, true, true);
 			}
+			
 		}
+		
 		else if(resource == ResourceType.ORE){
+			
 			ore.add(resource);
-			getDiscardView().setResourceDiscardAmount(resource, ore.size());
+			view.setResourceDiscardAmount(resource, ore.size());
 			if(ore.size() >= numOre){
-				getDiscardView().setResourceAmountChangeEnabled(resource, false, true);
+				view.setResourceAmountChangeEnabled(resource, false, true);
 			}else{
-				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
+				view.setResourceAmountChangeEnabled(resource, true, true);
 			}
+			
 		}
+		
 		else if(resource == ResourceType.SHEEP){
+			
 			sheep.add(resource);
-			getDiscardView().setResourceDiscardAmount(resource, sheep.size());
+			view.setResourceDiscardAmount(resource, sheep.size());
 			if(sheep.size() >= numSheep){
-				getDiscardView().setResourceAmountChangeEnabled(resource, false, true);
+				view.setResourceAmountChangeEnabled(resource, false, true);
 			}else{
-				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
+				view.setResourceAmountChangeEnabled(resource, true, true);
 			}
+			
 		}
+		
 		else if(resource == ResourceType.WHEAT){
+			
 			wheat.add(resource);
-			getDiscardView().setResourceDiscardAmount(resource, wheat.size());
+			view.setResourceDiscardAmount(resource, wheat.size());
 			if(wheat.size() >= numWheat){
-				getDiscardView().setResourceAmountChangeEnabled(resource, false, true);
+				view.setResourceAmountChangeEnabled(resource, false, true);
 			}else{
-				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
+				view.setResourceAmountChangeEnabled(resource, true, true);
 			}
+			
 		}
+		
 		else if(resource == ResourceType.WOOD){
+			
 			wood.add(resource);
-			getDiscardView().setResourceDiscardAmount(resource, wood.size());
+			view.setResourceDiscardAmount(resource, wood.size());
 			if(wood.size() >= numWood){
-				getDiscardView().setResourceAmountChangeEnabled(resource, false, true);
+				view.setResourceAmountChangeEnabled(resource, false, true);
 			}else{
-				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
+				view.setResourceAmountChangeEnabled(resource, true, true);
 			}
+			
 		}
 
 		if(amountToDiscard == totalToDiscard){
-			getDiscardView().setResourceAmountChangeEnabled(resource.BRICK, false, !brick.isEmpty());
-			getDiscardView().setResourceAmountChangeEnabled(resource.ORE, false, !ore.isEmpty());
-			getDiscardView().setResourceAmountChangeEnabled(resource.SHEEP, false, !sheep.isEmpty());
-			getDiscardView().setResourceAmountChangeEnabled(resource.WHEAT, false, !wheat.isEmpty());
-			getDiscardView().setResourceAmountChangeEnabled(resource.WOOD, false, !wood.isEmpty());
-			getDiscardView().setDiscardButtonEnabled(true);
-		}else{
+			
+			view.setResourceAmountChangeEnabled(ResourceType.BRICK, false, !brick.isEmpty());
+			view.setResourceAmountChangeEnabled(ResourceType.ORE, false, !ore.isEmpty());
+			view.setResourceAmountChangeEnabled(ResourceType.SHEEP, false, !sheep.isEmpty());
+			view.setResourceAmountChangeEnabled(ResourceType.WHEAT, false, !wheat.isEmpty());
+			view.setResourceAmountChangeEnabled(ResourceType.WOOD, false, !wood.isEmpty());
+			view.setDiscardButtonEnabled(true);
+			
+		} else{
 
-			getDiscardView().setDiscardButtonEnabled(false);
+			view.setDiscardButtonEnabled(false);
 		}
 
 	}
 
+	/**
+	 * Decrease the amount of the specified resource which will be discarded.
+	 * Controls buttons so that amount cannot be decreased below zero.
+	 * 
+	 */
 	@Override
 	public void decreaseAmount(ResourceType resource) {
 		System.out.println("DiscardController decreaseAmount()");
 		amountToDiscard--;
-		getDiscardView().setStateMessage(amountToDiscard+"/"+totalToDiscard);
+		IDiscardView view = getDiscardView();
+		view.setStateMessage(amountToDiscard+"/"+totalToDiscard);
 
 		if( resource == ResourceType.BRICK){
 			//remove the last element
 			brick.remove(brick.size() - 1);
-			getDiscardView().setResourceDiscardAmount(resource, brick.size());/*
-			if(brick.size() < 1){
-				getDiscardView().setResourceAmountChangeEnabled(resource, true, false);
-			}else{
-				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
-			}*/
+			view.setResourceDiscardAmount(resource, brick.size());
 		}
 		else if( resource == ResourceType.ORE){
 			//remove the last element
 			ore.remove(ore.size() - 1);
-			getDiscardView().setResourceDiscardAmount(resource, ore.size());/*
-			if(ore.size() < 1){
-				getDiscardView().setResourceAmountChangeEnabled(resource, true, false);
-			}else{
-				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
-			}*/
+			view.setResourceDiscardAmount(resource, ore.size());
 		}
 		else if( resource == ResourceType.SHEEP){
 			//remove the last element
 			sheep.remove(sheep.size() - 1);
-			getDiscardView().setResourceDiscardAmount(resource, sheep.size());/*
-			if(sheep.size() < 1){
-				getDiscardView().setResourceAmountChangeEnabled(resource, true, false);
-			}else{
-				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
-			}*/
+			view.setResourceDiscardAmount(resource, sheep.size());
 		}
 		else if( resource == ResourceType.WHEAT){
 			//remove the last element
 			wheat.remove(wheat.size() - 1);
-			getDiscardView().setResourceDiscardAmount(resource, wheat.size());/*
-			if(wheat.size() < 1){
-				getDiscardView().setResourceAmountChangeEnabled(resource, true, false);
-			}else{
-				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
-			}*/
+			view.setResourceDiscardAmount(resource, wheat.size());
 		}
 		else if(resource == ResourceType.WOOD){
 			wood.remove(wood.size() - 1);
-			getDiscardView().setResourceDiscardAmount(resource, wood.size()); /*
-			if(wood.size() < 1){
-				getDiscardView().setResourceAmountChangeEnabled(resource, true, false);
-			}else{
-				getDiscardView().setResourceAmountChangeEnabled(resource, true, true);
-			}*/
+			view.setResourceDiscardAmount(resource, wood.size()); 
 		}
 
 		if(amountToDiscard <= totalToDiscard){
-			getDiscardView().setDiscardButtonEnabled(false);
+			view.setDiscardButtonEnabled(false);
 		}else{
-			getDiscardView().setDiscardButtonEnabled(true);
+			view.setDiscardButtonEnabled(true);
 		}
 
 		if (amountToDiscard < totalToDiscard){
@@ -198,82 +197,87 @@ public class DiscardController extends Controller implements IDiscardController,
 			if(wheat.size()<numWheat)bwheat=true;
 			if(wood.size()<numWood)bwood=true;
 
-
-			getDiscardView().setResourceAmountChangeEnabled(resource.BRICK, bbrick, !brick.isEmpty());
-			getDiscardView().setResourceAmountChangeEnabled(resource.ORE, bore, !ore.isEmpty());
-			getDiscardView().setResourceAmountChangeEnabled(resource.SHEEP, bsheep, !sheep.isEmpty());
-			getDiscardView().setResourceAmountChangeEnabled(resource.WHEAT, bwheat, !wheat.isEmpty());
-			getDiscardView().setResourceAmountChangeEnabled(resource.WOOD, bwood, !wood.isEmpty());
-			getDiscardView().setDiscardButtonEnabled(false);
+			view.setResourceAmountChangeEnabled(ResourceType.BRICK, bbrick, !brick.isEmpty());
+			view.setResourceAmountChangeEnabled(ResourceType.ORE, bore, !ore.isEmpty());
+			view.setResourceAmountChangeEnabled(ResourceType.SHEEP, bsheep, !sheep.isEmpty());
+			view.setResourceAmountChangeEnabled(ResourceType.WHEAT, bwheat, !wheat.isEmpty());
+			view.setResourceAmountChangeEnabled(ResourceType.WOOD, bwood, !wood.isEmpty());
+			view.setDiscardButtonEnabled(false);
 
 		}
 	}
 
+	/**
+	 * Initializes the discard window with necessary information to ensure
+	 * proper discarding procedures and amounts are followed.
+	 * 
+	 * 
+	 */
 	public void init(){
+		
 		Game game = Client.getInstance().getGame();
-
+		Player p = game.getPlayerByID(Client.getInstance().getUserId());
+		IDiscardView view = getDiscardView();			
+		
 		brick.clear();
 		ore.clear();
 		sheep.clear();
 		wheat.clear();
 		wood.clear();
 		
-		numWood = game.getPlayerByID(Client.getInstance().getUserId())
-				.getNumberResourcesOfType(ResourceType.WOOD);
-		numWheat = game.getPlayerByID(Client.getInstance().getUserId())
-				.getNumberResourcesOfType(ResourceType.WHEAT);
-		numSheep = game.getPlayerByID(Client.getInstance().getUserId())
-				.getNumberResourcesOfType(ResourceType.SHEEP);
-		numOre = game.getPlayerByID(Client.getInstance().getUserId())
-				.getNumberResourcesOfType(ResourceType.ORE);
-		numBrick = game.getPlayerByID(Client.getInstance().getUserId())
-				.getNumberResourcesOfType(ResourceType.BRICK);
+		numWood = p.getNumberResourcesOfType(ResourceType.WOOD);
+		numWheat = p.getNumberResourcesOfType(ResourceType.WHEAT);
+		numSheep = p.getNumberResourcesOfType(ResourceType.SHEEP);
+		numOre = p.getNumberResourcesOfType(ResourceType.ORE);
+		numBrick = p.getNumberResourcesOfType(ResourceType.BRICK);
 
-		getDiscardView().setResourceMaxAmount(ResourceType.WOOD, numWood);
-		getDiscardView().setResourceMaxAmount(ResourceType.WHEAT, numWheat);
-		getDiscardView().setResourceMaxAmount(ResourceType.SHEEP, numSheep);
-		getDiscardView().setResourceMaxAmount(ResourceType.ORE, numOre);
-		getDiscardView().setResourceMaxAmount(ResourceType.BRICK, numBrick);
+		view.setResourceMaxAmount(ResourceType.WOOD, numWood);
+		view.setResourceMaxAmount(ResourceType.WHEAT, numWheat);
+		view.setResourceMaxAmount(ResourceType.SHEEP, numSheep);
+		view.setResourceMaxAmount(ResourceType.ORE, numOre);
+		view.setResourceMaxAmount(ResourceType.BRICK, numBrick);
 
-		getDiscardView().setResourceDiscardAmount(ResourceType.WOOD, 0);
-		getDiscardView().setResourceDiscardAmount(ResourceType.WHEAT, 0);
-		getDiscardView().setResourceDiscardAmount(ResourceType.SHEEP, 0);
-		getDiscardView().setResourceDiscardAmount(ResourceType.ORE, 0);
-		getDiscardView().setResourceDiscardAmount(ResourceType.BRICK, 0);
+		view.setResourceDiscardAmount(ResourceType.WOOD, 0);
+		view.setResourceDiscardAmount(ResourceType.WHEAT, 0);
+		view.setResourceDiscardAmount(ResourceType.SHEEP, 0);
+		view.setResourceDiscardAmount(ResourceType.ORE, 0);
+		view.setResourceDiscardAmount(ResourceType.BRICK, 0);
 
 		if(numWood > 0)
-			getDiscardView().setResourceAmountChangeEnabled(ResourceType.WOOD, true, false);
+			view.setResourceAmountChangeEnabled(ResourceType.WOOD, true, false);
 		else
-			getDiscardView().setResourceAmountChangeEnabled(ResourceType.WOOD, false, false);
+			view.setResourceAmountChangeEnabled(ResourceType.WOOD, false, false);
 		if(numWheat > 0)
-			getDiscardView().setResourceAmountChangeEnabled(ResourceType.WHEAT, true, false);
+			view.setResourceAmountChangeEnabled(ResourceType.WHEAT, true, false);
 		else
-			getDiscardView().setResourceAmountChangeEnabled(ResourceType.WHEAT, false, false);
+			view.setResourceAmountChangeEnabled(ResourceType.WHEAT, false, false);
 		if(numSheep > 0)
-			getDiscardView().setResourceAmountChangeEnabled(ResourceType.SHEEP, true, false);
+			view.setResourceAmountChangeEnabled(ResourceType.SHEEP, true, false);
 		else
-			getDiscardView().setResourceAmountChangeEnabled(ResourceType.SHEEP, false, false);
+			view.setResourceAmountChangeEnabled(ResourceType.SHEEP, false, false);
 		if(numOre > 0)
-			getDiscardView().setResourceAmountChangeEnabled(ResourceType.ORE, true, false);
+			view.setResourceAmountChangeEnabled(ResourceType.ORE, true, false);
 		else
-			getDiscardView().setResourceAmountChangeEnabled(ResourceType.ORE, false, false);
+			view.setResourceAmountChangeEnabled(ResourceType.ORE, false, false);
 		if(numBrick > 0)
-			getDiscardView().setResourceAmountChangeEnabled(ResourceType.BRICK, true, false);
+			view.setResourceAmountChangeEnabled(ResourceType.BRICK, true, false);
 		else 
-			getDiscardView().setResourceAmountChangeEnabled(ResourceType.BRICK, false, false);
+			view.setResourceAmountChangeEnabled(ResourceType.BRICK, false, false);
 
-		int handSize = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getResourceCardHandSize();
+		int handSize = p.getResourceCardHandSize();
 		totalToDiscard = handSize/2;
-		getDiscardView().setStateMessage(amountToDiscard+"/"+totalToDiscard);
+		view.setStateMessage(amountToDiscard+"/"+totalToDiscard);
 
-		getDiscardView().setDiscardButtonEnabled(false);
+		view.setDiscardButtonEnabled(false);
 	}
 
+	/**
+	 * Sends cards to be discarded to the client facade and closes the discard modal.
+	 * 
+	 */
 	@Override
 	public void discard() {
 		System.out.println("DiscardController discard()");
-
-		//init();
 
 		if(amountToDiscard == totalToDiscard){
 			getDiscardView().closeModal();
@@ -281,6 +285,16 @@ public class DiscardController extends Controller implements IDiscardController,
 		}
 	}
 
+	/**
+	 * Triggers the discard functionality when game is updated and status becomes 'discarding'.
+	 * --Status must be 'discarding'
+	 * --If player has more than 7 cards, a window appears which forces them
+	 * to discard half their hand.
+	 * --If player does not have more than 7 cards or has already discarded, they are shown
+	 * a wait screen which informs them other players are currently discarding.
+	 * --When discarding status ends, the wait window is closed.
+	 * 
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("DiscardController update()");

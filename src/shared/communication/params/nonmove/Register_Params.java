@@ -1,5 +1,9 @@
 package shared.communication.params.nonmove;
 
+/**
+ * 
+ * Defines a register command for the server.
+ */
 public class Register_Params {
 	
 	private String username;

@@ -26,6 +26,10 @@ import shared.model.items.DevelopmentCard;
 import shared.model.player.Player;
 
 
+/**
+ * Converts a JSON version of the current game into a Game object, and constructs that object.
+ * 
+ */
 public class JsonConverter {
 
 

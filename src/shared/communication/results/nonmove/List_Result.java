@@ -13,6 +13,10 @@ import com.google.gson.JsonObject;
 import client.data.GameInfo;
 import client.data.PlayerInfo;
 
+/**
+ * Result object from list result command.
+ *
+ */
 public class List_Result {
 
 	private boolean valid;

@@ -4,6 +4,10 @@ import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
 import shared.model.Game;
 
+/**
+ * Response object for send chat server command.
+ *
+ */
 public class SendChat_Result {
 
 	private boolean valid;

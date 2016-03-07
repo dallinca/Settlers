@@ -2,6 +2,10 @@ package shared.communication.params.nonmove;
 
 import shared.definitions.CatanColor;
 
+/**
+ * Defines a join game command for the server.
+ * 
+ */
 public class Join_Params {
 
 	private int id;

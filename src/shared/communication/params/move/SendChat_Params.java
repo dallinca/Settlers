@@ -1,5 +1,10 @@
 package shared.communication.params.move;
 
+
+/**
+ * Defines a send chat command for the server.
+ *
+ */
 public class SendChat_Params {
 
 	private final String type = "sendChat";

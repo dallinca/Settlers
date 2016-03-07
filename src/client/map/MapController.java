@@ -267,7 +267,9 @@ public class MapController extends Controller implements IMapController, Observe
 	}
 
 	/**
-	 * TODO
+	 * Replaces the robber on a given hex. Used for both robbing and soldier plays.
+	 * Determines which players may be robbed around specified hex and displays appropriate windows.
+	 * State must be robbing or playing in order to initiate.
 	 * 
 	 */
 	public void placeRobber(HexLocation hexLoc) {
@@ -340,7 +342,7 @@ public class MapController extends Controller implements IMapController, Observe
 	}
 
 	/**
-	 * TODO
+	 * Moves a piece on the gameboard to a location.
 	 * 
 	 */
 	public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {	
@@ -356,7 +358,7 @@ public class MapController extends Controller implements IMapController, Observe
 	}
 
 	/**
-	 * TODO
+	 * Ends a move sequence.
 	 * 
 	 */
 	public void cancelMove() {
@@ -365,7 +367,7 @@ public class MapController extends Controller implements IMapController, Observe
 	}
 
 	/**
-	 * TODO
+	 * Triggers the move robber action for the soldier card.
 	 * 
 	 */
 	public void playSoldierCard() {	
@@ -393,7 +395,7 @@ public class MapController extends Controller implements IMapController, Observe
 	}
 
 	/**
-	 * TODO
+	 * Robs the specified player, closes the modal, and sends information to the clientfacade.
 	 */
 	public void robPlayer(RobPlayerInfo victim) {	
 		System.out.println("MapController robPlayer()");
@@ -417,8 +419,9 @@ public class MapController extends Controller implements IMapController, Observe
 		}
 	}
 	/**
-	 * TODO
-	 * 
+	 * Updates map controller based on current state of the game.
+	 * --Redraws map.
+	 * --Triggers robbing sequence.
 	 */
 	@Override
 	public void update(Observable o, Object arg) {

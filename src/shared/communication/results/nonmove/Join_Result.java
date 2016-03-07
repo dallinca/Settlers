@@ -1,5 +1,9 @@
 package shared.communication.results.nonmove;
 
+/**
+ * Result object from join command.
+ *
+ */
 public class Join_Result {
 	
 	private boolean valid;

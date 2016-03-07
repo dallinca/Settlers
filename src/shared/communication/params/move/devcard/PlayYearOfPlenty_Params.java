@@ -2,6 +2,10 @@ package shared.communication.params.move.devcard;
 
 import shared.definitions.ResourceType;
 
+/**
+ * Defines a play year of plenty card command for the server.
+ *
+ */
 public class PlayYearOfPlenty_Params {
 
 	private final String type = "Year_of_Plenty";

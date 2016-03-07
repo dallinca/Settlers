@@ -1,5 +1,9 @@
 package shared.communication.results.nonmove;
 
+/**
+ * Not implemented. Extra credit.
+ *
+ */
 public class AddAI_Result {
 	
 	private boolean valid;

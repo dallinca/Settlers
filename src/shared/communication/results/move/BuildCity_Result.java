@@ -4,6 +4,10 @@ import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
 import shared.model.Game;
 
+/**
+ * Response object from build city server command.
+ *
+ */
 public class BuildCity_Result {
 	
 	private boolean valid;

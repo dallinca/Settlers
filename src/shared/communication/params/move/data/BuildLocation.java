@@ -2,6 +2,11 @@ package shared.communication.params.move.data;
 
 import shared.locations.VertexLocation;
 
+/**
+ * 
+ * Defines a vertex location for JSON serialization.
+ * 
+ */
 public class BuildLocation {
 
 	private int x;

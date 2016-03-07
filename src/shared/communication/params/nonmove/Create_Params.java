@@ -1,5 +1,8 @@
 package shared.communication.params.nonmove;
 
+/**
+ * Defines a create game command for the server.
+ */
 public class Create_Params {
 	
 	private String name;

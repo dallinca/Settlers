@@ -1,5 +1,8 @@
 package shared.communication.params.nonmove;
 
+/**
+ * Defines a get current game version command for the server.
+ */
 public class GetVersion_Params {
 	
 	private int versionNumber;

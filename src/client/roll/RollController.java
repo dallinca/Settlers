@@ -47,6 +47,11 @@ public class RollController extends Controller implements IRollController, Obser
 		return (IRollView)getView();
 	}
 
+	/**
+	 * Gets the game to roll the dice, then sends the result to the client facade.
+	 * Displays result view and closes roll view when successful.
+	 * 
+	 */
 	@Override
 	public void rollDice() {
 		rollTimer.cancel();
@@ -69,6 +74,13 @@ public class RollController extends Controller implements IRollController, Obser
 		}
 	}
 
+	/**
+	 * Updates the roll controller to reflect current situation in game object.
+	 * --Triggers only when in rolling, and client's turn.
+	 * --Displays roll view modal, and sets an automatic roll timer after 5 secodns.
+	 * 
+	 * 
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("RollController update()");
@@ -92,6 +104,9 @@ public class RollController extends Controller implements IRollController, Obser
 		}
 	}
 
+	/**
+	 * Timer to roll the dice after a set interval of time.
+	 */
 	class timedRollDice extends TimerTask {
 		public void run() {
 			rollDice();

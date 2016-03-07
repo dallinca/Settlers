@@ -4,6 +4,10 @@ import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
 import shared.model.Game;
 
+/**
+ * Respone object for buy dev card server command.
+ *
+ */
 public class BuyDevCard_Result {
 
 	private boolean valid;

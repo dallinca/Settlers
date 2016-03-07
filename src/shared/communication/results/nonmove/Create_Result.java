@@ -2,6 +2,11 @@ package shared.communication.results.nonmove;
 
 import com.google.gson.JsonObject;
 
+/**
+ * Result communication response from server from a create command.
+ *
+ */
+
 public class Create_Result {
 	
 	private String title;

@@ -4,6 +4,10 @@ import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
 import shared.model.Game;
 
+/**
+ * Response object for play year of plenty server command.
+ *
+ */
 public class PlayYearOfPlenty_Result {
 
 	private final String type = "Year_of_Plenty";

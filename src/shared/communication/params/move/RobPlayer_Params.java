@@ -2,6 +2,9 @@ package shared.communication.params.move;
 
 import shared.locations.HexLocation;
 
+/**
+ * Defines a rob player command for the server.
+ */
 public class RobPlayer_Params {
 	
 	private final String type = "robPlayer";

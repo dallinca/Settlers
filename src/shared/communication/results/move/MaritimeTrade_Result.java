@@ -4,6 +4,11 @@ import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
 import shared.model.Game;
 
+/**
+ * 
+ * Response object for maritime trade server command.
+ * 
+ */
 public class MaritimeTrade_Result {
 	
 	private final String type = "maritimeTrade";
