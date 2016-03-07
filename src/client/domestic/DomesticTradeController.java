@@ -630,8 +630,11 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	@Override
 	public void acceptTrade(boolean willAccept) {
 		System.out.println("DomesticTradeController willAccept()");	
-		getAcceptOverlay().closeModal();
+
 		ClientFacade.getInstance().acceptTrade(willAccept);
+		getAcceptOverlay().closeModal();
+		
+		
 	}
 
 	private void offer(ResourceType resource, int offer ){
@@ -664,6 +667,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 
 	private void acceptTradeWindow(){
 		System.out.println("DomesticTradeController acceptTradeWindow()");
+		getAcceptOverlay().reset();
 
 		Player sender = game.getAllPlayers()[tradeinfo.getSender()];
 		Player receiver = game.getAllPlayers()[tradeinfo.getReceiver()];
@@ -730,6 +734,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			this.tradeinfo = game.getTradeOffer();
 			//if a player has an offer
 			if(game.getPlayerByID(userID).getPlayerIndex() == tradeinfo.getReceiver()){
+				System.out.println("Accept trade window right here!");
 				acceptTradeWindow();		
 			}
 		}
