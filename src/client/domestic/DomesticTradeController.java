@@ -609,7 +609,14 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		
 		System.out.println("Wood: "	+wood+" Sheep: "+ sheep + " Ore: "+ore+ " Wheat: "+wheat+" Brick: "+brick);
 		ClientFacade.getInstance().offerTrade(brick, ore, sheep, wheat, wood, tradeIndex);//Trade happens here
-
+		
+		wood = 0; 
+		brick = 0;
+		ore = 0;
+		sheep = 0;
+		wheat = 0;
+		brick = 0;
+		
 		getWaitOverlay().setMessage("Trade transaction in progress...");
 		getWaitOverlay().showModal();
 	}
@@ -723,7 +730,6 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			this.tradeinfo = game.getTradeOffer();
 			//if a player has an offer
 			if(game.getPlayerByID(userID).getPlayerIndex() == tradeinfo.getReceiver()){
-				System.out.println("IM INSIDE GETTRADE OFFER");
 				acceptTradeWindow();		
 			}
 		}
