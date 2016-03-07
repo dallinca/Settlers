@@ -319,13 +319,9 @@ public class MapController extends Controller implements IMapController, Observe
 	}
 
 	/**
-<<<<<<< HEAD
 	 * Replaces the robber on a given hex. Used for both robbing and soldier plays.
 	 * Determines which players may be robbed around specified hex and displays appropriate windows.
 	 * State must be robbing or playing in order to initiate.
-=======
-	 * TODO - Javadoc
->>>>>>> 64dc12e52c0b5707608af1a6e0a70a56b17dc93a
 	 * 
 	 */
 	public void placeRobber(HexLocation hexLoc) {
@@ -478,18 +474,14 @@ public class MapController extends Controller implements IMapController, Observe
 		}
 	}
 	/**
-<<<<<<< HEAD
-	 * Updates map controller based on current state of the game.
-	 * --Redraws map.
-	 * --Triggers robbing sequence.
-=======
 	 * Every time time there is an updated version of the Game model. This function will fire
 	 * and update the map controller with the updated information.
+	 * --Redraws map.
+	 * --Triggers robbing sequence.
 	 * 
 	 * @pre Game object changed in Client
 	 * @post GUI map is updated to reflect current Game model state.
 	 * 
->>>>>>> 64dc12e52c0b5707608af1a6e0a70a56b17dc93a
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
