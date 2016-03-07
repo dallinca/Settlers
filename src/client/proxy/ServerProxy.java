@@ -865,6 +865,8 @@ public class ServerProxy implements IServerProxy {
 				connection.setRequestProperty("Cookie", unfixedUserCookie);
 			}
 
+			System.out.println("Test.");
+			
 			if (request.getClass()==MaritimeTrade_Params.class){
 				System.out.print("Call: "+job);
 			}
@@ -876,11 +878,15 @@ public class ServerProxy implements IServerProxy {
 
 			connection.connect(); // sends cookies
 
+			System.out.println("Test 1");
 
 			OutputStreamWriter sw = new OutputStreamWriter(connection.getOutputStream());
 			sw.write(job);
 			sw.flush();
 
+			
+			System.out.println("Test 2");
+			
 			if (request.getClass()==MaritimeTrade_Params.class){
 				System.out.println(" |||| Response code: "+connection.getResponseCode());
 			}
@@ -891,15 +897,17 @@ public class ServerProxy implements IServerProxy {
 			int len = 0;
 
 			//System.out.println("Input stream received.");
-
+			System.out.println("Test 2.5");
 			byte[] buffer = new byte[1024];
 
 			StringBuilder sb = new StringBuilder();
-
+			System.out.println("Test 2.6");
 			while (-1 != (len = in.read(buffer))){
 				sb.append(new String(buffer, 0, len));
 			}
 
+			System.out.println("Test 3");
+			
 			job = sb.toString();
 
 			in.close();
@@ -948,7 +956,7 @@ public class ServerProxy implements IServerProxy {
 			}
 
 			//String decodedUserData = URLDecoder.decode(userCookie, "UTF-8");
-
+			System.out.println("Test 4");
 			return job;
 
 		}	 

@@ -4,7 +4,7 @@ import shared.definitions.ResourceType;
 
 public class PlayYearOfPlenty_Params {
 
-	private final String type = "YearOfPlenty";
+	private final String type = "Year_of_Plenty";
 	private int playerIndex;
 	private String resource1;
 	private String resource2;

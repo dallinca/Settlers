@@ -49,6 +49,9 @@ public class JsonConverter {
 	}	
 
 	private Game getGame() {
+		
+		System.out.println("Made it to the beginning of getGame.");
+		
 		// check to see if we are going to be updating the entire game, or just the player waiting screen
 		int counter = 0;
 		ArrayList<PlayerInfo> playersInfo = new ArrayList<PlayerInfo>();
@@ -105,6 +108,9 @@ public class JsonConverter {
 			ArrayList<DevelopmentCard> roadBuilderCards = new ArrayList<DevelopmentCard>();
 			ArrayList<DevelopmentCard> monumentCards = new ArrayList<DevelopmentCard>();
 
+			
+			System.out.println("Right before the cards are read in");
+			
 			// Make the Dev cards that are played that we keep track of
 			for(int i = 0; i < mPlayer.getMonuments(); i++) { monumentCards.add(new DevelopmentCard(DevCardType.MONUMENT, 2, true)); }
 			for(int i = 0; i < mPlayer.getSoldiers(); i++) 	{ soldierCards.add(new DevelopmentCard(DevCardType.SOLDIER, 2, true));}
@@ -272,6 +278,8 @@ public class JsonConverter {
 		version.setChat(chatLines);
 		version.setHistory(historyLines);
 	
+		
+		System.out.println("end of getGame()");
 
 		return version;
 	}
