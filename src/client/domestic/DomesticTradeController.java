@@ -133,22 +133,6 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			playersOre = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.ORE);
 			playersBrick = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.BRICK);
 
-			/*keep track as a player increases/decreases so we can compare with the players hand so 
-			  that he can't send more than he has*/
-			//woodToSend = 0;
-			//sheepToSend = 0;
-			//oreToSend = 0;
-			//wheatToSend = 0;
-			//brickToSend = 0;
-
-			/*keep track as a player increases/decreases such that a resource cannot be decreased beyond 0.
-			  used to enable and disable down arrow.*/
-			//decreaseWood = 0;
-			//decreaseSheep = 0;
-			//decreaseOre = 0;
-			//decreaseWheat = 0;
-			//decreaseBrick = 0;
-
 			wood = 0;
 			sheep = 0;
 			ore = 0;
@@ -174,7 +158,6 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		switch(resource){
 
 		//if players has at least 1 or more of the type of this resource.
-
 		case WOOD: 
 			System.out.println("Wood count: "+ wood);
 
@@ -241,13 +224,11 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	}
 
 	private void decreaseResourceAmountSend(ResourceType resource){
-		/*System.out.println("    sw  "+woodToSend + "    ss   " + sheepToSend 
-				+ "    so  "+oreToSend+ "   swh  "+ wheatToSend+ "    sb " + brickToSend);*/
 
 		switch(resource){
 
 		case WOOD: 
-
+		
 			wood--;
 			tradeOverlay.setResourceAmount(ResourceType.WOOD, Integer.toString(wood));
 			if (wood==0){
@@ -270,7 +251,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 
 			ore--;
 			tradeOverlay.setResourceAmount(ResourceType.ORE, Integer.toString(ore));
-			if (wood==0){
+			if (ore==0){
 				tradeOverlay.setResourceAmountChangeEnabled(ResourceType.ORE, true,false);
 			}
 
@@ -278,10 +259,11 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			break;		
 
 		case WHEAT: 
-
+			
 			wheat--;
 			tradeOverlay.setResourceAmount(ResourceType.WHEAT, Integer.toString(wheat));
-			if (wood==0){
+			if (wheat==0){
+				System.out.println("INSIDE");
 				tradeOverlay.setResourceAmountChangeEnabled(ResourceType.WHEAT, true,false);
 			}
 
@@ -292,7 +274,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 
 			brick--;
 			tradeOverlay.setResourceAmount(ResourceType.BRICK, Integer.toString(brick));
-			if (wood==0){
+			if (brick==0){
 				tradeOverlay.setResourceAmountChangeEnabled(ResourceType.BRICK, true,false);
 			}				
 
@@ -413,6 +395,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			getTradeOverlay().setStateMessage("Select your trade partner.");
 
 		System.out.println("Wheat: "+wood+" Ore: "+" Sheep: "+sheep+" Ore: "+ore+" Wheat: "+wheat);
+		//He has to be sending a resource and he has to be receiving a resource 
 		if((wood > 0 || sheep > 0 || ore > 0 || wheat > 0 || brick > 0)
 				&& (wood < 0 || sheep < 0 || ore < 0 || wheat < 0 || brick < 0))
 			chooseSend = true;
@@ -421,7 +404,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			getTradeOverlay().setStateMessage("Set your trade.");
 			getTradeOverlay().setTradeEnabled(false);
 		}
-
+		System.out.println("Choose send is: "+chooseSend);
 		if(chooseSend && choosePlayer){
 			getTradeOverlay().setStateMessage("Trade!");
 			getTradeOverlay().setTradeEnabled(true);
@@ -472,7 +455,8 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	@Override
 	public void setResourceToReceive(ResourceType resource) {
 		System.out.println("DomesticTradeController setResourceToReceive()");
-
+		
+		toSend = false;
 		switch(resource){
 		case WOOD: 
 
@@ -518,14 +502,8 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	@Override
 	public void setResourceToSend(ResourceType resource) {
 		System.out.println("DomesticTradeController setResourceToSend()");
-
-		/*
-		System.out.println("    pw  "+playersWood + "    ps   " + playersSheep 
-				+ "    po  "+playersOre+ "   pwh  "+ playersWheat+ "    pb " + playersBrick);
-
-		System.out.println("    sw  "+woodToSend + "    ss   " + sheepToSend 
-				+ "    so  "+oreToSend+ "   swh  "+ wheatToSend+ "    sb " + brickToSend);*/
-
+		toSend = true;
+		
 		switch(resource){
 		//if players has at least 1 or more of the type of this resource.
 		case WOOD: 				
@@ -628,7 +606,8 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		System.out.println("DomesticTradeController sendTradeOffer()");
 
 		getTradeOverlay().closeModal();
-
+		
+		System.out.println("Wood: "	+wood+" Sheep: "+ sheep + " Ore: "+ore+ " Wheat: "+wheat+" Brick: "+brick);
 		ClientFacade.getInstance().offerTrade(brick, ore, sheep, wheat, wood, tradeIndex);//Trade happens here
 
 		getWaitOverlay().setMessage("Trade transaction in progress...");
@@ -650,6 +629,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 
 	private void offer(ResourceType resource, int offer ){
 		System.out.println("DomesticTradeController offer()");
+		
 		//The resource wasn't offered
 		if(offer == 0)
 			return;
@@ -657,12 +637,16 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		else if(offer > 0)
 			getAcceptOverlay().addGetResource(resource, offer);
 		//the resources giving 
-		else if(offer < 0)
+		else if(offer < 0){
+			//make the number positive so it displays correctly on the GUI
+			offer = -1*offer;
 			getAcceptOverlay().addGiveResource(resource, offer);
+		}
 	}
 
 	private void buttonEnabled(int offer, int receiverResource){
 		System.out.println("DomesticTradeController buttonEnabled()");
+		
 		if(receiverResource >= offer && offer > 0){
 			getAcceptOverlay().setAcceptEnabled(true);
 			acceptButtonEnabled = true;
@@ -685,7 +669,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		int sheepOffer = tradeinfo.getOffer().getSheep();
 		int wheatOffer = tradeinfo.getOffer().getWheat();
 		int woodOffer = tradeinfo.getOffer().getWood();
-
+		
 		System.out.println("Offer: brick: "+brickOffer+" ore: "+oreOffer+" sheep: "+sheepOffer
 				+"\nwheat: "+wheatOffer+" wood: "+woodOffer);
 
@@ -711,6 +695,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		buttonEnabled(sheepOffer, recieverSheep);
 		buttonEnabled(wheatOffer, recieverWheat);
 		buttonEnabled(woodOffer, recieverWood);
+		getAcceptOverlay().showModal();
 	}
 
 	@Override
@@ -738,8 +723,8 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			this.tradeinfo = game.getTradeOffer();
 			//if a player has an offer
 			if(game.getPlayerByID(userID).getPlayerIndex() == tradeinfo.getReceiver()){
+				System.out.println("IM INSIDE GETTRADE OFFER");
 				acceptTradeWindow();		
-				getAcceptOverlay().showModal();
 			}
 		}
 
