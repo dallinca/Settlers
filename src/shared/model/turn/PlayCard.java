@@ -56,6 +56,8 @@ public class PlayCard {
 	 * Plays an army development card.
 	 * @throws Exception 
 	 * 
+	 * 
+	 * @deprecated
 	 * @pre Player must have an army development card.
 	 * @post Player takes associated action.
 	 */
@@ -73,6 +75,12 @@ public class PlayCard {
 		}
 	}
 	
+	/**
+	 * Checks to see if you can play a Knight
+	 * 
+	 * @deprecated
+	 * @return
+	 */
 	public boolean canDoPlayKnight() {
 		System.out.println("PlayCard canDoPlayKnight()");
 		return Client.getInstance().getGame().canDoPlayerUseDevelopmentCard(Client.getInstance().getUserId(), DevCardType.SOLDIER);
