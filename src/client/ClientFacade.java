@@ -647,6 +647,7 @@ public class ClientFacade {
 		try {
 
 			result = sp.playYearOfPlenty(request);
+			System.out.println(result.getGame().getCurrentPlayer().getPlayerName() + "In the Facade after talking to the proxy.");
 			updateGame(result.getGame());
 			
 		} catch (ClientException e) {			

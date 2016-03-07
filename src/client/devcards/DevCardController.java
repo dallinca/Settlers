@@ -128,6 +128,8 @@ public class DevCardController extends Controller implements IDevCardController,
 			boolean enableOrNot = Client.getInstance().getGame().canDoPlayerUseDevelopmentCard(Client.getInstance().getUserId(), types[i]);
 			getPlayCardView().setCardAmount(types[i], Client.getInstance().getGame().numberUnplayedDevCards(Client.getInstance().getUserId(), types[i]));
 			
+			System.out.println(Client.getInstance().getName());
+			
 			if (Client.getInstance().getGame().getCurrentPlayer().getPlayerId() == Client.getInstance().getUserId()) {
 				getPlayCardView().setCardEnabled(types[i], enableOrNot);
 			} else {
@@ -236,6 +238,7 @@ public class DevCardController extends Controller implements IDevCardController,
 		if (result) {
 			try {
 				ActionManager.getInstance().playDevelopmentCard(ActionType.PLAYCARD_YEAROFPLENTY, toPassIn);
+				System.out.println("We just called the action manager to play a year of Plenty Card");
 			} catch (Exception e) {
 				System.out.println("Something went wrong while trying to play a year of plenty card");
 			}

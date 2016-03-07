@@ -100,7 +100,9 @@ public class PlayCard {
 			} else throw new Exception("Array Too large or non-existant!");
 			
 			try {
+				System.out.println("Here we go again, in the action managers year of plenty, right before the facade");
 				ClientFacade.getInstance().playYearOfPlenty(resource1, resource2);
+				System.out.println("Back from the Client facade");
 				//We do not need to update the model if Facade is called...
 				//Client.getInstance().getGame().useDevelopmentCard(Client.getInstance().getUserId(), DevCardType.YEAR_OF_PLENTY, toPassIn);
 			} catch (Exception e) {

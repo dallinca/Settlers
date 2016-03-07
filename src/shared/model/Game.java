@@ -418,7 +418,17 @@ public class Game {
 	 * @return how many unused cards the player has of the specified devCardType
 	 */
 	public int numberUnplayedDevCards(int userID, DevCardType devCardType) {
-		return currentPlayer.numberUnplayedDevCards(devCardType);
+		
+		int unplayed = -1;
+		
+		for (int i = 0; i < players.length; i++) {
+			if (players[i].getPlayerId() == userID) {
+				unplayed = players[i].numberUnplayedDevCards(devCardType);
+			}
+		}
+		
+		return unplayed;
+		//what it used to say: currentPlayer.numberUnplayedDevCards(devCardType)
 	}
 
 
