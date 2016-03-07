@@ -59,17 +59,35 @@ public class MapController extends Controller implements IMapController, Observe
 		this.robView = robView;
 	}
 
+	/**
+	 * This function initializes the map from the game model.
+	 * 
+	 * @pre Client.getInstance().getGame() != null
+	 * @post The GUI map will be a direct reflection game map model for hexes, ports, and player pieces
+	 * @return none
+	 */
 	protected void initFromModel() {
 		System.out.println("MapController initFromModel()");
-
 
 		// Check if there is a game to initialize from
 		if(Client.getInstance().getGame() == null) {
 			return;
-			//Client.getInstance().setGame(new Game());
 		}
 
-		// Init the water Hexes
+		initWaterHexes();
+		initLandHexes();
+		initPorts();
+		initPlayerPieces();
+
+	}
+
+	/**
+	 * Extension of initFromModel. Initializes the water hexes.
+	 * 
+	 * @pre should only be called from initFromModel
+	 * @post GUI water Hexes Initialized
+	 */
+	private void initWaterHexes() {
 		getView().addHex(new HexLocation(0, -3), HexType.WATER);
 		getView().addHex(new HexLocation(1, -3), HexType.WATER);
 		getView().addHex(new HexLocation(2, -3), HexType.WATER);
@@ -88,8 +106,15 @@ public class MapController extends Controller implements IMapController, Observe
 		getView().addHex(new HexLocation(-3, 0), HexType.WATER);
 		getView().addHex(new HexLocation(-2, -1), HexType.WATER);
 		getView().addHex(new HexLocation(-1, -2), HexType.WATER);
+	}
 
-		// Init the land hexes
+	/**
+	 * Extension of initFromModel. Initializes the land hexes.
+	 * 
+	 * @pre should only be called from initFromModel
+	 * @post GUI land Hexes Initialized
+	 */
+	private void initLandHexes() {
 		Hex[][] allLandHexes = Client.getInstance().getGame().getMapHexes();
 		Hex robberHex = Client.getInstance().getGame().getBoard().getHexWithRobber();
 		Hex curHex = null;
@@ -110,7 +135,15 @@ public class MapController extends Controller implements IMapController, Observe
 				}
 			}
 		}
+	}
 
+	/**
+	 * Extension of initFromModel. Initializes the ports.
+	 * 
+	 * @pre should only be called from initFromModel
+	 * @post GUI ports Initialized
+	 */
+	private void initPorts() {
 		// Init ports! and stuff :)
 		PortType[] allPorts = Client.getInstance().getGame().getMapPorts();
 		if(allPorts != null) {
@@ -124,7 +157,15 @@ public class MapController extends Controller implements IMapController, Observe
 			getView().addPort(new EdgeLocation(new HexLocation(-3, 2), EdgeDirection.NorthEast), allPorts[7]);
 			getView().addPort(new EdgeLocation(new HexLocation(-2, 3), EdgeDirection.NorthEast), allPorts[8]);
 		}
+	}
 
+	/**
+	 * Extension of initFromModel. Initializes the playerPieces.
+	 * 
+	 * @pre should only be called from initFromModel
+	 * @post GUI playerPieces Initialized
+	 */
+	private void initPlayerPieces() {
 		// Init all the roads, settlements, and cities!
 		for(Player player: Client.getInstance().getGame().getAllPlayers()) {
 			for(Road road: player.getPlayerPieces().getRoads()) {
@@ -154,23 +195,26 @@ public class MapController extends Controller implements IMapController, Observe
 			}
 		}
 	}
-
-
-	int hello = 0;
+	
 	/**
-	 * TODO
+	 * Called by the GUI when the edge is hovered over in the place road overlay.
 	 * 
+	 * @pre edgeLoc != null
+	 * @post none
+	 * @return Whether the current player can place a road at the specified edge Location
 	 */
 	public boolean canPlaceRoad(EdgeLocation edgeLoc) {
 		System.out.println("MapController canPlaceRoad()");
 		boolean canDo = Client.getInstance().getGame().canDoPlaceRoadOnEdge( Client.getInstance().getUserId(), edgeLoc);
-		System.out.println("MapController: " + canDo);
 		return canDo;
 	}
 
 	/**
-	 * TODO
+	 * Called by the GUI when the vertex is hovered over in the place settlement overlay.
 	 * 
+	 * @pre vertLoc != null
+	 * @post none
+	 * @return Whether the current player can place a settlement at the specified vertex Location
 	 */
 	public boolean canPlaceSettlement(VertexLocation vertLoc) {
 		System.out.println("MapController canPlaceSettlement()");
@@ -178,8 +222,11 @@ public class MapController extends Controller implements IMapController, Observe
 	}
 
 	/**
-	 * TODO
+	 * Called by the GUI when the vertex is hovered over in the place city overlay.
 	 * 
+	 * @pre vertLoc != null
+	 * @post none
+	 * @return Whether the current player can place a city at the specified vertex Location
 	 */
 	public boolean canPlaceCity(VertexLocation vertLoc) {
 		System.out.println("MapController canPlaceCity()");
@@ -187,18 +234,23 @@ public class MapController extends Controller implements IMapController, Observe
 	}
 
 	/**
-	 * TODO
+	 * Called by the GUI when the hex is hovered over in the place robber overlay.
 	 * 
+	 * @pre hecLoc != null
+	 * @post none
+	 * @return Whether the current player can place the robber at the specified hex Location
 	 */
 	public boolean canPlaceRobber(HexLocation hexLoc) {
-		//System.out.println("MapController canPlaceRobber()");
+		System.out.println("MapController canPlaceRobber()");
 		return Client.getInstance().getGame().canDoMoveRobberToHex(Client.getInstance().getUserId(), hexLoc);
-		//return true;
-		//		return Client.getInstance().getGame().canDoMoveRobberToHex( Client.getInstance().getUserId(), hexLoc);
-	}
+		}
 
 	/**
-	 * TODO
+	 * Called by GUI when the user selects a valid edge location to build a road.
+	 * However if we are using road builder then we keep track of the roads before sending off the request to the server.
+	 * 
+	 * @pre canPlaceRoad(edgeLoc) != false && edgeLoc != null
+	 * @post Road will be placed on the specified location. Place Road overlay will be closed.
 	 * 
 	 */
 	public void placeRoad(EdgeLocation edgeLoc) {
@@ -215,44 +267,45 @@ public class MapController extends Controller implements IMapController, Observe
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			} // If we are choosing the second road
+			}
+			// If we are choosing the second road
 			else {
 				ClientFacade.getInstance().playRoadBuilding(Client.getInstance().getFirstRoadBuildLocation(), edgeLoc);
 				Client.getInstance().setFirstRoadBuildLocation(null);
 				Client.getInstance().setChosenFirstRoadBuildingRoad(false);
 				Client.getInstance().setInRoadBuilding(false);
 			}
-			
 		} else {
 			try {
 				ActionManager.getInstance().doBuild(ActionType.PURCHASE_ROAD, edgeLoc);
-				//Client.getInstance().getGame().placeRoadOnEdge( Client.getInstance().getUserId(), edgeLoc);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		//getView().placeRoad(edgeLoc, Client.getInstance().getColor());
 	}
 
 	/**
-	 * TODO
+	 * Called by GUI when the user selects a valid vertex location to build a settlement.
+	 * 
+	 * @pre canPlaceSettlement(vertLoc) != false && vertLoc != null
+	 * @post Settlement will be placed on the specified location. Place Settlement overlay will be closed.
 	 * 
 	 */
 	public void placeSettlement(VertexLocation vertLoc) {
 		System.out.println("MapController placeSettlement()");
 		try {
 			ActionManager.getInstance().doBuild(ActionType.PURCHASE_SETTLEMENT, vertLoc);
-			//Client.getInstance().getGame().placeSettlementOnVertex(Client.getInstance().getUserId(), vertLoc);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		getView().placeSettlement(vertLoc, Client.getInstance().getColor());
 	}
 
 	/**
-	 * TODO
+	 * Called by GUI when the user selects a valid vertex location to build a city.
+	 * 
+	 * @pre canPlaceCity(vertLoc) != false && vertLoc != null
+	 * @post City will be placed on the specified location. Place city overlay will be closed.
 	 * 
 	 */
 	public void placeCity(VertexLocation vertLoc) {
@@ -260,14 +313,13 @@ public class MapController extends Controller implements IMapController, Observe
 		try {
 			ActionManager.getInstance().doBuild(ActionType.PURCHASE_CITY, vertLoc);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		getView().placeCity(vertLoc, Client.getInstance().getColor());
 	}
 
 	/**
-	 * TODO
+	 * TODO - Javadoc
 	 * 
 	 */
 	public void placeRobber(HexLocation hexLoc) {
@@ -333,14 +385,17 @@ public class MapController extends Controller implements IMapController, Observe
 				getRobView().setPlayers(targets);				
 				getRobView().showModal();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
 
 	/**
-	 * TODO
+	 * Function that is called when a move is started. Depending on which stated we are in, 
+	 * different overlays are used.
+	 * 
+	 * @pre state variable is set
+	 * @post Correct overlays will be displayed based off game state
 	 * 
 	 */
 	public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {	
@@ -355,30 +410,27 @@ public class MapController extends Controller implements IMapController, Observe
 		getView().startDrop(pieceType, Client.getInstance().getColor(), canCancel);
 	}
 
-	/**
-	 * TODO
-	 * 
-	 */
 	public void cancelMove() {
 		System.out.println("MapController cancelMove()");
-
 	}
 
 	/**
-	 * TODO
+	 * Called when the Soldier development card is used. Allows the robbing action dictated by current player.
+	 * 
+	 * @pre Soldier Development Card legally played
+	 * @post Player with be able to move robber to chosen place, rob adjacent municipal owners, and stop income from chosen hex.
 	 * 
 	 */
 	public void playSoldierCard() {	
 		System.out.println("MapController playSoldierCard()");
-		//ActionManager.getInstance().doAction(ActionType.PLAYCARD_KNIGHT);
-
-		//getView();
 		startMove(PieceType.ROBBER, true, true);
-		//robView.showModal();
 	}
 
 	/**
-	 * TODO
+	 * Called when the RoadBuilding development card is used. Allows the building of two free roads.
+	 * 
+	 * @pre RoadBuilding Dev Card legally played
+	 * @post Player will have choice to place two roads on the map free of charge.
 	 * 
 	 */
 	public void playRoadBuildingCard() {
@@ -388,7 +440,6 @@ public class MapController extends Controller implements IMapController, Observe
     	
 		//Build two roads
 		getView().startDrop(PieceType.ROAD, color, false);
-		
     	getView().startDrop(PieceType.ROAD, color, false);
 	}
 
@@ -417,7 +468,11 @@ public class MapController extends Controller implements IMapController, Observe
 		}
 	}
 	/**
-	 * TODO
+	 * Every time time there is an updated version of the Game model. This function will fire
+	 * and update the map controller with the updated information.
+	 * 
+	 * @pre Game object changed in Client
+	 * @post GUI map is updated to reflect current Game model state.
 	 * 
 	 */
 	@Override
