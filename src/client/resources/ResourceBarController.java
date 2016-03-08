@@ -48,15 +48,12 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	public void buildRoad() {
 		System.out.println("ResourceBarController buildRoad()");
 		executeElementAction(ResourceBarElement.ROAD);
-		
-		//elementActions.put(ResourceBarElement.ROAD, )
 	}
 
 	@Override
 	public void buildSettlement() {
 		System.out.println("ResourceBarController buildSettlement()");
 		executeElementAction(ResourceBarElement.SETTLEMENT);
-		//System.out.println(elementActions);
 	}
 
 	@Override
@@ -125,16 +122,39 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 			return;
 		}
 
-		Client ZeClieeent = (Client) o;
-		System.out.println("Roads unbuilt: " + ZeClieeent.getGame().getCurrentPlayer().getNumberUnplayedRoads());
-		
 		/*
-
 		Game game = Client.getInstance().getGame();
 		System.out.println("Client.getInstance().getUserId(): " + Client.getInstance().getUserId());
 		System.out.println("Client.getInstance().getGame(): " + Client.getInstance().getGame());
 		System.out.println("Client.getInstance().getGame(): " + Client.getInstance().getGame());*/
 		
+		enablePurchases();
+		updateAmounts();
+		
+		/*
+		System.out.println("This is the STATUS! " + Client.getInstance().getGame().getStatus());
+		System.out.println("status: " + Client.getInstance().getGame().getStatus());
+		System.out.println("turnNumber: " + Client.getInstance().getGame().getTurnNumber());
+		System.out.println("canDoPlayerBuildRoad: " + Client.getInstance().getGame().canDoPlayerBuildRoad(Client.getInstance().getUserId()));*/
+		
+		if(Client.getInstance().getGame().getTurnNumber() < 2 && Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getUserId())) {
+			System.out.println("\n\nWe should put up the Building Modal!\n\n");
+			if(Client.getInstance().getGame().canDoPlayerBuildRoad(Client.getInstance().getUserId())) {
+				buildRoad();
+			} else if(Client.getInstance().getGame().canDoPlayerBuildSettlement(Client.getInstance().getUserId())) {
+				buildSettlement();
+			} else {
+				// We must end the turn!
+				ClientFacade.getInstance().finishTurn();
+			}
+		}
+	}
+	
+	/**
+	 * To be called from the update function. Enables or disables purchase buttons from model.
+	 * 
+	 */
+	private void enablePurchases() {
 		boolean canBuildRoad = Client.getInstance().getGame().canDoPlayerBuildRoad(Client.getInstance().getUserId());
 		
 		if(canBuildRoad){
@@ -163,7 +183,13 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 		}else{
 			getView().setElementEnabled(ResourceBarElement.BUY_CARD, false);
 		}
-		
+	}
+	
+	/**
+	 * To be called from the update function. Sets the proper amounts of items from the model.
+	 * 
+	 */
+	private void updateAmounts() {
 		// Set resource amounts
 		getView().setElementAmount(ResourceBarElement.WOOD, Client.getInstance().getGame().getNumberResourcesOfType(Client.getInstance().getUserId(), ResourceType.WOOD));
 		getView().setElementAmount(ResourceBarElement.BRICK, Client.getInstance().getGame().getNumberResourcesOfType(Client.getInstance().getUserId(), ResourceType.BRICK));
@@ -179,25 +205,6 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 		// Set number of soldiers played
 		getView().setElementAmount(ResourceBarElement.SOLDIERS, Client.getInstance().getGame().getNumberOfSoldiersPlayed((Client.getInstance().getUserId())));
 	
-		
-		
-		/*
-		System.out.println("This is the STATUS! " + Client.getInstance().getGame().getStatus());
-		System.out.println("status: " + Client.getInstance().getGame().getStatus());
-		System.out.println("turnNumber: " + Client.getInstance().getGame().getTurnNumber());
-		System.out.println("canDoPlayerBuildRoad: " + Client.getInstance().getGame().canDoPlayerBuildRoad(Client.getInstance().getUserId()));*/
-		
-		if(Client.getInstance().getGame().getTurnNumber() < 2 && Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getUserId())) {
-			System.out.println("\n\nWe should put up the Building Modal!\n\n");
-			if(Client.getInstance().getGame().canDoPlayerBuildRoad(Client.getInstance().getUserId())) {
-				buildRoad();
-			} else if(Client.getInstance().getGame().canDoPlayerBuildSettlement(Client.getInstance().getUserId())) {
-				buildSettlement();
-			} else {
-				// We must end the turn!
-				ClientFacade.getInstance().finishTurn();
-			}
-		}
 	}
 
 }

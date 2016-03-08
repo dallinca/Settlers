@@ -279,14 +279,9 @@ public class LoginController extends Controller implements ILoginController, Obs
 		}
 	}
 
-	/**
-	 * TODO
-	 * 
-	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("LoginController update()");
-		// Auto-generated method stub
 		
 	}
 
