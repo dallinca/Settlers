@@ -65,7 +65,12 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 		executeElementAction(ResourceBarElement.CITY);
 		
 	}
-
+	
+	/** Checks to see if a Player can buy a card and enables or disables the card
+	 * 
+	 *  @pre none
+	 *  @post player can buy a development card or he can't
+	 */
 	@Override
 	public void buyCard() {
 		System.out.println("ResourceBarController buyCard()");
@@ -79,7 +84,12 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 			getView().setElementEnabled(ResourceBarElement.BUY_CARD, false);
 		}
 	}
-
+	
+	/** Player can play a card
+	 * 
+	 *  @pre player has a development card to play
+	 *  @post player plays development card
+	 */
 	@Override
 	public void playCard() {
 		System.out.println("ResourceBarController playCard()");
@@ -96,8 +106,20 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 		}
 	}
 
+	/**
+	 * Updates the ResourceBarController to reflect current situation in game object.
+	 * Allows the player to build a road, settlement, city. Buy a development card
+	 * 
+	 * @pre Game state has changed
+	 * @post build road, settlement,city. buy development card. finish turn.
+	 * 
+	 * @param Observable o 
+	 * @param Object arg 
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
+		System.out.println("ResourceBarController update()");
+		
 		// If the game is null just return
 		if(Client.getInstance().getGame() == null) {
 			return;
@@ -106,13 +128,15 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 		Client ZeClieeent = (Client) o;
 		System.out.println("Roads unbuilt: " + ZeClieeent.getGame().getCurrentPlayer().getNumberUnplayedRoads());
 		
-		
-		System.out.println("ResourceBarController update()");
+		/*
+
 		Game game = Client.getInstance().getGame();
 		System.out.println("Client.getInstance().getUserId(): " + Client.getInstance().getUserId());
 		System.out.println("Client.getInstance().getGame(): " + Client.getInstance().getGame());
-		System.out.println("Client.getInstance().getGame(): " + Client.getInstance().getGame());
+		System.out.println("Client.getInstance().getGame(): " + Client.getInstance().getGame());*/
+		
 		boolean canBuildRoad = Client.getInstance().getGame().canDoPlayerBuildRoad(Client.getInstance().getUserId());
+		
 		if(canBuildRoad){
 			getView().setElementEnabled(ResourceBarElement.ROAD, true);
 		}else{
@@ -157,11 +181,12 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 	
 		
 		
-
+		/*
 		System.out.println("This is the STATUS! " + Client.getInstance().getGame().getStatus());
 		System.out.println("status: " + Client.getInstance().getGame().getStatus());
 		System.out.println("turnNumber: " + Client.getInstance().getGame().getTurnNumber());
-		System.out.println("canDoPlayerBuildRoad: " + Client.getInstance().getGame().canDoPlayerBuildRoad(Client.getInstance().getUserId()));
+		System.out.println("canDoPlayerBuildRoad: " + Client.getInstance().getGame().canDoPlayerBuildRoad(Client.getInstance().getUserId()));*/
+		
 		if(Client.getInstance().getGame().getTurnNumber() < 2 && Client.getInstance().getGame().isPlayersTurn(Client.getInstance().getUserId())) {
 			System.out.println("\n\nWe should put up the Building Modal!\n\n");
 			if(Client.getInstance().getGame().canDoPlayerBuildRoad(Client.getInstance().getUserId())) {

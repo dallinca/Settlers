@@ -33,16 +33,25 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 		System.out.println("TurnTrackerController getView()");
 		return (ITurnTrackerView)super.getView();
 	}
-
+	/**
+	 * A players turn ends
+	 * 
+	 * @pre it is the players turn
+	 * @post the players turn ends 
+	 **/
 	@Override
 	public void endTurn() {
 		System.out.println("TurnTrackerController endTurn()");
 
 		ClientFacade.getInstance().finishTurn();
-		//Does this do it?
 		Client.getInstance().getGame().incrementPlayer();
 	}
-
+	/**
+	 * initializes the turn tracker GUI element 
+	 *
+	 * @pre Game initialized with four players 
+	 * @post Turn tracker view displayed
+	 **/
 	private void initFromModel() {
 		System.out.println("TurnTrackerController initFromModel()");
 
@@ -53,13 +62,24 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 		for(int i = 0; i < players.length && players[i] != null; i++){
 
 			getView().initializePlayer(players[i].getPlayerIndex(), players[i].getPlayerName(), players[i].getPlayerColor());
-			System.out.println("i: "+i+ " players[i].getPlayerIndex(): "+players[i].getPlayerIndex()+ 
-					"players[i].getPlayerName(): "+ players[i].getPlayerName()+" players[i].getPlayerColor(): "+players[i].getPlayerColor());
+			/*System.out.println("i: "+i+ " players[i].getPlayerIndex(): "+players[i].getPlayerIndex()+ 
+					"players[i].getPlayerName(): "+ players[i].getPlayerName()+" players[i].getPlayerColor(): "+players[i].getPlayerColor());*/
 
 		}
 		getView().setLocalPlayerColor(Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getPlayerColor());
 	}
-
+	
+	/**
+	 * Updates when the game state changes. 
+	 * Highlights current player, displays longest road, displays largest army. 
+	 * Allows player to end turn.
+	 * 
+	 * @pre Game state has changed
+	 * @post view finish turn or view waiting on other players
+	 * 
+	 * @param Observable o 
+	 * @param Object arg
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("TurnTrackerController update()");
