@@ -1,5 +1,8 @@
 package shared.communication.params.move;
 
+/**
+ * Defines an offer trade command for the server.
+ */
 public class OfferTrade_Params {
 
 	private final String type = "offerTrade";

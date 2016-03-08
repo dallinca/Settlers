@@ -1,6 +1,8 @@
 package client.maritime;
 
 import shared.definitions.*;
+import shared.model.Game;
+import shared.model.player.Player;
 import shared.model.player.ResourceCardHand;
 import shared.model.turn.ActionManager;
 import shared.model.turn.ActionType;
@@ -76,18 +78,21 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 		if(isPlayersTurn){
 			//This used to check the canDoTrade by calling the Action Manager, but that applies to the get options, in the selectGetType, which has been delegated to
 			//The Client to check. So that's why it is not here.
+			Game game = Client.getInstance().getGame();
+			Client c = Client.getInstance();
+			Player p = game.getPlayerByID(c.getUserId());
 			
-			int numWood = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getNumberResourcesOfType(ResourceType.WOOD);
-			int numWheat = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getNumberResourcesOfType(ResourceType.WHEAT);
-			int numSheep = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getNumberResourcesOfType(ResourceType.SHEEP);
-			int numOre = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getNumberResourcesOfType(ResourceType.ORE);
-			int numBrick = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getNumberResourcesOfType(ResourceType.BRICK);
+			int numWood = p.getNumberResourcesOfType(ResourceType.WOOD);
+			int numWheat = p.getNumberResourcesOfType(ResourceType.WHEAT);
+			int numSheep = p.getNumberResourcesOfType(ResourceType.SHEEP);
+			int numOre = p.getNumberResourcesOfType(ResourceType.ORE);
+			int numBrick = p.getNumberResourcesOfType(ResourceType.BRICK);
 			
-			tradeWood = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getTradeRate(ResourceType.WOOD);
-			tradeWheat = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getTradeRate(ResourceType.WHEAT);
-			tradeSheep = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getTradeRate(ResourceType.SHEEP);
-			tradeOre = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getTradeRate(ResourceType.ORE);
-			tradeBrick = Client.getInstance().getGame().getPlayerByID(Client.getInstance().getUserId()).getTradeRate(ResourceType.BRICK);
+			tradeWood = p.getTradeRate(ResourceType.WOOD);
+			tradeWheat = p.getTradeRate(ResourceType.WHEAT);
+			tradeSheep = p.getTradeRate(ResourceType.SHEEP);
+			tradeOre = p.getTradeRate(ResourceType.ORE);
+			tradeBrick = p.getTradeRate(ResourceType.BRICK);
 			
 			if(numWood >= tradeWood || numWood > 3){
 				resourceArray.add(ResourceType.WOOD);
@@ -156,22 +161,25 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 		//Client.getInstance().getGame().doMaritimeTrade(tradeIn, receive);
 		int tradeRate = 4;
 		
+		Game game = Client.getInstance().getGame();
+		Player p = game.getCurrentPlayer();
+		
 		switch(giveType) {
 			
 			case WHEAT: 
-				tradeRate = tradeWheat = Client.getInstance().getGame().getCurrentPlayer().getTradeRate(ResourceType.WHEAT);
+				tradeRate = tradeWheat = p.getTradeRate(ResourceType.WHEAT);
 				break;
 			case WOOD: 
-				tradeRate = tradeWood = Client.getInstance().getGame().getCurrentPlayer().getTradeRate(ResourceType.WOOD);
+				tradeRate = tradeWood = p.getTradeRate(ResourceType.WOOD);
 				break;
 			case ORE:
-				tradeRate = tradeOre = Client.getInstance().getGame().getCurrentPlayer().getTradeRate(ResourceType.ORE);
+				tradeRate = tradeOre = p.getTradeRate(ResourceType.ORE);
 				break;
 			case BRICK:
-				tradeRate = tradeBrick = Client.getInstance().getGame().getCurrentPlayer().getTradeRate(ResourceType.BRICK);
+				tradeRate = tradeBrick = p.getTradeRate(ResourceType.BRICK);
 				break;
 			case SHEEP:
-				tradeRate = tradeSheep = Client.getInstance().getGame().getCurrentPlayer().getTradeRate(ResourceType.SHEEP);
+				tradeRate = tradeSheep = p.getTradeRate(ResourceType.SHEEP);
 				break;
 			default:
 				tradeRate = 4;

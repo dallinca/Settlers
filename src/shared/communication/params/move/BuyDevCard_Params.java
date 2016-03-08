@@ -1,5 +1,8 @@
 package shared.communication.params.move;
 
+/**
+ * Defines a buy card command for the server.
+ */
 public class BuyDevCard_Params {
 	
 	private final String type = "buyDevCard";

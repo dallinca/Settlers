@@ -3,6 +3,10 @@ package shared.communication.params.move;
 import shared.communication.params.move.data.BorderSpot;
 import shared.locations.EdgeLocation;
 
+/**
+ * Defines a build road command for the server.
+ * 
+ */
 public class BuildRoad_Params {
 
 	private final String type = "buildRoad";

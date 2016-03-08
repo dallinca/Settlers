@@ -3,6 +3,11 @@ package shared.communication.params.move;
 import shared.communication.params.move.data.BuildLocation;
 import shared.locations.VertexLocation;
 
+/**
+ * 
+ * Defines a build settlement command for the server.
+ * 
+ */
 public class BuildSettlement_Params {
 	
 	private final String type = "buildSettlement";

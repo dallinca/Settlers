@@ -4,6 +4,11 @@ import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
 import shared.model.Game;
 
+/**
+ * 
+ * Response object for build road server command.
+ *
+ */
 public class BuildRoad_Result {
 	
 	private boolean valid;

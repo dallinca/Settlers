@@ -2,6 +2,10 @@ package shared.communication.params.move.data;
 
 import shared.locations.EdgeLocation;
 
+/**
+ * Defines a border location for JSON serialization.
+ *
+ */
 public class BorderSpot {
 
 	private int x;

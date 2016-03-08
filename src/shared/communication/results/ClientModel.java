@@ -2,7 +2,10 @@ package shared.communication.results;
 
 import java.util.Arrays;
 
-
+/**
+ * A full model of the game for JSON deserialization.
+ * 
+ */
 public class ClientModel {
 
 

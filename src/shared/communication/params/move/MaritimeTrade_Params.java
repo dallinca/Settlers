@@ -2,6 +2,12 @@ package shared.communication.params.move;
 
 import shared.definitions.ResourceType;
 
+/**
+ * 
+ * Defines a maritime trade command for the server.
+ *
+ */
+
 public class MaritimeTrade_Params {
 	
 	private final String type = "maritimeTrade";

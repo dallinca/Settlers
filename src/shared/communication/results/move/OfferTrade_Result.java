@@ -4,6 +4,11 @@ import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
 import shared.model.Game;
 
+/**
+ * 
+ * Response object for offer trade server command.
+ * 
+ */
 public class OfferTrade_Result {
 	
 	private boolean valid;

@@ -1,5 +1,11 @@
 package shared.communication.params.nonmove;
 
+/**
+ * 
+ * Defines a login command for the server.
+ * 
+ *
+ */
 public class Login_Params {
 	
 	private String username;

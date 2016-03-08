@@ -2,6 +2,9 @@ package shared.communication.params.move.devcard;
 
 import shared.definitions.ResourceType;
 
+/**
+ * Defines a play monopoly card command for the server.
+ */
 public class PlayMonopoly_Params {
 
 	private final String type = "Monopoly";

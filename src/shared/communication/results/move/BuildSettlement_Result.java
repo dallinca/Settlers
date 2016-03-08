@@ -4,6 +4,12 @@ import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
 import shared.model.Game;
 
+/**
+ * Response object for build settlement server command.
+ * 
+ * @author jchrisw
+ *
+ */
 public class BuildSettlement_Result {
 	
 	private boolean valid;

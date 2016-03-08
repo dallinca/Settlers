@@ -25,11 +25,8 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 
 	private boolean init, chooseSend, choosePlayer;
 	private boolean acceptButtonEnabled;
-	private boolean toSend, toRecieve;
-	private boolean receiveTosendWood,receiveTosendSheep, receiveTosendOre, receiveTosendWheat, receiveTosendBrick;
+	private boolean toSend;
 
-	//private int decreaseWood, decreaseSheep, decreaseOre, decreaseWheat, decreaseBrick;
-	//private int woodToSend, sheepToSend, oreToSend, wheatToSend, brickToSend;
 	private int playersWood, playersWheat, playersSheep, playersOre, playersBrick;
 	private int wood, sheep, ore, wheat, brick;
 
@@ -100,10 +97,11 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 
 		List<PlayerInfo> pl = Client.getInstance().getGameInfo().getPlayers();
 		ArrayList<PlayerInfo> temppl = new ArrayList<PlayerInfo>();
-
+		
+		Game game = Client.getInstance().getGame();
 
 		for(int i = 0; i < pl.size(); i++){
-			if(pl.get(i).getId() == Client.getInstance().getGame().getCurrentPlayer().getPlayerId()){}
+			if(pl.get(i).getId() == game.getCurrentPlayer().getPlayerId()){}
 			else{
 				temppl.add(pl.get(i));
 			}
@@ -115,14 +113,21 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		init = false;
 	}
 
+	/**
+	 * Initializes the trade offer window for the initiator, and gathers necessary information 
+	 * to making sure the offer is valid.
+	 * 
+	 */
 	@Override
 	public void startTrade() {
+		
 		System.out.println("DomesticTradeController startTrade()");
-
-
 
 		int userID = Client.getInstance().getUserId();
 		this.game = Client.getInstance().getGame();
+		Player p = this.game.getCurrentPlayer();
+		
+		IDomesticTradeOverlay overlay = getTradeOverlay();
 
 		if(game.isPlayersTurn(userID)){
 			if(init)
@@ -131,11 +136,11 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			tradeOverlay.reset();
 
 			//How much of each resource the player has
-			playersWood = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.WOOD);
-			playersWheat = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.WHEAT);
-			playersSheep = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.SHEEP);
-			playersOre = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.ORE);
-			playersBrick = Client.getInstance().getGame().getCurrentPlayer().getNumberResourcesOfType(ResourceType.BRICK);
+			playersWood = p.getNumberResourcesOfType(ResourceType.WOOD);
+			playersWheat = p.getNumberResourcesOfType(ResourceType.WHEAT);
+			playersSheep = p.getNumberResourcesOfType(ResourceType.SHEEP);
+			playersOre = p.getNumberResourcesOfType(ResourceType.ORE);
+			playersBrick = p.getNumberResourcesOfType(ResourceType.BRICK);
 
 			wood = 0;
 			sheep = 0;
@@ -143,20 +148,25 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			wheat = 0;
 			brick = 0;
 
-			getTradeOverlay().setPlayerSelectionEnabled(true);
-			getTradeOverlay().setResourceSelectionEnabled(true);
-			getTradeOverlay().setStateMessage("Set your trade.");
-			getTradeOverlay().showModal();
+			overlay.setPlayerSelectionEnabled(true);
+			overlay.setResourceSelectionEnabled(true);
+			overlay.setStateMessage("Set your trade.");
+			overlay.showModal();
 
 		}else{
 			System.out.println("Trade initiated when it is not player's turn.");
-			getTradeOverlay().setPlayerSelectionEnabled(false);
-			getTradeOverlay().setResourceSelectionEnabled(false);
-			getTradeOverlay().setStateMessage("It is not your turn.");
-			getTradeOverlay().showModal();
+			overlay.setPlayerSelectionEnabled(false);
+			overlay.setResourceSelectionEnabled(false);
+			overlay.setStateMessage("It is not your turn.");
+			overlay.showModal();
 		}
 	}
-
+/**
+ * Increases the amount of the specified resource which will be sent to the trade partner.
+ * 
+ * 
+ * @param resource
+ */
 	private void increaseResourceAmountSend(ResourceType resource){
 
 		switch(resource){
@@ -227,6 +237,12 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		}
 	}
 
+	/**
+	 * 
+	 * Decreases the amoutn of a specified resource that will be sent to the trade partner.
+	 * 
+	 * @param resource
+	 */
 	private void decreaseResourceAmountSend(ResourceType resource){
 
 		switch(resource){
@@ -286,6 +302,12 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		}
 	}
 
+	/**
+	 * Increases the resource amount of a specified resource to be asked from the trade partner.
+	 * 
+	 * 
+	 * @param resource
+	 */
 	private void increaseResourceAmountRecieve(ResourceType resource){
 		switch(resource){
 
@@ -328,6 +350,10 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		}
 	}
 
+	/**
+	 * Decreases the number of resources asked from the trade partner of a specified resource.
+	 * @param resource
+	 */
 	private void decreaseResourceAmountRecieve(ResourceType resource){
 		switch(resource){
 
@@ -383,20 +409,23 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	}
 
 	/***
-	 * the "send" button, A player can only increase a resource type if he has greater than or equal to amount of increase
+	 * the "send" button, A player can only increase a resource type if 
+	 * he has greater than or equal to amount of increase
 	 */
 	@Override
 	public void increaseResourceAmount(ResourceType resource) {
 
 		System.out.println("DomesticTradeController increaseResourceAmount");
 
+		IDomesticTradeOverlay overlay = getTradeOverlay();
+		
 		if(toSend)
 			increaseResourceAmountSend(resource);
 		else
 			increaseResourceAmountRecieve(resource);
 
 		if(!choosePlayer)
-			getTradeOverlay().setStateMessage("Select your trade partner.");
+			overlay.setStateMessage("Select your trade partner.");
 
 		System.out.println("Wheat: "+wood+" Ore: "+" Sheep: "+sheep+" Ore: "+ore+" Wheat: "+wheat);
 		//He has to be sending a resource and he has to be receiving a resource 
@@ -405,20 +434,25 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			chooseSend = true;
 		else{
 			chooseSend = false;
-			getTradeOverlay().setStateMessage("Set your trade.");
-			getTradeOverlay().setTradeEnabled(false);
+			overlay.setStateMessage("Set your trade.");
+			overlay.setTradeEnabled(false);
 		}
 		System.out.println("Choose send is: "+chooseSend);
 		if(chooseSend && choosePlayer){
-			getTradeOverlay().setStateMessage("Trade!");
-			getTradeOverlay().setTradeEnabled(true);
+			overlay.setStateMessage("Trade!");
+			overlay.setTradeEnabled(true);
 		}
 	}
 
+	/**
+	 * Decreases the count of the currently selected resource.
+	 */
 	@Override
 	public void decreaseResourceAmount(ResourceType resource) {
 		System.out.println("DomesticTradeController decreaseResourceAmount()");
 
+		IDomesticTradeOverlay overlay = getTradeOverlay();
+		
 		if(toSend)
 			decreaseResourceAmountSend(resource);
 		else
@@ -429,33 +463,43 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			chooseSend = true;
 		else{
 			chooseSend = false;
-			getTradeOverlay().setStateMessage("Set your trade.");
-			getTradeOverlay().setTradeEnabled(false);
+			overlay.setStateMessage("Set your trade.");
+			overlay.setTradeEnabled(false);
 		}
 	}
 
+	/**
+	 * Selects a player in the trade window who will be the recipient of the trade request.
+	 * 
+	 */
 	@Override
 	public void setPlayerToTradeWith(int playerIndex) {
 		System.out.println("DomesticTradeController setPlayerToTradeWith()");
 
+		IDomesticTradeOverlay overlay = getTradeOverlay();
+		
 		if (playerIndex == -1){
 			choosePlayer=false;
 			if(!chooseSend)
-				getTradeOverlay().setStateMessage("Set your trade.");
+				overlay.setStateMessage("Set your trade.");
 			else
-				getTradeOverlay().setStateMessage("Select your trade partner.");
-			getTradeOverlay().setTradeEnabled(false);
+				overlay.setStateMessage("Select your trade partner.");
+			overlay.setTradeEnabled(false);
 
 		}else if ((playerIndex > -1) && (playerIndex < 4)){
 			tradeIndex = playerIndex;
 			choosePlayer=true;
 		}
 		if(chooseSend && choosePlayer){
-			getTradeOverlay().setStateMessage("Trade!");
-			getTradeOverlay().setTradeEnabled(true);
+			overlay.setStateMessage("Trade!");
+			overlay.setTradeEnabled(true);
 		}
 	}
 
+	/**
+	 * 
+	 * In the trade window, selects specified resource to be received.
+	 */
 	@Override
 	public void setResourceToReceive(ResourceType resource) {
 		System.out.println("DomesticTradeController setResourceToReceive()");
@@ -503,6 +547,10 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		}
 	}
 
+	/**
+	 * In the trade window, selects specified resource to be sent.
+	 * 
+	 */
 	@Override
 	public void setResourceToSend(ResourceType resource) {
 		System.out.println("DomesticTradeController setResourceToSend()");
@@ -568,6 +616,10 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		}
 	}
 
+	/**
+	 * 
+	 * In the trade window, selects specified resource to be neither sent nor received.
+	 */
 	@Override
 	public void unsetResource(ResourceType resource) {
 		System.out.println("DomesticTradeController unsetResource()");
@@ -602,7 +654,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	}
 
 	/***
-	 * A player may only send offers on his turn
+	 * A player may only send offers on his turn, when game status is playing.
 	 * 
 	 */
 	@Override
@@ -641,6 +693,16 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 
 	}
 
+	/**
+	 * Translates the offer array of resource counts into displayable, readable information
+	 * for the accept window and the player.
+	 * Turns negative numbers from the offer into positive ones for display.
+	 * Sets offer count to 0 for resources that are being gifted to the client.
+	 * 
+	 * @param resource
+	 * @param offer
+	 * @return
+	 */
 	private int offer(ResourceType resource, int offer ){
 		System.out.println("DomesticTradeController offer()");
 
@@ -661,6 +723,21 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		return offer;
 	}
 
+	/**
+	 * 
+	 * Enables or disables accept button based on offer's request and client's resources.
+	 * 
+	 * @param brickOffer
+	 * @param recieverBrick
+	 * @param oreOffer
+	 * @param recieverOre
+	 * @param sheepOffer
+	 * @param recieverSheep
+	 * @param wheatOffer
+	 * @param recieverWheat
+	 * @param woodOffer
+	 * @param recieverWood
+	 */
 	private void buttonEnabled(int brickOffer,int recieverBrick,int oreOffer,int recieverOre,int sheepOffer, 
 			int recieverSheep,int wheatOffer,int recieverWheat, int woodOffer,int recieverWood){
 		System.out.println("DomesticTradeController buttonEnabled()");
@@ -680,6 +757,11 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			getAcceptOverlay().setAcceptEnabled(false);
 	}
 
+	/**
+	 * Initializes an accept trade window which displays all resources of the current offer.
+	 * Player is able to accept if they have the requested resources, unable to accept if they are lacking.
+	 *  
+	 */
 	private void acceptTradeWindow(){
 		System.out.println("DomesticTradeController acceptTradeWindow()");
 		getAcceptOverlay().reset();
@@ -723,6 +805,15 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		getAcceptOverlay().showModal();
 	}
 
+	/**
+	 * Enables or disables trade options dependent on current state of game.
+	 * --Must be client's turn in order to send a trade offer. 
+	 * --Status must be playing.
+	 * If client is receiving a trade offer, displays an acceptance window for confirmation or rejection.
+	 * --Does not have to be client's turn to receive trade offer.
+	 * 
+	 * 
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub

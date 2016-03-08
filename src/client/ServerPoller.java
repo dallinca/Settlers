@@ -19,24 +19,31 @@ public class ServerPoller {
 	private int interval;
 
 	/**
+	 * Creates a new server poller with default 5 second polling time.
 	 * 
-	 * Server poller may be created with either mock server or real server in mind.
-	 * 
-	 * @param IServerProxy proxy, Client client
-	 * 
-	 * @pre None
-	 * @post Server poller is created.
 	 */
 	public ServerPoller(){		
 		this.interval = 5000;
 	}
 
+	/**
+	 * Starts the polling timer.
+	 * 
+	 * 
+	 * @return true if timer triggered successfully.
+	 */
 	public boolean start(){
 		pollTimer = new Timer();
 		pollTimer.schedule(new timedPoll(), 0, interval);	//every 1.5 seconds
 		return true;
 	}
 
+	/**
+	 * Stops polling timer.
+	 * 
+	 * 
+	 * @return true if timer stopped successfully.
+	 */
 	public boolean stop(){
 		pollTimer.cancel();
 		return true;
@@ -47,7 +54,7 @@ public class ServerPoller {
 	}
 
 	/**
-	 * Internally keeps track of time since last poll, to keep game synchronized.
+	 * Internally keeps track of time since last poll, and keeps game synchronized.
 	 * 
 	 * @pre None
 	 * @post triggers poll at regular time intervals.
@@ -80,17 +87,4 @@ public class ServerPoller {
 		}	
 
 	}
-
-
-	/**
-	 * Takes result from server poll and synchronizes current game with the new information.
-	 * 
-	 * @pre Client is participating in a game
-	 * @post Client's game state will be synchronized with server's.
-	 */
-	//private static void synchronizeGameState(PollServer_Result result){
-	//			
-	//}
-
-
 }

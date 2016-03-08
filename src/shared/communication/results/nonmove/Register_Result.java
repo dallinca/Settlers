@@ -1,5 +1,10 @@
 package shared.communication.results.nonmove;
 
+/**
+ * 
+ * Response object from register command.
+ *
+ */
 public class Register_Result {
 
 	private int id = -1;

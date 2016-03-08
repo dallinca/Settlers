@@ -36,6 +36,7 @@ import shared.communication.params.nonmove.ListAI_Params;
 import shared.communication.params.nonmove.List_Params;
 import shared.communication.params.nonmove.Login_Params;
 import shared.communication.params.nonmove.Register_Params;
+import shared.communication.params.nonmove.Reset_Params;
 import shared.communication.results.move.AcceptTrade_Result;
 import shared.communication.results.move.BuildCity_Result;
 import shared.communication.results.move.BuildRoad_Result;
@@ -64,7 +65,6 @@ import shared.communication.results.nonmove.Register_Result;
 import shared.communication.results.nonmove.Reset_Result;
 import client.Client;
 import client.ClientException;
-import client.ClientFacade;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -72,7 +72,7 @@ import com.google.gson.JsonObject;
 
 /**
  * 
- * Communication object for server.
+ * Communication object for client to server interactions.
  * 
  */
 public class ServerProxy implements IServerProxy {
@@ -99,11 +99,6 @@ public class ServerProxy implements IServerProxy {
 	 * @post The client communicator will know how to communicate with the server.
 	 */
 
-	/*private ServerProxy SINGLETON = null;
-	private ServerProxy SINGLETON2 = null;
-	private ServerProxy SINGLETON3 = null;
-	private ServerProxy SINGLETON4 = null;*/
-
 	public ServerProxy(){
 		SERVER_HOST = "localhost";
 		SERVER_PORT = 8081;				
@@ -113,35 +108,6 @@ public class ServerProxy implements IServerProxy {
 		gameCookie = "";
 		playerID = -1;
 	}
-	
-	/*private ServerProxy(ServerProxy s){
-		s = new ServerProxy();		
-	}
-
-	public static ServerProxy getInstance(){
-		if (SINGLETON == null){
-			SINGLETON = new ServerProxy(SINGLETON);
-		}
-		return SINGLETON;
-	}
-	public static ServerProxy getInstance2(){
-		if (SINGLETON2 == null){
-			SINGLETON2 = new ServerProxy(SINGLETON2);
-		}
-		return SINGLETON2;
-	}
-	public static ServerProxy getInstance3(){
-		if (SINGLETON3 == null){
-			SINGLETON3 = new ServerProxy(SINGLETON3);
-		}
-		return SINGLETON3;
-	}
-	public static ServerProxy getInstance4(){
-		if (SINGLETON4 == null){
-			SINGLETON4 = new ServerProxy(SINGLETON4);
-		}
-		return SINGLETON4;
-	}*/
 	
 	public ServerProxy(String serverHost, int serverPort){
 		userCookie = "";

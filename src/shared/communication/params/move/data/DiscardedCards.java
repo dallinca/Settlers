@@ -1,5 +1,10 @@
 package shared.communication.params.move.data;
 
+/**
+ * 
+ * Defines a set of discarded cards for JSON serialization.
+ * 
+ */
 public class DiscardedCards {
 	
 	private int brick;

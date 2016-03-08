@@ -1,5 +1,10 @@
 package shared.communication.params.move;
 
+/**
+ * 
+ * Defines an accept trade command for the server.
+ * 
+ */
 public class AcceptTrade_Params {
 	
 	private final String type = "acceptTrade";

@@ -4,6 +4,10 @@ import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
 import shared.model.Game;
 
+/**
+ * Response object from get version command.
+ *  
+ */
 public class GetVersion_Result {
 
 	private Game game;	

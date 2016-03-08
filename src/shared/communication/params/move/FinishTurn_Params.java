@@ -1,5 +1,10 @@
 package shared.communication.params.move;
 
+
+/**
+ * Defines a finish turn command for the server.
+ * 
+ */
 public class FinishTurn_Params {
 	
 	private final String type = "finishTurn";

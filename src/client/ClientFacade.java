@@ -66,18 +66,18 @@ import shared.model.Game;
  *
  */
 public class ClientFacade {
-	
+
 	private static ClientFacade SINGLETON = null;
-	
-	
+
+
 	protected ClientFacade(){
 		//System.out.println("ClientFacade ClientFacade()");
 		sp = new ServerProxy();
 		//this.c = Client.getInstance();
 	}
-	
+
 	public static ClientFacade getInstance(){
-	//	System.out.println("ClientFacade ClientFacade()");
+		//	System.out.println("ClientFacade ClientFacade()");
 		if (SINGLETON == null){
 			SINGLETON = new ClientFacade();
 		}
@@ -103,7 +103,7 @@ public class ClientFacade {
 	public ServerProxy getProxy() {
 		return (ServerProxy)sp;
 	}
-	
+
 	/*public ClientFacade(){		
 		this.sp = new ServerProxy();				
 	}*/
@@ -126,7 +126,7 @@ public class ClientFacade {
 		try {
 
 			result = sp.login(request);	
-			
+
 			Client.getInstance().setUserId(result.getID());
 
 		} catch (ClientException e) {			
@@ -160,6 +160,17 @@ public class ClientFacade {
 		return null;
 	}
 
+	/**
+	 * Creates a new game on the server.
+	 * @param name Name of the game.
+	 * @param randomTiles True for random tiles, false for set tiles.
+	 * @param randomNumbers True for random numbers, false for set numbers.
+	 * @param randomPorts True for random ports, false for set ports.
+	 * 
+	 * @pre Client is logged into server.
+	 * @post A new game will be created in the server to the specified variables.
+	 */
+
 	public Create_Result createGame(String name, boolean randomTiles, boolean randomNumbers, boolean randomPorts)  {
 		Create_Result result; 
 		Create_Params request = new Create_Params(name, randomTiles, randomNumbers, randomPorts);		
@@ -179,23 +190,23 @@ public class ClientFacade {
 
 	/**
 	 * Gets the current game state from the server.
-	 * @param 
-	 * @return
 	 * 
 	 * @pre Client is validated and participating in a game.
-	 * @post Communicator will return usable PollServer_Result.
+	 * @post Game will be updated to newest version, or remain constant.
+	 * 
+	 * @return GetVersion_Result
 	 */
 	public GetVersion_Result getVersion()  {
 		//System.out.println("ClientFacade getVersion()");
 		GetVersion_Params request;
 		GetVersion_Result result; 
-		
+
 		if(Client.getInstance().getGame() == null) {
 			request = new GetVersion_Params(-1);
 		} else {
 			request = new GetVersion_Params(Client.getInstance().getGame().getVersionNumber());		
 		}
-		
+
 		try {
 
 			result = sp.getVersion(request);
@@ -220,6 +231,16 @@ public class ClientFacade {
 		return result;
 	}
 
+	/**
+	 * Joins a game of given ID.
+	 * @param gameID ID of game to be joined.
+	 * @param color Desired catan color when joining game (must not be taken)
+	 * 
+	 * @pre Client is validated and logged into server.
+	 * @post Client is added to specified game.
+	 * 
+	 * @return Join_Result
+	 */
 	public Join_Result joinGame(int gameID, CatanColor color)  {
 		System.out.println("ClientFacade joinGame()");
 		Join_Result result; 
@@ -237,6 +258,15 @@ public class ClientFacade {
 
 		return result;
 	}
+
+	/**
+	 * Lists all games with the server. 
+	 * 
+	 * @pre Client is validated and logged into server.
+	 * @post List_Result contains an up to date list of games in server.
+	 * 
+	 * @return List_Result
+	 */
 
 	public List_Result listGames()  {
 		System.out.println("ClientFacade listGames()");
@@ -288,7 +318,15 @@ public class ClientFacade {
 
 	//misc commands
 
-
+	/**
+	 * Sends chat to server and other players.
+	 * 
+	 * @pre Client is joined with a game.
+	 * @post Client's message is added to chat.
+	 * 
+	 * @param content String message to be added to chat.
+	 * @return SendChat_Result
+	 */
 	public SendChat_Result sendChat(String content)  {
 		System.out.println("ClientFacade sendChat()");
 		int playerIndex = Client.getInstance().getPlayerIndex();
@@ -310,6 +348,15 @@ public class ClientFacade {
 		return result;
 	}	
 
+	/**
+	 * Action to accept an offered trade.
+	 * 
+	 * @pre A trade offer exists and is directed toward this player.
+	 * @post Trade will execute, exchanging specified resources.
+	 * 
+	 * @param willAccept True if accepted trade, false if not accepted.
+	 * @return AcceptTrade_Result
+	 */
 	public AcceptTrade_Result acceptTrade(boolean willAccept)  {
 		System.out.println("ClientFacade acceptTrade()");
 		AcceptTrade_Result result; 
@@ -329,11 +376,20 @@ public class ClientFacade {
 		return result;
 	}
 
+	/**
+	 * Action to roll the dice.
+	 * 
+	 * @pre It is the player's turn and status is rolling.
+	 * @post Dice will be rolled and status will be switched to playing.
+	 * 
+	 * @param number
+	 * @return
+	 */
 
 	public RollNumber_Result rollNumber(int number)  {
 		System.out.println("ClientFacade rollNumber()");
 		int playerIndex = Client.getInstance().getPlayerIndex();
-		
+
 		RollNumber_Result result; 
 		RollNumber_Params request = new RollNumber_Params(playerIndex, number);		
 
@@ -352,6 +408,20 @@ public class ClientFacade {
 	}
 
 
+	/**
+	 * Discards cards due to action by robber.
+	 * 
+	 * @pre Status is discarding, and current player needs to discard.
+	 * @post Specified cards will be discarded, and player will no longer need to discard.
+	 * If player is last to discard, status will be switched to robbing.
+	 * 
+	 * @param brick
+	 * @param ore
+	 * @param sheep
+	 * @param wheat
+	 * @param wood
+	 * @return
+	 */
 	public DiscardCards_Result discardCards(int brick, int ore, int sheep, int wheat, int wood)  {
 		System.out.println("ClientFacade discardCards()");
 		int playerIndex = Client.getInstance().getPlayerIndex();
@@ -375,9 +445,19 @@ public class ClientFacade {
 
 	//move
 
+	/**
+	 * Builds a city in the specified location.
+	 * 
+	 * @pre Must be player's turn, player must have city available, 
+	 * location must be viable for a city, player must have resources.
+	 * @post City is built in specified location.
+	 * 
+	 * @param location
+	 * @return BuildCity_Result
+	 */
 	public BuildCity_Result buildCity(VertexLocation location)  {
 		System.out.println("ClientFacade buildCity()");
-		
+
 		int playerIndex = Client.getInstance().getPlayerIndex();
 
 		BuildCity_Result result; 
@@ -397,13 +477,25 @@ public class ClientFacade {
 		return result;
 	}
 
+	
+	/**
+	 * Builds a road in the specified location.
+	 * 
+	 * @pre Must be player's turn, player must have road available,
+	 * edge location must be viable for a road, player must have resources.
+	 * @post Road is built in specified location.
+	 * 
+	 * 
+	 * @param roadLocation
+	 * @return
+	 */
 	public BuildRoad_Result buildRoad(EdgeLocation roadLocation)  {
 		System.out.println("ClientFacade buildRoad()");
-		
+
 		int playerIndex = Client.getInstance().getPlayerIndex();
 		System.out.println("\n\nPlayer Index: " + playerIndex + "\n\n");
 		boolean free = Client.getInstance().getGame().isInSetUpPhase();
-		
+
 		BuildRoad_Result result; 
 		BuildRoad_Params request = new BuildRoad_Params(playerIndex, roadLocation, free);		
 
@@ -421,6 +513,16 @@ public class ClientFacade {
 		return result;	
 	}
 
+	/**
+	 * Builds a settlement in the specified location.
+	 * 
+	 * @pre Must be player's turn, player must have settlement available, 
+	 * location must be viable for a settlement, player must have resources.
+	 * @post Settlement is built in specified location.
+	 * 
+	 * @param location
+	 * @return BuildSettlement_Result
+	 */
 	public BuildSettlement_Result buildSettlement(VertexLocation location)  {
 		System.out.println("ClientFacade buildSettlement()");
 
@@ -444,6 +546,15 @@ public class ClientFacade {
 		return result;
 	}
 
+	/**
+	 * Buys a development card.
+	 * 
+	 * @pre Must be cards in dev deck, must be player's turn, player must have resources for card
+	 * @post Card is added to player's new card hand, price subtracted.
+	 * 
+	 * 
+	 * @return BuyDevCard_Result
+	 */
 	public BuyDevCard_Result buyDevCard()  {
 		System.out.println("ClientFacade buyDevCard()");
 		int playerIndex = Client.getInstance().getPlayerIndex();
@@ -454,7 +565,7 @@ public class ClientFacade {
 
 			result = sp.buyDevCard(request);
 			updateGame(result.getGame());
-			
+
 
 		} catch (ClientException e) {			
 			result = new BuyDevCard_Result();
@@ -465,6 +576,16 @@ public class ClientFacade {
 		return result;
 	}
 
+	/**
+	 * Finishes the player's turn.
+	 * 
+	 * @pre Must be player's turn. Status must be playing.
+	 * @post Player's turn ends, goes to next player's turn.
+	 * 
+	 * 
+	 * 
+	 * @return FinishTurn_Result
+	 */
 	public FinishTurn_Result finishTurn()  {
 		System.out.println("ClientFacade finishTurn()");
 		int playerIndex = Client.getInstance().getPlayerIndex();
@@ -485,6 +606,18 @@ public class ClientFacade {
 		return result;
 	}
 
+	/**
+	 * Executes a maritime trade.
+	 * 
+	 * @pre Must be player's turn. Status must be playing.
+	 * @post Resource is traded at given ratio for new resource.
+	 * 
+	 * 
+	 * @param ratio
+	 * @param inputResource
+	 * @param outputResource
+	 * @return MaritimeTrade_Result
+	 */
 	public MaritimeTrade_Result maritimeTrade(int ratio, ResourceType inputResource, 
 			ResourceType outputResource)  {
 		System.out.println("ClientFacade maritimeTrade()");
@@ -507,6 +640,20 @@ public class ClientFacade {
 		return result;
 	}
 
+	/**
+	 * Offers a trade to another player.
+	 * 
+	 * @pre Must be player's turn, player must have resources specified in trade, status must be playing.
+	 * @post Trade is either accepted or refused. 
+	 * 
+	 * @param brick
+	 * @param ore
+	 * @param sheep
+	 * @param wheat
+	 * @param wood
+	 * @param receiver
+	 * @return OfferTrade_Result
+	 */
 	public OfferTrade_Result offerTrade(int brick, int ore, int sheep, int wheat, int wood, int receiver)  {
 		System.out.println("ClientFacade offerTrade()");
 
@@ -529,6 +676,18 @@ public class ClientFacade {
 
 	}
 
+	/**
+	 * Moves the robber and robs a player adjacent to the robber.
+	 * 
+	 * @pre Must be player's turn. Status must be robbing.
+	 * @post Status set to playing. Victim gives up one random resource to the robber.
+	 * 
+	 * 
+	 * 
+	 * @param hex
+	 * @param victimIndex
+	 * @return RobPlayer_Result
+	 */
 	public RobPlayer_Result robPlayer(HexLocation hex, int victimIndex)  {
 		System.out.println("ClientFacade robPlayer()");
 
@@ -552,6 +711,18 @@ public class ClientFacade {
 
 	//dev card play
 
+	/**
+	 * Plays a monopoly card.
+	 * 
+	 * @pre Player must have a monopoly card, player must be able to play a card this turn, 
+	 * status must be playing, must be player's turn.
+	 * @post Player receives all of specified resource from all players. Card removed from hand.
+	 * Player unable to play additional cards this turn.
+	 * 
+	 * 
+	 * @param type
+	 * @return PlayMonopoly_Result
+	 */
 	public PlayMonopoly_Result playMonopoly(ResourceType type)  {
 		System.out.println("ClientFacade playMonopoly()");
 
@@ -573,6 +744,17 @@ public class ClientFacade {
 		return result;
 	}
 
+	/**
+	 * Plays a monument card for victory points.
+	 * 
+	 * @pre Player must have a monument card, player must be able to play a card this turn, 
+	 * status must be playing, must be player's turn.
+
+	 * @post Player gains one victory point, loses card, cannot play additional cards this turn.
+	 * 
+	 * 
+	 * @return
+	 */
 	public PlayMonument_Result playMonument()  {
 		System.out.println("ClientFacade playMonument()");
 
@@ -595,6 +777,19 @@ public class ClientFacade {
 
 	}
 
+	/**
+	 * Plays a road building card.
+	 * 
+	 * @pre Player must have a road building card, player must be able to play a card this turn, 
+	 * status must be playing, must be player's turn.
+
+	 * @post Player places two new roads, cannot play additional cards this turn, loses card.
+	 * 
+	 * @param roadLocation1
+	 * @param roadLocation2
+	 * @return PlayRoadBuilding_Result
+	 */
+	
 	public PlayRoadBuilding_Result playRoadBuilding(EdgeLocation roadLocation1, 
 			EdgeLocation roadLocation2)  {
 		System.out.println("ClientFacade playRoadBuilding()");
@@ -617,6 +812,17 @@ public class ClientFacade {
 		return result;		
 	}
 
+	/**
+	 * Plays a soldier card.
+	 * 
+	 * @pre Player must have a soldier card, player must be able to play a card this turn, 
+	 * status must be playing, must be player's turn.
+	 * @post Player moves robber, steals from specified player, not able to play another card this turn.
+	 * 
+	 * @param hex
+	 * @param victimIndex
+	 * @return PlaySoldier_Result
+	 */
 	public PlaySoldier_Result playSoldier(HexLocation hex, int victimIndex)  {
 		System.out.println("ClientFacade playSoldier()");
 
@@ -637,6 +843,18 @@ public class ClientFacade {
 
 		return result;
 	}
+	
+	/**
+	 * Plays a year of plenty card.
+	 * 
+	 * @pre Player must have a year of plenty card, player must be able to play a card this turn, 
+	 * status must be playing, must be player's turn.
+	 * @post Player gains one of each specified resource, cannot play another card this turn, loses YOP card.
+	 * 
+	 * @param resource1
+	 * @param resource2
+	 * @return PlayYearOfPlenty_Result
+	 */
 
 	public PlayYearOfPlenty_Result playYearOfPlenty(ResourceType resource1, ResourceType resource2)  {
 		System.out.println("ClientFacade playYearOfPlenty()");
@@ -650,19 +868,27 @@ public class ClientFacade {
 			result = sp.playYearOfPlenty(request);
 			System.out.println(result.getGame().getCurrentPlayer().getPlayerName() + "In the Facade after talking to the proxy.");
 			updateGame(result.getGame());
-			
+
 		} catch (ClientException e) {			
 			result = new PlayYearOfPlenty_Result();
 
 			e.printStackTrace();
 		}		
-		
+
 		return result;
 	}
-	
+
+	/**
+	 * Updates the game object in the client.
+	 * 
+	 * @pre Game must not be null.
+	 * @post Game and client updated.
+	 * 
+	 * @param game
+	 */
 	private void updateGame(Game game){
 		System.out.println("ClientFacade updateGame()");
-		
+
 		Client.getInstance().setGame(game);
 		return;
 	}
