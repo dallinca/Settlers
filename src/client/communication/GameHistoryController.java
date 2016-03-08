@@ -28,7 +28,7 @@ public class GameHistoryController extends Controller implements IGameHistoryCon
 	}
 	
 	/**
-	 * 
+	 * This functions purpose is to re-initalize the game history as obtained from the server
 	 * 
 	 */
 	private void initFromModel() {
@@ -66,9 +66,13 @@ public class GameHistoryController extends Controller implements IGameHistoryCon
 		}
 	}
 
+	/**
+	 * This function will check and see if the history has changed and read in the new entry and then post it.
+	 * @pre that the observable is not null
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
+		
 		System.out.println("GameHistoryController initFromModel()");
 		// If the game is null just return
 		if(Client.getInstance().getGame() == null) {

@@ -53,14 +53,14 @@ public class ActionManager {
 			try {
 				doTrade(action, null, null);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		else if (action.getCategory() == ActionType.PLAYCARD)
 			try {
 				playDevelopmentCard(action);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}	
 
