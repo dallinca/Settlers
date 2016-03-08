@@ -16,6 +16,11 @@ public class Trade {
 	Trade() {
 	}
 	
+	/**
+	 * If you can do domestic trade or not
+	 * @pre you have resources to trade
+	 * @return whether or not you can trade with players or not
+	 */
 	public boolean canDoTradeWithPlayer() {
 		System.out.println("Trade canDoTradeWithPlayer()");
 
@@ -47,13 +52,20 @@ public class Trade {
 
 	}
 
+	/**
+	 * Checks to see if the bank has the resources you want (the checking of your resources is done again but should have been done prior to this)
+	 * @pre you actually own the resources you are trading in
+	 * @param tradeIn
+	 * @param receive
+	 * @return whether or not you can do maritime trade
+	 */
 	public boolean canDoTradeWithBank(ResourceType tradeIn, ResourceType receive) {
 	System.out.println("Trade canDoTradeWithBank()");
 		return Client.getInstance().getGame().canDoPlayerDoMaritimeTrade(tradeIn, receive);
 	}
 	
 	/**
-	 *Trades selected cards of same type from player's hand to bank in exchange for another specified resource.
+	 * Trades selected cards of same type from player's hand to bank in exchange for another specified resource.
 	 * @throws Exception 
 	 * 
 	 * @pre Player must have 4 of same type of resource card if no port. 3 resource of same type if has general port.

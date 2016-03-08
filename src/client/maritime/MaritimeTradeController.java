@@ -38,8 +38,8 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	}
 
 	/**
-	 * TODO
-	 * 
+	 * Gets the trade view
+	 * @pre tradeview not null
 	 */
 	public IMaritimeTradeView getTradeView() {
 		System.out.println("MaritimeTradeController getTradeView()");
@@ -48,8 +48,8 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	}
 
 	/**
-	 * TODO
-	 * 
+	 * Gets the trade overlay
+	 * @pre the trade overlay is not null
 	 */
 	public IMaritimeTradeOverlay getTradeOverlay() {
 		System.out.println("MaritimeTradeController getTradeOverlay()");		
@@ -57,8 +57,8 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	}
 
 	/**
-	 * TODO
-	 * 
+	 * Sets your trade overlay
+	 * @pre you are not setting it to something that is null
 	 */
 	public void setTradeOverlay(IMaritimeTradeOverlay tradeOverlay) {
 		System.out.println("MaritimeTradeController setTradeOverlay()");
@@ -67,7 +67,7 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 
 	/**
 	 * Checks if it is the players turn and if he has enough resources to do a trade
-	 * 
+	 * @pre you are doing this on your turn
 	 */
 	@Override
 	public void startTrade() {
@@ -152,8 +152,8 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	}
 
 	/**
-	 * TODO
-	 * 
+	 * This method calculates the rate at which you can trade, and then makes the necessary trade based on that number
+	 * @pre you have been verified that you can trade.
 	 */
 	@Override
 	public void makeTrade() {
@@ -198,8 +198,8 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	}
 
 	/**
-	 * TODO
-	 * 
+	 * You can click cancel and it will close the modal by calling this function
+	 * @pre the modal was already open upon calling this method
 	 */
 	@Override
 	public void cancelTrade() {
@@ -210,8 +210,8 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	}
 
 	/**
-	 * TODO
-	 * 
+	 * When you click on a resource to receive from the trade, this method is called.
+	 * @pre the modal was up and you clicked a valid resource type
 	 */
 	@Override
 	public void setGetResource(ResourceType resource) {
@@ -231,8 +231,8 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	}
 
 	/**
-	 * TODO
-	 * 
+	 * When you click on what you want to give up, this method is called.
+	 * @pre you have the resources you are trying to give up. 
 	 */
 	@Override
 	public void setGiveResource(ResourceType resource) {
@@ -287,8 +287,8 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	}
 
 	/**
-	 * TODO
-	 * 
+	 * When you click the circle arrow, this method is called which clears your previous choice of a resource to get
+	 * @pre it is your turn, and the modal is actually open
 	 */
 	@Override
 	public void unsetGetValue() {
@@ -300,9 +300,9 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	}
 
 	/**
-	 * TODO
 	 * This method is called when you click the reset button and then it returns you to previous view.
-	 * The turn thing is technically not needed, but I believe it adds security to our code. Less breaks this way if something goes awry  
+	 * The turn thing is technically not needed, but I believe it adds security to our code. Less breaks this way if something goes awry 
+	 * @pre the modal to be open and it needs to be your turn for this symbol to even show up to be clicked on 
 	 */
 	@Override
 	public void unsetGiveValue() {
@@ -317,7 +317,8 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	}
 
 	/**
-	 * TODO
+	 * When the observable calls it's notify method, this method is called to ensure that this controller is up to date. However, most if not all of what this controller needs to know loads when a user clicks on a button rather than 
+	 * from the Client Facade via this function.
 	 * 
 	 * @param o
 	 * @param arg
@@ -331,6 +332,7 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 			return;
 		} 
 		
+		//This used to do more but it got moved to up above, so it technically makes the code just prior to this deprecated but it may be of use later
 		/*if (Client.getInstance().getGame().getTurnNumber() < 2) {
 			getTradeView().enableMaritimeTrade(false);
 		}*/
