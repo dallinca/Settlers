@@ -473,6 +473,7 @@ public class MapController extends Controller implements IMapController, Observe
 			ClientFacade.getInstance().playSoldier(robHex, victimIndex);
 		}
 	}
+	
 	/**
 	 * Every time time there is an updated version of the Game model. This function will fire
 	 * and update the map controller with the updated information.
