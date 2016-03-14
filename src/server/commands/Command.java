@@ -1,5 +1,11 @@
-package server;
+package server.commands;
 
-public class Command {
-
+/**
+ * Command interface for the command pattern.
+ * 
+ * @author Dallin
+ *
+ */
+public interface Command {
+	void execute();
 }
