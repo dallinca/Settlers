@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import client.data.TradeInfo;
+import server.commands.CommandHistory;
 import shared.communication.results.ClientModel;
 import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
@@ -45,6 +46,8 @@ public class Game {
 	private Line[] chat;
 	private Line[] history;
 	private int winner = -1;
+	private CommandHistory gameHistory = new CommandHistory();
+	
 
 	private TradeInfo tradeOffer;
 
@@ -1250,14 +1253,20 @@ public class Game {
 		return board;
 	}
 
-
-
 	public TradeInfo getTradeOffer() {
 		return tradeOffer;
 	}
 
 	public void setTradeOffer(TradeInfo tradeOffer) {
 		this.tradeOffer = tradeOffer;
+	}
+
+	public CommandHistory getGameHistory() {
+		return gameHistory;
+	}
+
+	public void setGameHistory(CommandHistory gameHistory) {
+		this.gameHistory = gameHistory;
 	}
 
 
