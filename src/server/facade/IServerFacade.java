@@ -4,6 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import server.commands.Command;
+import shared.communication.params.nonmove.AddAI_Params;
+import shared.communication.params.nonmove.Create_Params;
+import shared.communication.params.nonmove.GetVersion_Params;
+import shared.communication.params.nonmove.Join_Params;
+import shared.communication.params.nonmove.ListAI_Params;
+import shared.communication.params.nonmove.List_Params;
+import shared.communication.params.nonmove.Login_Params;
+import shared.communication.params.nonmove.Register_Params;
 import shared.communication.results.move.AcceptTrade_Result;
 import shared.communication.results.move.BuildCity_Result;
 import shared.communication.results.move.BuildRoad_Result;
@@ -22,6 +30,7 @@ import shared.communication.results.move.devcard.PlayRoadBuilding_Result;
 import shared.communication.results.move.devcard.PlaySoldier_Result;
 import shared.communication.results.move.devcard.PlayYearOfPlenty_Result;
 import shared.communication.results.nonmove.AddAI_Result;
+import shared.communication.results.nonmove.Create_Result;
 import shared.communication.results.nonmove.GetVersion_Result;
 import shared.communication.results.nonmove.Join_Result;
 import shared.communication.results.nonmove.ListAI_Result;
@@ -61,16 +70,30 @@ public interface IServerFacade {
 	public PlayYearOfPlenty_Result playYearOfPlenty(Command command);
 	
 	// Non Command pattern actions (nonmove actions)
-	public Login_Result login();
-	public Register_Result register();
-	public List_Result list();
-	public Register_Result create();
-	public Join_Result join();
-	public GetVersion_Result model();
-	public AddAI_Result addAI();
-	public ListAI_Result listAI();
+	public Login_Result login(Login_Params params);
+	public Register_Result register(Register_Params params);
+	public List_Result list(List_Params params);
+	public Create_Result create(Create_Params params);
+	public Join_Result join(Join_Params params);
+	public GetVersion_Result model(GetVersion_Params params);
+	public AddAI_Result addAI(AddAI_Params params);
+	public ListAI_Result listAI(ListAI_Params params);
 	
 	// Return the game that the command is meant to operate on
 	//Game findGameForCommand(); 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

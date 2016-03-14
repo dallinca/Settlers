@@ -4,6 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import server.commands.Command;
+import shared.communication.params.nonmove.AddAI_Params;
+import shared.communication.params.nonmove.Create_Params;
+import shared.communication.params.nonmove.GetVersion_Params;
+import shared.communication.params.nonmove.Join_Params;
+import shared.communication.params.nonmove.ListAI_Params;
+import shared.communication.params.nonmove.List_Params;
+import shared.communication.params.nonmove.Login_Params;
+import shared.communication.params.nonmove.Register_Params;
 import shared.communication.results.move.AcceptTrade_Result;
 import shared.communication.results.move.BuildCity_Result;
 import shared.communication.results.move.BuildRoad_Result;
@@ -22,6 +30,7 @@ import shared.communication.results.move.devcard.PlayRoadBuilding_Result;
 import shared.communication.results.move.devcard.PlaySoldier_Result;
 import shared.communication.results.move.devcard.PlayYearOfPlenty_Result;
 import shared.communication.results.nonmove.AddAI_Result;
+import shared.communication.results.nonmove.Create_Result;
 import shared.communication.results.nonmove.GetVersion_Result;
 import shared.communication.results.nonmove.Join_Result;
 import shared.communication.results.nonmove.ListAI_Result;
@@ -353,57 +362,128 @@ public class ServerFacade implements IServerFacade {
 
 	/**
 	 * To be called from the Handlers.<br>
-	 * Attempts to log the player in.
+	 * Attempts the login action.
 	 * 
-	 * @pre none
-	 * @post Play Year Of Plenty action will be performed on the correct model, or nothing
-	 * @return whether the Play Year Of Plenty action was performed
+	 * @pre params != null
+	 * @post Login Action performed
+	 * 
+	 * @return Login_Result Action
 	 * 
 	 */
 	@Override
-	public Login_Result login() {
+	public Login_Result login(Login_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * To be called from the Handlers.<br>
+	 * Attempts the Register action.
+	 * 
+	 * @pre params != null
+	 * @post Register Action performed
+	 * 
+	 * @return Register_Result Action
+	 * 
+	 */
 	@Override
-	public Register_Result register() {
+	public Register_Result register(Register_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * To be called from the Handlers.<br>
+	 * Attempts the Result action.
+	 * 
+	 * @pre params != null
+	 * @post List Games information retrieved
+	 * 
+	 * @return List_Result Action
+	 * 
+	 */
 	@Override
-	public List_Result list() {
+	public List_Result list(List_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * To be called from the Handlers.<br>
+	 * Attempts the Create Game action.
+	 * 
+	 * @pre params != null
+	 * @post Create Game Action performed
+	 * 
+	 * @return Create_Result Action
+	 * 
+	 */
 	@Override
-	public Register_Result create() {
+	public Create_Result create(Create_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * To be called from the Handlers.<br>
+	 * Attempts the Join Game action.
+	 * 
+	 * @pre params != null
+	 * @post Join Game Action performed
+	 * 
+	 * @return Join_Result Action
+	 * 
+	 */
 	@Override
-	public Join_Result join() {
+	public Join_Result join(Join_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * To be called from the Handlers.<br>
+	 * Attempts the Get Game Version action.
+	 * 
+	 * @pre params != null
+	 * @post Game model retrieved
+	 * 
+	 * @return GetVersion_Result Action
+	 * 
+	 */
 	@Override
-	public GetVersion_Result model() {
+	public GetVersion_Result model(GetVersion_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * To be called from the Handlers.<br>
+	 * Attempts the Add AI action.
+	 * 
+	 * @pre params != null
+	 * @post AI added to game
+	 * 
+	 * @return AddAI_Result Action
+	 * 
+	 */
 	@Override
-	public AddAI_Result addAI() {
+	public AddAI_Result addAI(AddAI_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * To be called from the Handlers.<br>
+	 * Attempts the list AI action.
+	 * 
+	 * @pre params != null
+	 * @post AI information retrieved for the game
+	 * 
+	 * @return ListAI_Result Action
+	 * 
+	 */
 	@Override
-	public ListAI_Result listAI() {
+	public ListAI_Result listAI(ListAI_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
