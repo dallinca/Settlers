@@ -12,9 +12,11 @@ import shared.model.Game;
  *
  */
 public interface IServerFacade {
-	
-	List<Game> liveGames = new ArrayList<Game>();
 
+	// TODO determine what the facade functions need to return for the handlers to package
+	
+	
+	// Command pattern actions (move actions)
 	public boolean acceptTrade();
 	public boolean buildCity();
 	public boolean buildRoad();
@@ -27,13 +29,21 @@ public interface IServerFacade {
 	public boolean robPlayer();
 	public boolean rollNumber();
 	public boolean sendChat();
-	
-	// Dev Card play actions
 	public boolean playMonopoly();
 	public boolean playMonument();
 	public boolean playRoadBuilding();
 	public boolean playSoldier();
 	public boolean playYearOfPlenty();
+	
+	// Non Command pattern actions (nonmove actions)
+	public boolean login();
+	public boolean register();
+	public boolean list();
+	public boolean create();
+	public boolean join();
+	public boolean model();
+	public boolean addAI();
+	public boolean listAI();
 	
 	// Return the game that the command is meant to operate on
 	Game findGameForCommand(); 
