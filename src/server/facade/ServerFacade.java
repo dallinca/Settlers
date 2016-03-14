@@ -4,6 +4,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 import server.commands.Command;
+import shared.communication.results.move.AcceptTrade_Result;
+import shared.communication.results.move.BuildCity_Result;
+import shared.communication.results.move.BuildRoad_Result;
+import shared.communication.results.move.BuildSettlement_Result;
+import shared.communication.results.move.BuyDevCard_Result;
+import shared.communication.results.move.DiscardCards_Result;
+import shared.communication.results.move.FinishTurn_Result;
+import shared.communication.results.move.MaritimeTrade_Result;
+import shared.communication.results.move.OfferTrade_Result;
+import shared.communication.results.move.RobPlayer_Result;
+import shared.communication.results.move.RollNumber_Result;
+import shared.communication.results.move.SendChat_Result;
+import shared.communication.results.move.devcard.PlayMonopoly_Result;
+import shared.communication.results.move.devcard.PlayMonument_Result;
+import shared.communication.results.move.devcard.PlayRoadBuilding_Result;
+import shared.communication.results.move.devcard.PlaySoldier_Result;
+import shared.communication.results.move.devcard.PlayYearOfPlenty_Result;
+import shared.communication.results.nonmove.AddAI_Result;
+import shared.communication.results.nonmove.GetVersion_Result;
+import shared.communication.results.nonmove.Join_Result;
+import shared.communication.results.nonmove.ListAI_Result;
+import shared.communication.results.nonmove.List_Result;
+import shared.communication.results.nonmove.Login_Result;
+import shared.communication.results.nonmove.Register_Result;
 import shared.model.Game;
 
 public class ServerFacade implements IServerFacade {
@@ -25,9 +49,9 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean acceptTrade(Command command) {
+	public AcceptTrade_Result acceptTrade(Command command) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	/**
@@ -43,9 +67,9 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean buildCity(Command command) {
+	public BuildCity_Result buildCity(Command command) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	/**
@@ -61,9 +85,9 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean buildRoad(Command command) {
+	public BuildRoad_Result buildRoad(Command command) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	/**
@@ -79,9 +103,9 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean buildSettlement(Command command) {
+	public BuildSettlement_Result buildSettlement(Command command) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	/**
@@ -97,9 +121,9 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean buyDevCard(Command command) {
+	public BuyDevCard_Result buyDevCard(Command command) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	/**
@@ -115,9 +139,9 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean discardCards(Command command) {
+	public DiscardCards_Result discardCards(Command command) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	/**
@@ -133,9 +157,9 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean finishTurn(Command command) {
+	public FinishTurn_Result finishTurn(Command command) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	/**
@@ -151,9 +175,9 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean maritimeTrade(Command command) {
+	public MaritimeTrade_Result maritimeTrade(Command command) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	/**
@@ -169,9 +193,9 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean offerTrade(Command command) {
+	public OfferTrade_Result offerTrade(Command command) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	/**
@@ -187,9 +211,9 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean robPlayer(Command command) {
+	public RobPlayer_Result robPlayer(Command command) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	/**
@@ -205,9 +229,9 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean rollNumber(Command command) {
+	public RollNumber_Result rollNumber(Command command) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	/**
@@ -223,9 +247,9 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean sendChat(Command command) {
+	public SendChat_Result sendChat(Command command) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	/**
@@ -241,9 +265,9 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean playMonopoly(Command command) {
+	public PlayMonopoly_Result playMonopoly(Command command) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	/**
@@ -259,9 +283,9 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean playMonument(Command command) {
+	public PlayMonument_Result playMonument(Command command) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	/**
@@ -277,9 +301,9 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean playRoadBuilding(Command command) {
+	public PlayRoadBuilding_Result playRoadBuilding(Command command) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	/**
@@ -295,9 +319,9 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean playSoldier(Command command) {
+	public PlaySoldier_Result playSoldier(Command command) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	/**
@@ -313,9 +337,9 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean playYearOfPlenty(Command command) {
+	public PlayYearOfPlenty_Result playYearOfPlenty(Command command) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	
@@ -326,53 +350,62 @@ public class ServerFacade implements IServerFacade {
 	
 	
 	
-	
+
+	/**
+	 * To be called from the Handlers.<br>
+	 * Attempts to log the player in.
+	 * 
+	 * @pre none
+	 * @post Play Year Of Plenty action will be performed on the correct model, or nothing
+	 * @return whether the Play Year Of Plenty action was performed
+	 * 
+	 */
 	@Override
-	public boolean login() {
+	public Login_Result login() {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override
-	public boolean register() {
+	public Register_Result register() {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override
-	public boolean list() {
+	public List_Result list() {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override
-	public boolean create() {
+	public Register_Result create() {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override
-	public boolean join() {
+	public Join_Result join() {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override
-	public boolean model() {
+	public GetVersion_Result model() {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override
-	public boolean addAI() {
+	public AddAI_Result addAI() {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override
-	public boolean listAI() {
+	public ListAI_Result listAI() {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	
@@ -381,13 +414,17 @@ public class ServerFacade implements IServerFacade {
 	
 	// Return the game that the command is meant to operate on
 	
-	
-	
+	/*
+	/**
+	 * Each of the concrete command classes need to have the correct game to act on
+	 * 
+	 * 
+	 *//*
 	@Override
 	public Game findGameForCommand() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+	*/
 	
 }
