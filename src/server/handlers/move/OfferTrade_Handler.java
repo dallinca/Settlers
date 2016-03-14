@@ -1,5 +1,16 @@
 package server.handlers.move;
 
-public class OfferTrade_Handler {
+import java.io.IOException;
+
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+
+public class OfferTrade_Handler implements HttpHandler{
+
+	@Override
+	public void handle(HttpExchange arg0) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

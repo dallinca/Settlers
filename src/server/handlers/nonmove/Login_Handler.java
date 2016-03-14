@@ -1,4 +1,4 @@
-package server.handlers;
+package server.handlers.nonmove;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
