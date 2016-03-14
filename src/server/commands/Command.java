@@ -1,9 +1,10 @@
-package server.commands;
+
 
 /**
- * Command interface for the command pattern.
+ * Command pattern object which is extended by all subtypes. 
+ * Consists of an execute function, and shared information between all commands.
  * 
- * @author Dallin
+ * 
  *
  */
 public interface Command {

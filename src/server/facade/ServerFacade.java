@@ -2,7 +2,6 @@ package server.facade;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import server.commands.Command;
 import shared.communication.params.nonmove.AddAI_Params;
 import shared.communication.params.nonmove.Create_Params;
@@ -38,6 +37,13 @@ import shared.communication.results.nonmove.List_Result;
 import shared.communication.results.nonmove.Login_Result;
 import shared.communication.results.nonmove.Register_Result;
 import shared.model.Game;
+
+
+/**
+ * Validates input from handlers, executes commands, and packages results for handler.
+ * 
+ * 
+ */
 
 public class ServerFacade implements IServerFacade {
 
