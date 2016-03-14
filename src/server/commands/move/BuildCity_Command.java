@@ -45,4 +45,18 @@ public class BuildCity_Command implements Command {
 		
 	}
 
+	/**
+	 * For use coupled with the non-standard initialization of the command.
+	 * Allows for one and only one setting of the game for which the command is to execute.
+	 * 
+	 * @pre this.game == null && game != null
+	 * @post this.game = game
+	 * @param game
+	 */
+	public void setGame(Game game) {
+		if(this.game == null) {
+			this.game = game;
+		}
+	}
+
 }
