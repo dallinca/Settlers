@@ -3,6 +3,7 @@ package server.facade;
 import java.util.ArrayList;
 import java.util.List;
 
+import server.commands.Command;
 import shared.model.Game;
 
 public class ServerFacade implements IServerFacade {
@@ -24,7 +25,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean acceptTrade() {
+	public boolean acceptTrade(Command command) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -42,7 +43,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean buildCity() {
+	public boolean buildCity(Command command) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -60,7 +61,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean buildRoad() {
+	public boolean buildRoad(Command command) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -78,7 +79,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean buildSettlement() {
+	public boolean buildSettlement(Command command) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -96,7 +97,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean buyDevCard() {
+	public boolean buyDevCard(Command command) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -114,7 +115,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean discardCards() {
+	public boolean discardCards(Command command) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -132,7 +133,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean finishTurn() {
+	public boolean finishTurn(Command command) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -150,7 +151,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean maritimeTrade() {
+	public boolean maritimeTrade(Command command) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -168,7 +169,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean offerTrade() {
+	public boolean offerTrade(Command command) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -186,7 +187,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean robPlayer() {
+	public boolean robPlayer(Command command) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -204,7 +205,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean rollNumber() {
+	public boolean rollNumber(Command command) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -222,7 +223,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean sendChat() {
+	public boolean sendChat(Command command) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -240,7 +241,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean playMonopoly() {
+	public boolean playMonopoly(Command command) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -258,7 +259,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean playMonument() {
+	public boolean playMonument(Command command) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -276,7 +277,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean playRoadBuilding() {
+	public boolean playRoadBuilding(Command command) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -294,7 +295,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean playSoldier() {
+	public boolean playSoldier(Command command) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -312,7 +313,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public boolean playYearOfPlenty() {
+	public boolean playYearOfPlenty(Command command) {
 		// TODO Auto-generated method stub
 		return false;
 	}
