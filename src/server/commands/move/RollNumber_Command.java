@@ -30,8 +30,14 @@ public class RollNumber_Command implements Command {
 	}
 
 	/**
-	 * TODO -- javadoc
+	 * Issues the Roll Number action on the given game server game model.
+	 * Should only be triggered by the games models Command History class.
 	 * 
+	 * @pre game != null
+	 * @pre game given is the correct game for this command
+	 * @pre command is a valid action on the game model
+	 * 
+	 * @post the Roll Number action will be correctly implemented on the game model
 	 */
 	@Override
 	public void execute() {

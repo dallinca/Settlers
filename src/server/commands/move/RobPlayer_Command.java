@@ -30,8 +30,14 @@ public class RobPlayer_Command implements Command {
 	}
 
 	/**
-	 * TODO -- javadoc
+	 * Issues the Rob Player action on the given game server game model.
+	 * Should only be triggered by the games models Command History class.
 	 * 
+	 * @pre game != null
+	 * @pre game given is the correct game for this command
+	 * @pre command is a valid action on the game model
+	 * 
+	 * @post the Rob Player action will be correctly implemented on the game model
 	 */
 	@Override
 	public void execute() {
