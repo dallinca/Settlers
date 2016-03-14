@@ -24,6 +24,9 @@ public class Login_Handler implements HttpHandler{
 	
 	private XStream xmlStream = new XStream(new DomDriver());	
 	
+	/**
+	 * Receives the Login Params and passes it to the Server Facade after decoding the object.
+	 */
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
 		logger.entering("server.handlers.ValidateUserHandler", "handle");

@@ -52,7 +52,7 @@ public class Bank {
 	}
 	
 	/**
-	 * TODO javadoc - implement
+	 * Takes in the numbers of resources it recieves from the server and adds it to the deck, or takes away, depending on the action last performed.
 	 * 
 	 * @pre these must be valid amounts according to the game rules
 	 * @post the bank will 
