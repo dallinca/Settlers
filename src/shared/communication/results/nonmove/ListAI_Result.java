@@ -1,5 +1,9 @@
 package shared.communication.results.nonmove;
 
+/**
+ * Not implemented. Extra credit.
+ *
+ */
 public class ListAI_Result {
 
 	private boolean valid;

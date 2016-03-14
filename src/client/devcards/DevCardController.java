@@ -49,16 +49,30 @@ public class DevCardController extends Controller implements IDevCardController,
 		
 	}
 
+	/**
+	 * Gets the playCard view
+	 * @pre view != null
+	 * @return the view
+	 */
 	public IPlayDevCardView getPlayCardView() {
 		System.out.println("DevCardController getPlayCardView()");
 		return (IPlayDevCardView)super.getView();
 	}
 
+	/**
+	 * Gets the buyCardView
+	 * @pre view != null
+	 * @return
+	 */
 	public IBuyDevCardView getBuyCardView() {
 		System.out.println("DevCardController getBuyCardView()");
 		return buyCardView;
 	}
 
+	/**
+	 * This method calls the action manager to see if you have the resources to buy a card and if it is your turn or not.
+	 * @pre the game isn't null and that the Client exists
+	 */
 	@Override
 	public void startBuyCard() {
 		System.out.println("DevCardController startBuyCard()");
@@ -75,12 +89,20 @@ public class DevCardController extends Controller implements IDevCardController,
 		}		
 	}
 
+	/**
+	 * Closes the modal when you click you dont want to buy a card
+	 * @pre the modal was open prior to calling this method
+	 */
 	@Override
 	public void cancelBuyCard() {
 		System.out.println("DevCardController cancelBuyCard()");
 		buyCardView.closeModal();
 	}
 
+	/**
+	 * This method calls the ClientFacade through calling the action manager to purchase a development card for this particular instance of the client
+	 * @pre the ClientFacade is not null.
+	 */
 	@Override
 	public void buyCard() {
 		System.out.println("DevCardController buyCard()");	
@@ -113,6 +135,11 @@ public class DevCardController extends Controller implements IDevCardController,
 			 }
 	}
 
+	/**
+	 * In this function we check and see how many cards each player has, and enable the ones they have if they can play them, which takes into account the turn they were played, and who's turn it is.
+	 * It also displays that number
+	 * @pre
+	 */
 	@Override
 	public void startPlayCard() {
 		
@@ -146,12 +173,20 @@ public class DevCardController extends Controller implements IDevCardController,
 		getPlayCardView().showModal();
 	}
 
+	/**
+	 * In case you don't want to play a card, this method is called when you click the cancel button
+	 * @pre the modal to be showing prior to this being called.
+	 */
 	@Override
 	public void cancelPlayCard() {
 		System.out.println("DevCardController cancelPlayCard()");
 		getPlayCardView().closeModal();
 	}
 
+	/**
+	 * This method calls the action manager to talk to the ClientFacade based on the type of development card this method uses.
+	 * @pre its your turn and you are able to play a monopoly card
+	 */
 	@Override
 	public void playMonopolyCard(ResourceType resource) {
 		System.out.println("DevCardController playMonopolyCard()");
@@ -169,7 +204,11 @@ public class DevCardController extends Controller implements IDevCardController,
 	}
 	
 	
-
+	/**
+	 * Very similar to all of these "play methods" It eventually gets the data to the ClientFacade which creates a params object and sends it to the server.
+	 * This one is unique to monument cards
+	 * @pre its your turn and you actually have a monument card 
+	 */
 	@Override
 	public void playMonumentCard() {
 		System.out.println("DevCardController playMonumentCard()");
@@ -183,7 +222,11 @@ public class DevCardController extends Controller implements IDevCardController,
 			}
 		}
 	}
-
+	
+	/**
+	 * This method allows you to play two roads for free because of the development card.
+	 * @pre you have to own the card and it has to be your turn 
+	 */
 	@Override
 	public void playRoadBuildCard() {
 		System.out.println("DevCardController playRoadBuildCard()");
@@ -200,6 +243,10 @@ public class DevCardController extends Controller implements IDevCardController,
 		
 	}
 
+	/**
+	 * This used to do more but with the application we found within the MapController, we didn't need to do as much.
+	 * @pre you need to own a soldier card and it needs to be your turn.
+	 */
 	@Override
 	public void playSoldierCard() {
 		System.out.println("DevCardController playSoldierCard()");
@@ -222,7 +269,11 @@ public class DevCardController extends Controller implements IDevCardController,
 		
 		
 	}
-
+	
+	/**
+	 * This method allows you to play your year of plenty card and request two resources, however it assumes it is your turn and you actually have and can play that card.
+	 * @pre its your turn and you have owned the card for at least a turn.
+	 */
 	@Override
 	public void playYearOfPlentyCard(ResourceType resource1, ResourceType resource2) {
 		System.out.println("DevCardController playYearOfPlentyCard()");
@@ -250,7 +301,11 @@ public class DevCardController extends Controller implements IDevCardController,
 		
 		
 	}
-
+	
+	/**
+	 * After much deliberation, this method really has no purpose. Everything about this function that would need to be updated occurs when you click on the button to bring up your view
+	 * @pre the ClientFacade must exist
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("DevCardController update()");

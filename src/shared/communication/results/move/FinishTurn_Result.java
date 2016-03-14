@@ -4,6 +4,9 @@ import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
 import shared.model.Game;
 
+/**
+ * Response object for finish turn server command.
+ */
 public class FinishTurn_Result {
 	
 	boolean valid;

@@ -163,8 +163,6 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	}
 
 	/**
-	 * TODO -Javadoc and Implement
-	 * 
 	 * Makes the create game view not visible, and makes the JoinGameHub view visible, creating a game
 	 * 
 	 * @pre None
@@ -242,8 +240,6 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	}
 
 	/**
-	 * TODO -Javadoc and Implement
-	 * 
 	 * Officially joins the game with a color
 	 * 
 	 * @pre None
@@ -283,25 +279,12 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 			joiningPlayer.setName(Client.getInstance().getName());
 			gameInfo.addPlayer(joiningPlayer);
 		}
-		// TODO check if we need to be adding our index here or not
-		// this will be influenced by when the Server is determining what index we are at
-		// Is it immediately when we join a game, even one that isn't full?
-		// Or does the server wait to assign player indexes until the games is full, and then lets everyone know their indexes?
-		
 		joinAction.execute();
 	}
 
-	/**
-	 * TODO -Javadoc and Implement
-	 * 
-	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("JoinGameController update()");
-		// TODO Auto-generated method stub
-		
-		
-		
 	}
 
 	public GameInfo getGameInfo() {

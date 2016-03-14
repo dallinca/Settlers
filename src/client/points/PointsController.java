@@ -47,12 +47,26 @@ public class PointsController extends Controller implements IPointsController, O
 	
 	/***
 	 * Each players points should init to 0
+	 * 
+	 * @pre Nothing
+	 * @post players points set to 0
 	 */
 	private void initFromModel() {
 		System.out.println("PointsController initFromModel()");			
 		getPointsView().setPoints(0);
 	}
 
+	/**
+	 * Updates when the game state changes. 
+	 * Checks if the game has a winner or updates players points. 
+	 * 
+	 * @pre Game state has changed
+	 * @post The game has a winner and displays finishedView or
+	 * each players points are updated for the GUI
+	 * 
+	 * @param Observable o 
+	 * @param Object arg
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("PointsController update()");

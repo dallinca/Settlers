@@ -4,6 +4,10 @@ import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
 import shared.model.Game;
 
+/**
+ * Response object for play monopoly server command.
+ *
+ */
 public class PlayMonopoly_Result {
 
 	private final String type = "monopoly";

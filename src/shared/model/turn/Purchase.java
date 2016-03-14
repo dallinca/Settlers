@@ -33,6 +33,11 @@ public class Purchase {
 		}
 	}
 
+	/**
+	 * Whether or not you can purchase a development card (name makes it pretty self-explanatory)
+	 * @pre your turn
+	 * @return if you can purchase one or not
+	 */
 	public boolean canDoPurchaseDevelopmentCard(){
 		
 		System.out.println("Purchase canDoPurchaseDevelopmentCard()");
@@ -71,6 +76,11 @@ public class Purchase {
 	}
 	
 
+	/**
+	 * Whether or not you can purchase a settlement (name makes it pretty self-explanatory)
+	 * @pre your turn
+	 * @return if you can purchase one or not
+	 */
 	public boolean canDoPurchaseSettlement(Object l){
 		System.out.println("Purchase canDoPurchaseSettlement()");
 		return Client.getInstance().getGame().canDoPlayerBuildSettlement(Client.getInstance().getUserId());
@@ -92,6 +102,11 @@ public class Purchase {
 		}
 	}
 
+	/**
+	 * Whether or not you can purchase a city (name makes it pretty self-explanatory)
+	 * @pre your turn
+	 * @return if you can purchase one or not
+	 */
 	public boolean canDoPurchaseCity(Object l){
 		System.out.println("Purchase canDoPurchaseCity()");
 		return Client.getInstance().getGame().canDoPlayerBuildCity(Client.getInstance().getUserId());
@@ -117,6 +132,11 @@ public class Purchase {
 		return;
 	}
 	
+	/**
+	 * Whether or not you can purchase a road (name makes it pretty self-explanatory)
+	 * @pre your turn
+	 * @return if you can purchase one or not
+	 */
 	public boolean canDoPurchaseRoad(Object l){
 		System.out.println("Purchase canDoPurchaseRoad()");
 		return Client.getInstance().getGame().canDoPlayerBuildRoad(Client.getInstance().getUserId());

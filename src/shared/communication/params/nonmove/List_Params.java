@@ -1,5 +1,9 @@
 package shared.communication.params.nonmove;
 
+/**
+ * 
+ * Defines a list game command for the server.
+ */
 public class List_Params {
 	
 	private String username;

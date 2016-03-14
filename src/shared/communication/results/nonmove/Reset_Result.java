@@ -4,6 +4,10 @@ import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
 import shared.model.Game;
 
+/**
+ * Not implemented.
+ *
+ */
 public class Reset_Result {
 
 	private Game game;	

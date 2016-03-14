@@ -4,6 +4,10 @@ import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
 import shared.model.Game;
 
+/**
+ * Response object from accept trade server command.
+ *
+ */
 public class AcceptTrade_Result {
 	
 	private boolean valid;

@@ -1,5 +1,9 @@
 package shared.communication;
 
+/**
+ * A data storage object for user information.
+ *
+ */
 public class User {
 //Encoded cookie value
 	private String name;

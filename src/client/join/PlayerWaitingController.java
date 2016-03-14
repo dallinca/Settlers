@@ -20,11 +20,6 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 	private Client client;
 	private boolean firstTime = true;
 	
-	/**
-	 * TODO - Javadoc and Implement
-	 * 
-	 * 
-	 */
 	public PlayerWaitingController(IPlayerWaitingView view) {
 
 		super(view);
@@ -35,11 +30,6 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 		Client.getInstance().addObserver(this);
 	}
 
-	/**
-	 * TODO - Javadoc and Implement
-	 * 
-	 * 
-	 */
 	@Override
 	public IPlayerWaitingView getView() {
 		System.out.println("PlayerWaitingController IPlayerWaitingView()");
@@ -48,8 +38,10 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 	}
 
 	/**
-	 * TODO - Javadoc and Implement
+	 * Get the players from the gameInfo to initialize the waiting screen
 	 * 
+	 * @pre game in client != null
+	 * @post waiting screen initialized from the gameInfo playersinfo
 	 * 
 	 */
 	@Override
@@ -62,9 +54,6 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 		getView().showModal();
 		// Start the poller for other people joining updates
 		Client.getInstance().getMyServerPoller().start();
-		//if(getView().isModalShowing() && client.getGameInfo().getPlayers().size() == 4) {
-		//	getView().closeModal();
-		//}
 	}
 
 	/**
@@ -81,9 +70,10 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 	}
 
 	/**
-	 * TODO - Javadoc and Implement
+	 * Called when the Game model is updated in the Client.
 	 * 
-	 * 
+	 * @pre Game model != null
+	 * @post the player waiting GUI will be updated to reflect the players in the game thus far.
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
@@ -91,11 +81,6 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 		PlayerInfo[] players = new PlayerInfo[client.getGameInfo().getPlayers().size()];
 		client.getGameInfo().getPlayers().toArray(players);
 		view.setPlayers(players);
-		// TODO Auto-generated method stub
-		//if(getView().isModalShowing() && client.getGameInfo().getPlayers().size() == 4) {
-		//	
-		//	getView().closeModal();
-		//}
 		if(Client.getInstance().getGame() != null ) {
 			System.out.println("going to try and close the modal");
 			getView().closeModal();

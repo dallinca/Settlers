@@ -3,6 +3,10 @@ package shared.communication.params.move;
 import shared.communication.params.move.data.BuildLocation;
 import shared.locations.VertexLocation;
 
+/**
+ * Defines a build city command for the server.
+ * 
+ */
 public class BuildCity_Params {
 
 	private final String type = "buildCity";

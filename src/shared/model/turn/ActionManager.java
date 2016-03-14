@@ -53,14 +53,14 @@ public class ActionManager {
 			try {
 				doTrade(action, null, null);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		else if (action.getCategory() == ActionType.PLAYCARD)
 			try {
 				playDevelopmentCard(action);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}	
 
@@ -95,10 +95,11 @@ public class ActionManager {
 	}	
 
 	/**
-	 * TODO javadoc
+	 * Checks to see if you can build the object you've requested to build.
 	 * 
 	 * @param action
 	 * @param location
+	 * @pre it is your turn, otherwise you should not be able to query about being able to build things
 	 */
 	public boolean canDoBuild(ActionType action, Object location){
 		System.out.println("ActionManager canDoBuild()");
@@ -127,7 +128,14 @@ public class ActionManager {
 		//} 
 	}
 
-
+	/**
+	 * The overloaded function of the previously defined one below. It takes in an array to verify that the bank has the cards you want. 
+	 * But checks to see if you can play the cards listed so it checks the turn they were played as it goes down the line.	 * 
+	 * @param action
+	 * @param toPassIn
+	 * @return if you can play the card or not
+	 * @pre its your turn ideally
+	 */
 	public boolean canDoPlay(ActionType action, ResourceType[] toPassIn) {
 		System.out.println("ActionManager canDoPlay()");
 		if (action == ActionType.PLAYCARD_MONOPOLY) return PLAYCARD.canDoPlayMonopoly(toPassIn);
@@ -137,6 +145,13 @@ public class ActionManager {
 	}
 
 
+	/**
+	 * Not sure if we need javadoc for CanDo's. I don't think so. But this method passes you on to the correct method in the PlayCard class and returns whether or not you can play a certain card.
+	 * This method is overloaded with a resource array just prior to the definition of this method
+	 * @param action
+	 * @return if you can play the card or not
+	 * @pre it is your turn, otherwise its useless in determining whether or not to disable a card.
+	 */
 	public boolean canDoPlay(ActionType action) {
 		System.out.println("ActionManager canDoPlay()");
 		if (action == ActionType.PLAYCARD_BUILDROADS) return PLAYCARD.canDoPlayBuildRoads();
@@ -206,7 +221,13 @@ public class ActionManager {
 			}
 		} else throw new Exception("Should not have been able to call the playDevelopmentCard (for monopoly and year of Plenty) method");
 	}
-
+	
+	/**
+	 * This filters the request to the right action.
+	 * @param action
+	 * @throws Exception
+	 * @pre its your turn
+	 */
 	public void playDevelopmentCard(ActionType action) throws Exception{
 		System.out.println("ActionManager playDevelopmentCard()");
 		if (canDoPlay(action)) {

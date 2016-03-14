@@ -4,6 +4,11 @@ import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
 import shared.model.Game;
 
+/**
+ * 
+ * Response object for roll number server command.
+ *
+ */
 public class RollNumber_Result {
 
 	private boolean valid;

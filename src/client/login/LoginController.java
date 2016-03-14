@@ -88,9 +88,10 @@ public class LoginController extends Controller implements ILoginController, Obs
 	}
 
 	/**
-	 * TODO - Javadoc
+	 * Sign in a user that is already registered
 	 * 
-	 * 
+	 * @pre None
+	 * @post loginAction executed if valid, else error message is shown
 	 */
 	@Override
 	public void signIn() {
@@ -135,10 +136,14 @@ public class LoginController extends Controller implements ILoginController, Obs
 	
 	/**
 	 * Checks that the input conditions of registering a new name correct
-	 * @param String registername
-	 * @return boolean, weather name is valid
+	 * 
+	 * @pre None
+	 * @post checks name, if invalid returns false, else if valid return true
+	 * 
+	 * @param String - the name the user input
+	 * @return boolean - weather name is valid
 	 */
-	public boolean checkName(String registername){
+	private boolean checkName(String registername){
 		System.out.println("LoginController checkName()");
 		if(registername.length() < 3 || registername.length() > 7){
 			System.out.println("LoginController checkName() returning false 1");
@@ -155,8 +160,17 @@ public class LoginController extends Controller implements ILoginController, Obs
 		System.out.println("LoginController checkName() returning true");
 		return true;
 	}
-
-	public boolean checkLoginPassword(String loginpassword){
+	
+	/**
+	 * Checks that the input conditions of a loginpassword
+	 * 
+	 * @pre if username is valid
+	 * @post false if invalid, true if valid
+	 * 
+	 * @param String - the password the user input
+	 * @return boolean - weather password is valid
+	 */
+	private boolean checkLoginPassword(String loginpassword){
 		
 		for(int i = 0; i < loginpassword.length(); i++){
 			char c = loginpassword.charAt(i);
@@ -171,12 +185,18 @@ public class LoginController extends Controller implements ILoginController, Obs
 		return true; 
 		
 	}
+	
 	/**
 	 * Checks that the input conditions of registering a new password 
-	 * @param String registerpassword, String repeatregisterpassword
-	 * @return boolean, weather Password is valid
+	 * 
+	 * @pre if registername is valid
+	 * @post false if invalid, true if valid
+	 * 
+	 * @param String registerpassword - the password a user wants to register
+	 * @param String repeatregisterpassword - the repeated password a user wants to register
+	 * @return boolean - weather Password is valid
 	 */
-	public boolean checkPassword(String registerpassword, String repeatregisterpassword){
+	private boolean checkPassword(String registerpassword, String repeatregisterpassword){
 		System.out.println("LoginController checkPassword()");
 		if(registerpassword.length() < 5){
 			getMessageView().setMessage("The password must be five or "
@@ -209,9 +229,13 @@ public class LoginController extends Controller implements ILoginController, Obs
 	}
 
 	/**
-	 * TODO - Javadoc
+	 * Registers a new user
 	 * 
+	 * @pre none
+	 * @post loginAction executed if valid, else error message is shown
 	 * 
+	 * @param none
+	 * @return none
 	 */
 	@Override
 	public void register() {
@@ -255,14 +279,9 @@ public class LoginController extends Controller implements ILoginController, Obs
 		}
 	}
 
-	/**
-	 * TODO
-	 * 
-	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("LoginController update()");
-		// Auto-generated method stub
 		
 	}
 

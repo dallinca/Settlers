@@ -1,5 +1,9 @@
 package shared.communication.params.move;
 
+/**
+ * 
+ * Defines a roll number command for the server.
+ */
 public class RollNumber_Params {
 	
 	private final String type = "rollNumber";

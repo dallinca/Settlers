@@ -4,6 +4,11 @@ import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
 import shared.model.Game;
 
+/**
+ * Response object for rob player server command.
+ * 
+ * 
+ */
 public class RobPlayer_Result {
 	private boolean valid;
 	private Game game;

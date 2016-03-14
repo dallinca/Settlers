@@ -56,6 +56,8 @@ public class PlayCard {
 	 * Plays an army development card.
 	 * @throws Exception 
 	 * 
+	 * 
+	 * @deprecated
 	 * @pre Player must have an army development card.
 	 * @post Player takes associated action.
 	 */
@@ -73,6 +75,12 @@ public class PlayCard {
 		}
 	}
 	
+	/**
+	 * Checks to see if you can play a Knight
+	 * 
+	 * @deprecated
+	 * @return
+	 */
 	public boolean canDoPlayKnight() {
 		System.out.println("PlayCard canDoPlayKnight()");
 		return Client.getInstance().getGame().canDoPlayerUseDevelopmentCard(Client.getInstance().getUserId(), DevCardType.SOLDIER);
@@ -120,6 +128,12 @@ public class PlayCard {
 		}
 	}
 	
+	/**
+	 * Checks to see if you can play the year of plenty card you supposedly have
+	 * @pre it is your turn mostly, but hopefully tthat you own the card and are trying to play it currently
+	 * @param toPassIn
+	 * @return
+	 */
 	public boolean canDoPlayYearOfPlenty(ResourceType[] toPassIn) {
 		System.out.println("PlayCard canDoPlayYearOfPlenty()");
 		return Client.getInstance().getGame().canDoPlayerUseYearOfPlenty(toPassIn, Client.getInstance().getUserId());
@@ -173,6 +187,11 @@ public class PlayCard {
 		}
 	}
 	
+	/**
+	 * Checks to see if you can play the build roads card
+	 * @pre must be your turn
+	 * @return if you can play the card or not.
+	 */
 	public boolean canDoPlayBuildRoads() {
 		System.out.println("PlayCard canDoPlayBuildRoads()");
 		return Client.getInstance().getGame().canDoPlayerUseDevelopmentCard(Client.getInstance().getUserId(), DevCardType.ROAD_BUILD);
