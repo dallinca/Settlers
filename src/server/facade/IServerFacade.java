@@ -4,14 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import server.commands.Command;
-import shared.communication.params.nonmove.AddAI_Params;
-import shared.communication.params.nonmove.Create_Params;
-import shared.communication.params.nonmove.GetVersion_Params;
-import shared.communication.params.nonmove.Join_Params;
-import shared.communication.params.nonmove.ListAI_Params;
-import shared.communication.params.nonmove.List_Params;
-import shared.communication.params.nonmove.Login_Params;
-import shared.communication.params.nonmove.Register_Params;
+import shared.communication.params.nonmove.*;
+import shared.communication.params.move.*;
+import shared.communication.params.move.devcard.*;
 import shared.communication.results.move.AcceptTrade_Result;
 import shared.communication.results.move.BuildCity_Result;
 import shared.communication.results.move.BuildRoad_Result;
@@ -51,23 +46,24 @@ public interface IServerFacade {
 	
 	
 	// Command pattern actions (move actions)
-	public AcceptTrade_Result acceptTrade(Command command);
-	public BuildCity_Result buildCity(Command command);
-	public BuildRoad_Result buildRoad(Command command);
-	public BuildSettlement_Result buildSettlement(Command command);
-	public BuyDevCard_Result buyDevCard(Command command);
-	public DiscardCards_Result discardCards(Command command);
-	public FinishTurn_Result finishTurn(Command command);
-	public MaritimeTrade_Result maritimeTrade(Command command);
-	public OfferTrade_Result offerTrade(Command command);
-	public RobPlayer_Result robPlayer(Command command);
-	public RollNumber_Result rollNumber(Command command);
-	public SendChat_Result sendChat(Command command);
-	public PlayMonopoly_Result playMonopoly(Command command);
-	public PlayMonument_Result playMonument(Command command);
-	public PlayRoadBuilding_Result playRoadBuilding(Command command);
-	public PlaySoldier_Result playSoldier(Command command);
-	public PlayYearOfPlenty_Result playYearOfPlenty(Command command);
+	public AcceptTrade_Result acceptTrade(AcceptTrade_Params params);
+	public BuildCity_Result buildCity(BuildCity_Params params);
+	public BuildRoad_Result buildRoad(BuildRoad_Params params);
+	public BuildSettlement_Result buildSettlement(BuildSettlement_Params params);
+	
+	public BuyDevCard_Result buyDevCard(BuyDevCard_Params params);
+	public DiscardCards_Result discardCards(DiscardCards_Params params);
+	public FinishTurn_Result finishTurn(FinishTurn_Params params);
+	public MaritimeTrade_Result maritimeTrade(MaritimeTrade_Params params);
+	public OfferTrade_Result offerTrade(OfferTrade_Params params);
+	public RobPlayer_Result robPlayer(RobPlayer_Params params);
+	public RollNumber_Result rollNumber(RollNumber_Params params);
+	public SendChat_Result sendChat(SendChat_Params params);
+	public PlayMonopoly_Result playMonopoly(PlayMonopoly_Params params);
+	public PlayMonument_Result playMonument(PlayMonument_Params params);
+	public PlayRoadBuilding_Result playRoadBuilding(PlayRoadBuilding_Params params);
+	public PlaySoldier_Result playSoldier(PlaySoldier_Params params);
+	public PlayYearOfPlenty_Result playYearOfPlenty(PlayYearOfPlenty_Params params);
 	
 	// Non Command pattern actions (nonmove actions)
 	public Login_Result login(Login_Params params);

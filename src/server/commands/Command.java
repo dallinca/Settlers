@@ -1,4 +1,4 @@
-
+package server.commands;
 
 /**
  * Command pattern object which is extended by all subtypes. 

@@ -1,32 +1,33 @@
 package server.commands.move;
 
 import server.commands.Command;
+import server.facade.IServerFacade;
 import shared.model.Game;
 
 /**
  * Concrete command implementing the Command interface.
- * Issues the Roll Number action on the server game model.
+ * Issues the Roll Number action on the server facade.
  * 
  * @author Dallin
  *
  */
 public class RollNumber_Command implements Command {
-	private Game game;
+	private IServerFacade facade;
 
 	/**
-	 * Non-standard command pattern constructor instantiation without the game model.
-	 * The game model will be determined after original command instantiation.
+	 * Non-standard command pattern constructor instantiation without the facade.
+	 * The facade will be determined after original command instantiation.
 	 * 
 	 */
 	public RollNumber_Command() {}
 	
 	/**
-	 * Standard Command pattern constructor instantiation with the game model
+	 * Standard Command pattern constructor instantiation with the facade
 	 * 
 	 * @param game
 	 */
-	public RollNumber_Command(Game game) {
-		this.game = game;
+	public RollNumber_Command(IServerFacade facade) {
+		this.facade = facade;
 	}
 
 	/**
@@ -47,15 +48,15 @@ public class RollNumber_Command implements Command {
 
 	/**
 	 * For use coupled with the non-standard initialization of the command.
-	 * Allows for one and only one setting of the game for which the command is to execute.
+	 * Allows for one and only one setting of the facade for which the command is to execute.
 	 * 
-	 * @pre this.game == null && game != null
-	 * @post this.game = game
-	 * @param game
+	 * @pre this.facade == null && facade != null
+	 * @post this.facade = facade
+	 * @param facade
 	 */
-	public void setGame(Game game) {
-		if(this.game == null) {
-			this.game = game;
+	public void setGame(IServerFacade facade) {
+		if(this.facade == null) {
+			this.facade = facade;
 		}
 	}
 

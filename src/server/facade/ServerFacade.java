@@ -2,7 +2,10 @@ package server.facade;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import server.commands.Command;
+import shared.communication.params.move.devcard.*;
+import shared.communication.params.move.*;
 import shared.communication.params.nonmove.AddAI_Params;
 import shared.communication.params.nonmove.Create_Params;
 import shared.communication.params.nonmove.GetVersion_Params;
@@ -64,7 +67,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public AcceptTrade_Result acceptTrade(Command command) {
+	public AcceptTrade_Result acceptTrade(AcceptTrade_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -82,7 +85,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public BuildCity_Result buildCity(Command command) {
+	public BuildCity_Result buildCity(BuildCity_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -100,7 +103,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public BuildRoad_Result buildRoad(Command command) {
+	public BuildRoad_Result buildRoad(BuildRoad_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -118,7 +121,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public BuildSettlement_Result buildSettlement(Command command) {
+	public BuildSettlement_Result buildSettlement(BuildSettlement_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -136,7 +139,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public BuyDevCard_Result buyDevCard(Command command) {
+	public BuyDevCard_Result buyDevCard(BuyDevCard_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -154,7 +157,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public DiscardCards_Result discardCards(Command command) {
+	public DiscardCards_Result discardCards(DiscardCards_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -172,7 +175,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public FinishTurn_Result finishTurn(Command command) {
+	public FinishTurn_Result finishTurn(FinishTurn_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -190,7 +193,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public MaritimeTrade_Result maritimeTrade(Command command) {
+	public MaritimeTrade_Result maritimeTrade(MaritimeTrade_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -208,7 +211,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public OfferTrade_Result offerTrade(Command command) {
+	public OfferTrade_Result offerTrade(OfferTrade_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -226,7 +229,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public RobPlayer_Result robPlayer(Command command) {
+	public RobPlayer_Result robPlayer(RobPlayer_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -244,7 +247,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public RollNumber_Result rollNumber(Command command) {
+	public RollNumber_Result rollNumber(RollNumber_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -262,7 +265,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public SendChat_Result sendChat(Command command) {
+	public SendChat_Result sendChat(SendChat_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -280,7 +283,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public PlayMonopoly_Result playMonopoly(Command command) {
+	public PlayMonopoly_Result playMonopoly(PlayMonopoly_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -298,7 +301,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public PlayMonument_Result playMonument(Command command) {
+	public PlayMonument_Result playMonument(PlayMonument_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -316,7 +319,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public PlayRoadBuilding_Result playRoadBuilding(Command command) {
+	public PlayRoadBuilding_Result playRoadBuilding(PlayRoadBuilding_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -334,7 +337,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public PlaySoldier_Result playSoldier(Command command) {
+	public PlaySoldier_Result playSoldier(PlaySoldier_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -352,7 +355,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public PlayYearOfPlenty_Result playYearOfPlenty(Command command) {
+	public PlayYearOfPlenty_Result playYearOfPlenty(PlayYearOfPlenty_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
