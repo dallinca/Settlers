@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import server.ServerException;
 import server.facade.ServerFacade;
+import server.handlers.SettlersOfCatanHandler;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -18,7 +19,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
  * @author jchrisw
  *
  */
-public class Login_Handler implements HttpHandler{
+public class Login_Handler extends SettlersOfCatanHandler{
 	
 	private Logger logger = Logger.getLogger("record-indexer"); 
 	

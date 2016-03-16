@@ -2,6 +2,8 @@ package server.handlers.nonmove;
 
 import java.io.IOException;
 
+import server.handlers.SettlersOfCatanHandler;
+
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -9,7 +11,7 @@ import com.sun.net.httpserver.HttpHandler;
 /**
  * Handles calls from a client to register a user
  */
-public class Register_Handler implements HttpHandler {
+public class Register_Handler extends SettlersOfCatanHandler {
 
 	/**
 	 * Receives the Register Params and constructs the appropriate command and passes it to the Server Facade after decoding the object.

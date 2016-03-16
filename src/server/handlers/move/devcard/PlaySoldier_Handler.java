@@ -2,13 +2,15 @@ package server.handlers.move.devcard;
 
 import java.io.IOException;
 
+import server.handlers.SettlersOfCatanHandler;
+
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 /**
  * Handles calls from a client to Play a soldier development card
  */
-public class PlaySoldier_Handler implements HttpHandler{
+public class PlaySoldier_Handler extends SettlersOfCatanHandler{
 
 	
 	/**
