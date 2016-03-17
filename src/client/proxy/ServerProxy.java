@@ -843,18 +843,14 @@ public class ServerProxy implements IServerProxy {
 
 			connection.connect(); // sends cookies
 
-			
-
 			OutputStreamWriter sw = new OutputStreamWriter(connection.getOutputStream());
 			sw.write(job);
-			sw.flush();
-
+			sw.flush();			
 			
-			
-			
+			/*
 			if (request.getClass()==MaritimeTrade_Params.class){
 				System.out.println(" |||| Response code: "+connection.getResponseCode());
-			}
+			}*/
 			//System.out.println(" |||| Response code: "+connection.getResponseCode());
 
 			InputStream in = connection.getInputStream();
@@ -862,11 +858,11 @@ public class ServerProxy implements IServerProxy {
 			int len = 0;
 
 			//System.out.println("Input stream received.");
-			System.out.println("Test 2.5");
+			//System.out.println("Test 2.5");
 			byte[] buffer = new byte[1024];
 
 			StringBuilder sb = new StringBuilder();
-			System.out.println("Test 2.6");
+			//System.out.println("Test 2.6");
 			while (-1 != (len = in.read(buffer))){
 				sb.append(new String(buffer, 0, len));
 			}
@@ -877,9 +873,9 @@ public class ServerProxy implements IServerProxy {
 
 			//System.out.println("Response: "+job+'\n');
 
-			if (request.getClass()==MaritimeTrade_Params.class){
+			/*if (request.getClass()==MaritimeTrade_Params.class){
 				System.out.println("Response: "+job+'\n');
-			}
+			}*/
 
 			//Cookie cacher----------------------------------
 			Map<String, List<String>> headers = connection.getHeaderFields();

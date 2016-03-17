@@ -1,5 +1,7 @@
 package shared.communication.results.nonmove;
 
+import java.util.List;
+
 /**
  * 
  * Response object from login command.
@@ -10,6 +12,7 @@ public class Login_Result {
 	private boolean valid;
 	private int playerID = -1;
 	private String name = "";
+	private String userCookie;//For use by login_handler
 	
 	// CONSTRUCTORS
 	//////////////////////
@@ -62,5 +65,13 @@ public class Login_Result {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public void setUserCookie(String cookie) {
+		this.userCookie = cookie;
+	}
+
+	public String getUserCookie() {
+		return userCookie;
 	}
 }
