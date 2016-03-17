@@ -10,7 +10,7 @@ import com.sun.net.httpserver.HttpHandler;
 /**
  * Handles calls from a client to buy a development card
  */
-public class BuyDevCard_Handler extends SettlersOfCatanHandler{
+public class BuyDevCard_Handler extends SettlersOfCatanHandler {
 
 	/**
 	 * Receives the BuyDevCard Params and constructs the appropriate command and passes it to the Server Facade after decoding the object.
