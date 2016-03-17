@@ -91,7 +91,7 @@ public abstract class SettlersOfCatanHandler {
 	}
 
 	public String validateCookies(LinkedList<String> cookies){
-		
+
 		if (cookies.size()<2){
 			return "MISSING COOKIES";
 		}
@@ -108,23 +108,24 @@ public abstract class SettlersOfCatanHandler {
 		return "VALID";
 
 	}
-	
-	public void writeResult(HttpExchange exchange, Class<?> class1, Object result){
-		
-		try {
-			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-		
-		String job = gson.toJson(result);	//serialize result to json
 
-		OutputStreamWriter sw = new OutputStreamWriter(exchange.getResponseBody());
-		sw.write(job);//Write result to stream.
-		sw.flush();		
-		
+	public void writeResult(HttpExchange exchange, Object result){
+
+		try {
+			
+			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+
+			String job = gson.toJson(result);	//serialize result to json
+
+			OutputStreamWriter sw = new OutputStreamWriter(exchange.getResponseBody());
+			sw.write(job);//Write result to stream.
+			sw.flush();
+
 		} catch (IOException e) {
 			System.out.println("Error writing result.");
 			e.printStackTrace();
 		} //Everything's okay
-		
+
 	}
 
 

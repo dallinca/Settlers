@@ -31,7 +31,7 @@ public class GetVersion_Handler extends SettlersOfCatanHandler {
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
 
-		logger.entering("server.handlers.JoinHandler", "handle");
+		logger.entering("server.handlers.GetVersion", "handle");
 		//Handling Login http exchange.
 
 		String job;	
@@ -48,15 +48,7 @@ public class GetVersion_Handler extends SettlersOfCatanHandler {
 			request = gson.fromJson(job, GetVersion_Params.class); //deserialize request from json		
 			result = facade.model(request);//Call facade to perform operation with request
 			
-			writeResult(exchange, result.getClass(), result);
-
-			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); //Everything's okay
-			job = gson.toJson(result);	//serialize result to json
-
-			OutputStreamWriter sw = new OutputStreamWriter(exchange.getResponseBody());
-			sw.write(job);//Write result to stream.
-			sw.flush();					
-
+			writeResult(exchange, result);
 
 		}else{
 
@@ -65,7 +57,7 @@ public class GetVersion_Handler extends SettlersOfCatanHandler {
 		}			
 
 		exchange.getResponseBody().close();		
-		logger.exiting("server.handlers.JoinHandler", "handle");
+		logger.exiting("server.handlers.GetVersion", "handle");
 
 	}
 
