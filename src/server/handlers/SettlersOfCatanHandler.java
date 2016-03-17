@@ -16,18 +16,15 @@ import shared.communication.results.nonmove.GetVersion_Result;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 
-public abstract class SettlersOfCatanHandler {
+public abstract class SettlersOfCatanHandler implements HttpHandler {
 	protected Gson gson;
 	protected ServerFacade facade;
 
 	public SettlersOfCatanHandler(){
 		gson = new Gson();
 		facade = new ServerFacade();
-	}
-
-	public void handle(HttpExchange arg0)  throws IOException{
-		//Overrride
 	}
 
 	public String getExchangeBody(HttpExchange exchange){
