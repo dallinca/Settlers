@@ -8,7 +8,7 @@ public class Join_Result {
 	
 	private boolean valid;
 	private String response;
-	
+	private String gameCookie;
 	
 	public Join_Result(String doPost){
 		//System.out.println("Join game result string: "+doPost);
@@ -58,5 +58,11 @@ public class Join_Result {
 		this.joined = joined;
 	}
 	
-	
+	public void setGameCookie(String cookie){
+		gameCookie = cookie;
+	}
+
+	public String getGameCookie() {
+		return gameCookie;
+	}	
 }

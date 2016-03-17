@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import server.commands.Command;
+import shared.communication.User;
 import shared.communication.params.move.devcard.*;
 import shared.communication.params.move.*;
 import shared.communication.params.nonmove.AddAI_Params;
@@ -497,6 +498,35 @@ public class ServerFacade implements IServerFacade {
 		return null;
 	}
 
+	/**
+	 * Returns true if the user as specified exists in server memory, false if otherwise.
+	 * Used to check cookie validity.
+	 * @param user
+	 * @return
+	 */
+	public boolean validateUser(User user) {
+		if(user==null){
+			return false;
+		}
+		// TODO Auto-generated method stub
+		//Check to ensure that username, password, and playerID triple exists in server.
+		
+		return false;
+		
+	}
+	
+	/**
+	 * Checks to see if the given user exists in the given game. 
+	 * 
+	 * @param user
+	 * @param gameID
+	 * @return
+	 */
+
+	public boolean validateGame(User user, int gameID) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 	
 	
