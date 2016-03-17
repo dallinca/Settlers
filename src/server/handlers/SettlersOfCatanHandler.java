@@ -16,8 +16,9 @@ import shared.communication.results.nonmove.GetVersion_Result;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 
-public abstract class SettlersOfCatanHandler {
+public abstract class SettlersOfCatanHandler implements HttpHandler {
 	protected Gson gson;
 	protected ServerFacade facade;
 
@@ -26,10 +27,13 @@ public abstract class SettlersOfCatanHandler {
 		facade = new ServerFacade();
 	}
 
+<<<<<<< HEAD
 	public void handle(HttpExchange arg0)  throws IOException {
 		//Overrride
 	}
 
+=======
+>>>>>>> cd035fc1987b7a3ba1e84056ec9c2a30f64a2892
 	public String getExchangeBody(HttpExchange exchange){
 
 		InputStream in = exchange.getRequestBody();
@@ -91,7 +95,7 @@ public abstract class SettlersOfCatanHandler {
 	}
 
 	public String validateCookies(LinkedList<String> cookies){
-		
+
 		if (cookies.size()<2){
 			return "MISSING COOKIES";
 		}
@@ -108,23 +112,24 @@ public abstract class SettlersOfCatanHandler {
 		return "VALID";
 
 	}
-	
-	public void writeResult(HttpExchange exchange, Class<?> class1, Object result){
-		
-		try {
-			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-		
-		String job = gson.toJson(result);	//serialize result to json
 
-		OutputStreamWriter sw = new OutputStreamWriter(exchange.getResponseBody());
-		sw.write(job);//Write result to stream.
-		sw.flush();		
-		
+	public void writeResult(HttpExchange exchange, Object result){
+
+		try {
+			
+			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+
+			String job = gson.toJson(result);	//serialize result to json
+
+			OutputStreamWriter sw = new OutputStreamWriter(exchange.getResponseBody());
+			sw.write(job);//Write result to stream.
+			sw.flush();
+
 		} catch (IOException e) {
 			System.out.println("Error writing result.");
 			e.printStackTrace();
 		} //Everything's okay
-		
+
 	}
 
 
