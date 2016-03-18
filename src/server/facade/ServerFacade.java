@@ -55,13 +55,14 @@ import shared.model.Game;
 public class ServerFacade implements IServerFacade {
 
 	private List<Game> liveGames = new ArrayList<Game>();
+	private List<User> users = new ArrayList<User>();
 
 	/**
 	 * Singleton pattern for serverfacade
 	 */
 	private static ServerFacade SINGLETON = null;
 	private ServerFacade() { }
-	public static IServerFacade getInstance() {
+	public static ServerFacade getInstance() {
 		if(SINGLETON == null){
 			SINGLETON = new ServerFacade();
 		}
@@ -452,11 +453,31 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public Login_Result login(Login_Params params) {
+		
+		String username = params.getUsername();
+		String password = params.getPassword();
+		
+		Login_Result result = new Login_Result();
+		
+		for (User current : users){
+			if (current.getName().equals(username)){
+				if (current.getPassword().equals(password)){
+					
+					result.setWasLoggedIn(true);
+					//name
+					//password
+					//playerID
+					
+					String userCookie = ("{\"name\":\"" + current.getName()
+							+ "\",\"password\":\""+current.getPassword()
+							+ "\",\"playerID\":"+ current.getPlayerID() +"}");
+					
+					result.setUserCookie(userCookie);
+				}
+			}
+		}
 
-		/*if(params.getUsername().equals() && params.getPassword().equals())
-		 * 	return true;
-		 */
-		return null;
+		return result;
 	}
 
 	/**
@@ -588,14 +609,14 @@ public class ServerFacade implements IServerFacade {
 	 * @return
 	 */
 	public boolean validateUser(User user) {
-		if(user==null){
-			return false;
+
+		for (User current : users){			
+			if (current.equals(user)){
+				return true; //The given user exists in the system.
+			}			
 		}
-		// TODO Auto-generated method stub
-		//Check to ensure that username, password, and playerID triple exists in server.
 
 		return false;
-
 	}
 
 	/**
@@ -607,8 +628,15 @@ public class ServerFacade implements IServerFacade {
 	 */
 
 	public boolean validateGame(User user, int gameID) {
-		// TODO Auto-generated method stub
-		return false;
+		Game g = findGame(gameID);
+
+		if (g==null || user==null){
+			return false;
+		}else if (g.getPlayerByID(user.getPlayerID())==null){
+			return false;
+		}		
+
+		return true;
 	}
 
 	@Override
