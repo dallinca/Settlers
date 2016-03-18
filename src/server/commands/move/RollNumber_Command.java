@@ -52,7 +52,11 @@ public class RollNumber_Command implements Command {
 		//Call facade to check if can do operation
 		game = facade.rollNumber(params, gameID, userID);
 
-		game.RollDice(UserId);
+		try {
+			game.RollDice(userID);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		//Perform operation on the game <------Perform the operation
 		//
@@ -63,22 +67,6 @@ public class RollNumber_Command implements Command {
 		
 		//Create a result object
 		//RollDice_Result
-		RollNumber_Result result;
-		
+		RollNumber_Result result = new RollNumber_Result(game);
 	}
-
-	/**
-	 * For use coupled with the non-standard initialization of the command.
-	 * Allows for one and only one setting of the facade for which the command is to execute.
-	 * 
-	 * @pre this.facade == null && facade != null
-	 * @post this.facade = facade
-	 * @param facade
-	 */
-	public void setGame(IServerFacade facade) {
-		if(this.facade == null) {
-			this.facade = facade;
-		}
-	}
-
 }

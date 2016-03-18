@@ -2,6 +2,8 @@ package server.commands.move;
 
 import server.commands.Command;
 import server.facade.IServerFacade;
+import shared.communication.params.move.OfferTrade_Params;
+import shared.communication.results.move.OfferTrade_Result;
 import shared.model.Game;
 
 /**
@@ -12,7 +14,9 @@ import shared.model.Game;
  *
  */
 public class OfferTrade_Command implements Command {
-	private IServerFacade facade;
+	
+	private OfferTrade_Params params;
+	private int gameID, userID;
 
 	/**
 	 * Non-standard command pattern constructor instantiation without the facade.
@@ -26,8 +30,10 @@ public class OfferTrade_Command implements Command {
 	 * 
 	 * @param game
 	 */
-	public OfferTrade_Command(IServerFacade facade) {
-		this.facade = facade;
+	public OfferTrade_Command(OfferTrade_Params params, int gameID, int userID) {
+		this.params = params;
+		this.gameID = gameID;
+		this.userID = userID;
 	}
 
 	/**
@@ -42,8 +48,10 @@ public class OfferTrade_Command implements Command {
 	 */
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		Game game = null;
+		game = facade.offerTrade(params);
 		
+		OfferTrade_Result result = new OfferTrade_Result();
 	}
 
 	/**

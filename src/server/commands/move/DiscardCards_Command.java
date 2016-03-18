@@ -2,6 +2,8 @@ package server.commands.move;
 
 import server.commands.Command;
 import server.facade.IServerFacade;
+import shared.communication.params.move.DiscardCards_Params;
+import shared.communication.results.move.DiscardCards_Result;
 import shared.model.Game;
 
 /**
@@ -13,6 +15,8 @@ import shared.model.Game;
  */
 public class DiscardCards_Command implements Command {
 	private IServerFacade facade;
+	private DiscardCards_Params params;
+	private int gameID, userID;
 
 	/**
 	 * Non-standard command pattern constructor instantiation without the facade.
@@ -26,8 +30,14 @@ public class DiscardCards_Command implements Command {
 	 * 
 	 * @param game
 	 */
+	/*
 	public DiscardCards_Command(IServerFacade facade) {
 		this.facade = facade;
+	}*/
+	public DiscardCards_Command(DiscardCards_Params params, int gameID, int userID) {
+		this.params = params;
+		this.gameID = gameID;
+		this.userID = userID;
 	}
 
 	/**
@@ -42,7 +52,9 @@ public class DiscardCards_Command implements Command {
 	 */
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		Game game = null;
+		game = facade.discardCards(params);
+		DiscardCards_Result result = new DiscardCards_Result();
 		
 	}
 

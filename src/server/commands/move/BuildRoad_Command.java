@@ -2,6 +2,8 @@ package server.commands.move;
 
 import server.commands.Command;
 import server.facade.IServerFacade;
+import shared.communication.params.move.BuildRoad_Params;
+import shared.communication.results.move.BuildRoad_Result;
 import shared.model.Game;
 
 /**
@@ -13,6 +15,9 @@ import shared.model.Game;
  */
 public class BuildRoad_Command implements Command {
 	private IServerFacade facade;
+	
+	private BuildRoad_Params params;
+	private int gameID, userID;
 
 	/**
 	 * Non-standard command pattern constructor instantiation without the facade.
@@ -30,6 +35,12 @@ public class BuildRoad_Command implements Command {
 		this.facade = facade;
 	}
 	
+	public BuildRoad_Command(BuildRoad_Params params, int gameID, int userID) {
+		this.params = params;
+		this.gameID = gameID;
+		this.userID = userID;
+	}
+	
 	/**
 	 * Issues the Build Road action on the given game server game model.
 	 * Should only be triggered by the games models Command History class.
@@ -42,8 +53,9 @@ public class BuildRoad_Command implements Command {
 	 */
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
-		
+		Game game = null;
+		game = facade.buildRoad(params);
+		BuildRoad_Result result = new BuildRoad_Result();
 	}
 
 	/**

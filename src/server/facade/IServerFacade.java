@@ -56,7 +56,7 @@ public interface IServerFacade {
 	public FinishTurn_Result finishTurn(FinishTurn_Params params);
 	public MaritimeTrade_Result maritimeTrade(MaritimeTrade_Params params);
 	public OfferTrade_Result offerTrade(OfferTrade_Params params);
-	public RobPlayer_Result robPlayer(RobPlayer_Params params);
+	public Game robPlayer(RobPlayer_Params params, int gameID, int userID);
 	public Game rollNumber(RollNumber_Params params, int gameID, int userID);
 	public SendChat_Result sendChat(SendChat_Params params);
 	public PlayMonopoly_Result playMonopoly(PlayMonopoly_Params params);

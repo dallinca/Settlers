@@ -2,6 +2,8 @@ package server.commands.move;
 
 import server.commands.Command;
 import server.facade.IServerFacade;
+import shared.communication.params.move.RobPlayer_Params;
+import shared.communication.results.move.RobPlayer_Result;
 import shared.model.Game;
 
 /**
@@ -12,7 +14,9 @@ import shared.model.Game;
  *
  */
 public class RobPlayer_Command implements Command {
-	private IServerFacade facade;
+
+	private RobPlayer_Params params;
+	private int gameID, userID;
 
 	/**
 	 * Non-standard command pattern constructor instantiation without the facade.
@@ -26,8 +30,10 @@ public class RobPlayer_Command implements Command {
 	 * 
 	 * @param game
 	 */
-	public RobPlayer_Command(IServerFacade facade) {
-		this.facade = facade;
+	public RobPlayer_Command(RobPlayer_Params params, int gameID, int userID) {
+		this.params = params;
+		this.gameID = gameID;
+		this.userID = userID;
 	}
 
 	/**
@@ -42,8 +48,9 @@ public class RobPlayer_Command implements Command {
 	 */
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
-		
+		Game game = null;
+		game = facade.robPlayer(params, gameID, userID);
+		RobPlayer_Result results = new RobPlayer_Result(game);
 	}
 
 	/**
@@ -54,10 +61,11 @@ public class RobPlayer_Command implements Command {
 	 * @post this.facade = facade
 	 * @param facade
 	 */
+	/* I don't believe this is needed
 	public void setGame(IServerFacade facade) {
 		if(this.facade == null) {
 			this.facade = facade;
 		}
-	}
+	}*/
 
 }

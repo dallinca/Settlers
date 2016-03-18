@@ -2,6 +2,8 @@ package server.commands.move;
 
 import server.commands.Command;
 import server.facade.IServerFacade;
+import shared.communication.params.move.AcceptTrade_Params;
+import shared.communication.results.move.AcceptTrade_Result;
 import shared.model.Game;
 
 /**
@@ -13,6 +15,9 @@ import shared.model.Game;
  */
 public class AcceptTrade_Command implements Command {
 	private IServerFacade facade;
+	
+	private AcceptTrade_Params params;
+	private int gameID, userID;
 
 	/**
 	 * Non-standard command pattern constructor instantiation without the facade.
@@ -29,6 +34,12 @@ public class AcceptTrade_Command implements Command {
 	public AcceptTrade_Command(IServerFacade facade) {
 		this.facade = facade;
 	}
+	
+	public AcceptTrade_Command(AcceptTrade_Params params, int gameID, int userID) {
+		this.params = params;
+		this.gameID = gameID;
+		this.userID = userID;
+	}
 
 	/**
 	 * Issues the Accept Trade action on the given game server game model.
@@ -42,6 +53,9 @@ public class AcceptTrade_Command implements Command {
 	 */
 	@Override
 	public void execute() {
+		Game game = null;
+		game = facade.acceptTrade(params);
+		AcceptTrade_Result result = new AcceptTrade_Result();
 		// TODO Auto-generated method stub
 		//this.facade.acceptTrade(params);
 	}
