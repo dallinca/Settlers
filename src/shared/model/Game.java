@@ -48,6 +48,9 @@ public class Game {
 	private int winner = -1;
 	private CommandHistory gameHistory = new CommandHistory();
 	
+	//How do we create this / initialize it????
+	private int gameID;
+	
 
 	private TradeInfo tradeOffer;
 

@@ -534,12 +534,11 @@ public class ServerFacade implements IServerFacade {
 		Game game = null;
 		
 		for (Game theGame: liveGames) {
+			//The functionality to retrieve the gameID from the game objects is required to figure out which game this person belongs to.
 			if (theGame.getGameId() == gameID) {
 				if (theGame.getAllPlayers()[userID].canDoPlayDevelopmentCard(theGame.getTurnNumber(), DevCardType.MONOPOLY)) {
 					game = theGame;
-				}
-				
-				
+				}				
 			}
 		}
 		return game;

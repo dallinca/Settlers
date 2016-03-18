@@ -57,6 +57,7 @@ public class PlayMonopoly_Command implements Command {
 		int userID = theParams.getPlayerIndex();
 		
 		//Ask the server facade if that action can happen
+		//If it is true, it will return a game object then call the appropriate commands on the game object
 		Game game = facade.canDoPlayMonopoly(gameID, userID);
 		
 		if (game != null) {
@@ -69,8 +70,9 @@ public class PlayMonopoly_Command implements Command {
 				}
 			}
 		}
-		//If it is true, it will return a game object then call the appropriate commands on the game object
+		
 		//Create a result object with the appropriate information (it contains the newly modified game object)
+		//Should this happen in the handler because that is where it would be serialized? The Handler has the gameID, so it can retrieve the appropriate modified game after this method is through executing.
 	}
 
 	/**
@@ -81,6 +83,7 @@ public class PlayMonopoly_Command implements Command {
 	 * @post this.facade = facade
 	 * @param facade
 	 */
+	//According to Woodfield, I believe the facade is set up in Command.java and so each command knows the facade upon creation.
 	public void setGame(IServerFacade facade) {
 		if(this.facade == null) {
 			this.facade = facade;
