@@ -530,6 +530,11 @@ public class ServerFacade implements IServerFacade {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	public static IServerFacade getInstance() {
+		// TODO Auto-generated method stub
+		return new ServerFacade();
+	}
 	
 	
 	

@@ -2,6 +2,8 @@ package server.commands.move;
 
 import server.commands.Command;
 import server.facade.IServerFacade;
+import shared.communication.params.move.RollNumber_Params;
+import shared.communication.results.move.RollNumber_Result;
 import shared.model.Game;
 
 /**
@@ -12,8 +14,7 @@ import shared.model.Game;
  *
  */
 public class RollNumber_Command implements Command {
-	private IServerFacade facade;
-
+	
 	/**
 	 * Non-standard command pattern constructor instantiation without the facade.
 	 * The facade will be determined after original command instantiation.
@@ -26,8 +27,10 @@ public class RollNumber_Command implements Command {
 	 * 
 	 * @param game
 	 */
-	public RollNumber_Command(IServerFacade facade) {
-		this.facade = facade;
+	public RollNumber_Command(RollNumber_Params params, int ID, int userID) {
+		
+		gameID = ID;
+		userID = userID;
 	}
 
 	/**
@@ -43,6 +46,23 @@ public class RollNumber_Command implements Command {
 	@Override
 	public void execute() {
 		// TODO Auto-generated method stub
+		
+		//Call facade to check if can do operation
+		//facade.rollDice(params, gameID, userID) <----Validation
+		//If operation can be performed, serverFacade will return a game job
+		//If unable, server facade will return null
+		
+		
+		//Perform operation on the game <------Perform the operation
+		//
+		//Game game = new Game();
+		
+		//game.useDevelopmentCard(userID, devCardType;)
+		//game.gatherResources(params.getNumber());
+		
+		//Create a result object
+		//RollDice_Result
+		RollNumber_Result result;
 		
 	}
 

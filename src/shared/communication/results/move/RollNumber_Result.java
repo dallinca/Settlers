@@ -29,6 +29,13 @@ public class RollNumber_Result {
 	public Game getGame(){
 		return game;
 	}
+	
+	public RollNumber_Result(Game game) {
+		this.game = game;	
+		if (game == null){
+			valid = false;
+		}
+	}
 
 	public RollNumber_Result(String post) {
 
