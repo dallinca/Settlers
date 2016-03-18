@@ -27,13 +27,10 @@ public abstract class SettlersOfCatanHandler implements HttpHandler {
 		facade = new ServerFacade();
 	}
 
-<<<<<<< HEAD
 	public void handle(HttpExchange arg0)  throws IOException {
 		//Overrride
 	}
 
-=======
->>>>>>> cd035fc1987b7a3ba1e84056ec9c2a30f64a2892
 	public String getExchangeBody(HttpExchange exchange){
 
 		InputStream in = exchange.getRequestBody();

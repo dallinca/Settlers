@@ -52,8 +52,15 @@ import shared.model.Game;
 public class ServerFacade implements IServerFacade {
 
 	private List<Game> liveGames = new ArrayList<Game>();
-
-	public ServerFacade() {}
+	
+	/**
+	 * Singleton pattern for serverfacade
+	 */
+	private static ServerFacade singleton = new ServerFacade( );
+	private ServerFacade() { }
+	public static IServerFacade getInstance() {
+		 return singleton;
+	}
 	
 	/**
 	 * To be called from the Handlers.<br>
@@ -530,11 +537,14 @@ public class ServerFacade implements IServerFacade {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-	public static IServerFacade getInstance() {
+	
+	@Override
+	public Game canDoPlayMonopoly(int gameID, int userID) {
 		// TODO Auto-generated method stub
-		return new ServerFacade();
+		return null;
 	}
+
+
 	
 	
 	

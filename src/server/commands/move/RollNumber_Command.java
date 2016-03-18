@@ -15,6 +15,7 @@ import shared.model.Game;
  */
 public class RollNumber_Command implements Command {
 	
+	private RollNumber_Params params;
 	/**
 	 * Non-standard command pattern constructor instantiation without the facade.
 	 * The facade will be determined after original command instantiation.
@@ -28,7 +29,7 @@ public class RollNumber_Command implements Command {
 	 * @param game
 	 */
 	public RollNumber_Command(RollNumber_Params params, int ID, int userID) {
-		
+		this.params = params; 
 		gameID = ID;
 		userID = userID;
 	}
@@ -45,9 +46,10 @@ public class RollNumber_Command implements Command {
 	 */
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
 		
 		//Call facade to check if can do operation
+		facade.rollNumber(params);
+		
 		//facade.rollDice(params, gameID, userID) <----Validation
 		//If operation can be performed, serverFacade will return a game job
 		//If unable, server facade will return null
