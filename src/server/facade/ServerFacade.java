@@ -255,8 +255,15 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public RollNumber_Result rollNumber(RollNumber_Params params) {
-		// TODO Auto-generated method stub
+	public Game rollNumber(RollNumber_Params params, int gameID, int userID) {
+
+		for(Game currentGame: liveGames){
+			if(currentGame.getGameId() ==  gameID){
+				if(currentGame.canDoRollDice(userID)){
+					return currentGame;
+				}
+			}
+		}
 		return null;
 	}
 
