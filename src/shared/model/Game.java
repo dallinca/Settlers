@@ -1274,6 +1274,16 @@ public class Game {
 
 
 
+	public int getGameID() {
+		return gameID;
+	}
+
+	public void setGameID(int gameID) {
+		this.gameID = gameID;
+	}
+
+
+
 	/**
 	 * Hear ye, hear ye! We have a class line that is designated for the functionality of the ChatController and the GameHistoryController
 	 * its purpose is to keep track of all the message type objects we get from the server so it can be accessed and printed by the two controllers mentioned above.

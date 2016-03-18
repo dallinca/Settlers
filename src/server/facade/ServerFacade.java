@@ -55,7 +55,7 @@ import shared.model.Game;
 public class ServerFacade implements IServerFacade {
 
 	private List<Game> liveGames = new ArrayList<Game>();
-	
+
 	/**
 	 * Singleton pattern for serverfacade
 	 */
@@ -67,7 +67,7 @@ public class ServerFacade implements IServerFacade {
 		}
 		return SINGLETON;
 	}
-	
+
 	/**
 	 * To be called from the Handlers.<br>
 	 * Verifies which Game model the command is for.<br>
@@ -81,7 +81,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public AcceptTrade_Result acceptTrade(AcceptTrade_Params params) {
+	public Game acceptTrade(AcceptTrade_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -99,7 +99,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public BuildCity_Result buildCity(BuildCity_Params params) {
+	public Game buildCity(BuildCity_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -117,7 +117,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public BuildRoad_Result buildRoad(BuildRoad_Params params) {
+	public Game buildRoad(BuildRoad_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -135,15 +135,15 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public BuildSettlement_Result buildSettlement(BuildSettlement_Params params) {
-		for(Game game: liveGames){
-			if(game.getGameID() ==  gameID){
-				if(game.canDoPlayerBuildSettlement(userID)){
-					
-					return game; 
-				}
-			}
+	public Game buildSettlement(BuildSettlement_Params params) {
+
+		Game game = findGame(gameID);
+
+		if(game.canDoPlayerBuildSettlement(userID)){
+
+			return game; 
 		}
+
 		return null;
 	}
 
@@ -160,15 +160,14 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public BuyDevCard_Result buyDevCard(BuyDevCard_Params params) {
-		for(Game game: liveGames){
-			if(game.getGameID() ==  gameID){
-				if(game.canDoPlayerBuyDevelopmentCard(userID)){
-					game.buyDevelopmentCard();
-					return game;
-				}
-			}
+	public Game buyDevCard(BuyDevCard_Params params) {
+		Game game = findGame(gameID);
+		if(game.canDoPlayerBuyDevelopmentCard(userID)){
+			game.buyDevelopmentCard();
+			return game;
 		}
+
+
 		return null;
 	}
 
@@ -185,29 +184,26 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public DiscardCards_Result discardCards(DiscardCards_Params params) {
-		for(Game game: liveGames){
-			if(game.getGameID() ==  gameID){
-				
-				if(game.canDoDiscardNumberOfResourceType(userID, params.getDiscardedCards().getBrick(), ResourceType.BRICK)){
-					
-				}
-				if(game.canDoDiscardNumberOfResourceType(userID, params.getDiscardedCards().getOre(), ResourceType.ORE)){
-									
-				}
-				if(game.canDoDiscardNumberOfResourceType(userID, params.getDiscardedCards().getSheep(), ResourceType.SHEEP)){
-					
-				}
-				if(game.canDoDiscardNumberOfResourceType(userID, params.getDiscardedCards().getWheat(), ResourceType.WHEAT)){
-					
-				}
-				if(game.canDoDiscardNumberOfResourceType(userID, params.getDiscardedCards().getWood(), ResourceType.WOOD)){
-					
-				}
-				return game;
-			}
+	public Game discardCards(DiscardCards_Params params) {
+		Game game = findGame(gameID);
+
+		if(!game.canDoDiscardNumberOfResourceType(userID, params.getDiscardedCards().getBrick(), ResourceType.BRICK)){
+			return null;
 		}
-		return null;
+		if(!game.canDoDiscardNumberOfResourceType(userID, params.getDiscardedCards().getOre(), ResourceType.ORE)){
+			return null;
+		}
+		if(!game.canDoDiscardNumberOfResourceType(userID, params.getDiscardedCards().getSheep(), ResourceType.SHEEP)){
+			return null;
+		}
+		if(!game.canDoDiscardNumberOfResourceType(userID, params.getDiscardedCards().getWheat(), ResourceType.WHEAT)){
+			return null;
+		}
+		if(!game.canDoDiscardNumberOfResourceType(userID, params.getDiscardedCards().getWood(), ResourceType.WOOD)){
+			return null;
+		}
+
+		return game;		
 	}
 
 	/**
@@ -223,11 +219,10 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public FinishTurn_Result finishTurn(FinishTurn_Params params) {
-		for(Game game: liveGames){
-			if(game.getGameID() ==  gameID){
-			}
-		}
+	public Game finishTurn(FinishTurn_Params params) {
+
+		Game game = findGame(gameID);
+
 		return null;
 	}
 
@@ -244,17 +239,17 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public MaritimeTrade_Result maritimeTrade(MaritimeTrade_Params params) {
-		
-		for(Game game: liveGames){
-			if(game.getGameID() ==  gameID){
-				//tradein, recieve
-				//PROBLEM: params.getOutputResource(), params.getInputResource() are strings. Need to be resourceType. 
-				if(game.canDoPlayerDoMaritimeTrade(params.getOutputResource(), params.getInputResource())){
-					return game;
-				}
-			}
+	public Game maritimeTrade(MaritimeTrade_Params params) {
+
+		Game game = findGame(gameID);
+
+		//tradein, recieve
+		//PROBLEM: params.getOutputResource(), params.getInputResource() are strings. Need to be resourceType. 
+		if(game.canDoPlayerDoMaritimeTrade(params.getOutputResource(), params.getInputResource())){
+			return game;
 		}
+
+
 		return null;
 	}
 
@@ -271,15 +266,14 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public OfferTrade_Result offerTrade(OfferTrade_Params params) {
-		
-		for(Game game: liveGames){
-			if(game.getGameID() ==  gameID){
-				if(game.canDoPlayerDoDomesticTrade(userID, p1resources, params.getReceiver(), p2resources)){
-					return game;
-				}
-			}
+	public Game offerTrade(OfferTrade_Params params) {
+
+		Game game = findGame(gameID);
+
+		if(game.canDoPlayerDoDomesticTrade(userID, p1resources, params.getReceiver(), p2resources)){
+			return game;
 		}
+
 		return null;
 	}
 
@@ -297,14 +291,11 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public Game robPlayer(RobPlayer_Params params, int gameID, int userID) {
-		
-		for(Game currentGame: liveGames){
-			if(game.getGameID() ==  gameID){
-				if(currentGame.canDoMoveRobberToHex(userID, params.getLocation())){
-					if(game.canDoStealPlayerResource(userID, params.getVictimIndex() )){
-						return game;
-					}
-				}
+
+		Game game = findGame(gameID);
+		if(game.canDoMoveRobberToHex(userID, params.getLocation())){
+			if(game.canDoStealPlayerResource(userID, params.getVictimIndex() )){
+				return game;
 			}
 		}
 		return null;
@@ -325,12 +316,9 @@ public class ServerFacade implements IServerFacade {
 	@Override
 	public Game rollNumber(RollNumber_Params params, int gameID, int userID) {
 
-		for(Game game: liveGames){
-			if(game.getGameID() ==  gameID){
-				if(game.canDoRollDice(userID)){
-					return game;
-				}
-			}
+		Game game = findGame(gameID);
+		if(game.canDoRollDice(userID)){
+			return game;
 		}
 		return null;
 	}
@@ -348,7 +336,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public SendChat_Result sendChat(SendChat_Params params) {
+	public Game sendChat(SendChat_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -366,7 +354,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public PlayMonopoly_Result playMonopoly(PlayMonopoly_Params params) {
+	public Game playMonopoly(PlayMonopoly_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -384,7 +372,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public PlayMonument_Result playMonument(PlayMonument_Params params) {
+	public Game playMonument(PlayMonument_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -402,7 +390,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public PlayRoadBuilding_Result playRoadBuilding(PlayRoadBuilding_Params params) {
+	public Game playRoadBuilding(PlayRoadBuilding_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -420,7 +408,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public PlaySoldier_Result playSoldier(PlaySoldier_Params params) {
+	public Game playSoldier(PlaySoldier_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -438,19 +426,19 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public PlayYearOfPlenty_Result playYearOfPlenty(PlayYearOfPlenty_Params params) {
+	public Game playYearOfPlenty(PlayYearOfPlenty_Params params) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
-	
-	
+
+
+
 	// Non Command pattern actions (nonmove actions)
-	
-	
-	
-	
+
+
+
+
 
 	/**
 	 * To be called from the Handlers.<br>
@@ -464,7 +452,7 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public Login_Result login(Login_Params params) {
-		
+
 		/*if(params.getUsername().equals() && params.getPassword().equals())
 		 * 	return true;
 		 */
@@ -551,6 +539,16 @@ public class ServerFacade implements IServerFacade {
 		return null;
 	}
 
+	private Game findGame(int gameID){
+
+		for(Game currentGame: liveGames){
+			if(currentGame.getGameID() ==  gameID){
+				return currentGame;
+			}
+		}
+		return null;		
+	}
+
 	/**
 	 * To be called from the Handlers.<br>
 	 * Attempts the Add AI action.
@@ -595,11 +593,11 @@ public class ServerFacade implements IServerFacade {
 		}
 		// TODO Auto-generated method stub
 		//Check to ensure that username, password, and playerID triple exists in server.
-		
+
 		return false;
-		
+
 	}
-	
+
 	/**
 	 * Checks to see if the given user exists in the given game. 
 	 * 
@@ -612,7 +610,7 @@ public class ServerFacade implements IServerFacade {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+
 	@Override
 	public Game canDoPlayMonopoly(int gameID, int userID) {
 		// TODO Auto-generated method stub
@@ -620,12 +618,12 @@ public class ServerFacade implements IServerFacade {
 	}
 
 
-	
-	
-	
-	
+
+
+
+
 	// Return the game that the command is meant to operate on
-	
+
 	/*
 	/**
 	 * Each of the concrete command classes need to have the correct game to act on
@@ -637,6 +635,6 @@ public class ServerFacade implements IServerFacade {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	*/
-	
+	  */
+
 }
