@@ -1,7 +1,10 @@
-package server.commands.move.devcard;
+package move.devcard;
 
 import server.commands.Command;
 import server.facade.IServerFacade;
+import shared.communication.params.move.devcard.PlayMonopoly_Params;
+import shared.communication.results.move.devcard.PlayMonopoly_Result;
+import shared.definitions.DevCardType;
 import shared.model.Game;
 
 /**
@@ -13,13 +16,18 @@ import shared.model.Game;
  */
 public class PlayMonopoly_Command implements Command {
 	private IServerFacade facade;
-
+	private boolean isValid = false;
+	private PlayMonopoly_Result theResult;
+	private PlayMonopoly_Params theParams;
+	
 	/**
 	 * Non-standard command pattern constructor instantiation without the facade.
 	 * The facade will be determined after original command instantiation.
 	 * 
 	 */
-	public PlayMonopoly_Command() {}
+	public PlayMonopoly_Command(PlayMonopoly_Params theParams) {
+		this.theParams = theParams;
+	}
 	
 	/**
 	 * Standard Command pattern constructor instantiation with the facade
@@ -44,6 +52,17 @@ public class PlayMonopoly_Command implements Command {
 	public void execute() {
 		// TODO Auto-generated method stub
 		
+		//Ask the server facade if that action can happen
+		Game game = facade.canDoPlayMonopoly();
+		int userID = theParams.getPlayerIndex();
+		
+		if (game != null) {
+			if (game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONOPOLY)) {
+				game.useDevelopmentCard(userID, DevCardType.MONOPOLY);
+			}
+		}
+		//If it is true, it will return a game object then call the appropriate commands on the game object
+		//Create a result object with the appropriate information (it contains the newly modified game object)
 	}
 
 	/**

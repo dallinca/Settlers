@@ -20,7 +20,7 @@ import com.sun.net.httpserver.HttpExchange;
  */
 public class Login_Handler extends SettlersOfCatanHandler{
 
-	private Logger logger = Logger.getLogger("record-indexer"); 	
+	private Logger logger = Logger.getLogger("settlers-of-catan"); 	
 
 	/**
 	 * Receives the Login Params and passes it to the Server Facade after decoding the object.
@@ -35,7 +35,7 @@ public class Login_Handler extends SettlersOfCatanHandler{
 		Login_Result result;
 
 		job = getExchangeBody(exchange); //get json string from exchange.
-		request = gson.fromJson(job, Login_Params.class); //deserialize request from json
+		request = gson.fromJson(job, Login_Params.class); //deserialize request from json		
 		result = facade.login(request);//Call facade to perform operation with request
 
 		if (result.isValid()){

@@ -66,14 +66,6 @@ public class Server {
 	private void run() {
 
 		logger.info("Initializing Model");
-		/*
-		try {
-			//ServerProxy.initialize();		
-		}
-		catch (ServerException e) {
-			logger.log(Level.SEVERE, e.getMessage(), e);
-			return;
-		}*/
 
 		logger.info("Initializing HTTP Server");
 
@@ -157,7 +149,10 @@ public class Server {
 
 
 	public static void main(String[] args) {
-		if (args[0].equals("")){
+		if (args.length==0){
+			//Do nothing, no parameters.
+		}
+		else if (args[0].equals("")){
 			//Go with default 39640 for the port number.
 		}
 		else if (args.length==1){
