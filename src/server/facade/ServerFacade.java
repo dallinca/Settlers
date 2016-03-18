@@ -40,6 +40,7 @@ import shared.communication.results.nonmove.ListAI_Result;
 import shared.communication.results.nonmove.List_Result;
 import shared.communication.results.nonmove.Login_Result;
 import shared.communication.results.nonmove.Register_Result;
+import shared.definitions.DevCardType;
 import shared.model.Game;
 
 
@@ -526,6 +527,22 @@ public class ServerFacade implements IServerFacade {
 	public boolean validateGame(User user, int gameID) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public Game canDoPlayMonopoly(int gameID, int userID) {
+		Game game = null;
+		
+		for (Game theGame: liveGames) {
+			if (theGame.getGameId() == gameID) {
+				if (theGame.getAllPlayers()[userID].canDoPlayDevelopmentCard(theGame.getTurnNumber(), DevCardType.MONOPOLY)) {
+					game = theGame;
+				}
+				
+				
+			}
+		}
+		return game;
 	}
 	
 	

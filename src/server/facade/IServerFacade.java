@@ -74,6 +74,7 @@ public interface IServerFacade {
 	public GetVersion_Result model(GetVersion_Params params);
 	public AddAI_Result addAI(AddAI_Params params);
 	public ListAI_Result listAI(ListAI_Params params);
+	public Game canDoPlayMonopoly(int gameID, int userID);
 	
 	// Return the game that the command is meant to operate on
 	//Game findGameForCommand(); 
