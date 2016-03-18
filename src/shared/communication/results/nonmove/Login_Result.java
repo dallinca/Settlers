@@ -53,7 +53,6 @@ public class Login_Result {
 	public int getID() {
 		return playerID;
 	}
-	
 
 	public void setID(int id) {
 		this.playerID = id;

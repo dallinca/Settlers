@@ -43,7 +43,7 @@ public class AcceptTrade_Command implements Command {
 	@Override
 	public void execute() {
 		// TODO Auto-generated method stub
-		
+		//this.facade.acceptTrade(params);
 	}
 
 	/**

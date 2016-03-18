@@ -381,7 +381,10 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public Login_Result login(Login_Params params) {
-		// TODO Auto-generated method stub
+		
+		/*if(params.getUsername().equals() && params.getPassword().equals())
+		 * 	return true;
+		 */
 		return null;
 	}
 

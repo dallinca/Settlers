@@ -40,5 +40,4 @@ public class Login_Params {
 		this.username = username;
 	}
 	
-
 }
