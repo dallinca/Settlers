@@ -2,6 +2,10 @@ package server.commands.move.devcard;
 
 import server.commands.Command;
 import server.facade.IServerFacade;
+import shared.communication.params.move.devcard.PlayYearOfPlenty_Params;
+import shared.communication.results.move.devcard.PlayYearOfPlenty_Result;
+import shared.definitions.DevCardType;
+import shared.definitions.ResourceType;
 import shared.model.Game;
 
 /**
@@ -12,7 +16,9 @@ import shared.model.Game;
  *
  */
 public class PlayYearOfPlenty_Command implements Command {
-	private IServerFacade facade;
+	private PlayYearOfPlenty_Params params;
+	private PlayYearOfPlenty_Result result; 
+	private int gameID, userID;
 
 	/**
 	 * Non-standard command pattern constructor instantiation without the facade.
@@ -26,8 +32,10 @@ public class PlayYearOfPlenty_Command implements Command {
 	 * 
 	 * @param game
 	 */
-	public PlayYearOfPlenty_Command(IServerFacade facade) {
-		this.facade = facade;
+	public PlayYearOfPlenty_Command(PlayYearOfPlenty_Params params, int gameID, int userID) {
+		this.params = params;
+		this.gameID = gameID;
+		this.userID = userID;
 	}
 
 	/**
@@ -42,24 +50,19 @@ public class PlayYearOfPlenty_Command implements Command {
 	 */
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	/**
-	 * For use coupled with the non-standard initialization of the command.
-	 * Allows for one and only one setting of the facade for which the command is to execute.
-	 * 
-	 * @pre this.facade == null && facade != null
-	 * @post this.facade = facade
-	 * @param facade
-	 */
-	public void setGame(IServerFacade facade) {
-		if(this.facade == null) {
-			this.facade = facade;
+		Game game = null;
+	
+		game = facade.playYearOfPlenty(params, gameID, userID);
+		try {
+			game.useDevelopmentCard(userID, DevCardType.YEAR_OF_PLENTY);
+		} catch (Exception e) {
+			new PlayYearOfPlenty_Result();
+			e.printStackTrace();
 		}
+		result = new PlayYearOfPlenty_Result(game);
 	}
 	
-	
-
+	public PlayYearOfPlenty_Result getResult(){
+		return result;
+	}
 }

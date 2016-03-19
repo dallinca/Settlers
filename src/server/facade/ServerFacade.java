@@ -43,6 +43,7 @@ import shared.communication.results.nonmove.List_Result;
 import shared.communication.results.nonmove.Login_Result;
 import shared.communication.results.nonmove.Register_Result;
 import shared.definitions.CatanColor;
+import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
 import shared.model.Game;
 import shared.model.player.Player;
@@ -353,8 +354,11 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game playMonopoly(PlayMonopoly_Params params) {
-		// TODO Auto-generated method stub
+	public Game playMonopoly(PlayMonopoly_Params params, int gameID, int userID) {
+		Game game = findGame(gameID);
+		if(game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONOPOLY)){
+			return game;
+		}
 		return null;
 	}
 
@@ -371,8 +375,12 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game playMonument(PlayMonument_Params params) {
-		// TODO Auto-generated method stub
+	public Game playMonument(PlayMonument_Params params, int gameID, int userID) {
+		
+		Game game = findGame(gameID);
+		if(game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONUMENT)){
+			return game;
+		}
 		return null;
 	}
 
@@ -389,8 +397,12 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game playRoadBuilding(PlayRoadBuilding_Params params) {
-		// TODO Auto-generated method stub
+	public Game playRoadBuilding(PlayRoadBuilding_Params params, int gameID, int userID) {
+		
+		Game game = findGame(gameID);
+		if(game.canDoPlayerUseDevelopmentCard(userID, DevCardType.ROAD_BUILD)){
+			return game;
+		}
 		return null;
 	}
 
@@ -407,8 +419,12 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game playSoldier(PlaySoldier_Params params) {
-		// TODO Auto-generated method stub
+	public Game playSoldier(PlaySoldier_Params params, int gameID, int userID) {
+		
+		Game game = findGame(gameID);
+		if(game.canDoPlayerUseDevelopmentCard(userID, DevCardType.SOLDIER)){
+			return game;
+		}
 		return null;
 	}
 
@@ -425,8 +441,20 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game playYearOfPlenty(PlayYearOfPlenty_Params params) {
-		// TODO Auto-generated method stub
+	public Game playYearOfPlenty(PlayYearOfPlenty_Params params, int gameID, int userID) {
+	
+		//convert from string into enum
+		ResourceType resource1 = ResourceType.valueOf(params.getResource1() );
+		ResourceType resource2 = ResourceType.valueOf(params.getResource2() );
+		//create an array that can be passed to canDo
+		ResourceType[] resource = new ResourceType[2];
+		resource[0] = resource1;
+		resource[1] = resource2; 
+		
+		Game game = findGame(gameID);
+		if(game.canDoPlayerUseYearOfPlenty(resource, userID)){
+			return game;
+		}
 		return null;
 	}
 

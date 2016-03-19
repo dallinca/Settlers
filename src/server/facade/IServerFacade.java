@@ -61,10 +61,10 @@ public interface IServerFacade {
 	public Game rollNumber(RollNumber_Params params, int gameID, int userID);
 	public Game sendChat(SendChat_Params params, int gameID, int userID);
 	public Game playMonopoly(PlayMonopoly_Params params);
-	public Game playMonument(PlayMonument_Params params);
-	public Game playRoadBuilding(PlayRoadBuilding_Params params);
-	public Game playSoldier(PlaySoldier_Params params);
-	public Game playYearOfPlenty(PlayYearOfPlenty_Params params);
+	public Game playMonument(PlayMonument_Params params, int gameID, int userID);
+	public Game playRoadBuilding(PlayRoadBuilding_Params params, int gameID, int userID);
+	public Game playSoldier(PlaySoldier_Params params, int gameID, int userID);
+	public Game playYearOfPlenty(PlayYearOfPlenty_Params params, int gameID, int userID);
 	
 	// Non Command pattern actions (nonmove actions)
 	public Login_Result login(Login_Params params);

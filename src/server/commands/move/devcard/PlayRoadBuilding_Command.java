@@ -2,6 +2,9 @@ package server.commands.move.devcard;
 
 import server.commands.Command;
 import server.facade.IServerFacade;
+import shared.communication.params.move.devcard.PlayRoadBuilding_Params;
+import shared.communication.results.move.devcard.PlayRoadBuilding_Result;
+import shared.definitions.DevCardType;
 import shared.model.Game;
 
 /**
@@ -12,7 +15,9 @@ import shared.model.Game;
  *
  */
 public class PlayRoadBuilding_Command implements Command {
-	private IServerFacade facade;
+	private PlayRoadBuilding_Params params;
+	private PlayRoadBuilding_Result result;
+	private int gameID, userID;
 
 	/**
 	 * Non-standard command pattern constructor instantiation without the facade.
@@ -26,8 +31,10 @@ public class PlayRoadBuilding_Command implements Command {
 	 * 
 	 * @param game
 	 */
-	public PlayRoadBuilding_Command(IServerFacade facade) {
-		this.facade = facade;
+	public PlayRoadBuilding_Command(PlayRoadBuilding_Params params, int gameID, int userID) {
+		this.params = params;
+		this.gameID = gameID;
+		this.userID = userID;
 	}
 
 	/**
@@ -42,22 +49,20 @@ public class PlayRoadBuilding_Command implements Command {
 	 */
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		Game game = null;
+		game = facade.playRoadBuilding(params, gameID, userID);
 		
-	}
-
-	/**
-	 * For use coupled with the non-standard initialization of the command.
-	 * Allows for one and only one setting of the facade for which the command is to execute.
-	 * 
-	 * @pre this.facade == null && facade != null
-	 * @post this.facade = facade
-	 * @param facade
-	 */
-	public void setGame(IServerFacade facade) {
-		if(this.facade == null) {
-			this.facade = facade;
+		try {
+			game.useDevelopmentCard(userID, DevCardType.ROAD_BUILD);
+		} catch (Exception e) {
+			new PlayRoadBuilding_Result();
+			e.printStackTrace();
 		}
+		result = new PlayRoadBuilding_Result(game);
+	}
+	
+	public PlayRoadBuilding_Result result(){
+		return result;
 	}
 
 }
