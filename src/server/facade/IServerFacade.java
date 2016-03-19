@@ -60,8 +60,8 @@ public interface IServerFacade {
 	public Game robPlayer(RobPlayer_Params params, int gameID, int userID);
 	public Game rollNumber(RollNumber_Params params, int gameID, int userID);
 	public Game sendChat(SendChat_Params params, int gameID, int userID);
-	public Game playMonopoly(PlayMonopoly_Params params);
-	public Game playMonument(PlayMonument_Params params, int gameID, int userID);
+	public Game playMonopoly(int gameID, int userID);
+	public Game playMonument(int gameID, int userID);
 	public Game playRoadBuilding(PlayRoadBuilding_Params params, int gameID, int userID);
 	public Game playSoldier(PlaySoldier_Params params, int gameID, int userID);
 	public Game playYearOfPlenty(PlayYearOfPlenty_Params params, int gameID, int userID);
@@ -76,6 +76,8 @@ public interface IServerFacade {
 	public ListAI_Result listAI(ListAI_Params params);
 	public Game canDoPlayMonopoly(int gameID, int userID);
 	Join_Result join(Join_Params params, int userID);
+	public Game canDoPlayMonument(int gameID, int userID);
+	Game canDoPlayMonopoly(int gameID, int userID, ResourceType[] resourceType);
 	
 	// Return the game that the command is meant to operate on
 	//Game findGameForCommand(); 

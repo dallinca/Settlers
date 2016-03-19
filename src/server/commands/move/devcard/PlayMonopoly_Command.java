@@ -1,10 +1,11 @@
-package move.devcard;
+package server.commands.move.devcard;
 
 import server.commands.Command;
 import server.facade.IServerFacade;
 import shared.communication.params.move.devcard.PlayMonopoly_Params;
 import shared.communication.results.move.devcard.PlayMonopoly_Result;
 import shared.definitions.DevCardType;
+import shared.definitions.ResourceType;
 import shared.model.Game;
 
 /**
@@ -63,16 +64,32 @@ public class PlayMonopoly_Command implements Command {
 	public void execute() {
 		// TODO Auto-generated method stub
 		
-		int userID = theParams.getPlayerIndex();
+		int userID = params.getPlayerIndex();
 		
 		//Ask the server facade if that action can happen
 		//If it is true, it will return a game object then call the appropriate commands on the game object
+		
+		String resourceName = params.getResource();
+		ResourceType[] resourceType = new ResourceType[1];
+		
+		if (resourceName.equals("wheat")) {
+			resourceType[0] = ResourceType.WHEAT;
+		} else if (resourceName.equals("wood")) {
+			resourceType[0] = ResourceType.WOOD;
+		} else if (resourceName.equals("brick")) {
+			resourceType[0] = ResourceType.BRICK;
+		} else if (resourceName.equals("ore")) {
+			resourceType[0] = ResourceType.ORE;
+		} else if (resourceName.equals("sheep")) {
+			resourceType[0] = ResourceType.SHEEP;
+		}
+		
 		Game game = facade.canDoPlayMonopoly(gameID, userID);
 		
 		if (game != null) {
 			if (game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONOPOLY)) {
-				try {
-					game.useDevelopmentCard(userID, DevCardType.MONOPOLY);
+				try {	
+					game.useDevelopmentCard(userID, DevCardType.MONOPOLY, resourceType);
 				} catch (Exception e) {
 					System.out.println("");
 					e.printStackTrace();

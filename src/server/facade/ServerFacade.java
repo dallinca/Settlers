@@ -359,12 +359,14 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game playMonopoly(PlayMonopoly_Params params, int gameID, int userID) {
+	public Game playMonopoly(int gameID, int userID) {
 		Game game = findGame(gameID);
-		if(game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONOPOLY)){
-			return game;
+		 
+		if (!game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONOPOLY)) {
+			game = null;
 		}
-		return null;
+		
+ 		return game;
 	}
 
 	/**
@@ -380,13 +382,15 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game playMonument(PlayMonument_Params params, int gameID, int userID) {
-		
+	public Game playMonument(int gameID, int userID) {
 		Game game = findGame(gameID);
-		if(game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONUMENT)){
-			return game;
+ 		
+		//The functionality to retrieve the gameID from the game objects is required to figure out which game this person belongs to.
+		if (!game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONUMENT)) {
+			game = null;
 		}
-		return null;
+		
+ 		return game;
 	}
 
 	/**
@@ -402,12 +406,8 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game playRoadBuilding(PlayRoadBuilding_Params params, int gameID, int userID) {
-		
-		Game game = findGame(gameID);
-		if(game.canDoPlayerUseDevelopmentCard(userID, DevCardType.ROAD_BUILD)){
-			return game;
-		}
+	public Game playRoadBuilding(PlayRoadBuilding_Params params) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -424,12 +424,8 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game playSoldier(PlaySoldier_Params params, int gameID, int userID) {
-		
-		Game game = findGame(gameID);
-		if(game.canDoPlayerUseDevelopmentCard(userID, DevCardType.SOLDIER)){
-			return game;
-		}
+	public Game playSoldier(PlaySoldier_Params params) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -446,20 +442,8 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game playYearOfPlenty(PlayYearOfPlenty_Params params, int gameID, int userID) {
-	
-		//convert from string into enum
-		ResourceType resource1 = ResourceType.valueOf(params.getResource1() );
-		ResourceType resource2 = ResourceType.valueOf(params.getResource2() );
-		//create an array that can be passed to canDo
-		ResourceType[] resource = new ResourceType[2];
-		resource[0] = resource1;
-		resource[1] = resource2; 
-		
-		Game game = findGame(gameID);
-		if(game.canDoPlayerUseYearOfPlenty(resource, userID)){
-			return game;
-		}
+	public Game playYearOfPlenty(PlayYearOfPlenty_Params params) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -788,8 +772,24 @@ public class ServerFacade implements IServerFacade {
 
 	@Override
 	public Game canDoPlayMonopoly(int gameID, int userID) {
-		// TODO Auto-generated method stub
-		return null;
+		Game game = findGame(gameID);
+ 
+		if (!game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONOPOLY)) {
+			game = null;
+		}
+		
+ 		return game;
+	}
+	@Override
+	public Game canDoPlayMonument(int gameID, int userID) {
+		Game game = findGame(gameID);
+ 		
+		//The functionality to retrieve the gameID from the game objects is required to figure out which game this person belongs to.
+		if (!game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONUMENT)) {
+			game = null;
+		}
+		
+ 		return game;
 	}
 
 
