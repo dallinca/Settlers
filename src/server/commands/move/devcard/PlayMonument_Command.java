@@ -2,6 +2,9 @@ package server.commands.move.devcard;
 
 import server.commands.Command;
 import server.facade.IServerFacade;
+import shared.communication.params.move.devcard.PlayMonument_Params;
+import shared.communication.results.move.devcard.PlayMonument_Result;
+import shared.definitions.DevCardType;
 import shared.model.Game;
 
 /**
@@ -12,7 +15,10 @@ import shared.model.Game;
  *
  */
 public class PlayMonument_Command implements Command {
-	private IServerFacade facade;
+
+	private PlayMonument_Params params;
+	private PlayMonument_Result result; 
+	private int gameID, userID;
 
 	/**
 	 * Non-standard command pattern constructor instantiation without the facade.
@@ -26,8 +32,10 @@ public class PlayMonument_Command implements Command {
 	 * 
 	 * @param game
 	 */
-	public PlayMonument_Command(IServerFacade facade) {
-		this.facade = facade;
+	public PlayMonument_Command( PlayMonument_Params params, int gameID, int userID) {
+		this.params = params;
+		this.gameID = gameID;
+		this.userID = userID;
 	}
 
 	/**
@@ -42,22 +50,19 @@ public class PlayMonument_Command implements Command {
 	 */
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		Game game = null;
+		game = facade.playMonument(params, gameID, userID);
 		
-	}
-
-	/**
-	 * For use coupled with the non-standard initialization of the command.
-	 * Allows for one and only one setting of the facade for which the command is to execute.
-	 * 
-	 * @pre this.facade == null && facade != null
-	 * @post this.facade = facade
-	 * @param facade
-	 */
-	public void setGame(IServerFacade facade) {
-		if(this.facade == null) {
-			this.facade = facade;
+		try {
+			game.useDevelopmentCard(userID, DevCardType.MONUMENT);
+		} catch (Exception e) {
+			new PlayMonument_Result();
+			e.printStackTrace();
 		}
+		result = new PlayMonument_Result(game);
 	}
-
+	
+	public PlayMonument_Result getResult(){
+		return result;
+	}
 }

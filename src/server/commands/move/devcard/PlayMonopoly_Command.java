@@ -18,17 +18,18 @@ public class PlayMonopoly_Command implements Command {
 	private IServerFacade facade;
 	private boolean isValid = false;
 	private PlayMonopoly_Result theResult;
-	private PlayMonopoly_Params theParams;
-	private int gameID;
+	private PlayMonopoly_Params params;
+	private int gameID, userID;
 	
 	/**
 	 * Non-standard command pattern constructor instantiation without the facade.
 	 * The facade will be determined after original command instantiation.
 	 * 
 	 */
-	public PlayMonopoly_Command(PlayMonopoly_Params theParams, int gameID) {
-		this.theParams = theParams;
+	public PlayMonopoly_Command(PlayMonopoly_Params theParams, int gameID, int userID) {
+		this.params = params;
 		this.gameID = gameID;
+		this.userID = userID;
 	}
 	
 	/**

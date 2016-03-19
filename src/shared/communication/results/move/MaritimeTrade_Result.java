@@ -31,6 +31,16 @@ public class MaritimeTrade_Result {
 		return game;
 	}
 
+	public MaritimeTrade_Result(Game game){
+		this.game = game;	
+		
+		if (game == null){
+			valid = false;
+		}else{
+			valid = true;
+		}
+	}
+	
 	public MaritimeTrade_Result(String post) {
 
 		if (post==null){

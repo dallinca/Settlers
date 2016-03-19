@@ -17,6 +17,7 @@ public class BuildCity_Command implements Command {
 	private IServerFacade facade;
 	
 	private BuildCity_Params params;
+	private BuildCity_Result result;
 	private int gameID, userID;
 
 	/**
@@ -54,23 +55,18 @@ public class BuildCity_Command implements Command {
 	@Override
 	public void execute() {
 		Game game = null;
-		game = facade.buildCity(params);
-		BuildCity_Result result = new BuildCity_Result();
-		
-	}
+		game = facade.buildCity(params, gameID, userID);
 
-	/**
-	 * For use coupled with the non-standard initialization of the command.
-	 * Allows for one and only one setting of the facade for which the command is to execute.
-	 * 
-	 * @pre this.facade == null && facade != null
-	 * @post this.facade = facade
-	 * @param facade
-	 */
-	public void setGame(IServerFacade facade) {
-		if(this.facade == null) {
-			this.facade = facade;
+		try {
+			game.placeCityOnVertex(params.getCmdVertLocation());
+		} catch (Exception e) {
+			new BuildCity_Result();
+			e.printStackTrace();
 		}
+		result = new BuildCity_Result(game);
 	}
-
+	
+	public BuildCity_Result getResult(){
+		return result;
+	}
 }

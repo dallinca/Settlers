@@ -16,6 +16,7 @@ import shared.model.Game;
 public class RobPlayer_Command implements Command {
 
 	private RobPlayer_Params params;
+	private RobPlayer_Result result;
 	private int gameID, userID;
 
 	/**
@@ -50,22 +51,16 @@ public class RobPlayer_Command implements Command {
 	public void execute() {
 		Game game = null;
 		game = facade.robPlayer(params, gameID, userID);
-		RobPlayer_Result results = new RobPlayer_Result(game);
-	}
-
-	/**
-	 * For use coupled with the non-standard initialization of the command.
-	 * Allows for one and only one setting of the facade for which the command is to execute.
-	 * 
-	 * @pre this.facade == null && facade != null
-	 * @post this.facade = facade
-	 * @param facade
-	 */
-	/* I don't believe this is needed
-	public void setGame(IServerFacade facade) {
-		if(this.facade == null) {
-			this.facade = facade;
+		
+		try {
+			game.moveRobberToHex(userID, params.getLocation());
+			game.stealPlayerResource(userID, params.getVictimIndex());
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-	}*/
-
+		result = new RobPlayer_Result(game);
+	}
+	public RobPlayer_Result getResult(){
+		return result;
+	}
 }

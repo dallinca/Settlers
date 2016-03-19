@@ -16,6 +16,7 @@ import shared.model.Game;
 public class SendChat_Command implements Command {
 	
 	private SendChat_Params params;
+	private SendChat_Result result;
 	private int gameID, userID;
 	
 	/**
@@ -49,7 +50,11 @@ public class SendChat_Command implements Command {
 	@Override
 	public void execute() {
 		Game game = null;
-		facade.sendChat(params);
-		SendChat_Result result = new SendChat_Result();
+		game = facade.sendChat(params, gameID, userID);
+		result = new SendChat_Result();
+	}
+	
+	public SendChat_Result getResult(){
+		return result;
 	}
 }

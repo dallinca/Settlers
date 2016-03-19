@@ -14,7 +14,9 @@ import shared.model.Game;
  *
  */
 public class FinishTurn_Command implements Command {
+	
 	private IServerFacade facade;
+	private FinishTurn_Result result;
 	private FinishTurn_Params params;
 	private int gameID, userID;
 
@@ -24,16 +26,7 @@ public class FinishTurn_Command implements Command {
 	 * 
 	 */
 	public FinishTurn_Command() {}
-	
-	/**
-	 * Standard Command pattern constructor instantiation with the facade
-	 * 
-	 * @param game
-	 */
-	/*
-	public FinishTurn_Command(IServerFacade facade) {
-		this.facade = facade;
-	}*/
+
 	public FinishTurn_Command(FinishTurn_Params params, int gameID, int userID) {
 		this.params = params;
 		this.gameID = gameID;
@@ -53,22 +46,13 @@ public class FinishTurn_Command implements Command {
 	@Override
 	public void execute() {
 		Game game = null;
-		game = facade.finishTurn(params);
-		FinishTurn_Result result = new FinishTurn_Result();
+		game = facade.finishTurn(params, gameID, userID);
+		//IS THERE AN END TURN FUNCTION ON GAME?????
+		result = new FinishTurn_Result(game);
 	}
-
-	/**
-	 * For use coupled with the non-standard initialization of the command.
-	 * Allows for one and only one setting of the facade for which the command is to execute.
-	 * 
-	 * @pre this.facade == null && facade != null
-	 * @post this.facade = facade
-	 * @param facade
-	 */
-	public void setGame(IServerFacade facade) {
-		if(this.facade == null) {
-			this.facade = facade;
-		}
+	
+	public FinishTurn_Result getResult(){
+		return result;
 	}
 
 }

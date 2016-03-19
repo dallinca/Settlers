@@ -5,6 +5,8 @@ import server.facade.IServerFacade;
 import shared.communication.params.move.BuyDevCard_Params;
 import shared.communication.results.move.BuyDevCard_Result;
 import shared.model.Game;
+import shared.model.player.exceptions.CannotBuyException;
+import shared.model.player.exceptions.InsufficientPlayerResourcesException;
 
 /**
  * Concrete command implementing the Command interface.
@@ -18,6 +20,7 @@ public class BuyDevCard_Command implements Command {
 	private IServerFacade facade;
 	
 	private BuyDevCard_Params params;
+	private BuyDevCard_Result result;
 	private int gameID, userID;
 
 	/**
@@ -55,22 +58,20 @@ public class BuyDevCard_Command implements Command {
 	@Override
 	public void execute() {
 		Game game = null;
-		game = facade.buyDevCard(params);
-		BuyDevCard_Result result = new BuyDevCard_Result();
-	}
-
-	/**
-	 * For use coupled with the non-standard initialization of the command.
-	 * Allows for one and only one setting of the facade for which the command is to execute.
-	 * 
-	 * @pre this.facade == null && facade != null
-	 * @post this.facade = facade
-	 * @param facade
-	 */
-	public void setGame(IServerFacade facade) {
-		if(this.facade == null) {
-			this.facade = facade;
+		game = facade.buyDevCard(params, gameID, userID);
+		
+		try {
+			game.buyDevelopmentCard();
+		} catch (CannotBuyException e) {
+			e.printStackTrace();
+		} catch (InsufficientPlayerResourcesException e) {
+			e.printStackTrace();
 		}
+		
+		result = new BuyDevCard_Result();
 	}
-
+	
+	public BuyDevCard_Result getResult(){
+		return result;
+	}
 }

@@ -14,12 +14,16 @@ public class BuildSettlement_Params {
 	private int playerIndex;
 	private BuildLocation vertexLocation;
 	private boolean free;
-
+	
+	//this is for use in BuildSettlement_Command
+	VertexLocation location;
+	
 	public BuildSettlement_Params(int playerIndex, VertexLocation location,
 			boolean free) {
 		this.playerIndex = playerIndex;
 		this.vertexLocation = new BuildLocation(location);
 		this.free = free;
+		this.location = location; 
 	}
 
 	public int getPlayerIndex() {
@@ -44,6 +48,10 @@ public class BuildSettlement_Params {
 
 	public void setFree(boolean free) {
 		this.free = free;
+	}
+	
+	public VertexLocation getCmdVertLocation(){
+		return location;
 	}
 	
 }

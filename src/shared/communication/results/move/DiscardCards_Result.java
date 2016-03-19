@@ -26,6 +26,16 @@ public class DiscardCards_Result {
 		return game;
 	}
 
+	public DiscardCards_Result(Game game){
+		this.game = game;	
+		
+		if (game == null){
+			valid = false;
+		}else{
+			valid = true;
+		}
+	}
+	
 	public DiscardCards_Result(String post) {
 
 		if (post==null){

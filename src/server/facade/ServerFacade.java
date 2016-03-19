@@ -45,6 +45,7 @@ import shared.communication.results.nonmove.List_Result;
 import shared.communication.results.nonmove.Login_Result;
 import shared.communication.results.nonmove.Register_Result;
 import shared.definitions.CatanColor;
+import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
 import shared.model.Bank;
 import shared.model.Game;
@@ -90,7 +91,6 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public Game acceptTrade(AcceptTrade_Params params) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -107,8 +107,12 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game buildCity(BuildCity_Params params) {
-		// TODO Auto-generated method stub
+	public Game buildCity(BuildCity_Params params, int gameID, int userID) {
+
+		Game game = findGame(gameID);
+		if(game.canDoPlayerBuildCity(userID)){
+			return game; 
+		}
 		return null;
 	}
 
@@ -125,8 +129,12 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game buildRoad(BuildRoad_Params params) {
-		// TODO Auto-generated method stub
+	public Game buildRoad(BuildRoad_Params params, int gameID, int userID) {
+		
+		Game game = findGame(gameID);
+		if(game.canDoPlayerBuildRoad(userID)){
+			return game;
+		}
 		return null;
 	}
 
@@ -143,15 +151,12 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game buildSettlement(BuildSettlement_Params params) {
+	public Game buildSettlement(BuildSettlement_Params params, int gameID, int userID) {
 
 		Game game = findGame(gameID);
-
 		if(game.canDoPlayerBuildSettlement(userID)){
-
 			return game; 
 		}
-
 		return null;
 	}
 
@@ -168,14 +173,12 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game buyDevCard(BuyDevCard_Params params) {
-		Game game = findGame(gameID);
+	public Game buyDevCard(BuyDevCard_Params params, int gameID, int userID) {
+		
+		Game game = findGame(gameID);	
 		if(game.canDoPlayerBuyDevelopmentCard(userID)){
-			game.buyDevelopmentCard();
 			return game;
 		}
-
-
 		return null;
 	}
 
@@ -192,7 +195,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game discardCards(DiscardCards_Params params) {
+	public Game discardCards(DiscardCards_Params params, int gameID, int userID) {
 		Game game = findGame(gameID);
 
 		if(!game.canDoDiscardNumberOfResourceType(userID, params.getDiscardedCards().getBrick(), ResourceType.BRICK)){
@@ -210,7 +213,6 @@ public class ServerFacade implements IServerFacade {
 		if(!game.canDoDiscardNumberOfResourceType(userID, params.getDiscardedCards().getWood(), ResourceType.WOOD)){
 			return null;
 		}
-
 		return game;		
 	}
 
@@ -227,10 +229,12 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game finishTurn(FinishTurn_Params params) {
+	public Game finishTurn(FinishTurn_Params params, int gameID, int userID) {
 
 		Game game = findGame(gameID);
-
+		if(game.canDoPlayerEndTurn(userID)){
+			return game;
+		}
 		return null;
 	}
 
@@ -247,17 +251,12 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game maritimeTrade(MaritimeTrade_Params params) {
+	public Game maritimeTrade(MaritimeTrade_Params params, int gameID, ResourceType tradeIn, ResourceType receive) {
 
 		Game game = findGame(gameID);
-
-		//tradein, recieve
-		//PROBLEM: params.getOutputResource(), params.getInputResource() are strings. Need to be resourceType. 
-		if(game.canDoPlayerDoMaritimeTrade(params.getOutputResource(), params.getInputResource())){
+		if(game.canDoPlayerDoMaritimeTrade(tradeIn, receive)){
 			return game;
 		}
-
-
 		return null;
 	}
 
@@ -274,14 +273,12 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game offerTrade(OfferTrade_Params params) {
+	public Game offerTrade(OfferTrade_Params params, int gameID,int userID) {
 
 		Game game = findGame(gameID);
-
 		if(game.canDoPlayerDoDomesticTrade(userID, p1resources, params.getReceiver(), p2resources)){
 			return game;
 		}
-
 		return null;
 	}
 
@@ -344,9 +341,9 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game sendChat(SendChat_Params params) {
-		// TODO Auto-generated method stub
-		return null;
+	public Game sendChat(SendChat_Params params, int gameID, int userID) {
+		Game game = findGame(gameID);
+		return game;
 	}
 
 	/**
@@ -362,8 +359,11 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game playMonopoly(PlayMonopoly_Params params) {
-		// TODO Auto-generated method stub
+	public Game playMonopoly(PlayMonopoly_Params params, int gameID, int userID) {
+		Game game = findGame(gameID);
+		if(game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONOPOLY)){
+			return game;
+		}
 		return null;
 	}
 
@@ -380,8 +380,12 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game playMonument(PlayMonument_Params params) {
-		// TODO Auto-generated method stub
+	public Game playMonument(PlayMonument_Params params, int gameID, int userID) {
+		
+		Game game = findGame(gameID);
+		if(game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONUMENT)){
+			return game;
+		}
 		return null;
 	}
 
@@ -398,8 +402,12 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game playRoadBuilding(PlayRoadBuilding_Params params) {
-		// TODO Auto-generated method stub
+	public Game playRoadBuilding(PlayRoadBuilding_Params params, int gameID, int userID) {
+		
+		Game game = findGame(gameID);
+		if(game.canDoPlayerUseDevelopmentCard(userID, DevCardType.ROAD_BUILD)){
+			return game;
+		}
 		return null;
 	}
 
@@ -416,8 +424,12 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game playSoldier(PlaySoldier_Params params) {
-		// TODO Auto-generated method stub
+	public Game playSoldier(PlaySoldier_Params params, int gameID, int userID) {
+		
+		Game game = findGame(gameID);
+		if(game.canDoPlayerUseDevelopmentCard(userID, DevCardType.SOLDIER)){
+			return game;
+		}
 		return null;
 	}
 
@@ -434,8 +446,20 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game playYearOfPlenty(PlayYearOfPlenty_Params params) {
-		// TODO Auto-generated method stub
+	public Game playYearOfPlenty(PlayYearOfPlenty_Params params, int gameID, int userID) {
+	
+		//convert from string into enum
+		ResourceType resource1 = ResourceType.valueOf(params.getResource1() );
+		ResourceType resource2 = ResourceType.valueOf(params.getResource2() );
+		//create an array that can be passed to canDo
+		ResourceType[] resource = new ResourceType[2];
+		resource[0] = resource1;
+		resource[1] = resource2; 
+		
+		Game game = findGame(gameID);
+		if(game.canDoPlayerUseYearOfPlenty(resource, userID)){
+			return game;
+		}
 		return null;
 	}
 

@@ -16,6 +16,7 @@ import shared.model.Game;
 public class RollNumber_Command implements Command {
 	
 	private RollNumber_Params params;
+	private RollNumber_Result result;
 	private int gameID;
 	private int userID;
 	/**
@@ -57,16 +58,10 @@ public class RollNumber_Command implements Command {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		//Perform operation on the game <------Perform the operation
-		//
-		//Game game = new Game();
-		
-		//game.useDevelopmentCard(userID, devCardType;)
-		//game.gatherResources(params.getNumber());
-		
-		//Create a result object
-		//RollDice_Result
-		RollNumber_Result result = new RollNumber_Result(game);
+		result = new RollNumber_Result(game);
+	}
+	
+	public RollNumber_Result getResult(){
+		return result;
 	}
 }
