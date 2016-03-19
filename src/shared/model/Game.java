@@ -48,8 +48,10 @@ public class Game {
 	private int winner = -1;
 	private CommandHistory gameHistory = new CommandHistory();
 	
+	
 	//How do we create this / initialize it????
 	private int gameID;
+	private String title;
 	
 
 	private TradeInfo tradeOffer;
@@ -1314,9 +1316,31 @@ public class Game {
 
 
 
+	public int getPlayerCount(){
+		
+		Player[] players = getAllPlayers();
+		int playerCount = 0;
+		
+		for (int i = 0; i < 4; i ++){
+			if (players[i]!=null){ //Check for vacancy in game roster.
+				playerCount++;
+			}			
+		}
+		
+		return playerCount;
+	}
+	
 	public void addPlayer(int userID, CatanColor playerColor) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 

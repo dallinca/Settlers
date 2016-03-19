@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import client.ClientFacade;
+import client.data.GameInfo;
+import client.data.PlayerInfo;
 import client.proxy.ServerProxy;
 import server.commands.Command;
 import shared.communication.User;
@@ -44,7 +46,9 @@ import shared.communication.results.nonmove.Login_Result;
 import shared.communication.results.nonmove.Register_Result;
 import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
+import shared.model.Bank;
 import shared.model.Game;
+import shared.model.board.Board;
 import shared.model.player.Player;
 
 
@@ -56,6 +60,7 @@ import shared.model.player.Player;
 
 public class ServerFacade implements IServerFacade {
 
+	private int gameTracker = 0;
 	private List<Game> liveGames = new ArrayList<Game>();
 	private List<User> users = new ArrayList<User>();
 
@@ -472,6 +477,8 @@ public class ServerFacade implements IServerFacade {
 							+ "\",\"playerID\":"+ current.getPlayerID() +"}}");
 
 					result.setUserCookie(userCookie);
+
+					return result;
 				}
 			}
 		}
@@ -491,8 +498,33 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public Register_Result register(Register_Params params) {
-		// TODO Auto-generated method stub
-		return null;
+
+		String username = params.getUsername();
+		String password = params.getPassword();
+
+		Register_Result result = new Register_Result();
+
+		for (User current : users){
+			if (current.getName().equals(username)){
+				return result;
+				//no duplicate names allowed.
+			}
+		}
+
+		result.setValid(true);
+
+		User user = new User(username, password, users.size());
+
+		users.add(user); // add new user to roster
+
+		//generate user cookie
+		String userCookie = ("{\"catan.user\":{\"name\":\"" + username
+				+ "\",\"password\":\""+password
+				+ "\",\"playerID\":"+ user.getPlayerID() +"}}");
+
+		result.setUserCookie(userCookie);
+
+		return result;
 	}
 
 	/**
@@ -507,8 +539,44 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public List_Result list(List_Params params) {
-		// TODO Auto-generated method stub
-		return null;
+
+		List_Result result = new List_Result();
+		if (params==null){
+			return result;
+		}
+
+		GameInfo[] list = new GameInfo[liveGames.size()];
+
+		for (int i = 0 ; i < liveGames.size(); i++){
+
+			Game g = liveGames.get(i);
+
+			GameInfo info = new GameInfo();
+			info.setId(g.getGameID());
+			info.setTitle(g.getTitle());
+
+			Player[] players = g.getAllPlayers();
+
+			for (int x = 0; x < g.getPlayerCount(); x++){
+
+				PlayerInfo pi = new PlayerInfo();
+				Player p = players[x];
+
+				pi.setId(p.getPlayerId());
+				pi.setName(p.getPlayerName());
+				pi.setPlayerIndex(p.getPlayerIndex());
+				pi.setColor(p.getPlayerColor());
+
+				info.addPlayer(pi);
+			}
+
+			list[i] = info;					
+		}
+
+		result.setGames(list);
+		result.setValid(true);
+
+		return result;
 	}
 
 	/**
@@ -523,8 +591,28 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public Create_Result create(Create_Params params) {
-		// TODO Auto-generated method stub
-		return null;
+
+		String name = params.getName();
+		boolean numbers = params.isRandomNumbers();
+		boolean ports = params.isRandomPorts();
+		boolean tiles = params.isRandomTiles();
+
+		Create_Result result = new Create_Result();
+		result.setID(gameTracker);
+
+		Player[] players = new Player[4];		
+		Board board = new Board(tiles, numbers, ports);
+		Game game = new Game(players, board, new Bank());
+
+		game.setTitle(name);		
+		game.setGameID(gameTracker++);
+
+		liveGames.add(game);
+
+		result.setTitle(name);
+		result.setValid(true);
+
+		return result;
 	}
 
 	/**
@@ -540,7 +628,6 @@ public class ServerFacade implements IServerFacade {
 	@Override
 	public Join_Result join(Join_Params params, int userID) {
 
-		String color = params.getColor();
 		int gameID = params.getGameID();
 		Join_Result result = new Join_Result();
 
@@ -562,13 +649,16 @@ public class ServerFacade implements IServerFacade {
 				break;
 			}
 		}
-		
+
 		if (!joinable){
 			return result;			
 		}
 
 		Player p = g.getPlayerByID(userID);
 		CatanColor playerColor = params.convertColor();
+		if (playerColor==null){
+			return result;
+		}
 
 		if (p!=null){
 			p.setPlayerColor(playerColor);
@@ -601,15 +691,7 @@ public class ServerFacade implements IServerFacade {
 		return null;
 	}
 
-	private Game findGame(int gameID){
 
-		for(Game currentGame: liveGames){
-			if(currentGame.getGameID() ==  gameID){
-				return currentGame;
-			}
-		}
-		return null;		
-	}
 
 	/**
 	 * To be called from the Handlers.<br>
@@ -687,7 +769,15 @@ public class ServerFacade implements IServerFacade {
 	}
 
 
+	private Game findGame(int gameID){
 
+		for(Game currentGame: liveGames){
+			if(currentGame.getGameID() ==  gameID){
+				return currentGame;
+			}
+		}
+		return null;		
+	}
 
 
 

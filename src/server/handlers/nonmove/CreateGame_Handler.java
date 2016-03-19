@@ -1,11 +1,13 @@
 package server.handlers.nonmove;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
 import server.handlers.SettlersOfCatanHandler;
+import shared.communication.User;
 import shared.communication.params.nonmove.Create_Params;
 import shared.communication.results.nonmove.Create_Result;
 
@@ -15,15 +17,15 @@ import com.sun.net.httpserver.HttpExchange;
  * Handles calls from a client to create a game
  */
 public class CreateGame_Handler extends SettlersOfCatanHandler{
-	
+
 	private Logger logger = Logger.getLogger("settlers-of-catan"); 	
-	
+
 	/**
 	 * Receives the Create Params to create a game and constructs the appropriate command and passes it to the Server Facade after decoding the object.
 	 */
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
-		
+
 		logger.entering("server.handlers.CreateHandler", "handle");
 		//Handling Login http exchange.
 
@@ -33,25 +35,35 @@ public class CreateGame_Handler extends SettlersOfCatanHandler{
 
 		LinkedList<String> cookies = extractCookies(exchange);
 
-		String check = validateCookies(cookies);
+		User user = gson.fromJson(cookies.getFirst(), User.class);		
 
-		if (check.equals("VALID")){
+		if (facade.validateUser(user)){
 
 			job = getExchangeBody(exchange); //get json string from exchange.
 			request = gson.fromJson(job, Create_Params.class); //deserialize request from json		
 			result = facade.create(request);//Call facade to perform operation with request
-			
-			writeResult(exchange, result);
+
+			if (result.isValid()){
+				job = gson.toJson(result);	//serialize result to json			
+				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);				
+			}
+			else {
+				job = "Failed";
+				exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0); //Cookies invalid
+			}
 
 		}else{
-
+			job = "Failed";
 			exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0); //Cookies invalid
-
 		}			
+
+		OutputStreamWriter sw = new OutputStreamWriter(exchange.getResponseBody());
+		sw.write(job);//Write result to stream.
+		sw.flush();		
 
 		exchange.getResponseBody().close();		
 		logger.exiting("server.handlers.CreateHandler", "handle");		
-		
+
 	}
 
 }
