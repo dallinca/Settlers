@@ -48,9 +48,7 @@ public class Login_Handler extends SettlersOfCatanHandler{
 		}else{
 			job = "Failure";
 			exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0); //Everything's okay
-		}
-
-		
+		}		
 
 		OutputStreamWriter sw = new OutputStreamWriter(exchange.getResponseBody());
 		sw.write(job);//Write result to stream.

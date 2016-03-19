@@ -66,7 +66,7 @@ public class Register_Result {
 		this.name = name;
 	}
 	
-	public void setUserCooke(String cookie){
+	public void setUserCookie(String cookie){
 		userCookie = cookie;
 	}
 

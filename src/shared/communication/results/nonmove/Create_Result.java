@@ -26,7 +26,7 @@ public class Create_Result {
 	}
 
 	public Create_Result(String doPost) {
-		System.out.println("Create game result.");
+		//System.out.println("Create game result.");
 		System.out.println(doPost);
 		
 		

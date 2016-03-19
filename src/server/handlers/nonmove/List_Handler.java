@@ -48,17 +48,16 @@ public class List_Handler extends SettlersOfCatanHandler {
 			result = facade.list(request);//Call facade to perform operation with request
 			
 			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); //Everything's okay
-			job = gson.toJson(result);	//serialize result to json
-			
-			OutputStreamWriter sw = new OutputStreamWriter(exchange.getResponseBody());
-			sw.write(job);//Write result to stream.
-			sw.flush();	
+			job = gson.toJson(result);	//serialize result to json			
 			
 		}else{
-			
-			exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0); //User invalid
-			
-		}			
+			job = "Failed";			
+			exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0); //User invalid			
+		}		
+		
+		OutputStreamWriter sw = new OutputStreamWriter(exchange.getResponseBody());
+		sw.write(job);//Write result to stream.
+		sw.flush();	
 
 		exchange.getResponseBody().close();		
 		logger.exiting("server.handlers.ListHandler", "handle");			
