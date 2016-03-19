@@ -3,6 +3,8 @@ package server.commands.move;
 import server.commands.Command;
 import server.facade.IServerFacade;
 import shared.communication.params.move.BuildSettlement_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
 import shared.communication.results.move.BuildSettlement_Result;
 import shared.model.Game;
 
@@ -15,7 +17,7 @@ import shared.model.Game;
  */
 public class BuildSettlement_Command implements Command {
 	private IServerFacade facade;
-	
+
 	private BuildSettlement_Params params;
 	private BuildSettlement_Result result;
 	private int gameID, userID;
@@ -26,7 +28,7 @@ public class BuildSettlement_Command implements Command {
 	 * 
 	 */
 	public BuildSettlement_Command() {}
-	
+
 	/**
 	 * Standard Command pattern constructor instantiation with the facade
 	 * 
@@ -35,7 +37,7 @@ public class BuildSettlement_Command implements Command {
 	public BuildSettlement_Command(IServerFacade facade) {
 		this.facade = facade;
 	}
-	
+
 	public BuildSettlement_Command(BuildSettlement_Params params, int gameID, int userID) {
 		this.params = params;
 		this.gameID = gameID;
@@ -56,16 +58,28 @@ public class BuildSettlement_Command implements Command {
 	public void execute() {
 		Game game = null;
 		game = facade.buildSettlement(params, gameID, userID);
-		
+
+		result = new BuildSettlement_Result();
+
+		if (game==null){
+			return;
+		}
+
 		try {
 			game.placeSettlementOnVertex(userID, params.getCmdVertLocation());
 		} catch (Exception e) {
-			new BuildSettlement_Result();
 			e.printStackTrace();
+			return;
 		}
-		result = new BuildSettlement_Result(game);
+		
+		result.setValid(true);
+
+		JsonConverter converter = new JsonConverter();
+		ClientModel cm = converter.toClientModel(game);
+
+		result.setModel(cm);
 	}
-	
+
 	public BuildSettlement_Result getResult(){
 		return result;
 	}

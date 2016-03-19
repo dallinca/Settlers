@@ -3,6 +3,8 @@ package server.commands.move;
 import server.commands.Command;
 import server.facade.IServerFacade;
 import shared.communication.params.move.BuyDevCard_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
 import shared.communication.results.move.BuyDevCard_Result;
 import shared.model.Game;
 import shared.model.player.exceptions.CannotBuyException;
@@ -59,7 +61,11 @@ public class BuyDevCard_Command implements Command {
 	public void execute() {
 		Game game = null;
 		game = facade.buyDevCard(params, gameID, userID);
+		result = new BuyDevCard_Result();
 		
+		if (game==null){
+			return;
+		}
 		try {
 			game.buyDevelopmentCard();
 		} catch (CannotBuyException e) {
@@ -68,7 +74,13 @@ public class BuyDevCard_Command implements Command {
 			e.printStackTrace();
 		}
 		
-		result = new BuyDevCard_Result();
+		result.setValid(true);
+		
+		JsonConverter converter = new JsonConverter();
+		
+		ClientModel cm = converter.toClientModel(game);
+		
+		result.setModel(cm);
 	}
 	
 	public BuyDevCard_Result getResult(){

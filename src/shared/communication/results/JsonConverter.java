@@ -411,6 +411,11 @@ public class JsonConverter {
 		return null;
 	}
 
+	public ClientModel toClientModel(Game game) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	/**
 	 * @TODO
 	 * @param post
