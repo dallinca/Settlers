@@ -18,7 +18,7 @@ import shared.model.Game;
 public class PlayMonopoly_Command implements Command {
 	private IServerFacade facade;
 	private boolean isValid = false;
-	private PlayMonopoly_Result theResult;
+	private PlayMonopoly_Result result;
 	private PlayMonopoly_Params params;
 	private int gameID, userID;
 	
@@ -28,11 +28,19 @@ public class PlayMonopoly_Command implements Command {
 	 * 
 	 */
 	public PlayMonopoly_Command(PlayMonopoly_Params theParams, int gameID, int userID) {
-		this.params = params;
+		this.params = theParams;
 		this.gameID = gameID;
 		this.userID = userID;
 	}
 	
+	public PlayMonopoly_Result getResult() {
+		return result;
+	}
+
+	public void setResult(PlayMonopoly_Result result) {
+		this.result = result;
+	}
+
 	/**
 	 * Standard Command pattern constructor instantiation with the facade
 	 * 

@@ -18,6 +18,7 @@ public class AcceptTrade_Command implements Command {
 	
 	private AcceptTrade_Params params;
 	private int gameID, userID;
+	private AcceptTrade_Result result;
 
 	/**
 	 * Non-standard command pattern constructor instantiation without the facade.
@@ -73,6 +74,10 @@ public class AcceptTrade_Command implements Command {
 		if(this.facade == null) {
 			this.facade = facade;
 		}
+	}
+
+	public AcceptTrade_Result getResult() {
+		return result;
 	}
 
 }

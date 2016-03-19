@@ -4,19 +4,13 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import server.handlers.SettlersOfCatanHandler;
-import shared.communication.User;
 import shared.communication.params.nonmove.GetVersion_Params;
-import shared.communication.params.nonmove.Join_Params;
+import shared.communication.results.ClientModel;
 import shared.communication.results.nonmove.GetVersion_Result;
-import shared.communication.results.nonmove.Join_Result;
-
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 
 /**
  * Handles calls from a client to get the version number
@@ -40,23 +34,42 @@ public class GetVersion_Handler extends SettlersOfCatanHandler {
 
 		LinkedList<String> cookies = extractCookies(exchange);
 
-		String check = validateCookies(cookies);
+		String check = validateCookies(cookies);		
 
 		if (check.equals("VALID")){
 
-			job = getExchangeBody(exchange); //get json string from exchange.
-			request = gson.fromJson(job, GetVersion_Params.class); //deserialize request from json		
-			result = facade.model(request);//Call facade to perform operation with request
-			
-			writeResult(exchange, result);
+			request = new GetVersion_Params();			
+			job = exchange.getRequestURI().toString();			
+			job = job.substring(job.lastIndexOf('=') + 1);//Get version number from URI
 
+			request.setVersionNumber(Integer.parseInt(job));
+			result = facade.model(request);
+	
+			if (result.isValid()){
+				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); //Everything's okay
+				
+				if (result.isUpToDate()){
+					job = "True";
+				}
+				else{
+					ClientModel cm = result.getModel();
+					job = gson.toJson(cm);	//serialize result to json	
+				}
+				
+			}else{
+				exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+				job = "MODEL REQUEST FAILURE";	
+			}			
 		}else{
+			job = check;			
+			exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0); //User invalid			
+		}		
 
-			exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0); //Cookies invalid
+		OutputStreamWriter sw = new OutputStreamWriter(exchange.getResponseBody());
+		sw.write(job);//Write result to stream.
+		sw.flush();	
 
-		}			
-
-		exchange.getResponseBody().close();		
+		exchange.getResponseBody().close();				
 		logger.exiting("server.handlers.GetVersion", "handle");
 
 	}
