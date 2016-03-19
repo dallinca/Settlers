@@ -12,10 +12,14 @@ public class BuildCity_Params {
 	private final String type = "buildCity";
 	private int playerIndex;
 	private BuildLocation vertexLocation;
+	
+	//for use in BuildCity_Command
+	VertexLocation location;
 
 	public BuildCity_Params(int playerIndex, VertexLocation location) {
 		this.playerIndex = playerIndex;
 		this.vertexLocation = new BuildLocation(location);
+		this.location = location;
 	}
 
 	public int getPlayerIndex() {
@@ -34,5 +38,8 @@ public class BuildCity_Params {
 		this.vertexLocation = vertexLocation;
 	}
 	
+	public VertexLocation getCmdVertLocation(){
+		return location;
+	}
 	
 }

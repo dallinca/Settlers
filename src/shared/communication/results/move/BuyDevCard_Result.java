@@ -29,6 +29,16 @@ public class BuyDevCard_Result {
 		return game;
 	}
 
+	public BuyDevCard_Result(Game game){
+		this.game = game;	
+		
+		if (game == null){
+			valid = false;
+		}else{
+			valid = true;
+		}
+	}
+	
 	public BuyDevCard_Result(String post) {
 
 		if (post==null){

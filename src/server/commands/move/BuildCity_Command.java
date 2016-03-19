@@ -2,6 +2,8 @@ package server.commands.move;
 
 import server.commands.Command;
 import server.facade.IServerFacade;
+import shared.communication.params.move.BuildCity_Params;
+import shared.communication.results.move.BuildCity_Result;
 import shared.model.Game;
 
 /**
@@ -13,6 +15,10 @@ import shared.model.Game;
  */
 public class BuildCity_Command implements Command {
 	private IServerFacade facade;
+	
+	private BuildCity_Params params;
+	private BuildCity_Result result;
+	private int gameID, userID;
 
 	/**
 	 * Non-standard command pattern constructor instantiation without the facade.
@@ -29,7 +35,13 @@ public class BuildCity_Command implements Command {
 	public BuildCity_Command(IServerFacade facade) {
 		this.facade = facade;
 	}
-
+	
+	public BuildCity_Command(BuildCity_Params params, int gameID, int userID) {
+		this.params = params;
+		this.gameID = gameID;
+		this.userID = userID;
+	}
+	
 	/**
 	 * Issues the Build City action on the given game server game model.
 	 * Should only be triggered by the games models Command History class.
@@ -42,22 +54,19 @@ public class BuildCity_Command implements Command {
 	 */
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
-		
-	}
+		Game game = null;
+		game = facade.buildCity(params, gameID, userID);
 
-	/**
-	 * For use coupled with the non-standard initialization of the command.
-	 * Allows for one and only one setting of the facade for which the command is to execute.
-	 * 
-	 * @pre this.facade == null && facade != null
-	 * @post this.facade = facade
-	 * @param facade
-	 */
-	public void setGame(IServerFacade facade) {
-		if(this.facade == null) {
-			this.facade = facade;
+		try {
+			game.placeCityOnVertex(params.getCmdVertLocation());
+		} catch (Exception e) {
+			new BuildCity_Result();
+			e.printStackTrace();
 		}
+		result = new BuildCity_Result(game);
 	}
-
+	
+	public BuildCity_Result getResult(){
+		return result;
+	}
 }

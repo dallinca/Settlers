@@ -14,11 +14,15 @@ public class BuildRoad_Params {
 	private BorderSpot roadLocation;
 	private boolean free;
 	
+	//for use in BuildRoad_Command
+	private EdgeLocation location;
+	
 	public BuildRoad_Params(int playerIndex, EdgeLocation roadLocation,
 			boolean free) {
 		this.playerIndex = playerIndex;
 		this.roadLocation = new BorderSpot(roadLocation);
-		this.free = free;		
+		this.free = free;	
+		location = roadLocation;
 	}
 
 	public int getPlayerIndex() {
@@ -45,6 +49,9 @@ public class BuildRoad_Params {
 		this.free = free;
 	}
 	
+	public EdgeLocation getCmdEdgeLocation(){
+		return location;
+	}
 	
 
 }

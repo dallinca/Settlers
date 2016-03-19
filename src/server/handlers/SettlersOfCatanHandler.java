@@ -20,11 +20,10 @@ import com.sun.net.httpserver.HttpHandler;
 
 public abstract class SettlersOfCatanHandler implements HttpHandler {
 	protected Gson gson;
-	protected ServerFacade facade;
+	protected ServerFacade facade = ServerFacade.getInstance();
 
 	public SettlersOfCatanHandler(){
 		gson = new Gson();
-		facade = new ServerFacade();
 	}
 
 	public void handle(HttpExchange arg0)  throws IOException {

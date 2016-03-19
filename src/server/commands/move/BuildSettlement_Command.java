@@ -2,6 +2,8 @@ package server.commands.move;
 
 import server.commands.Command;
 import server.facade.IServerFacade;
+import shared.communication.params.move.BuildSettlement_Params;
+import shared.communication.results.move.BuildSettlement_Result;
 import shared.model.Game;
 
 /**
@@ -13,6 +15,10 @@ import shared.model.Game;
  */
 public class BuildSettlement_Command implements Command {
 	private IServerFacade facade;
+	
+	private BuildSettlement_Params params;
+	private BuildSettlement_Result result;
+	private int gameID, userID;
 
 	/**
 	 * Non-standard command pattern constructor instantiation without the facade.
@@ -29,6 +35,12 @@ public class BuildSettlement_Command implements Command {
 	public BuildSettlement_Command(IServerFacade facade) {
 		this.facade = facade;
 	}
+	
+	public BuildSettlement_Command(BuildSettlement_Params params, int gameID, int userID) {
+		this.params = params;
+		this.gameID = gameID;
+		this.userID = userID;
+	}
 
 	/**
 	 * Issues the Build Settlement action on the given game server game model.
@@ -42,22 +54,19 @@ public class BuildSettlement_Command implements Command {
 	 */
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		Game game = null;
+		game = facade.buildSettlement(params, gameID, userID);
 		
-	}
-
-	/**
-	 * For use coupled with the non-standard initialization of the command.
-	 * Allows for one and only one setting of the facade for which the command is to execute.
-	 * 
-	 * @pre this.facade == null && facade != null
-	 * @post this.facade = facade
-	 * @param facade
-	 */
-	public void setGame(IServerFacade facade) {
-		if(this.facade == null) {
-			this.facade = facade;
+		try {
+			game.placeSettlementOnVertex(userID, params.getCmdVertLocation());
+		} catch (Exception e) {
+			new BuildSettlement_Result();
+			e.printStackTrace();
 		}
+		result = new BuildSettlement_Result(game);
 	}
-
+	
+	public BuildSettlement_Result getResult(){
+		return result;
+	}
 }

@@ -2,6 +2,8 @@ package move;
 
 import server.commands.Command;
 import server.facade.IServerFacade;
+import shared.communication.params.move.RollNumber_Params;
+import shared.communication.results.move.RollNumber_Result;
 import shared.model.Game;
 
 /**
@@ -12,8 +14,11 @@ import shared.model.Game;
  *
  */
 public class RollNumber_Command implements Command {
-	private IServerFacade facade;
-
+	
+	private RollNumber_Params params;
+	private RollNumber_Result result;
+	private int gameID;
+	private int userID;
 	/**
 	 * Non-standard command pattern constructor instantiation without the facade.
 	 * The facade will be determined after original command instantiation.
@@ -26,8 +31,10 @@ public class RollNumber_Command implements Command {
 	 * 
 	 * @param game
 	 */
-	public RollNumber_Command(IServerFacade facade) {
-		this.facade = facade;
+	public RollNumber_Command(RollNumber_Params params, int ID, int userID) {
+		this.params = params; 
+		this.gameID = ID;
+		this.userID = userID;
 	}
 
 	/**
@@ -42,22 +49,19 @@ public class RollNumber_Command implements Command {
 	 */
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
-		
-	}
+		Game game = null;
+		//Call facade to check if can do operation
+		game = facade.rollNumber(params, gameID, userID);
 
-	/**
-	 * For use coupled with the non-standard initialization of the command.
-	 * Allows for one and only one setting of the facade for which the command is to execute.
-	 * 
-	 * @pre this.facade == null && facade != null
-	 * @post this.facade = facade
-	 * @param facade
-	 */
-	public void setGame(IServerFacade facade) {
-		if(this.facade == null) {
-			this.facade = facade;
+		try {
+			game.RollDice(userID);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		result = new RollNumber_Result(game);
 	}
-
+	
+	public RollNumber_Result getResult(){
+		return result;
+	}
 }

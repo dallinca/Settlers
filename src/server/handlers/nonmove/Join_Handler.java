@@ -45,17 +45,23 @@ public class Join_Handler extends SettlersOfCatanHandler {
 
 			job = getExchangeBody(exchange); //get json string from exchange.
 			request = gson.fromJson(job, Join_Params.class); //deserialize request from json		
-			result = facade.join(request);//Call facade to perform operation with request
-			
+			result = facade.join(request, user.getPlayerID());//Call facade to perform operation with request
+
 			if (result.isValid()){ //Set game cookie in response
 				Map<String, List<String>> headers = exchange.getResponseHeaders();
 				List<String> gameCookie = new LinkedList<String>();
 				gameCookie.add(result.getGameCookie());
 				headers.put("Set-cookie", gameCookie);
-			}
 
-			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); //Everything's okay
-			job = gson.toJson(result);	//serialize result to json
+
+				job = "Success";	//serialize result to json
+				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); //Everything's okay
+			}
+			else{ 
+
+				job = "Failure";
+				exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0); //Game invalid
+			}			
 
 			OutputStreamWriter sw = new OutputStreamWriter(exchange.getResponseBody());
 			sw.write(job);//Write result to stream.

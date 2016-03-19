@@ -57,14 +57,14 @@ public class Join_Params {
 	public Join_Params(){
 
 	}
-/*
-	public int getID() {
+
+	public int getGameID() {
 		return id;
 	}
 
-	public void setID(int gameID) {
+	public void setGameID(int gameID) {
 		this.id = gameID;
-	}*/
+	}
 
 	public String getColor() {
 		return color;
@@ -74,6 +74,30 @@ public class Join_Params {
 		this.color = color;
 	}
 
-
-
+	public CatanColor convertColor() {
+		
+		if (color.equals("red")){
+			return CatanColor.RED;
+		}else if (color.equals("orange")){
+			return CatanColor.ORANGE;
+		}else if (color.equals("yellow")){
+			return CatanColor.YELLOW;
+		}
+		else if (color.equals("blue")){
+			return CatanColor.BLUE;
+		}
+		else if (color.equals("purple")){
+			return CatanColor.PURPLE;
+		}
+		else if (color.equals("puce")){
+			return CatanColor.PUCE;
+		}
+		else if (color.equals("white")){
+			return CatanColor.WHITE;
+		}
+		else if (color.equals("brown")){
+			return CatanColor.BROWN;
+		}
+		return null;
+	}
 }
