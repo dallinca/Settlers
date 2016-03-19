@@ -3,6 +3,8 @@ package move;
 import server.commands.Command;
 import server.facade.IServerFacade;
 import shared.communication.params.move.RollNumber_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
 import shared.communication.results.move.RollNumber_Result;
 import shared.model.Game;
 
@@ -52,13 +54,26 @@ public class RollNumber_Command implements Command {
 		Game game = null;
 		//Call facade to check if can do operation
 		game = facade.rollNumber(params, gameID, userID);
-
+		result = new RollNumber_Result();
+		
+		if (game==null){
+			return;
+		}
+		
 		try {
 			game.RollDice(userID);
 		} catch (Exception e) {
 			e.printStackTrace();
+			return;
 		}
-		result = new RollNumber_Result(game);
+		
+		result.setValid(true);
+
+		JsonConverter converter = new JsonConverter();
+		ClientModel cm = converter.toClientModel(game);
+
+		result.setModel(cm);
+		
 	}
 	
 	public RollNumber_Result getResult(){

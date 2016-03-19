@@ -3,6 +3,8 @@ package server.commands.move;
 import server.commands.Command;
 import server.facade.IServerFacade;
 import shared.communication.params.move.SendChat_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
 import shared.communication.results.move.SendChat_Result;
 import shared.model.Game;
 
@@ -51,8 +53,20 @@ public class SendChat_Command implements Command {
 	public void execute() {
 		Game game = null;
 		game = facade.sendChat(params, gameID, userID);
+		result = new SendChat_Result();
+		
+		if (game==null){
+			return;
+		}
+		
 		//game.setChat(lines);
-		result = new SendChat_Result(game);
+		
+		result.setValid(true);
+
+		JsonConverter converter = new JsonConverter();
+		ClientModel cm = converter.toClientModel(game);
+
+		result.setModel(cm);
 	}
 	
 	public SendChat_Result getResult(){
