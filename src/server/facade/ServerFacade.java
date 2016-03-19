@@ -42,8 +42,10 @@ import shared.communication.results.nonmove.ListAI_Result;
 import shared.communication.results.nonmove.List_Result;
 import shared.communication.results.nonmove.Login_Result;
 import shared.communication.results.nonmove.Register_Result;
+import shared.definitions.CatanColor;
 import shared.definitions.ResourceType;
 import shared.model.Game;
+import shared.model.player.Player;
 
 
 /**
@@ -449,25 +451,22 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public Login_Result login(Login_Params params) {
-		
+
 		String username = params.getUsername();
 		String password = params.getPassword();
-		
+
 		Login_Result result = new Login_Result();
-		
+
 		for (User current : users){
 			if (current.getName().equals(username)){
 				if (current.getPassword().equals(password)){
-					
+
 					result.setWasLoggedIn(true);
-					//name
-					//password
-					//playerID
-					
-					String userCookie = ("{\"name\":\"" + current.getName()
+
+					String userCookie = ("{\"catan.user\":{\"name\":\"" + current.getName()
 							+ "\",\"password\":\""+current.getPassword()
-							+ "\",\"playerID\":"+ current.getPlayerID() +"}");
-					
+							+ "\",\"playerID\":"+ current.getPlayerID() +"}}");
+
 					result.setUserCookie(userCookie);
 				}
 			}
@@ -535,9 +534,51 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Join_Result join(Join_Params params) {
-		// TODO Auto-generated method stub
-		return null;
+	public Join_Result join(Join_Params params, int userID) {
+
+		String color = params.getColor();
+		int gameID = params.getGameID();
+		Join_Result result = new Join_Result();
+
+		Game g = findGame(gameID);
+
+		if (g==null){
+			return result;
+		}
+		Player[] players = g.getAllPlayers();
+
+		boolean joinable = false;
+		for (int i = 0; i < 4; i ++){
+			if (players[i]==null){ //Check for vacancy in game roster.
+				joinable = true;
+				break;
+			}
+			else if (players[i].getPlayerId()==userID){ //Check if player has already joined game previously
+				joinable = true;
+				break;
+			}
+		}
+		
+		if (!joinable){
+			return result;			
+		}
+
+		Player p = g.getPlayerByID(userID);
+		CatanColor playerColor = params.convertColor();
+
+		if (p!=null){
+			p.setPlayerColor(playerColor);
+		}else{
+			g.addPlayer(userID, playerColor);//TODO --- Somebody help me add new players to an empty game.
+		}		
+
+		result.setValid(true);
+
+		String gameCookie = ("{\"catan.game\":"+ gameID +"}");
+
+		result.setGameCookie(gameCookie);
+
+		return result;
 	}
 
 	/**
