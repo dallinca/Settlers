@@ -51,7 +51,8 @@ public class SendChat_Command implements Command {
 	public void execute() {
 		Game game = null;
 		game = facade.sendChat(params, gameID, userID);
-		result = new SendChat_Result();
+		//game.setChat(lines);
+		result = new SendChat_Result(game);
 	}
 	
 	public SendChat_Result getResult(){

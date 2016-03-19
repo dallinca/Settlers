@@ -29,6 +29,16 @@ public class SendChat_Result {
 		return game;
 	}
 
+	public SendChat_Result(Game game) {
+		this.game = game;	
+		
+		if (game == null){
+			valid = false;
+		}else{
+			valid = true;
+		}
+	}
+	
 	public SendChat_Result(String post) {
 
 		if (post==null){
