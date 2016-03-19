@@ -1314,4 +1314,11 @@ public class Game {
 
 
 
+	public void addPlayer(int userID, CatanColor playerColor) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
 }

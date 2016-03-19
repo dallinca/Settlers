@@ -43,10 +43,14 @@ public class Login_Handler extends SettlersOfCatanHandler{
 			List<String> cookieList = new LinkedList<String>();
 			cookieList.add(result.getUserCookie());
 			headers.put("Set-cookie", cookieList);
+			job = "Success";
+			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); //Everything's okay
+		}else{
+			job = "Failure";
+			exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0); //Everything's okay
 		}
 
-		exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); //Everything's okay
-		job = gson.toJson(result);	//serialize result to json
+		
 
 		OutputStreamWriter sw = new OutputStreamWriter(exchange.getResponseBody());
 		sw.write(job);//Write result to stream.
