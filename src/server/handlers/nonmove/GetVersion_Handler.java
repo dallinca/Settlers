@@ -4,23 +4,13 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
-import server.commands.move.AcceptTrade_Command;
 import server.handlers.SettlersOfCatanHandler;
-import shared.communication.User;
-import shared.communication.params.move.AcceptTrade_Params;
 import shared.communication.params.nonmove.GetVersion_Params;
-import shared.communication.params.nonmove.Join_Params;
 import shared.communication.results.ClientModel;
-import shared.communication.results.move.AcceptTrade_Result;
 import shared.communication.results.nonmove.GetVersion_Result;
-import shared.communication.results.nonmove.Join_Result;
-
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 
 /**
  * Handles calls from a client to get the version number
@@ -40,6 +30,7 @@ public class GetVersion_Handler extends SettlersOfCatanHandler {
 
 		String job;	
 		GetVersion_Params request;
+		GetVersion_Result result;
 
 		LinkedList<String> cookies = extractCookies(exchange);
 
@@ -47,26 +38,27 @@ public class GetVersion_Handler extends SettlersOfCatanHandler {
 
 		if (check.equals("VALID")){
 
-			//User user = gson.fromJson(cookies.getFirst(), User.class);	
-			//int gameID = Integer.parseInt(cookies.get(1));
+			request = new GetVersion_Params();			
+			job = exchange.getRequestURI().toString();			
+			job = job.substring(job.lastIndexOf('=') + 1);//Get version number from URI
 
-			job = getExchangeBody(exchange); //get json string from exchange.
-			request = gson.fromJson(job, AcceptTrade_Params.class); //deserialize request from json
-
-			AcceptTrade_Command command = new AcceptTrade_Command(request, gameID, user.getPlayerID());
-
-			command.execute();//Execute the command	
-
-			result = command.getResult(); //Get result from command			
-
+			request.setVersionNumber(Integer.parseInt(job));
+			result = facade.model(request);
+	
 			if (result.isValid()){
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); //Everything's okay
 				
-				ClientModel cm = result.getModel();
-				job = gson.toJson(cm);	//serialize result to json	
+				if (result.isUpToDate()){
+					job = "True";
+				}
+				else{
+					ClientModel cm = result.getModel();
+					job = gson.toJson(cm);	//serialize result to json	
+				}
+				
 			}else{
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
-				job = "COMMAND FAILURE";	
+				job = "MODEL REQUEST FAILURE";	
 			}			
 		}else{
 			job = check;			
