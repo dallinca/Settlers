@@ -1,4 +1,4 @@
-package server.commands.move.devcard;
+package move.devcard;
 
 import server.commands.Command;
 import server.facade.IServerFacade;
