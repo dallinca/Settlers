@@ -43,6 +43,7 @@ import shared.communication.results.nonmove.List_Result;
 import shared.communication.results.nonmove.Login_Result;
 import shared.communication.results.nonmove.Register_Result;
 import shared.definitions.CatanColor;
+import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
 import shared.model.Game;
 import shared.model.player.Player;
@@ -678,8 +679,37 @@ public class ServerFacade implements IServerFacade {
 
 	@Override
 	public Game canDoPlayMonopoly(int gameID, int userID) {
-		// TODO Auto-generated method stub
-		return null;
+		Game game = null;
+ 		
+ 		for (Game theGame: liveGames) {
+			//The functionality to retrieve the gameID from the game objects is required to figure out which game this person belongs to.
+ 			if (theGame.getGameID() == gameID) {
+ 				if (theGame.canDoPlayerDevelopmentCard(userID, theGame.getTurnNumber(), DevCardType.MONOPOLY)) {
+ 					game = theGame;
+				}
+				
+				
+			}				
+ 			
+ 		}
+ 		return game;
+	}
+	@Override
+	public Game canDoPlayMonument(int gameID, int userID) {
+		Game game = null;
+ 		
+ 		for (Game theGame: liveGames) {
+			//The functionality to retrieve the gameID from the game objects is required to figure out which game this person belongs to.
+ 			if (theGame.getGameID() == gameID) {
+ 				if (theGame.getAllPlayers()[userID].canDoPlayDevelopmentCard(theGame.getTurnNumber(), DevCardType.MONUMENT)) {
+ 					game = theGame;
+				}
+				
+				
+			}				
+ 			
+ 		}
+ 		return game;
 	}
 
 

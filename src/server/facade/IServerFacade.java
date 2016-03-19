@@ -76,6 +76,7 @@ public interface IServerFacade {
 	public ListAI_Result listAI(ListAI_Params params);
 	public Game canDoPlayMonopoly(int gameID, int userID);
 	Join_Result join(Join_Params params, int userID);
+	public Game canDoPlayMonument(int gameID, int userID);
 	
 	// Return the game that the command is meant to operate on
 	//Game findGameForCommand(); 
