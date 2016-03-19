@@ -3,6 +3,8 @@ package server.commands.move;
 import server.commands.Command;
 import server.facade.IServerFacade;
 import shared.communication.params.move.FinishTurn_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
 import shared.communication.results.move.FinishTurn_Result;
 import shared.model.Game;
 
@@ -47,8 +49,20 @@ public class FinishTurn_Command implements Command {
 	public void execute() {
 		Game game = null;
 		game = facade.finishTurn(params, gameID, userID);
+	
+		result = new FinishTurn_Result();
+		
+		if (game==null){
+			return;
+		}
 		//IS THERE AN END TURN FUNCTION ON GAME?????
-		result = new FinishTurn_Result(game);
+	
+		result.setValid(true);
+
+		JsonConverter converter = new JsonConverter();
+		ClientModel cm = converter.toClientModel(game);
+
+		result.setModel(cm);
 	}
 	
 	public FinishTurn_Result getResult(){

@@ -3,6 +3,8 @@ package server.commands.move;
 import server.commands.Command;
 import server.facade.IServerFacade;
 import shared.communication.params.move.DiscardCards_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
 import shared.communication.results.move.DiscardCards_Result;
 import shared.definitions.ResourceType;
 import shared.model.Game;
@@ -47,7 +49,12 @@ public class DiscardCards_Command implements Command {
 	public void execute() {
 		Game game = null;
 		game = facade.discardCards(params, gameID, userID);
-	
+		result = new DiscardCards_Result();
+		
+		if (game==null){
+			return;
+		}
+		
 		try {
 			game.discardNumberOfResourceType(userID, params.getDiscardedCards().getBrick(), ResourceType.BRICK);
 			game.discardNumberOfResourceType(userID, params.getDiscardedCards().getOre(), ResourceType.ORE);
@@ -56,9 +63,15 @@ public class DiscardCards_Command implements Command {
 			game.discardNumberOfResourceType(userID, params.getDiscardedCards().getWood(), ResourceType.WOOD);
 		} catch (Exception e) {
 			e.printStackTrace();
+			return;
 		}
-		
-		result = new DiscardCards_Result(game);
+
+		result.setValid(true);
+
+		JsonConverter converter = new JsonConverter();
+		ClientModel cm = converter.toClientModel(game);
+
+		result.setModel(cm);
 	}
 	
 	public DiscardCards_Result getResult(){
