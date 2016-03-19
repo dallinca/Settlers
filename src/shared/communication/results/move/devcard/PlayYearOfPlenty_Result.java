@@ -30,6 +30,16 @@ public class PlayYearOfPlenty_Result {
 		return game;
 	}
 
+	public PlayYearOfPlenty_Result(Game game){
+		this.game = game;	
+		
+		if (game == null){
+			valid = false;
+		}else{
+			valid = true;
+		}
+	}
+	
 	public PlayYearOfPlenty_Result(String post) {
 
 		if (post==null){

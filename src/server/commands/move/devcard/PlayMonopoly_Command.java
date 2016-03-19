@@ -19,17 +19,18 @@ public class PlayMonopoly_Command implements Command {
 	private IServerFacade facade;
 	private boolean isValid = false;
 	private PlayMonopoly_Result theResult;
-	private PlayMonopoly_Params theParams;
-	private int gameID;
+	private PlayMonopoly_Params params;
+	private int gameID, userID;
 	
 	/**
 	 * Non-standard command pattern constructor instantiation without the facade.
 	 * The facade will be determined after original command instantiation.
 	 * 
 	 */
-	public PlayMonopoly_Command(PlayMonopoly_Params theParams, int gameID) {
-		this.theParams = theParams;
+	public PlayMonopoly_Command(PlayMonopoly_Params theParams, int gameID, int userID) {
+		this.params = params;
 		this.gameID = gameID;
+		this.userID = userID;
 	}
 	
 	/**
@@ -55,13 +56,14 @@ public class PlayMonopoly_Command implements Command {
 	public void execute() {
 		// TODO Auto-generated method stub
 		
-		int userID = theParams.getPlayerIndex();
+		int userID = params.getPlayerIndex();
 		
 		//Ask the server facade if that action can happen
 		//If it is true, it will return a game object then call the appropriate commands on the game object
-		Game game = facade.canDoPlayMonopoly(gameID, userID);
-		String resourceName = theParams.getResource();
+		
+		String resourceName = params.getResource();
 		ResourceType[] resourceType = new ResourceType[1];
+		
 		if (resourceName.equals("wheat")) {
 			resourceType[0] = ResourceType.WHEAT;
 		} else if (resourceName.equals("wood")) {
@@ -73,6 +75,8 @@ public class PlayMonopoly_Command implements Command {
 		} else if (resourceName.equals("sheep")) {
 			resourceType[0] = ResourceType.SHEEP;
 		}
+		
+		Game game = facade.canDoPlayMonopoly(gameID, userID);
 		
 		if (game != null) {
 			if (game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONOPOLY)) {

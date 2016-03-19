@@ -354,9 +354,14 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game playMonopoly(PlayMonopoly_Params params) {
-		// TODO Auto-generated method stub
-		return null;
+	public Game playMonopoly(int gameID, int userID) {
+		Game game = findGame(gameID);
+		 
+		if (!game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONOPOLY)) {
+			game = null;
+		}
+		
+ 		return game;
 	}
 
 	/**
@@ -372,9 +377,15 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game playMonument(PlayMonument_Params params) {
-		// TODO Auto-generated method stub
-		return null;
+	public Game playMonument(int gameID, int userID) {
+		Game game = findGame(gameID);
+ 		
+		//The functionality to retrieve the gameID from the game objects is required to figure out which game this person belongs to.
+		if (!game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONUMENT)) {
+			game = null;
+		}
+		
+ 		return game;
 	}
 
 	/**
@@ -679,36 +690,23 @@ public class ServerFacade implements IServerFacade {
 
 	@Override
 	public Game canDoPlayMonopoly(int gameID, int userID) {
-		Game game = null;
- 		
- 		for (Game theGame: liveGames) {
-			//The functionality to retrieve the gameID from the game objects is required to figure out which game this person belongs to.
- 			if (theGame.getGameID() == gameID) {
- 				if (theGame.canDoPlayerDevelopmentCard(userID, theGame.getTurnNumber(), DevCardType.MONOPOLY)) {
- 					game = theGame;
-				}
-				
-				
-			}				
- 			
- 		}
+		Game game = findGame(gameID);
+ 
+		if (!game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONOPOLY)) {
+			game = null;
+		}
+		
  		return game;
 	}
 	@Override
 	public Game canDoPlayMonument(int gameID, int userID) {
-		Game game = null;
+		Game game = findGame(gameID);
  		
- 		for (Game theGame: liveGames) {
-			//The functionality to retrieve the gameID from the game objects is required to figure out which game this person belongs to.
- 			if (theGame.getGameID() == gameID) {
- 				if (theGame.getAllPlayers()[userID].canDoPlayDevelopmentCard(theGame.getTurnNumber(), DevCardType.MONUMENT)) {
- 					game = theGame;
-				}
-				
-				
-			}				
- 			
- 		}
+		//The functionality to retrieve the gameID from the game objects is required to figure out which game this person belongs to.
+		if (!game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONUMENT)) {
+			game = null;
+		}
+		
  		return game;
 	}
 

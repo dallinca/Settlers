@@ -30,6 +30,16 @@ public class PlayRoadBuilding_Result {
 		return game;
 	}
 
+	public PlayRoadBuilding_Result(Game game){
+		this.game = game;	
+		
+		if (game == null){
+			valid = false;
+		}else{
+			valid = true;
+		}
+	}
+	
 	public PlayRoadBuilding_Result(String post) {
 
 		if (post==null){

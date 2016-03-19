@@ -2,12 +2,18 @@ package server.commands.move.devcard;
 
 import server.commands.Command;
 import server.facade.IServerFacade;
+<<<<<<< HEAD
 import shared.communication.params.move.devcard.PlayMonopoly_Params;
 import shared.communication.params.move.devcard.PlayMonument_Params;
 import shared.communication.results.move.devcard.PlayMonopoly_Result;
 import shared.communication.results.move.devcard.PlayMonument_Result;
 import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
+=======
+import shared.communication.params.move.devcard.PlayMonument_Params;
+import shared.communication.results.move.devcard.PlayMonument_Result;
+import shared.definitions.DevCardType;
+>>>>>>> 91c65baf303864037cbd743d5900d5e82be82076
 import shared.model.Game;
 
 /**
@@ -18,11 +24,18 @@ import shared.model.Game;
  *
  */
 public class PlayMonument_Command implements Command {
+<<<<<<< HEAD
 	private IServerFacade facade;
 	private boolean isValid = false;
 	private PlayMonument_Result theResult;
 	private PlayMonument_Params theParams;
 	private int gameID;
+=======
+
+	private PlayMonument_Params params;
+	private PlayMonument_Result result; 
+	private int gameID, userID;
+>>>>>>> 91c65baf303864037cbd743d5900d5e82be82076
 
 	/**
 	 * Non-standard command pattern constructor instantiation without the facade.
@@ -38,10 +51,17 @@ public class PlayMonument_Command implements Command {
 	 * 
 	 * @param game
 	 */
+<<<<<<< HEAD
 	public PlayMonument_Command(IServerFacade facade) {
 		this.facade = facade;
 		this.theParams = theParams;
 		this.gameID = gameID;
+=======
+	public PlayMonument_Command( PlayMonument_Params params, int gameID, int userID) {
+		this.params = params;
+		this.gameID = gameID;
+		this.userID = userID;
+>>>>>>> 91c65baf303864037cbd743d5900d5e82be82076
 	}
 
 	/**
@@ -56,6 +76,7 @@ public class PlayMonument_Command implements Command {
 	 */
 	@Override
 	public void execute() {
+
 		int userID = theParams.getPlayerIndex();
 		
 		//Ask the server facade if that action can happen
@@ -63,30 +84,26 @@ public class PlayMonument_Command implements Command {
 		Game game = facade.canDoPlayMonument(gameID, userID);
 		
 		if (game != null) {
-			if (game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONUMENT)) {
-				try {
-					game.useDevelopmentCard(userID, DevCardType.MONUMENT);
-				} catch (Exception e) {
-					System.out.println("");
-					e.printStackTrace();
-				}
+			try {
+				game.useDevelopmentCard(userID, DevCardType.MONUMENT);
+			} catch (Exception e) {
+				System.out.println("");
+				e.printStackTrace();
 			}
 		}
+
+		game = facade.playMonument(gameID, userID);
 		
-	}
-
-	/**
-	 * For use coupled with the non-standard initialization of the command.
-	 * Allows for one and only one setting of the facade for which the command is to execute.
-	 * 
-	 * @pre this.facade == null && facade != null
-	 * @post this.facade = facade
-	 * @param facade
-	 */
-	public void setGame(IServerFacade facade) {
-		if(this.facade == null) {
-			this.facade = facade;
+		try {
+			game.useDevelopmentCard(userID, DevCardType.MONUMENT);
+		} catch (Exception e) {
+			new PlayMonument_Result();
+			e.printStackTrace();
 		}
+		result = new PlayMonument_Result(game);
 	}
-
+	
+	public PlayMonument_Result getResult(){
+		return result;
+	}
 }
