@@ -12,6 +12,7 @@ import server.handlers.SettlersOfCatanHandler;
 import shared.communication.User;
 import shared.communication.params.move.SendChat_Params;
 import shared.communication.params.nonmove.List_Params;
+import shared.communication.results.ClientModel;
 import shared.communication.results.move.SendChat_Result;
 import shared.communication.results.nonmove.List_Result;
 
@@ -58,7 +59,9 @@ public class SendChat_Handler extends SettlersOfCatanHandler {
 
 			if (result.isValid()){
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); //Everything's okay
-				job = gson.toJson(result);	//serialize result to json	
+				
+				ClientModel cm = result.getModel();
+				job = gson.toJson(cm);	//serialize result to json	
 			}else{
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
 				job = "COMMAND FAILURE";	
