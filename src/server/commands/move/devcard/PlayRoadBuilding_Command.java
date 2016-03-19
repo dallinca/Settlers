@@ -61,7 +61,8 @@ public class PlayRoadBuilding_Command implements Command {
 		result = new PlayRoadBuilding_Result(game);
 	}
 	
-	public PlayRoadBuilding_Result result(){
+
+	public PlayRoadBuilding_Result getResult() {
 		return result;
 	}
 
