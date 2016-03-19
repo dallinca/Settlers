@@ -3,6 +3,8 @@ package server.commands.move.devcard;
 import server.commands.Command;
 import server.facade.IServerFacade;
 import shared.communication.params.move.devcard.PlayYearOfPlenty_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
 import shared.communication.results.move.devcard.PlayYearOfPlenty_Result;
 import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
@@ -26,7 +28,7 @@ public class PlayYearOfPlenty_Command implements Command {
 	 * 
 	 */
 	public PlayYearOfPlenty_Command() {}
-	
+
 	/**
 	 * Standard Command pattern constructor instantiation with the facade
 	 * 
@@ -51,17 +53,32 @@ public class PlayYearOfPlenty_Command implements Command {
 	@Override
 	public void execute() {
 		Game game = null;
-	
+
 		game = facade.playYearOfPlenty(params, gameID, userID);
-		try {
-			game.useDevelopmentCard(userID, DevCardType.YEAR_OF_PLENTY);
-		} catch (Exception e) {
-			new PlayYearOfPlenty_Result();
-			e.printStackTrace();
+		result = new PlayYearOfPlenty_Result();
+
+		if (game != null) {
+			try {
+				//Need to grab the resources from the params object.............
+				game.useDevelopmentCard(userID, DevCardType.YEAR_OF_PLENTY);
+			} catch (Exception e) {
+				new PlayYearOfPlenty_Result();
+				e.printStackTrace();
+				return;
+			}
+		} else {
+			return;
 		}
-		result = new PlayYearOfPlenty_Result(game);
+
+		result.setValid(true);
+
+		JsonConverter converter = new JsonConverter();
+		ClientModel cm = converter.toClientModel(game);
+
+		result.setModel(cm);
+
 	}
-	
+
 	public PlayYearOfPlenty_Result getResult(){
 		return result;
 	}

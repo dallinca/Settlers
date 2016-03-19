@@ -3,6 +3,9 @@ package server.commands.move.devcard;
 import server.commands.Command;
 import server.facade.IServerFacade;
 import shared.communication.params.move.devcard.PlayMonopoly_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
+import shared.communication.results.move.BuildSettlement_Result;
 import shared.communication.results.move.devcard.PlayMonopoly_Result;
 import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
@@ -85,6 +88,7 @@ public class PlayMonopoly_Command implements Command {
 		}
 		
 		Game game = facade.canDoPlayMonopoly(gameID, userID);
+		result = new PlayMonopoly_Result();
 		
 		if (game != null) {
 			if (game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONOPOLY)) {
@@ -93,12 +97,23 @@ public class PlayMonopoly_Command implements Command {
 				} catch (Exception e) {
 					System.out.println("");
 					e.printStackTrace();
+					return;
 				}
 			}
+		} else {
+			return;
 		}
 		
 		//Create a result object with the appropriate information (it contains the newly modified game object)
 		//Should this happen in the handler because that is where it would be serialized? The Handler has the gameID, so it can retrieve the appropriate modified game after this method is through executing.
+		
+		result.setValid(true);
+
+		JsonConverter converter = new JsonConverter();
+		ClientModel cm = converter.toClientModel(game);
+
+		result.setModel(cm);
+	
 	}
 
 	/**
