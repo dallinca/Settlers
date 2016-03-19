@@ -56,6 +56,7 @@ public class AcceptTrade_Command implements Command {
 		Game game = null;
 		game = facade.acceptTrade(params);
 		AcceptTrade_Result result = new AcceptTrade_Result();
+
 		// TODO Auto-generated method stub
 		//this.facade.acceptTrade(params);
 	}

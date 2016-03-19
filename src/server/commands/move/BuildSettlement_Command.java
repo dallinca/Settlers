@@ -17,6 +17,7 @@ public class BuildSettlement_Command implements Command {
 	private IServerFacade facade;
 	
 	private BuildSettlement_Params params;
+	private BuildSettlement_Result result;
 	private int gameID, userID;
 
 	/**
@@ -54,23 +55,18 @@ public class BuildSettlement_Command implements Command {
 	@Override
 	public void execute() {
 		Game game = null;
-		game = facade.buildSettlement(params);
-		game.placeSettlementOnVertex(userID, params.getVertexLocation());
-		BuildSettlement_Result result = new BuildSettlement_Result();
-	}
-
-	/**
-	 * For use coupled with the non-standard initialization of the command.
-	 * Allows for one and only one setting of the facade for which the command is to execute.
-	 * 
-	 * @pre this.facade == null && facade != null
-	 * @post this.facade = facade
-	 * @param facade
-	 */
-	public void setGame(IServerFacade facade) {
-		if(this.facade == null) {
-			this.facade = facade;
+		game = facade.buildSettlement(params, gameID, userID);
+		
+		try {
+			game.placeSettlementOnVertex(userID, params.getCmdVertLocation());
+		} catch (Exception e) {
+			new BuildSettlement_Result();
+			e.printStackTrace();
 		}
+		result = new BuildSettlement_Result(game);
 	}
-
+	
+	public BuildSettlement_Result getResult(){
+		return result;
+	}
 }

@@ -83,7 +83,6 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public Game acceptTrade(AcceptTrade_Params params) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -100,8 +99,12 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game buildCity(BuildCity_Params params) {
-		// TODO Auto-generated method stub
+	public Game buildCity(BuildCity_Params params, int gameID, int userID) {
+
+		Game game = findGame(gameID);
+		if(game.canDoPlayerBuildCity(userID)){
+			return game; 
+		}
 		return null;
 	}
 
@@ -118,8 +121,12 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game buildRoad(BuildRoad_Params params) {
-		// TODO Auto-generated method stub
+	public Game buildRoad(BuildRoad_Params params, int gameID, int userID) {
+		
+		Game game = findGame(gameID);
+		if(game.canDoPlayerBuildRoad(userID)){
+			return game;
+		}
 		return null;
 	}
 
@@ -136,15 +143,12 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game buildSettlement(BuildSettlement_Params params) {
+	public Game buildSettlement(BuildSettlement_Params params, int gameID, int userID) {
 
 		Game game = findGame(gameID);
-
 		if(game.canDoPlayerBuildSettlement(userID)){
-
 			return game; 
 		}
-
 		return null;
 	}
 
@@ -161,14 +165,12 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game buyDevCard(BuyDevCard_Params params) {
-		Game game = findGame(gameID);
+	public Game buyDevCard(BuyDevCard_Params params, int gameID, int userID) {
+		
+		Game game = findGame(gameID);	
 		if(game.canDoPlayerBuyDevelopmentCard(userID)){
-			game.buyDevelopmentCard();
 			return game;
 		}
-
-
 		return null;
 	}
 
@@ -185,7 +187,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game discardCards(DiscardCards_Params params) {
+	public Game discardCards(DiscardCards_Params params, int gameID, int userID) {
 		Game game = findGame(gameID);
 
 		if(!game.canDoDiscardNumberOfResourceType(userID, params.getDiscardedCards().getBrick(), ResourceType.BRICK)){
@@ -203,7 +205,6 @@ public class ServerFacade implements IServerFacade {
 		if(!game.canDoDiscardNumberOfResourceType(userID, params.getDiscardedCards().getWood(), ResourceType.WOOD)){
 			return null;
 		}
-
 		return game;		
 	}
 
@@ -220,10 +221,12 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game finishTurn(FinishTurn_Params params) {
+	public Game finishTurn(FinishTurn_Params params, int gameID, int userID) {
 
 		Game game = findGame(gameID);
-
+		if(game.canDoPlayerEndTurn(userID)){
+			return game;
+		}
 		return null;
 	}
 
@@ -240,17 +243,12 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game maritimeTrade(MaritimeTrade_Params params) {
+	public Game maritimeTrade(MaritimeTrade_Params params, int gameID, ResourceType tradeIn, ResourceType receive) {
 
 		Game game = findGame(gameID);
-
-		//tradein, recieve
-		//PROBLEM: params.getOutputResource(), params.getInputResource() are strings. Need to be resourceType. 
-		if(game.canDoPlayerDoMaritimeTrade(params.getOutputResource(), params.getInputResource())){
+		if(game.canDoPlayerDoMaritimeTrade(tradeIn, receive)){
 			return game;
 		}
-
-
 		return null;
 	}
 
@@ -267,14 +265,12 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game offerTrade(OfferTrade_Params params) {
+	public Game offerTrade(OfferTrade_Params params, int gameID,int userID) {
 
 		Game game = findGame(gameID);
-
 		if(game.canDoPlayerDoDomesticTrade(userID, p1resources, params.getReceiver(), p2resources)){
 			return game;
 		}
-
 		return null;
 	}
 
@@ -337,9 +333,9 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game sendChat(SendChat_Params params) {
-		// TODO Auto-generated method stub
-		return null;
+	public Game sendChat(SendChat_Params params, int gameID, int userID) {
+		Game game = findGame(gameID);
+		return game;
 	}
 
 	/**

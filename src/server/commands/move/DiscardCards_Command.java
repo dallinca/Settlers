@@ -4,6 +4,7 @@ import server.commands.Command;
 import server.facade.IServerFacade;
 import shared.communication.params.move.DiscardCards_Params;
 import shared.communication.results.move.DiscardCards_Result;
+import shared.definitions.ResourceType;
 import shared.model.Game;
 
 /**
@@ -16,6 +17,7 @@ import shared.model.Game;
 public class DiscardCards_Command implements Command {
 	private IServerFacade facade;
 	private DiscardCards_Params params;
+	private DiscardCards_Result result;
 	private int gameID, userID;
 
 	/**
@@ -25,15 +27,6 @@ public class DiscardCards_Command implements Command {
 	 */
 	public DiscardCards_Command() {}
 	
-	/**
-	 * Standard Command pattern constructor instantiation with the facade
-	 * 
-	 * @param game
-	 */
-	/*
-	public DiscardCards_Command(IServerFacade facade) {
-		this.facade = facade;
-	}*/
 	public DiscardCards_Command(DiscardCards_Params params, int gameID, int userID) {
 		this.params = params;
 		this.gameID = gameID;
@@ -53,23 +46,23 @@ public class DiscardCards_Command implements Command {
 	@Override
 	public void execute() {
 		Game game = null;
-		game = facade.discardCards(params);
-		DiscardCards_Result result = new DiscardCards_Result();
-		
-	}
-
-	/**
-	 * For use coupled with the non-standard initialization of the command.
-	 * Allows for one and only one setting of the facade for which the command is to execute.
-	 * 
-	 * @pre this.facade == null && facade != null
-	 * @post this.facade = facade
-	 * @param facade
-	 */
-	public void setGame(IServerFacade facade) {
-		if(this.facade == null) {
-			this.facade = facade;
+		game = facade.discardCards(params, gameID, userID);
+	
+		try {
+			game.discardNumberOfResourceType(userID, params.getDiscardedCards().getBrick(), ResourceType.BRICK);
+			game.discardNumberOfResourceType(userID, params.getDiscardedCards().getOre(), ResourceType.ORE);
+			game.discardNumberOfResourceType(userID, params.getDiscardedCards().getSheep(), ResourceType.SHEEP);
+			game.discardNumberOfResourceType(userID, params.getDiscardedCards().getWheat(), ResourceType.WHEAT);
+			game.discardNumberOfResourceType(userID, params.getDiscardedCards().getWood(), ResourceType.WOOD);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		
+		result = new DiscardCards_Result(game);
+	}
+	
+	public DiscardCards_Result getResult(){
+		return result;
 	}
 
 }

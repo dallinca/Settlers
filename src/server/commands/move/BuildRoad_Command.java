@@ -17,6 +17,7 @@ public class BuildRoad_Command implements Command {
 	private IServerFacade facade;
 	
 	private BuildRoad_Params params;
+	private BuildRoad_Result result;
 	private int gameID, userID;
 
 	/**
@@ -54,22 +55,18 @@ public class BuildRoad_Command implements Command {
 	@Override
 	public void execute() {
 		Game game = null;
-		game = facade.buildRoad(params);
-		BuildRoad_Result result = new BuildRoad_Result();
-	}
-
-	/**
-	 * For use coupled with the non-standard initialization of the command.
-	 * Allows for one and only one setting of the facade for which the command is to execute.
-	 * 
-	 * @pre this.facade == null && facade != null
-	 * @post this.facade = facade
-	 * @param facade
-	 */
-	public void setGame(IServerFacade facade) {
-		if(this.facade == null) {
-			this.facade = facade;
+		game = facade.buildRoad(params, gameID, userID);
+		
+		try {
+			game.placeRoadOnEdge(userID, params.getCmdEdgeLocation() );
+		} catch (Exception e) {
+			new BuildRoad_Result();
+			e.printStackTrace();
 		}
+		result = new BuildRoad_Result(game);
 	}
-
+	
+	public BuildRoad_Result getResult(){
+		return result;
+	}
 }

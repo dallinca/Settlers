@@ -29,6 +29,16 @@ public class BuildCity_Result {
 		return game;
 	}
 
+	public BuildCity_Result(Game game){
+		this.game = game;	
+		
+		if (game == null){
+			valid = false;
+		}else{
+			valid = true;
+		}
+	}
+	
 	public BuildCity_Result(String post) {
 
 		if (post==null){

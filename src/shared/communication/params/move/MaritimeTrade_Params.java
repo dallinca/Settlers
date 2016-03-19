@@ -34,11 +34,9 @@ public class MaritimeTrade_Params {
 		this.outputResource = outputResource.toString().toLowerCase();
 	}
 
-
 	public int getPlayerIndex() {
 		return playerIndex;
 	}
-	
 	
 	public void setPlayerIndex(int playerIndex) {
 		this.playerIndex = playerIndex;
