@@ -3,6 +3,8 @@ package server.commands.move;
 import server.commands.Command;
 import server.facade.IServerFacade;
 import shared.communication.params.move.OfferTrade_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
 import shared.communication.results.move.OfferTrade_Result;
 import shared.model.Game;
 
@@ -51,9 +53,20 @@ public class OfferTrade_Command implements Command {
 	public void execute() {
 		Game game = null;
 		game = facade.offerTrade(params, gameID, userID);
+		result = new OfferTrade_Result();
+		
+		if (game==null){
+			return;
+		}
 		
 		game.doDomesticTrade(userID, p1resources, params.getReceiver(), p2resources);
-		result = new OfferTrade_Result(game);
+
+		result.setValid(true);
+
+		JsonConverter converter = new JsonConverter();
+		ClientModel cm = converter.toClientModel(game);
+
+		result.setModel(cm);
 	}
 	
 	public 	OfferTrade_Result getResult(){

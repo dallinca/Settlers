@@ -3,6 +3,8 @@ package server.commands.move.devcard;
 import server.commands.Command;
 import server.facade.IServerFacade;
 import shared.communication.params.move.devcard.PlayRoadBuilding_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
 import shared.communication.results.move.devcard.PlayRoadBuilding_Result;
 import shared.definitions.DevCardType;
 import shared.model.Game;
@@ -25,7 +27,7 @@ public class PlayRoadBuilding_Command implements Command {
 	 * 
 	 */
 	public PlayRoadBuilding_Command() {}
-	
+
 	/**
 	 * Standard Command pattern constructor instantiation with the facade
 	 * 
@@ -51,16 +53,32 @@ public class PlayRoadBuilding_Command implements Command {
 	public void execute() {
 		Game game = null;
 		game = facade.playRoadBuilding(params, gameID, userID);
-		
-		try {
-			game.useDevelopmentCard(userID, DevCardType.ROAD_BUILD);
-		} catch (Exception e) {
-			new PlayRoadBuilding_Result();
-			e.printStackTrace();
+		result = new PlayRoadBuilding_Result();
+
+		if (game != null) {
+			try {
+				//Check on this because the game needs to know where the roads will be built, so it needs to grab that out of the params
+				//I will check on and fix this upon completeing the other tasks...
+				game.useDevelopmentCard(userID, DevCardType.ROAD_BUILD);
+			} catch (Exception e) {
+				new PlayRoadBuilding_Result();
+				e.printStackTrace();
+				return;
+			} 
+		} else {
+			return;
 		}
-		result = new PlayRoadBuilding_Result(game);
+
+
+		result.setValid(true);
+
+		JsonConverter converter = new JsonConverter();
+		ClientModel cm = converter.toClientModel(game);
+
+		result.setModel(cm);
+
 	}
-	
+
 
 	public PlayRoadBuilding_Result getResult() {
 		return result;

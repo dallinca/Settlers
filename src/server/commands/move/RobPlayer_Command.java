@@ -3,6 +3,8 @@ package server.commands.move;
 import server.commands.Command;
 import server.facade.IServerFacade;
 import shared.communication.params.move.RobPlayer_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
 import shared.communication.results.move.RobPlayer_Result;
 import shared.model.Game;
 
@@ -51,14 +53,26 @@ public class RobPlayer_Command implements Command {
 	public void execute() {
 		Game game = null;
 		game = facade.robPlayer(params, gameID, userID);
+		result = new RobPlayer_Result();
+		
+		if (game==null){
+			return;
+		}
 		
 		try {
 			game.moveRobberToHex(userID, params.getLocation());
 			game.stealPlayerResource(userID, params.getVictimIndex());
 		} catch (Exception e) {
 			e.printStackTrace();
+			return;
 		}
-		result = new RobPlayer_Result(game);
+		
+		result.setValid(true);
+
+		JsonConverter converter = new JsonConverter();
+		ClientModel cm = converter.toClientModel(game);
+
+		result.setModel(cm);
 	}
 	public RobPlayer_Result getResult(){
 		return result;

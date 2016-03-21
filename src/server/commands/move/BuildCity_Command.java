@@ -3,6 +3,8 @@ package server.commands.move;
 import server.commands.Command;
 import server.facade.IServerFacade;
 import shared.communication.params.move.BuildCity_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
 import shared.communication.results.move.BuildCity_Result;
 import shared.model.Game;
 
@@ -15,7 +17,7 @@ import shared.model.Game;
  */
 public class BuildCity_Command implements Command {
 	private IServerFacade facade;
-	
+
 	private BuildCity_Params params;
 	private BuildCity_Result result;
 	private int gameID, userID;
@@ -26,7 +28,7 @@ public class BuildCity_Command implements Command {
 	 * 
 	 */
 	public BuildCity_Command() {}
-	
+
 	/**
 	 * Standard Command pattern constructor instantiation with the facade
 	 * 
@@ -35,13 +37,13 @@ public class BuildCity_Command implements Command {
 	public BuildCity_Command(IServerFacade facade) {
 		this.facade = facade;
 	}
-	
+
 	public BuildCity_Command(BuildCity_Params params, int gameID, int userID) {
 		this.params = params;
 		this.gameID = gameID;
 		this.userID = userID;
 	}
-	
+
 	/**
 	 * Issues the Build City action on the given game server game model.
 	 * Should only be triggered by the games models Command History class.
@@ -56,16 +58,28 @@ public class BuildCity_Command implements Command {
 	public void execute() {
 		Game game = null;
 		game = facade.buildCity(params, gameID, userID);
+		result = new BuildCity_Result();
 
-		try {
-			game.placeCityOnVertex(params.getCmdVertLocation());
-		} catch (Exception e) {
-			new BuildCity_Result();
-			e.printStackTrace();
+		if (game != null) {
+			try {
+				game.placeCityOnVertex(params.getCmdVertLocation());
+			} catch (Exception e) {
+				new BuildCity_Result();
+				e.printStackTrace();
+				return;
+			}
+		} else {
+			return;
 		}
-		result = new BuildCity_Result(game);
+
+		result.setValid(true);
+
+		JsonConverter converter = new JsonConverter();
+		ClientModel cm = converter.toClientModel(game);
+
+		result.setModel(cm);
 	}
-	
+
 	public BuildCity_Result getResult(){
 		return result;
 	}

@@ -3,6 +3,8 @@ package server.commands.move;
 import server.commands.Command;
 import server.facade.IServerFacade;
 import shared.communication.params.move.MaritimeTrade_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
 import shared.communication.results.move.MaritimeTrade_Result;
 import shared.definitions.ResourceType;
 import shared.model.Game;
@@ -56,13 +58,26 @@ public class MaritimeTrade_Command implements Command {
 		ResourceType receive = ResourceType.valueOf(params.getInputResource() );
 		
 		game = facade.maritimeTrade(params, gameID, tradeIn, receive );
+		result = new MaritimeTrade_Result();
+		
+		if (game==null){
+			return;
+		}
+		
 		try {
 			game.doMaritimeTrade(tradeIn, receive);
 		} catch (Exception e) {
 			new MaritimeTrade_Result();
 			e.printStackTrace();
+			return;
 		}
-		result = new MaritimeTrade_Result(game);
+
+		result.setValid(true);
+
+		JsonConverter converter = new JsonConverter();
+		ClientModel cm = converter.toClientModel(game);
+
+		result.setModel(cm);
 	}
 	
 	public MaritimeTrade_Result getResult(){
