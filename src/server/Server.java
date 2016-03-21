@@ -146,8 +146,6 @@ public class Server {
 	private PlaySoldier_Handler PlaySoldierHandler = new PlaySoldier_Handler();
 	private PlayYearOfPlenty_Handler PlayYearOfPlentyHandler = new PlayYearOfPlenty_Handler();
 
-
-
 	public static void main(String[] args) {
 		if (args.length==0){
 			//Do nothing, no parameters.

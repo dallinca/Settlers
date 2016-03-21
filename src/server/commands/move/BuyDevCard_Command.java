@@ -70,8 +70,10 @@ public class BuyDevCard_Command implements Command {
 			game.buyDevelopmentCard();
 		} catch (CannotBuyException e) {
 			e.printStackTrace();
+			return;
 		} catch (InsufficientPlayerResourcesException e) {
 			e.printStackTrace();
+			return;
 		}
 		
 		result.setValid(true);

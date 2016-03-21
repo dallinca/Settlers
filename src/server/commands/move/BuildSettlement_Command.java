@@ -58,7 +58,6 @@ public class BuildSettlement_Command implements Command {
 	public void execute() {
 		Game game = null;
 		game = facade.buildSettlement(params, gameID, userID);
-
 		result = new BuildSettlement_Result();
 
 		if (game==null){

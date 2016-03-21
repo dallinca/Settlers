@@ -1,5 +1,6 @@
 package server.facade;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -480,9 +481,15 @@ public class ServerFacade implements IServerFacade {
 
 					result.setWasLoggedIn(true);
 
-					String userCookie = ("{\"catan.user\":{\"name\":\"" + current.getName()
+					String userCookie = ("{\"name\":\"" + current.getName()
 							+ "\",\"password\":\""+current.getPassword()
-							+ "\",\"playerID\":"+ current.getPlayerID() +"}}");
+							+ "\",\"playerID\":"+ current.getPlayerID() +"}");
+					
+					StringBuilder sb = new StringBuilder();
+					sb.append("catan.user=");
+					
+					sb.append(URLEncoder.encode(userCookie));
+					sb.append(";Path=/");
 
 					result.setUserCookie(userCookie);
 
@@ -504,6 +511,7 @@ public class ServerFacade implements IServerFacade {
 	 * @return Register_Result Action
 	 * 
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public Register_Result register(Register_Params params) {
 
@@ -526,9 +534,16 @@ public class ServerFacade implements IServerFacade {
 		users.add(user); // add new user to roster
 
 		//generate user cookie
-		String userCookie = ("{\"catan.user\":{\"name\":\"" + username
+		String userCookie = ("{\"name\":\"" + username
 				+ "\",\"password\":\""+password
-				+ "\",\"playerID\":"+ user.getPlayerID() +"}}");
+				+ "\",\"playerID\":"+ user.getPlayerID() +"}");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("catan.user=");
+		
+		sb.append(URLEncoder.encode(userCookie));
+		sb.append(";Path=/");
+		
 
 		result.setUserCookie(userCookie);
 
@@ -676,7 +691,7 @@ public class ServerFacade implements IServerFacade {
 
 		result.setValid(true);
 
-		String gameCookie = ("{\"catan.game\":"+ gameID +"}");
+		String gameCookie = ("catan.game="+ gameID +";Path=/;");
 
 		result.setGameCookie(gameCookie);
 
