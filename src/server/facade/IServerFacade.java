@@ -50,7 +50,6 @@ public interface IServerFacade {
 	public BuildCity_Result buildCity(BuildCity_Params params);
 	public BuildRoad_Result buildRoad(BuildRoad_Params params);
 	public BuildSettlement_Result buildSettlement(BuildSettlement_Params params);
-	
 	public BuyDevCard_Result buyDevCard(BuyDevCard_Params params);
 	public DiscardCards_Result discardCards(DiscardCards_Params params);
 	public FinishTurn_Result finishTurn(FinishTurn_Params params);
