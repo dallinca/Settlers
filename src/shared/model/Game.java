@@ -48,6 +48,11 @@ public class Game {
 	private int winner = -1;
 	private CommandHistory gameHistory = new CommandHistory();
 	
+	
+	//How do we create this / initialize it????
+	private int gameID;
+	private String title;
+	
 
 	private TradeInfo tradeOffer;
 
@@ -1271,6 +1276,16 @@ public class Game {
 
 
 
+	public int getGameID() {
+		return gameID;
+	}
+
+	public void setGameID(int gameID) {
+		this.gameID = gameID;
+	}
+
+
+
 	/**
 	 * Hear ye, hear ye! We have a class line that is designated for the functionality of the ChatController and the GameHistoryController
 	 * its purpose is to keep track of all the message type objects we get from the server so it can be accessed and printed by the two controllers mentioned above.
@@ -1297,6 +1312,35 @@ public class Game {
 		public String getSource() {
 			return source;
 		}
+	}
+
+
+
+	public int getPlayerCount(){
+		
+		Player[] players = getAllPlayers();
+		int playerCount = 0;
+		
+		for (int i = 0; i < 4; i ++){
+			if (players[i]!=null){ //Check for vacancy in game roster.
+				playerCount++;
+			}			
+		}
+		
+		return playerCount;
+	}
+	
+	public void addPlayer(int userID, CatanColor playerColor) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 

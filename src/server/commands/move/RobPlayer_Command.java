@@ -2,6 +2,10 @@ package server.commands.move;
 
 import server.commands.Command;
 import server.facade.IServerFacade;
+import shared.communication.params.move.RobPlayer_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
+import shared.communication.results.move.RobPlayer_Result;
 import shared.model.Game;
 
 /**
@@ -12,7 +16,10 @@ import shared.model.Game;
  *
  */
 public class RobPlayer_Command implements Command {
-	private IServerFacade facade;
+
+	private RobPlayer_Params params;
+	private RobPlayer_Result result;
+	private int gameID, userID;
 
 	/**
 	 * Non-standard command pattern constructor instantiation without the facade.
@@ -26,8 +33,10 @@ public class RobPlayer_Command implements Command {
 	 * 
 	 * @param game
 	 */
-	public RobPlayer_Command(IServerFacade facade) {
-		this.facade = facade;
+	public RobPlayer_Command(RobPlayer_Params params, int gameID, int userID) {
+		this.params = params;
+		this.gameID = gameID;
+		this.userID = userID;
 	}
 
 	/**
@@ -42,22 +51,30 @@ public class RobPlayer_Command implements Command {
 	 */
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		Game game = null;
+		game = facade.robPlayer(params, gameID, userID);
+		result = new RobPlayer_Result();
 		
-	}
-
-	/**
-	 * For use coupled with the non-standard initialization of the command.
-	 * Allows for one and only one setting of the facade for which the command is to execute.
-	 * 
-	 * @pre this.facade == null && facade != null
-	 * @post this.facade = facade
-	 * @param facade
-	 */
-	public void setGame(IServerFacade facade) {
-		if(this.facade == null) {
-			this.facade = facade;
+		if (game==null){
+			return;
 		}
-	}
+		
+		try {
+			game.moveRobberToHex(userID, params.getLocation());
+			game.stealPlayerResource(userID, params.getVictimIndex());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		result.setValid(true);
 
+		JsonConverter converter = new JsonConverter();
+		ClientModel cm = converter.toClientModel(game);
+
+		result.setModel(cm);
+	}
+	public RobPlayer_Result getResult(){
+		return result;
+	}
 }

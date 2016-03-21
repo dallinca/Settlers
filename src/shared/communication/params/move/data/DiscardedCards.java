@@ -60,7 +60,4 @@ public class DiscardedCards {
 	public void setWood(int wood) {
 		this.wood = wood;
 	}
-
-	
-	
 }

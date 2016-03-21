@@ -2,6 +2,11 @@ package server.commands.move.devcard;
 
 import server.commands.Command;
 import server.facade.IServerFacade;
+import shared.communication.params.move.devcard.PlaySoldier_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
+import shared.communication.results.move.devcard.PlaySoldier_Result;
+import shared.definitions.DevCardType;
 import shared.model.Game;
 
 /**
@@ -12,7 +17,10 @@ import shared.model.Game;
  *
  */
 public class PlaySoldier_Command implements Command {
-	private IServerFacade facade;
+
+	private PlaySoldier_Params params;
+	private PlaySoldier_Result result;
+	private int gameID, userID;
 
 	/**
 	 * Non-standard command pattern constructor instantiation without the facade.
@@ -20,14 +28,16 @@ public class PlaySoldier_Command implements Command {
 	 * 
 	 */
 	public PlaySoldier_Command() {}
-	
+
 	/**
 	 * Standard Command pattern constructor instantiation with the facade
 	 * 
 	 * @param game
 	 */
-	public PlaySoldier_Command(IServerFacade facade) {
-		this.facade = facade;
+	public PlaySoldier_Command(PlaySoldier_Params params, int gameID, int userID) {
+		this.params = params;
+		this.gameID = gameID;
+		this.userID = userID;
 	}
 
 	/**
@@ -42,22 +52,34 @@ public class PlaySoldier_Command implements Command {
 	 */
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
-		
-	}
+		Game game = null;
+		game = facade.playSoldier(params, gameID, userID);
 
-	/**
-	 * For use coupled with the non-standard initialization of the command.
-	 * Allows for one and only one setting of the facade for which the command is to execute.
-	 * 
-	 * @pre this.facade == null && facade != null
-	 * @post this.facade = facade
-	 * @param facade
-	 */
-	public void setGame(IServerFacade facade) {
-		if(this.facade == null) {
-			this.facade = facade;
+		result = new PlaySoldier_Result();
+
+		if (game != null) {
+			try {
+				//Same deal as what I just saw in road building. grab from the params object the location the soldier will be built and pass that in
+				game.useDevelopmentCard(userID, DevCardType.SOLDIER);
+			} catch (Exception e) {
+				new PlaySoldier_Result();
+				e.printStackTrace();
+				return;
+			}
+		} else {
+			return;
 		}
+
+		result.setValid(true);
+
+		JsonConverter converter = new JsonConverter();
+		ClientModel cm = converter.toClientModel(game);
+
+		result.setModel(cm);
+
 	}
 
+	public PlaySoldier_Result getResult(){
+		return result;
+	}
 }

@@ -2,6 +2,12 @@ package server.commands.move.devcard;
 
 import server.commands.Command;
 import server.facade.IServerFacade;
+import shared.communication.params.move.devcard.PlayYearOfPlenty_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
+import shared.communication.results.move.devcard.PlayYearOfPlenty_Result;
+import shared.definitions.DevCardType;
+import shared.definitions.ResourceType;
 import shared.model.Game;
 
 /**
@@ -12,7 +18,9 @@ import shared.model.Game;
  *
  */
 public class PlayYearOfPlenty_Command implements Command {
-	private IServerFacade facade;
+	private PlayYearOfPlenty_Params params;
+	private PlayYearOfPlenty_Result result; 
+	private int gameID, userID;
 
 	/**
 	 * Non-standard command pattern constructor instantiation without the facade.
@@ -20,14 +28,16 @@ public class PlayYearOfPlenty_Command implements Command {
 	 * 
 	 */
 	public PlayYearOfPlenty_Command() {}
-	
+
 	/**
 	 * Standard Command pattern constructor instantiation with the facade
 	 * 
 	 * @param game
 	 */
-	public PlayYearOfPlenty_Command(IServerFacade facade) {
-		this.facade = facade;
+	public PlayYearOfPlenty_Command(PlayYearOfPlenty_Params params, int gameID, int userID) {
+		this.params = params;
+		this.gameID = gameID;
+		this.userID = userID;
 	}
 
 	/**
@@ -42,24 +52,34 @@ public class PlayYearOfPlenty_Command implements Command {
 	 */
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
-		
-	}
+		Game game = null;
 
-	/**
-	 * For use coupled with the non-standard initialization of the command.
-	 * Allows for one and only one setting of the facade for which the command is to execute.
-	 * 
-	 * @pre this.facade == null && facade != null
-	 * @post this.facade = facade
-	 * @param facade
-	 */
-	public void setGame(IServerFacade facade) {
-		if(this.facade == null) {
-			this.facade = facade;
+		game = facade.playYearOfPlenty(params, gameID, userID);
+		result = new PlayYearOfPlenty_Result();
+
+		if (game != null) {
+			try {
+				//Need to grab the resources from the params object.............
+				game.useDevelopmentCard(userID, DevCardType.YEAR_OF_PLENTY);
+			} catch (Exception e) {
+				new PlayYearOfPlenty_Result();
+				e.printStackTrace();
+				return;
+			}
+		} else {
+			return;
 		}
-	}
-	
-	
 
+		result.setValid(true);
+
+		JsonConverter converter = new JsonConverter();
+		ClientModel cm = converter.toClientModel(game);
+
+		result.setModel(cm);
+
+	}
+
+	public PlayYearOfPlenty_Result getResult(){
+		return result;
+	}
 }

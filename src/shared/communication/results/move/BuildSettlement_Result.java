@@ -31,6 +31,16 @@ public class BuildSettlement_Result {
 		return game;
 	}
 
+	public BuildSettlement_Result(Game game){
+		this.game = game;	
+		
+		if (game == null){
+			valid = false;
+		}else{
+			valid = true;
+		}
+	}
+	
 	public BuildSettlement_Result(String post) {
 
 		if (post==null){

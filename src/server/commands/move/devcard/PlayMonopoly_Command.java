@@ -2,6 +2,13 @@ package server.commands.move.devcard;
 
 import server.commands.Command;
 import server.facade.IServerFacade;
+import shared.communication.params.move.devcard.PlayMonopoly_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
+import shared.communication.results.move.BuildSettlement_Result;
+import shared.communication.results.move.devcard.PlayMonopoly_Result;
+import shared.definitions.DevCardType;
+import shared.definitions.ResourceType;
 import shared.model.Game;
 
 /**
@@ -13,14 +20,30 @@ import shared.model.Game;
  */
 public class PlayMonopoly_Command implements Command {
 	private IServerFacade facade;
-
+	private boolean isValid = false;
+	private PlayMonopoly_Result result;
+	private PlayMonopoly_Params params;
+	private int gameID, userID;
+	
 	/**
 	 * Non-standard command pattern constructor instantiation without the facade.
 	 * The facade will be determined after original command instantiation.
 	 * 
 	 */
-	public PlayMonopoly_Command() {}
+	public PlayMonopoly_Command(PlayMonopoly_Params theParams, int gameID, int userID) {
+		this.params = theParams;
+		this.gameID = gameID;
+		this.userID = userID;
+	}
 	
+	public PlayMonopoly_Result getResult() {
+		return result;
+	}
+
+	public void setResult(PlayMonopoly_Result result) {
+		this.result = result;
+	}
+
 	/**
 	 * Standard Command pattern constructor instantiation with the facade
 	 * 
@@ -44,6 +67,53 @@ public class PlayMonopoly_Command implements Command {
 	public void execute() {
 		// TODO Auto-generated method stub
 		
+		int userID = params.getPlayerIndex();
+		
+		//Ask the server facade if that action can happen
+		//If it is true, it will return a game object then call the appropriate commands on the game object
+		
+		String resourceName = params.getResource();
+		ResourceType[] resourceType = new ResourceType[1];
+		
+		if (resourceName.equals("wheat")) {
+			resourceType[0] = ResourceType.WHEAT;
+		} else if (resourceName.equals("wood")) {
+			resourceType[0] = ResourceType.WOOD;
+		} else if (resourceName.equals("brick")) {
+			resourceType[0] = ResourceType.BRICK;
+		} else if (resourceName.equals("ore")) {
+			resourceType[0] = ResourceType.ORE;
+		} else if (resourceName.equals("sheep")) {
+			resourceType[0] = ResourceType.SHEEP;
+		}
+		
+		Game game = facade.canDoPlayMonopoly(gameID, userID);
+		result = new PlayMonopoly_Result();
+		
+		if (game != null) {
+			if (game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONOPOLY)) {
+				try {	
+					game.useDevelopmentCard(userID, DevCardType.MONOPOLY, resourceType);
+				} catch (Exception e) {
+					System.out.println("");
+					e.printStackTrace();
+					return;
+				}
+			}
+		} else {
+			return;
+		}
+		
+		//Create a result object with the appropriate information (it contains the newly modified game object)
+		//Should this happen in the handler because that is where it would be serialized? The Handler has the gameID, so it can retrieve the appropriate modified game after this method is through executing.
+		
+		result.setValid(true);
+
+		JsonConverter converter = new JsonConverter();
+		ClientModel cm = converter.toClientModel(game);
+
+		result.setModel(cm);
+	
 	}
 
 	/**
@@ -54,6 +124,7 @@ public class PlayMonopoly_Command implements Command {
 	 * @post this.facade = facade
 	 * @param facade
 	 */
+	//According to Woodfield, I believe the facade is set up in Command.java and so each command knows the facade upon creation.
 	public void setGame(IServerFacade facade) {
 		if(this.facade == null) {
 			this.facade = facade;

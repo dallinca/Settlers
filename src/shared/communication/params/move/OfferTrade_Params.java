@@ -27,8 +27,6 @@ public class OfferTrade_Params {
 		this.playerIndex = playerIndex;
 	}
 
-
-
 	public int getReceiver() {
 		return receiver;
 	}

@@ -28,7 +28,16 @@ public class RobPlayer_Result {
 	public Game getGame(){
 		return game;
 	}
-
+	public RobPlayer_Result(Game game){
+		this.game = game;	
+		
+		if (game == null){
+			valid = false;
+		}else{
+			valid = true;
+		}
+	}
+	
 	public RobPlayer_Result(String post) {
 
 		if (post==null){

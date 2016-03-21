@@ -1,7 +1,4 @@
-package server.commands;
-
-import server.facade.IServerFacade;
-import server.facade.ServerFacade;
+package server;
 
 /**
  * Command pattern object which is extended by all subtypes. 
@@ -11,11 +8,5 @@ import server.facade.ServerFacade;
  *
  */
 public interface Command {
-	IServerFacade facade = ServerFacade.getInstance();
-	public int gameID = -1;
-	public int userID = -1;
-		
 	void execute();
-	
-
 }

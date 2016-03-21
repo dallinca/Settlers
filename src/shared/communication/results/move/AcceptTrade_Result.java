@@ -29,6 +29,16 @@ public class AcceptTrade_Result {
 		return game;
 	}
 
+	public AcceptTrade_Result(Game game){
+		this.game = game;	
+		
+		if (game == null){
+			valid = false;
+		}else{
+			valid = true;
+		}
+	}
+	
 	public AcceptTrade_Result(String post) {
 
 		if (post==null){

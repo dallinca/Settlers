@@ -2,6 +2,10 @@ package server.commands.move;
 
 import server.commands.Command;
 import server.facade.IServerFacade;
+import shared.communication.params.move.OfferTrade_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
+import shared.communication.results.move.OfferTrade_Result;
 import shared.model.Game;
 
 /**
@@ -12,7 +16,10 @@ import shared.model.Game;
  *
  */
 public class OfferTrade_Command implements Command {
-	private IServerFacade facade;
+	
+	private OfferTrade_Params params;
+	private OfferTrade_Result result;
+	private int gameID, userID;
 
 	/**
 	 * Non-standard command pattern constructor instantiation without the facade.
@@ -26,8 +33,10 @@ public class OfferTrade_Command implements Command {
 	 * 
 	 * @param game
 	 */
-	public OfferTrade_Command(IServerFacade facade) {
-		this.facade = facade;
+	public OfferTrade_Command(OfferTrade_Params params, int gameID, int userID) {
+		this.params = params;
+		this.gameID = gameID;
+		this.userID = userID;
 	}
 
 	/**
@@ -42,22 +51,25 @@ public class OfferTrade_Command implements Command {
 	 */
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		Game game = null;
+		game = facade.offerTrade(params, gameID, userID);
+		result = new OfferTrade_Result();
 		
-	}
-
-	/**
-	 * For use coupled with the non-standard initialization of the command.
-	 * Allows for one and only one setting of the facade for which the command is to execute.
-	 * 
-	 * @pre this.facade == null && facade != null
-	 * @post this.facade = facade
-	 * @param facade
-	 */
-	public void setGame(IServerFacade facade) {
-		if(this.facade == null) {
-			this.facade = facade;
+		if (game==null){
+			return;
 		}
-	}
+		
+		game.doDomesticTrade(userID, p1resources, params.getReceiver(), p2resources);
 
+		result.setValid(true);
+
+		JsonConverter converter = new JsonConverter();
+		ClientModel cm = converter.toClientModel(game);
+
+		result.setModel(cm);
+	}
+	
+	public 	OfferTrade_Result getResult(){
+		return result;
+	}
 }

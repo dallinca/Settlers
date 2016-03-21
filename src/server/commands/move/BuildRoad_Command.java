@@ -2,6 +2,10 @@ package server.commands.move;
 
 import server.commands.Command;
 import server.facade.IServerFacade;
+import shared.communication.params.move.BuildRoad_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
+import shared.communication.results.move.BuildRoad_Result;
 import shared.model.Game;
 
 /**
@@ -14,13 +18,17 @@ import shared.model.Game;
 public class BuildRoad_Command implements Command {
 	private IServerFacade facade;
 
+	private BuildRoad_Params params;
+	private BuildRoad_Result result;
+	private int gameID, userID;
+
 	/**
 	 * Non-standard command pattern constructor instantiation without the facade.
 	 * The facade will be determined after original command instantiation.
 	 * 
 	 */
 	public BuildRoad_Command() {}
-	
+
 	/**
 	 * Standard Command pattern constructor instantiation with the facade
 	 * 
@@ -29,7 +37,13 @@ public class BuildRoad_Command implements Command {
 	public BuildRoad_Command(IServerFacade facade) {
 		this.facade = facade;
 	}
-	
+
+	public BuildRoad_Command(BuildRoad_Params params, int gameID, int userID) {
+		this.params = params;
+		this.gameID = gameID;
+		this.userID = userID;
+	}
+
 	/**
 	 * Issues the Build Road action on the given game server game model.
 	 * Should only be triggered by the games models Command History class.
@@ -42,22 +56,30 @@ public class BuildRoad_Command implements Command {
 	 */
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
-		
-	}
+		Game game = null;
+		game = facade.buildRoad(params, gameID, userID);
+		result = new BuildRoad_Result();
 
-	/**
-	 * For use coupled with the non-standard initialization of the command.
-	 * Allows for one and only one setting of the facade for which the command is to execute.
-	 * 
-	 * @pre this.facade == null && facade != null
-	 * @post this.facade = facade
-	 * @param facade
-	 */
-	public void setGame(IServerFacade facade) {
-		if(this.facade == null) {
-			this.facade = facade;
+		if (game != null) {
+			try {
+				game.placeRoadOnEdge(userID, params.getCmdEdgeLocation() );
+			} catch (Exception e) {
+				new BuildRoad_Result();
+				e.printStackTrace();
+				return;
+			}
+		} else {
+			return;
 		}
+		result.setValid(true);
+
+		JsonConverter converter = new JsonConverter();
+		ClientModel cm = converter.toClientModel(game);
+
+		result.setModel(cm);
 	}
 
+	public BuildRoad_Result getResult(){
+		return result;
+	}
 }

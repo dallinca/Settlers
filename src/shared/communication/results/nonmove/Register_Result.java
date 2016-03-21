@@ -10,6 +10,7 @@ public class Register_Result {
 	private int id = -1;
 	private String name;
 	private boolean valid;
+	private String userCookie;
 
 	// CONSTRUCTORS
 	//////////////////////
@@ -63,6 +64,14 @@ public class Register_Result {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public void setUserCookie(String cookie){
+		userCookie = cookie;
+	}
+
+	public String getUserCookie() {
+		return userCookie;
 	}
 
 
