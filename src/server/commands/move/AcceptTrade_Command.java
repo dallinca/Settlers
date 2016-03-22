@@ -57,7 +57,7 @@ public class AcceptTrade_Command implements Command {
 	public void execute() {
 		Game game = null;
 		//Will fix in a second
-		game = facade.acceptTrade(params);
+		game = facade.canDoAcceptTrade(params);
 		result = new AcceptTrade_Result();
 		
 		if (game != null) {
@@ -70,9 +70,6 @@ public class AcceptTrade_Command implements Command {
 				return;
 			}
 		}
-		
-
-		// TODO Auto-generated method stub
 		//this.facade.acceptTrade(params);
 	}
 

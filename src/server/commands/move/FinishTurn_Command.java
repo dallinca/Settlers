@@ -48,7 +48,7 @@ public class FinishTurn_Command implements Command {
 	@Override
 	public void execute() {
 		Game game = null;
-		game = facade.finishTurn(params, gameID, userID);
+		game = facade.canDoFinishTurn(params, gameID, userID);
 	
 		result = new FinishTurn_Result();
 		

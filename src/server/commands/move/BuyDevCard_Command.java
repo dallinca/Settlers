@@ -60,7 +60,7 @@ public class BuyDevCard_Command implements Command {
 	@Override
 	public void execute() {
 		Game game = null;
-		game = facade.buyDevCard(params, gameID, userID);
+		game = facade.canDoBuyDevCard(params, gameID, userID);
 		result = new BuyDevCard_Result();
 		
 		if (game==null){

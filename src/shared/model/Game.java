@@ -5,6 +5,7 @@ import java.util.Random;
 
 import client.data.TradeInfo;
 import server.commands.CommandHistory;
+import shared.communication.params.move.OfferTrade_Params.Offer;
 import shared.communication.results.ClientModel;
 import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
@@ -701,9 +702,17 @@ public class Game {
 	 * @pre: the player in question who calls this method is taking his/her turn currently
 	 * @post 
 	 */
-	public boolean canDoPlayerDoDomesticTrade(int p1id, int[] p1resources, int p2id, int[] p2resources) {
+	public boolean canDoPlayerDoDomesticTrade(int p1id, Offer offer, int p2id) {
 		//Is it the Current Players turn and do they have any resources?
 		//Do they have the resources he said he would trade
+		
+		//Offer contains 5 numbers, one for each resource, which can be retrieved through getters.
+		//Positive numbers are the resources P1 is offering.
+		//Negative numbers are the resources that P2 is being asked to give away.
+		
+		int[] p1resources;		
+		int[] p2resources;
+		
 
 		ResourceType resourceType = null;
 

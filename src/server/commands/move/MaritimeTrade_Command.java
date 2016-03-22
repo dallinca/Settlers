@@ -57,7 +57,7 @@ public class MaritimeTrade_Command implements Command {
 		ResourceType tradeIn = ResourceType.valueOf(params.getOutputResource() );
 		ResourceType receive = ResourceType.valueOf(params.getInputResource() );
 		
-		game = facade.maritimeTrade(params, gameID, tradeIn, receive );
+		game = facade.canDoMaritimeTrade(params, gameID, tradeIn, receive );
 		result = new MaritimeTrade_Result();
 		
 		if (game==null){

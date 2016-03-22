@@ -12,6 +12,7 @@ import server.commands.Command;
 import shared.communication.User;
 import shared.communication.params.move.devcard.*;
 import shared.communication.params.move.*;
+import shared.communication.params.move.OfferTrade_Params.Offer;
 import shared.communication.params.nonmove.AddAI_Params;
 import shared.communication.params.nonmove.Create_Params;
 import shared.communication.params.nonmove.GetVersion_Params;
@@ -91,7 +92,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game acceptTrade(AcceptTrade_Params params) {
+	public Game canDoAcceptTrade(AcceptTrade_Params params) {
 		return null;
 	}
 
@@ -108,7 +109,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game buildCity(BuildCity_Params params, int gameID, int userID) {
+	public Game canDoBuildCity(BuildCity_Params params, int gameID, int userID) {
 
 		Game game = findGame(gameID);
 		if(game.canDoPlayerBuildCity(userID)){
@@ -130,8 +131,8 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game buildRoad(BuildRoad_Params params, int gameID, int userID) {
-		
+	public Game canDoBuildRoad(BuildRoad_Params params, int gameID, int userID) {
+
 		Game game = findGame(gameID);
 		if(game.canDoPlayerBuildRoad(userID)){
 			return game;
@@ -152,7 +153,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game buildSettlement(BuildSettlement_Params params, int gameID, int userID) {
+	public Game canDoBuildSettlement(BuildSettlement_Params params, int gameID, int userID) {
 
 		Game game = findGame(gameID);
 		if(game.canDoPlayerBuildSettlement(userID)){
@@ -174,8 +175,8 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game buyDevCard(BuyDevCard_Params params, int gameID, int userID) {
-		
+	public Game canDoBuyDevCard(BuyDevCard_Params params, int gameID, int userID) {
+
 		Game game = findGame(gameID);	
 		if(game.canDoPlayerBuyDevelopmentCard(userID)){
 			return game;
@@ -196,7 +197,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game discardCards(DiscardCards_Params params, int gameID, int userID) {
+	public Game canDoDiscardCards(DiscardCards_Params params, int gameID, int userID) {
 		Game game = findGame(gameID);
 
 		if(!game.canDoDiscardNumberOfResourceType(userID, params.getDiscardedCards().getBrick(), ResourceType.BRICK)){
@@ -230,7 +231,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game finishTurn(FinishTurn_Params params, int gameID, int userID) {
+	public Game canDoFinishTurn(FinishTurn_Params params, int gameID, int userID) {
 
 		Game game = findGame(gameID);
 		if(game.canDoPlayerEndTurn(userID)){
@@ -252,7 +253,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game maritimeTrade(MaritimeTrade_Params params, int gameID, ResourceType tradeIn, ResourceType receive) {
+	public Game canDoMaritimeTrade(MaritimeTrade_Params params, int gameID, ResourceType tradeIn, ResourceType receive) {
 
 		Game game = findGame(gameID);
 		if(game.canDoPlayerDoMaritimeTrade(tradeIn, receive)){
@@ -274,10 +275,13 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game offerTrade(OfferTrade_Params params, int gameID,int userID) {
-
+	public Game canDoOfferTrade(OfferTrade_Params params, int gameID,int userID) {
+		
+		Offer offer = params.getOffer();
+		
 		Game game = findGame(gameID);
-		if(game.canDoPlayerDoDomesticTrade(userID, p1resources, params.getReceiver(), p2resources)){
+		game.getTradeOffer();
+		if(game.canDoPlayerDoDomesticTrade(userID, offer, params.getReceiver())){
 			return game;
 		}
 		return null;
@@ -296,7 +300,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game robPlayer(RobPlayer_Params params, int gameID, int userID) {
+	public Game canDoRobPlayer(RobPlayer_Params params, int gameID, int userID) {
 
 		Game game = findGame(gameID);
 		if(game.canDoMoveRobberToHex(userID, params.getLocation())){
@@ -320,7 +324,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game rollNumber(RollNumber_Params params, int gameID, int userID) {
+	public Game canDoRollNumber(RollNumber_Params params, int gameID, int userID) {
 
 		Game game = findGame(gameID);
 		if(game.canDoRollDice(userID)){
@@ -342,7 +346,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game sendChat(SendChat_Params params, int gameID, int userID) {
+	public Game canDoSendChat(SendChat_Params params, int gameID, int userID) {
 		Game game = findGame(gameID);
 		return game;
 	}
@@ -360,14 +364,14 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game playMonopoly(int gameID, int userID) {
+	public Game canDoPlayMonopoly(PlayMonopoly_Params params, int gameID, int userID) {
 		Game game = findGame(gameID);
-		 
+
 		if (!game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONOPOLY)) {
 			game = null;
 		}
-		
- 		return game;
+
+		return game;
 	}
 
 	/**
@@ -383,17 +387,17 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game playMonument(int gameID, int userID) {
+	public Game canDoPlayMonument(int gameID, int userID) {
 		Game game = findGame(gameID);
- 		
+
 		//The functionality to retrieve the gameID from the game objects is required to figure out which game this person belongs to.
 		if (!game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONUMENT)) {
 			game = null;
 		}
-		
- 		return game;
-	}
 
+		return game;
+	}
+	
 	/**
 	 * To be called from the Handlers.<br>
 	 * Verifies which Game model the command is for.<br>
@@ -407,11 +411,11 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game playRoadBuilding(PlayRoadBuilding_Params params) {
+	public Game canDoPlayRoadBuilding(PlayRoadBuilding_Params params, int gameID,
+			int userID) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 	/**
 	 * To be called from the Handlers.<br>
 	 * Verifies which Game model the command is for.<br>
@@ -425,7 +429,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game playSoldier(PlaySoldier_Params params) {
+	public Game canDoPlaySoldier(PlaySoldier_Params params, int gameID, int userID) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -443,11 +447,10 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game playYearOfPlenty(PlayYearOfPlenty_Params params) {
+	public Game canDoPlayYearOfPlenty(PlayYearOfPlenty_Params params, int gameID, int userID) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 
 
@@ -484,10 +487,10 @@ public class ServerFacade implements IServerFacade {
 					String userCookie = ("{\"name\":\"" + current.getName()
 							+ "\",\"password\":\""+current.getPassword()
 							+ "\",\"playerID\":"+ current.getPlayerID() +"}");
-					
+
 					StringBuilder sb = new StringBuilder();
 					sb.append("catan.user=");
-					
+
 					sb.append(URLEncoder.encode(userCookie));
 					sb.append(";Path=/");
 
@@ -537,13 +540,13 @@ public class ServerFacade implements IServerFacade {
 		String userCookie = ("{\"name\":\"" + username
 				+ "\",\"password\":\""+password
 				+ "\",\"playerID\":"+ user.getPlayerID() +"}");
-		
+
 		StringBuilder sb = new StringBuilder();
 		sb.append("catan.user=");
-		
+
 		sb.append(URLEncoder.encode(userCookie));
 		sb.append(";Path=/");
-		
+
 
 		result.setUserCookie(userCookie);
 
@@ -785,27 +788,7 @@ public class ServerFacade implements IServerFacade {
 		return true;
 	}
 
-	@Override
-	public Game canDoPlayMonopoly(int gameID, int userID) {
-		Game game = findGame(gameID);
- 
-		if (!game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONOPOLY)) {
-			game = null;
-		}
-		
- 		return game;
-	}
-	@Override
-	public Game canDoPlayMonument(int gameID, int userID) {
-		Game game = findGame(gameID);
- 		
-		//The functionality to retrieve the gameID from the game objects is required to figure out which game this person belongs to.
-		if (!game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONUMENT)) {
-			game = null;
-		}
-		
- 		return game;
-	}
+	
 
 
 	private Game findGame(int gameID){
@@ -818,21 +801,5 @@ public class ServerFacade implements IServerFacade {
 		return null;		
 	}
 
-
-
-	// Return the game that the command is meant to operate on
-
-	/*
-	/**
-	 * Each of the concrete command classes need to have the correct game to act on
-	 * 
-	 * 
-	 *//*
-	@Override
-	public Game findGameForCommand() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	  */
 
 }
