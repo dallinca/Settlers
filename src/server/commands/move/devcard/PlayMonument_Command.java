@@ -53,7 +53,7 @@ public class PlayMonument_Command implements Command {
 	@Override
 	public void execute() {
 
-		int userID = params.getPlayerIndex();
+		//int userID = params.getPlayerIndex();
 		result = new PlayMonument_Result();
 		
 		//Ask the server facade if that action can happen

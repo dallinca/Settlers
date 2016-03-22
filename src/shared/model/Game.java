@@ -727,7 +727,7 @@ public class Game {
 			}
 		}
 
-		for (int g = 0; g < p1resources.length; g++) {
+		for (int g = 0; g < p2resources.length; g++) {
 
 			if (g == 0) {
 				resourceType = ResourceType.BRICK;				
