@@ -1,12 +1,16 @@
 package server.commands.move;
 
+import client.data.TradeInfo;
 import server.commands.Command;
 import server.facade.IServerFacade;
 import shared.communication.params.move.AcceptTrade_Params;
+import shared.communication.params.move.OfferTrade_Params.Offer;
 import shared.communication.results.ClientModel;
+import shared.communication.results.ClientModel.ResourceList;
 import shared.communication.results.JsonConverter;
 import shared.communication.results.move.AcceptTrade_Result;
 import shared.definitions.DevCardType;
+import shared.definitions.ResourceType;
 import shared.model.Game;
 
 /**
@@ -18,7 +22,7 @@ import shared.model.Game;
  */
 public class AcceptTrade_Command implements Command {
 	private IServerFacade facade;
-	
+
 	private AcceptTrade_Params params;
 	private int gameID, userID;
 	private AcceptTrade_Result result;
@@ -29,7 +33,7 @@ public class AcceptTrade_Command implements Command {
 	 * 
 	 */
 	public AcceptTrade_Command() {}
-	
+
 	/**
 	 * Standard Command pattern constructor instantiation with the facade
 	 * 
@@ -38,7 +42,7 @@ public class AcceptTrade_Command implements Command {
 	public AcceptTrade_Command(IServerFacade facade) {
 		this.facade = facade;
 	}
-	
+
 	public AcceptTrade_Command(AcceptTrade_Params params, int gameID, int userID) {
 		this.params = params;
 		this.gameID = gameID;
@@ -58,41 +62,113 @@ public class AcceptTrade_Command implements Command {
 	@Override
 	public void execute() {
 		Game game = null;
-		
+
 		//Will fix in a second
 		game = facade.canDoAcceptTrade(params);
-		
+
 		result = new AcceptTrade_Result();
-		
+
 		if (game != null) {
 			try {
-				
+
 				//Check and see if they declined or accepted:
 				if (params.isWillAccept()) {
-					
-					//Now we operate to perform the trade
-					game.getTradeOffer().getOffer().
-					
-					result.setValid(true);
-				} else {
-					result.setValid(false);
-				}
+
+					//The Order
+					//Brick
+					//Wood
+					//Wheat
+					//Ore
+					//Sheep
+
+					ResourceList o = game.getTradeOffer().getOffer();
+					int[] offer = new int[5];
+					int[] receive = new int[5];
+
+					if (o.getBrick() >= 0) {
+						offer[0] = o.getBrick();
+						receive[0] = 0;
+					} else {
+						receive[0] = o.getBrick();
+						offer[0] = 0;
+					}
+
+					if (o.getWood() >= 0) {
+						offer[1] = o.getWood();
+						receive[1] = 0;
+					} else {
+						receive[1] = o.getWood();
+						offer[1] = 0;
+					}
+
+					if (o.getWheat() >= 0) {
+						offer[2] = o.getWheat();
+						receive[2] = 0;
+					} else {
+						receive[2] = o.getWheat();
+						offer[2] = 0;
+					}
+
+					if (o.getOre() >= 0) {
+						offer[3] = o.getOre();
+						receive[3] = 0;
+					} else {
+						receive[3] = o.getOre();
+						offer[3] = 0;
+					}
+
+					if (o.getBrick() >= 0) {
+						offer[4] = o.getSheep();
+						receive[4] = 0;
+					} else {
+						receive[4] = o.getSheep();
+						offer[4] = 0;
+					}
+
+					if (game.canDoPlayerDoDomesticTrade(game.getTradeOffer().getSender(), offer, userID, receive)) {
+						
+						//Now we operate to perform the trade
+						game.doDomesticTrade(game.getTradeOffer().getSender(), offer, userID, receive);
+						
+						result.setValid(true);
+						game.setTradeOffer(null);
+						
+						JsonConverter converter = new JsonConverter();
+						ClientModel cm = converter.toClientModel(game);
+
+						result.setModel(cm);
+					} else {
 				
-				game.getTradeOffer() = null;
+						result.setValid(false);
+						game.setTradeOffer(null);
+						JsonConverter converter = new JsonConverter();
+						ClientModel cm = converter.toClientModel(game);
+
+						result.setModel(cm);
+					}
+				} else {
+					
+					result.setValid(false);
+					game.setTradeOffer(null);
+					JsonConverter converter = new JsonConverter();
+					ClientModel cm = converter.toClientModel(game);
+
+					result.setModel(cm);
+				}
 			} catch (Exception e) {
 				System.out.println("");
 				e.printStackTrace();
+				
 				return;
 			}
-			
-			
 
 			JsonConverter converter = new JsonConverter();
 			ClientModel cm = converter.toClientModel(game);
 
 			result.setModel(cm);
 		} else {
-			
+			result.setValid(false);
+			return;
 		}
 		//this.facade.acceptTrade(params);
 	}
