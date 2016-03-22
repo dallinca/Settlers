@@ -1,6 +1,7 @@
 package shared.communication.results.nonmove;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 import shared.communication.results.JsonConverter;
@@ -32,6 +33,7 @@ public class List_Result {
 
 	public List_Result(GameInfo[] games) {
 		this.games = games;
+		listedGames = new LinkedList<Game>();
 	}
 
 	public List_Result(JsonArray jobj) {
@@ -79,6 +81,11 @@ public class List_Result {
 
 	public GameInfo[] getGames() {
 		
+		if (listedGames==null){
+			return new GameInfo[0];
+		}else if(listedGames.size()==0){
+			return new GameInfo[0];
+		}
 		games = new GameInfo[listedGames.size()];
 		for (int i =0;i<listedGames.size(); i++){
 			games[i]=new GameInfo();
@@ -105,17 +112,27 @@ public class List_Result {
 		this.games = games;
 	}
 	
-	public String toString(){
+	/*public String toString(){
 		StringBuilder sb = new StringBuilder();
 		
 		for (Game g: listedGames){
 			sb.append(g.toString());
 		}
 		return sb.toString();		
-	}
+	}*/
+	
+	
+	
+	
 	
 	public boolean isValid() {
 		return valid;
+	}
+
+	@Override
+	public String toString() {
+		return "List_Result [valid=" + valid + ", games="
+				+ Arrays.toString(games) + ", listedGames=" + listedGames + "]";
 	}
 
 	public void setValid(boolean valid) {

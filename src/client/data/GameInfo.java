@@ -55,5 +55,11 @@ public class GameInfo
 	{
 		return Collections.unmodifiableList(players);
 	}
+
+	@Override
+	public String toString() {
+		return "GameInfo [id=" + id + ", title=" + title + ", players="
+				+ players + "]";
+	}	
 }
 
