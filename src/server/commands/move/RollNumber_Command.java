@@ -1,4 +1,4 @@
-package move;
+package server.commands.move;
 
 import server.commands.Command;
 import server.facade.IServerFacade;

@@ -87,7 +87,7 @@ public class PlayMonopoly_Command implements Command {
 			resourceType[0] = ResourceType.SHEEP;
 		}
 		
-		Game game = facade.canDoPlayMonopoly(gameID, userID);
+		Game game = facade.canDoPlayMonopoly(params, gameID, userID);
 		result = new PlayMonopoly_Result();
 		
 		if (game != null) {

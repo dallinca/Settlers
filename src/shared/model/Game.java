@@ -702,18 +702,10 @@ public class Game {
 	 * @pre: the player in question who calls this method is taking his/her turn currently
 	 * @post 
 	 */
-	public boolean canDoPlayerDoDomesticTrade(int p1id, Offer offer, int p2id) {
+	public boolean canDoPlayerDoDomesticTrade(int p1id, int[] p1resources, int p2id, int[] p2resources) {
 		//Is it the Current Players turn and do they have any resources?
 		//Do they have the resources he said he would trade
-		
-		//Offer contains 5 numbers, one for each resource, which can be retrieved through getters.
-		//Positive numbers are the resources P1 is offering.
-		//Negative numbers are the resources that P2 is being asked to give away.
-		
-		int[] p1resources;		
-		int[] p2resources;
-		
-
+				
 		ResourceType resourceType = null;
 
 		for (int i = 0; i < p1resources.length; i++) {

@@ -280,8 +280,11 @@ public class ServerFacade implements IServerFacade {
 		Offer offer = params.getOffer();
 		
 		Game game = findGame(gameID);
-		game.getTradeOffer();
-		if(game.canDoPlayerDoDomesticTrade(userID, offer, params.getReceiver())){
+		
+		int[] p1resources = null;//TODO
+		int[] p2resources = null;//TODO
+		
+		if(game.canDoPlayerDoDomesticTrade(userID, p1resources, params.getReceiver(), p2resources)){
 			return game;
 		}
 		return null;
@@ -414,7 +417,8 @@ public class ServerFacade implements IServerFacade {
 	public Game canDoPlayRoadBuilding(PlayRoadBuilding_Params params, int gameID,
 			int userID) {
 		// TODO Auto-generated method stub
-		return null;
+		Game game = findGame(gameID);
+		return game;
 	}
 	/**
 	 * To be called from the Handlers.<br>
@@ -431,7 +435,8 @@ public class ServerFacade implements IServerFacade {
 	@Override
 	public Game canDoPlaySoldier(PlaySoldier_Params params, int gameID, int userID) {
 		// TODO Auto-generated method stub
-		return null;
+		Game game = findGame(gameID);
+		return game;
 	}
 
 	/**
@@ -449,16 +454,14 @@ public class ServerFacade implements IServerFacade {
 	@Override
 	public Game canDoPlayYearOfPlenty(PlayYearOfPlenty_Params params, int gameID, int userID) {
 		// TODO Auto-generated method stub
-		return null;
+		Game game = findGame(gameID);
+		
+		return game;
 	}
 
 
 
 	// Non Command pattern actions (nonmove actions)
-
-
-
-
 
 	/**
 	 * To be called from the Handlers.<br>
@@ -719,7 +722,7 @@ public class ServerFacade implements IServerFacade {
 
 
 
-	/**
+	/**EXTRA CREDIT, IGNORE
 	 * To be called from the Handlers.<br>
 	 * Attempts the Add AI action.
 	 * 
