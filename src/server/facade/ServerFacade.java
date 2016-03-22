@@ -4,6 +4,10 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import client.ClientFacade;
 import client.data.GameInfo;
 import client.data.PlayerInfo;
@@ -501,6 +505,7 @@ public class ServerFacade implements IServerFacade {
 
 					sb.append(URLEncoder.encode(userCookie));
 					sb.append(";Path=/");
+					userCookie = sb.toString();
 
 					result.setUserCookie(userCookie);
 
@@ -525,6 +530,7 @@ public class ServerFacade implements IServerFacade {
 	@SuppressWarnings("deprecation")
 	@Override
 	public Register_Result register(Register_Params params) {
+		System.out.println("ServerFacade.register");
 
 		String username = params.getUsername();
 		String password = params.getPassword();
@@ -533,6 +539,7 @@ public class ServerFacade implements IServerFacade {
 
 		for (User current : users){
 			if (current.getName().equals(username)){
+				System.out.println("Username already exists in system");
 				return result;
 				//no duplicate names allowed.
 			}
@@ -542,18 +549,31 @@ public class ServerFacade implements IServerFacade {
 
 		User user = new User(username, password, users.size());
 
+		System.out.println("Creating new user");
 		users.add(user); // add new user to roster
 
+		System.out.println("Creating user cookie");
 		//generate user cookie
-		String userCookie = ("{\"name\":\"" + username
+		/*String userCookie = ("{\"name\":\"" + username
 				+ "\",\"password\":\""+password
-				+ "\",\"playerID\":"+ user.getPlayerID() +"}");
+				+ "\",\"playerID\":"+ user.getPlayerID() +"}");*/
+				
+		JsonObject json = new JsonObject();
+		
+		json.addProperty("name", username);
+		json.addProperty("password", password);
+		json.addProperty("playerID", user.getPlayerID());		
+		
+		System.out.println("Unencoded cookie: "+json.toString());
+		String userCookie = json.toString();
 
 		StringBuilder sb = new StringBuilder();
 		sb.append("catan.user=");
-
+		
 		sb.append(URLEncoder.encode(userCookie));
-		sb.append(";Path=/");
+		sb.append(";Path=/;");
+		userCookie = sb.toString();
+		System.out.println("Encoded cookie: "+userCookie);
 
 
 		result.setUserCookie(userCookie);
@@ -573,13 +593,19 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public List_Result list(List_Params params) {
+		
+		System.out.println("Server.ServerFacade.list");
 
 		List_Result result = new List_Result();
 		if (params==null){
+			System.out.println("Null parameters");
 			return result;
 		}
 
+		System.out.println("Getting game info list");
 		GameInfo[] list = new GameInfo[liveGames.size()];
+
+		
 
 		for (int i = 0 ; i < liveGames.size(); i++){
 
@@ -602,14 +628,20 @@ public class ServerFacade implements IServerFacade {
 				pi.setColor(p.getPlayerColor());
 
 				info.addPlayer(pi);
+				
 			}
 
+			
 			list[i] = info;					
 		}
 
 		result.setGames(list);
 		result.setValid(true);
+		
+		System.out.println("Result to string");
 
+		System.out.println(result.toString());
+		
 		return result;
 	}
 

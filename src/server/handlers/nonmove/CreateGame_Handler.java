@@ -25,6 +25,7 @@ public class CreateGame_Handler extends SettlersOfCatanHandler{
 	 */
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
+		System.out.println("Handling create game");
 
 		logger.entering("server.handlers.CreateHandler", "handle");
 		//Handling Login http exchange.

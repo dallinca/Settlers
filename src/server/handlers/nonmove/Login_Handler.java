@@ -27,6 +27,8 @@ public class Login_Handler extends SettlersOfCatanHandler{
 	 */
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
+		System.out.println("Handling login");
+		
 		logger.entering("server.handlers.LoginHandler", "handle");
 		//Handling Login http exchange.
 
