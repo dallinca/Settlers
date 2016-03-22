@@ -91,6 +91,7 @@ public class ServerFacade implements IServerFacade {
 	 * @return whether the Accept Trade action was performed
 	 * 
 	 */
+	@Deprecated
 	@Override
 	public Game canDoAcceptTrade(AcceptTrade_Params params) {
 		return null;
@@ -414,10 +415,14 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game canDoPlayRoadBuilding(PlayRoadBuilding_Params params, int gameID,
-			int userID) {
+	public Game canDoPlayRoadBuilding(PlayRoadBuilding_Params params, int gameID, int userID) {
 		// TODO Auto-generated method stub
 		Game game = findGame(gameID);
+		
+		if (!game.canDoPlay) {
+			game = null;
+		}
+		
 		return game;
 	}
 	/**
