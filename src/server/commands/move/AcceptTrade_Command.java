@@ -3,6 +3,8 @@ package server.commands.move;
 import server.commands.Command;
 import server.facade.IServerFacade;
 import shared.communication.params.move.AcceptTrade_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
 import shared.communication.results.move.AcceptTrade_Result;
 import shared.definitions.DevCardType;
 import shared.model.Game;
@@ -56,19 +58,41 @@ public class AcceptTrade_Command implements Command {
 	@Override
 	public void execute() {
 		Game game = null;
+		
 		//Will fix in a second
 		game = facade.canDoAcceptTrade(params);
+		
 		result = new AcceptTrade_Result();
 		
 		if (game != null) {
 			try {
 				
+				//Check and see if they declined or accepted:
+				if (params.isWillAccept()) {
+					
+					//Now we operate to perform the trade
+					game.getTradeOffer().getOffer().
+					
+					result.setValid(true);
+				} else {
+					result.setValid(false);
+				}
 				
+				game.getTradeOffer() = null;
 			} catch (Exception e) {
 				System.out.println("");
 				e.printStackTrace();
 				return;
 			}
+			
+			
+
+			JsonConverter converter = new JsonConverter();
+			ClientModel cm = converter.toClientModel(game);
+
+			result.setModel(cm);
+		} else {
+			
 		}
 		//this.facade.acceptTrade(params);
 	}
