@@ -55,7 +55,7 @@ public class AcceptTrade_Command implements Command {
 	@Override
 	public void execute() {
 		Game game = null;
-		game = facade.acceptTrade(params);
+		game = facade.canDoAcceptTrade(params);
 		AcceptTrade_Result result = new AcceptTrade_Result();
 
 		// TODO Auto-generated method stub

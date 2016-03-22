@@ -47,19 +47,19 @@ public interface IServerFacade {
 	
 	
 	// Command pattern actions (move actions)
-	public Game acceptTrade(AcceptTrade_Params params);
-	public Game buildCity(BuildCity_Params params, int gameID, int userID);
-	public Game buildRoad(BuildRoad_Params params, int gameID, int userID);
-	public Game buildSettlement(BuildSettlement_Params params, int gameID, int userID);
+	public Game canDoAcceptTrade(AcceptTrade_Params params);
+	public Game canDoBuildCity(BuildCity_Params params, int gameID, int userID);
+	public Game canDoBuildRoad(BuildRoad_Params params, int gameID, int userID);
+	public Game canDoBuildSettlement(BuildSettlement_Params params, int gameID, int userID);
 	
-	public Game buyDevCard(BuyDevCard_Params params, int gameID, int userID);
-	public Game discardCards(DiscardCards_Params params, int gameID, int userID);
-	public Game finishTurn(FinishTurn_Params params, int gameID, int userID);
-	public Game maritimeTrade(MaritimeTrade_Params params, int gameID, ResourceType tradeIn, ResourceType receive);
-	public Game offerTrade(OfferTrade_Params params, int gameID, int userID);
-	public Game robPlayer(RobPlayer_Params params, int gameID, int userID);
-	public Game rollNumber(RollNumber_Params params, int gameID, int userID);
-	public Game sendChat(SendChat_Params params, int gameID, int userID);
+	public Game canDoBuyDevCard(BuyDevCard_Params params, int gameID, int userID);
+	public Game canDoDiscardCards(DiscardCards_Params params, int gameID, int userID);
+	public Game canDoFinishTurn(FinishTurn_Params params, int gameID, int userID);
+	public Game canDoMaritimeTrade(MaritimeTrade_Params params, int gameID, ResourceType tradeIn, ResourceType receive);
+	public Game canDoOfferTrade(OfferTrade_Params params, int gameID, int userID);
+	public Game canDoRobPlayer(RobPlayer_Params params, int gameID, int userID);
+	public Game canDoRollNumber(RollNumber_Params params, int gameID, int userID);
+	public Game canDoSendChat(SendChat_Params params, int gameID, int userID);
 	
 	//Dev card commands
 	public Game canDoPlayRoadBuilding(PlayRoadBuilding_Params params, int gameID, int userID);

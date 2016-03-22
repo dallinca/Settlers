@@ -92,7 +92,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game acceptTrade(AcceptTrade_Params params) {
+	public Game canDoAcceptTrade(AcceptTrade_Params params) {
 		return null;
 	}
 
@@ -109,7 +109,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game buildCity(BuildCity_Params params, int gameID, int userID) {
+	public Game canDoBuildCity(BuildCity_Params params, int gameID, int userID) {
 
 		Game game = findGame(gameID);
 		if(game.canDoPlayerBuildCity(userID)){
@@ -131,7 +131,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game buildRoad(BuildRoad_Params params, int gameID, int userID) {
+	public Game canDoBuildRoad(BuildRoad_Params params, int gameID, int userID) {
 
 		Game game = findGame(gameID);
 		if(game.canDoPlayerBuildRoad(userID)){
@@ -153,7 +153,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game buildSettlement(BuildSettlement_Params params, int gameID, int userID) {
+	public Game canDoBuildSettlement(BuildSettlement_Params params, int gameID, int userID) {
 
 		Game game = findGame(gameID);
 		if(game.canDoPlayerBuildSettlement(userID)){
@@ -175,7 +175,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game buyDevCard(BuyDevCard_Params params, int gameID, int userID) {
+	public Game canDoBuyDevCard(BuyDevCard_Params params, int gameID, int userID) {
 
 		Game game = findGame(gameID);	
 		if(game.canDoPlayerBuyDevelopmentCard(userID)){
@@ -197,7 +197,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game discardCards(DiscardCards_Params params, int gameID, int userID) {
+	public Game canDoDiscardCards(DiscardCards_Params params, int gameID, int userID) {
 		Game game = findGame(gameID);
 
 		if(!game.canDoDiscardNumberOfResourceType(userID, params.getDiscardedCards().getBrick(), ResourceType.BRICK)){
@@ -231,7 +231,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game finishTurn(FinishTurn_Params params, int gameID, int userID) {
+	public Game canDoFinishTurn(FinishTurn_Params params, int gameID, int userID) {
 
 		Game game = findGame(gameID);
 		if(game.canDoPlayerEndTurn(userID)){
@@ -253,7 +253,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game maritimeTrade(MaritimeTrade_Params params, int gameID, ResourceType tradeIn, ResourceType receive) {
+	public Game canDoMaritimeTrade(MaritimeTrade_Params params, int gameID, ResourceType tradeIn, ResourceType receive) {
 
 		Game game = findGame(gameID);
 		if(game.canDoPlayerDoMaritimeTrade(tradeIn, receive)){
@@ -275,11 +275,12 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game offerTrade(OfferTrade_Params params, int gameID,int userID) {
-
+	public Game canDoOfferTrade(OfferTrade_Params params, int gameID,int userID) {
+		
 		Offer offer = params.getOffer();
-
+		
 		Game game = findGame(gameID);
+		game.getTradeOffer();
 		if(game.canDoPlayerDoDomesticTrade(userID, offer, params.getReceiver())){
 			return game;
 		}
@@ -299,7 +300,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game robPlayer(RobPlayer_Params params, int gameID, int userID) {
+	public Game canDoRobPlayer(RobPlayer_Params params, int gameID, int userID) {
 
 		Game game = findGame(gameID);
 		if(game.canDoMoveRobberToHex(userID, params.getLocation())){
@@ -323,7 +324,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game rollNumber(RollNumber_Params params, int gameID, int userID) {
+	public Game canDoRollNumber(RollNumber_Params params, int gameID, int userID) {
 
 		Game game = findGame(gameID);
 		if(game.canDoRollDice(userID)){
@@ -345,7 +346,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game sendChat(SendChat_Params params, int gameID, int userID) {
+	public Game canDoSendChat(SendChat_Params params, int gameID, int userID) {
 		Game game = findGame(gameID);
 		return game;
 	}

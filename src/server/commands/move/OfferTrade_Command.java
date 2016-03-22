@@ -52,7 +52,7 @@ public class OfferTrade_Command implements Command {
 	@Override
 	public void execute() {
 		Game game = null;
-		game = facade.offerTrade(params, gameID, userID);
+		game = facade.canDoOfferTrade(params, gameID, userID);
 		result = new OfferTrade_Result();
 		
 		if (game==null){

@@ -57,7 +57,7 @@ public class BuildCity_Command implements Command {
 	@Override
 	public void execute() {
 		Game game = null;
-		game = facade.buildCity(params, gameID, userID);
+		game = facade.canDoBuildCity(params, gameID, userID);
 		result = new BuildCity_Result();
 
 		if (game != null) {
