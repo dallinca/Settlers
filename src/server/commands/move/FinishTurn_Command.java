@@ -56,6 +56,10 @@ public class FinishTurn_Command implements Command {
 			return;
 		}
 		//IS THERE AN END TURN FUNCTION ON GAME?????
+		
+		//Well at the very least we need to move to the next player! But we should probably come up with the action associated with this as it gets sent back across
+		//For the game history controller at least
+		game.incrementPlayer();
 	
 		result.setValid(true);
 
