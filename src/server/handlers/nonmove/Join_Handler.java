@@ -66,7 +66,7 @@ public class Join_Handler extends SettlersOfCatanHandler {
 
 				ClientModel cm = result.getModel();
 				
-				System.out.println("Wrting client model to json.");
+				System.out.println("Writing client model to json.");
 				job = gson.toJson(cm);	//serialize result to json
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); //Everything's okay
 			}
