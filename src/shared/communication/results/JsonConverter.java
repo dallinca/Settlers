@@ -746,10 +746,6 @@ public class JsonConverter {
 		// Return the clientModel
 		return clientModel;
 	}
-	
-
-	public void toClientModel() {
-	}
 
 
 }
