@@ -214,7 +214,12 @@ public class ClientModel {
 		VertexObject[] cities;
 		int radius;
 		MHexLocation robber;
+		
 
+		public MMap(){
+			robber = new MHexLocation();
+			
+		}
 		@Override
 		public String toString() {
 			return "Map [hexes=" + Arrays.toString(hexes) + ",\n ports="
@@ -307,7 +312,10 @@ public class ClientModel {
 			int owner;
 			MEdgeLocation location;
 
-			public EdgeValue() {}
+			public EdgeValue() {
+				
+				location = new MEdgeLocation();
+			}
 			public EdgeValue(int owner, MEdgeLocation location) {
 				this.owner = owner;
 				this.location = location;
@@ -364,7 +372,11 @@ public class ClientModel {
 			String direction;
 			int ratio;
 
-			public Port() {}
+			public Port() {
+				location = new MHexLocation();
+				
+				
+			}
 			public Port(String resource, MHexLocation location, String direction, int ratio) {
 				this.resource = resource;
 				this.location = location;
@@ -398,6 +410,9 @@ public class ClientModel {
 			String resource;
 			int number;
 
+			public MHex(){
+				location = new MHexLocation();
+			}
 			public MHexLocation getLocation() {
 				return location;
 			}

@@ -2,6 +2,8 @@ package shared.communication.results;
 
 import java.util.ArrayList;
 
+import shared.communication.results.ClientModel.MMap.EdgeValue;
+import shared.communication.results.ClientModel.MMap.MEdgeLocation;
 import shared.communication.results.ClientModel.MTradeOffer;
 import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
@@ -659,24 +661,36 @@ public class JsonConverter {
 			// HEXES
 		System.out.println("Initializing hexes");
 		Hex[][] allLandHexes = board.getMapHexes();
+		
+		System.out.println("Array list hex");
 		ArrayList<ClientModel.MMap.MHex> modelHexes = new ArrayList<ClientModel.MMap.MHex>();
 		
 		Hex curHex = null;
+		
+		System.out.println("Looper");
 		for(int Y = 0; Y < allLandHexes.length; Y++) {
 			for(int X = 0; X <allLandHexes.length; X++) {
+				System.out.println("X: "+X + " Y: "+Y);
 				curHex = allLandHexes[Y][X];
-				if(curHex != null) {
+				
+				if(curHex != null) {	
+					System.out.print("Hex not null." );
 					ClientModel.MMap.MHex mHex = clientModel.map.new MHex();
 					mHex.location.x = curHex.getTheirX_coord_hex();
 					mHex.location.y = curHex.getTheirY_coord_hex();
 					mHex.number = curHex.getRollValue();
+					System.out.print(" Resource: X: "+mHex.resource);	
 					mHex.resource = putHexTypeIntoString(curHex.getHexType());
 					modelHexes.add(mHex);
+					System.out.println(" Good to go!");	
 				}
 			}
 		}
 		// Convert the arraylist into an array for the client model
+		
+		System.out.println("Getting client model hex map");
 		modelMap.hexes = new ClientModel.MMap.MHex[modelHexes.size()];
+		System.out.println("Turning hexes to array");
 		modelMap.hexes = modelHexes.toArray(modelMap.hexes);
 		
 			// PORTS
@@ -700,18 +714,44 @@ public class JsonConverter {
 		modelMap.ports = modelPorts.toArray(modelMap.ports);
 		
 			// ROADS
+		System.out.println("Initializing Roads");
+		
 		ArrayList<ClientModel.MMap.EdgeValue> modelRoads = new ArrayList<ClientModel.MMap.EdgeValue>();
+		
+		System.out.println("Looping");
 		for(Player Zplayer: game.getAllPlayers()) {
+			if (Zplayer==null){
+				break;
+			}
+			System.out.println("Inner looping");
 			for(Road Zroad: Zplayer.getPlayerPieces().getRoads()) {
 				// If the road has been placed
+				System.out.println("Double inner loop");
 				if(Zroad.getEdge() != null) {
+					System.out.print("Not null. ");
 					// Add the road only if it is on the map
-					modelRoads.add( clientModel.map.new EdgeValue( game.getIndexOfPlayer(Zroad.getPlayer()),
-							clientModel.map.new MEdgeLocation(putEdgeDirectionIntoString(Zroad.getEdge().getTheirEdgeDirection()),
-									Zroad.getEdge().getTheirX_coord(),
-									Zroad.getEdge().getTheirY_coord())
-							)
-					);
+					
+					ClientModel.MMap.EdgeValue ev;
+					
+					System.out.print("Getting player index. ");
+					int playerIndex = game.getIndexOfPlayer(Zroad.getPlayer());
+					
+					ClientModel.MMap.MEdgeLocation el;					
+					
+					System.out.print("Getting edge direction. ");
+					String edgeDirection = putEdgeDirectionIntoString(Zroad.getEdge().getTheirEdgeDirection());
+					System.out.print("Edge X ");
+					int edgeX = Zroad.getEdge().getTheirX_coord();
+					System.out.print("Edge Y ");
+					int edgeY = Zroad.getEdge().getTheirY_coord();
+					System.out.print("Edge location generation. ");
+					el = clientModel.map.new MEdgeLocation(edgeDirection, edgeX, edgeY);
+					System.out.print("Edge value generation. ");
+					ev = clientModel.map.new EdgeValue(playerIndex, el);	
+					System.out.print("Adding to model roads. ");
+					modelRoads.add(ev);
+					System.out.println("Success. ");
+
 				}
 			}
 		}
