@@ -19,6 +19,33 @@ public class ClientModel {
 	MTurnTracker turnTracker;
 	int version;
 	int winner;
+	
+	public ClientModel(MDevCardList deck, MBank bank, MChat chat, MLog log,
+			MMap map, MPlayer[] players, MTradeOffer tradeOffer,
+			MTurnTracker turnTracker, int version, int winner) {
+		super();
+		this.deck = deck;
+		this.bank = bank;
+		this.chat = chat;
+		this.log = log;
+		this.map = map;
+		this.players = players;
+		this.tradeOffer = tradeOffer;
+		this.turnTracker = turnTracker;
+		this.version = version;
+		this.winner = winner;
+	}
+	
+	public ClientModel() {
+		super();
+		this.deck = new MDevCardList();
+		this.bank = new MBank();
+		this.chat = new MChat();
+		this.log = new MLog();
+		this.map = new MMap();
+		this.turnTracker = new MTurnTracker();
+	}
+
 
 	@Override
 	public String toString() {
@@ -187,7 +214,12 @@ public class ClientModel {
 		VertexObject[] cities;
 		int radius;
 		MHexLocation robber;
+		
 
+		public MMap(){
+			robber = new MHexLocation();
+			
+		}
 		@Override
 		public String toString() {
 			return "Map [hexes=" + Arrays.toString(hexes) + ",\n ports="
@@ -280,7 +312,10 @@ public class ClientModel {
 			int owner;
 			MEdgeLocation location;
 
-			public EdgeValue() {}
+			public EdgeValue() {
+				
+				location = new MEdgeLocation();
+			}
 			public EdgeValue(int owner, MEdgeLocation location) {
 				this.owner = owner;
 				this.location = location;
@@ -337,7 +372,11 @@ public class ClientModel {
 			String direction;
 			int ratio;
 
-			public Port() {}
+			public Port() {
+				location = new MHexLocation();
+				
+				
+			}
 			public Port(String resource, MHexLocation location, String direction, int ratio) {
 				this.resource = resource;
 				this.location = location;
@@ -371,6 +410,9 @@ public class ClientModel {
 			String resource;
 			int number;
 
+			public MHex(){
+				location = new MHexLocation();
+			}
 			public MHexLocation getLocation() {
 				return location;
 			}
@@ -432,6 +474,17 @@ public class ClientModel {
 		int settlements;
 		int soldiers;
 		int victoryPoints;
+
+		
+		
+		
+		public MPlayer() {
+			super();
+			
+			this.resources = new ResourceList();
+			this.newDevCards = new MDevCardList();
+			this.oldDevCards = new MDevCardList();
+		}
 
 		public int getCities() {
 			return cities;
@@ -534,6 +587,10 @@ public class ClientModel {
 		int longestRoad;
 		int largestArmy;
 
+		public MTurnTracker(){
+			status = "";
+		}
+		
 		public int getCurrentTurn() {
 			return currentTurn;
 		}
