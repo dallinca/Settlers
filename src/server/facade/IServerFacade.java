@@ -12,6 +12,7 @@ import shared.communication.results.nonmove.List_Result;
 import shared.communication.results.nonmove.Login_Result;
 import shared.communication.results.nonmove.Register_Result;
 import shared.definitions.ResourceType;
+import shared.locations.EdgeLocation;
 import shared.model.Game;
 
 /**
@@ -41,9 +42,9 @@ public interface IServerFacade {
 	public Game canDoSendChat(SendChat_Params params, int gameID, int userID);
 	
 	//Dev card commands
-	public Game canDoPlayRoadBuilding(PlayRoadBuilding_Params params, int gameID, int userID);
+	public Game canDoPlayRoadBuilding(PlayRoadBuilding_Params params, EdgeLocation edge1, EdgeLocation edge2, int gameID, int userID);
 	public Game canDoPlaySoldier(PlaySoldier_Params params, int gameID, int userID);	
-	public Game canDoPlayYearOfPlenty(PlayYearOfPlenty_Params params, int gameID, int userID);
+	public Game canDoPlayYearOfPlenty(ResourceType[] resourceType, int gameID, int userID);
 	public Game canDoPlayMonopoly(PlayMonopoly_Params params, int gameID, int userID);
 	public Game canDoPlayMonument(int gameID, int userID);
 	

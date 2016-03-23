@@ -11,6 +11,7 @@ import com.google.gson.JsonObject;
 import client.ClientFacade;
 import client.data.GameInfo;
 import client.data.PlayerInfo;
+import client.data.TradeInfo;
 import client.proxy.ServerProxy;
 import server.commands.Command;
 import shared.communication.User;
@@ -25,6 +26,8 @@ import shared.communication.params.nonmove.ListAI_Params;
 import shared.communication.params.nonmove.List_Params;
 import shared.communication.params.nonmove.Login_Params;
 import shared.communication.params.nonmove.Register_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.ClientModel.ResourceList;
 import shared.communication.results.move.AcceptTrade_Result;
 import shared.communication.results.move.BuildCity_Result;
 import shared.communication.results.move.BuildRoad_Result;
@@ -53,6 +56,9 @@ import shared.communication.results.nonmove.Register_Result;
 import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
+import shared.locations.EdgeDirection;
+import shared.locations.EdgeLocation;
+import shared.locations.HexLocation;
 import shared.model.Bank;
 import shared.model.Game;
 import shared.model.board.Board;
@@ -95,6 +101,7 @@ public class ServerFacade implements IServerFacade {
 	 * @return whether the Accept Trade action was performed
 	 * 
 	 */
+	@Deprecated
 	@Override
 	public Game canDoAcceptTrade(AcceptTrade_Params params) {
 		return null;
@@ -280,15 +287,65 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public Game canDoOfferTrade(OfferTrade_Params params, int gameID,int userID) {
-		
-		Offer offer = params.getOffer();
-		
+
 		Game game = findGame(gameID);
 		
-		int[] p1resources = null;//TODO
-		int[] p2resources = null;//TODO
+		ClientModel clientModel = new ClientModel();
+		ClientModel.ResourceList resourceList = clientModel.new ResourceList();
+		resourceList.brick = params.getOffer().getBrick();
+		resourceList.wood = params.getOffer().getWood();
+		resourceList.wheat = params.getOffer().getWheat();
+		resourceList.ore = params.getOffer().getOre();
+		resourceList.sheep = params.getOffer().getSheep();
 		
-		if(game.canDoPlayerDoDomesticTrade(userID, p1resources, params.getReceiver(), p2resources)){
+		
+		TradeInfo tradeInfo = new TradeInfo(params.getPlayerIndex(), params.getReceiver(), resourceList);
+		
+		ResourceList o = tradeInfo.getOffer();
+		int[] offer = new int[5];
+		int[] receive = new int[5];
+
+		if (o.getBrick() >= 0) {
+			offer[0] = o.getBrick();
+			receive[0] = 0;
+		} else {
+			receive[0] = o.getBrick() * -1;
+			offer[0] = 0;
+		}
+
+		if (o.getWood() >= 0) {
+			offer[1] = o.getWood();
+			receive[1] = 0;
+		} else {
+			receive[1] = o.getWood() * -1;
+			offer[1] = 0;
+		}
+
+		if (o.getWheat() >= 0) {
+			offer[2] = o.getWheat();
+			receive[2] = 0;
+		} else {
+			receive[2] = o.getWheat() * -1;
+			offer[2] = 0;
+		}
+
+		if (o.getOre() >= 0) {
+			offer[3] = o.getOre();
+			receive[3] = 0;
+		} else {
+			receive[3] = o.getOre() * -1;
+			offer[3] = 0;
+		}
+
+		if (o.getBrick() >= 0) {
+			offer[4] = o.getSheep();
+			receive[4] = 0;
+		} else {
+			receive[4] = o.getSheep() * -1;
+			offer[4] = 0;
+		}
+
+		if(game.canDoPlayerDoDomesticTrade(userID, offer, params.getReceiver(), receive)){
 			return game;
 		}
 		return null;
@@ -404,7 +461,7 @@ public class ServerFacade implements IServerFacade {
 
 		return game;
 	}
-	
+
 	/**
 	 * To be called from the Handlers.<br>
 	 * Verifies which Game model the command is for.<br>
@@ -418,10 +475,13 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game canDoPlayRoadBuilding(PlayRoadBuilding_Params params, int gameID,
-			int userID) {
-		// TODO Auto-generated method stub
+	public Game canDoPlayRoadBuilding(PlayRoadBuilding_Params params, EdgeLocation edge1, EdgeLocation edge2, int gameID, int userID) {
 		Game game = findGame(gameID);
+
+		if (!game.canDoPlaceRoadOnEdge(userID, edge1) && !game.canDoPlaceRoadOnEdge(userID, edge2)) {
+			game = null;
+		}
+
 		return game;
 	}
 	/**
@@ -438,8 +498,12 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public Game canDoPlaySoldier(PlaySoldier_Params params, int gameID, int userID) {
-		// TODO Auto-generated method stub
 		Game game = findGame(gameID);
+
+
+		if (!game.canDoStealPlayerResource(userID, params.getVictimIndex()) || !game.canDoMoveRobberToHex(userID, params.getLocation()) || !game.canDoPlayerUseDevelopmentCard(userID, DevCardType.SOLDIER)) {
+			game = null;
+		} 
 
 		return game;
 	}
@@ -457,10 +521,22 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Game canDoPlayYearOfPlenty(PlayYearOfPlenty_Params params, int gameID, int userID) {
-		// TODO Auto-generated method stub
+	public Game canDoPlayYearOfPlenty(ResourceType[] resourceType, int gameID, int userID) {
+
 		Game game = findGame(gameID);
-		
+
+		if (resourceType.length == 1) {
+			if (!game.canDoPlayerTake2OfResource(resourceType[0])) {
+				return null;
+			}
+		} else {
+
+			for (int i = 0; i < resourceType.length; i++) {
+				if (!game.canDoPlayerTakeResource(resourceType[i])) {
+					return null;
+				}
+			}
+		} 
 		return game;
 	}
 
@@ -553,19 +629,19 @@ public class ServerFacade implements IServerFacade {
 		/*String userCookie = ("{\"name\":\"" + username
 				+ "\",\"password\":\""+password
 				+ "\",\"playerID\":"+ user.getPlayerID() +"}");*/
-				
+
 		JsonObject json = new JsonObject();
-		
+
 		json.addProperty("name", username);
 		json.addProperty("password", password);
 		json.addProperty("playerID", user.getPlayerID());		
-		
+
 		System.out.println("Unencoded cookie: "+json.toString());
 		String userCookie = json.toString();
 
 		StringBuilder sb = new StringBuilder();
 		sb.append("catan.user=");
-		
+
 		sb.append(URLEncoder.encode(userCookie));
 		sb.append(";Path=/;");
 		userCookie = sb.toString();
@@ -589,7 +665,7 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public List_Result list(List_Params params) {
-		
+
 		System.out.println("Server.ServerFacade.list");
 
 		List_Result result = new List_Result();
@@ -601,7 +677,7 @@ public class ServerFacade implements IServerFacade {
 		System.out.println("Getting game info list");
 		GameInfo[] list = new GameInfo[liveGames.size()];
 
-		
+
 
 		for (int i = 0 ; i < liveGames.size(); i++){
 
@@ -624,20 +700,20 @@ public class ServerFacade implements IServerFacade {
 				pi.setColor(p.getPlayerColor());
 
 				info.addPlayer(pi);
-				
+
 			}
 
-			
+
 			list[i] = info;					
 		}
 
 		result.setGames(list);
 		result.setValid(true);
-		
+
 		System.out.println("Result to string");
 
 		System.out.println(result.toString());
-		
+
 		return result;
 	}
 
@@ -824,7 +900,7 @@ public class ServerFacade implements IServerFacade {
 		return true;
 	}
 
-	
+
 
 
 	private Game findGame(int gameID){
