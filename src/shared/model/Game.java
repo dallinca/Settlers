@@ -5,9 +5,7 @@ import java.util.Random;
 
 import client.data.TradeInfo;
 import server.commands.CommandHistory;
-import shared.communication.params.move.OfferTrade_Params.Offer;
 import shared.communication.params.move.devcard.PlaySoldier_Params;
-import shared.communication.results.ClientModel;
 import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
 import shared.definitions.PortType;
@@ -19,9 +17,7 @@ import shared.model.items.*;
 import shared.model.player.*;
 import shared.model.player.exceptions.CannotBuyException;
 import shared.model.player.exceptions.InsufficientPlayerResourcesException;
-import shared.model.turn.Dice;
 import shared.model.board.Board;
-import shared.model.board.Edge;
 import shared.model.board.Hex;
 import shared.model.board.Vertex;
 
@@ -559,8 +555,14 @@ public class Game {
 			if (currentPlayer.canDoPlayDevelopmentCard(turnNumber, DevCardType.SOLDIER)) {
 				if (canDoStealPlayerResource(userID, params.getVictimIndex())) {
 
-					moveRobberToHex(userID, params.getLocation());
-					stealPlayerResource(userID, params.getVictimIndex());
+					try {
+						moveRobberToHex(userID, params.getLocation());
+						stealPlayerResource(userID, params.getVictimIndex());
+					} catch (Exception e) {
+						System.out.println("Something went wrong when trying to move the robber or steal resources");
+						e.printStackTrace();
+					}
+					
 
 					boolean firstTime = true;
 
@@ -604,6 +606,7 @@ public class Game {
 				}
 			}
 		}
+		return doWeHaveAWinner();
 	}
 
 

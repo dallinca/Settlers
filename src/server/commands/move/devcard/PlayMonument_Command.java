@@ -55,7 +55,6 @@ public class PlayMonument_Command implements Command {
 
 		//int userID = params.getPlayerIndex();
 		result = new PlayMonument_Result();
-		
 		//Ask the server facade if that action can happen
 		//If it is true, it will return a game object then call the appropriate commands on the game object
 		Game game = facade.canDoPlayMonument(gameID, userID);

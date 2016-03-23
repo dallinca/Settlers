@@ -1,13 +1,10 @@
 package server.commands.move.devcard;
 
 import server.commands.Command;
-import server.facade.IServerFacade;
 import shared.communication.params.move.devcard.PlaySoldier_Params;
 import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
 import shared.communication.results.move.devcard.PlaySoldier_Result;
-import shared.definitions.DevCardType;
-import shared.locations.HexLocation;
 import shared.model.Game;
 
 /**
