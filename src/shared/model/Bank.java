@@ -52,7 +52,7 @@ public class Bank {
 	}
 	
 	/**
-	 * Takes in the numbers of resources it recieves from the server and adds it to the deck, or takes away, depending on the action last performed.
+	 * Takes in the numbers of resources it receives from the server and adds it to the deck, or takes away, depending on the action last performed.
 	 * 
 	 * @pre these must be valid amounts according to the game rules
 	 * @post the bank will 
@@ -116,6 +116,22 @@ public class Bank {
 		}
 		
 		shuffleDevCards();
+	}
+	
+	/**
+	 * Retrieves the current number of the specified development card type that the bank currently has
+	 * 
+	 * @param type
+	 * @return the current number of the specified development card type that the bank currently has
+	 */
+	public int numberOfDevCardType(DevCardType type) {
+		int number = 0;
+		for(int i = 0; i < developmentDeck.size(); i++) {
+			if(developmentDeck.get(i).getDevCardType() == type) {
+				number++;
+			}
+		}
+		return number;
 	}
 	
 	/**
@@ -551,7 +567,47 @@ public class Bank {
 	}
 		//playerTurnInResources(wheat);
 		//playerTurnInResources(ore);
-		
+
+	public ArrayList<ResourceCard> getWheatDeck() {
+		return wheatDeck;
+	}
+
+	public void setWheatDeck(ArrayList<ResourceCard> wheatDeck) {
+		this.wheatDeck = wheatDeck;
+	}
+
+	public ArrayList<ResourceCard> getSheepDeck() {
+		return sheepDeck;
+	}
+
+	public void setSheepDeck(ArrayList<ResourceCard> sheepDeck) {
+		this.sheepDeck = sheepDeck;
+	}
+
+	public ArrayList<ResourceCard> getLumberDeck() {
+		return lumberDeck;
+	}
+
+	public void setLumberDeck(ArrayList<ResourceCard> lumberDeck) {
+		this.lumberDeck = lumberDeck;
+	}
+
+	public ArrayList<ResourceCard> getOreDeck() {
+		return oreDeck;
+	}
+
+	public void setOreDeck(ArrayList<ResourceCard> oreDeck) {
+		this.oreDeck = oreDeck;
+	}
+
+	public ArrayList<ResourceCard> getBrickDeck() {
+		return brickDeck;
+	}
+
+	public void setBrickDeck(ArrayList<ResourceCard> brickDeck) {
+		this.brickDeck = brickDeck;
+	}
+
 
 	
 	//done canDoPlayerTakeResource(ResourceType resourceType)

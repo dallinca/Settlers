@@ -313,6 +313,13 @@ public class ClientModel {
 			String direction;
 			int ratio;
 
+			public Port() {}
+			public Port(String resource, MHexLocation location, String direction, int ratio) {
+				this.resource = resource;
+				this.location = location;
+				this.direction = direction;
+				this.ratio = ratio;
+			}
 
 			@Override
 			public String toString() {
@@ -361,6 +368,12 @@ public class ClientModel {
 			int x;
 			int y;
 
+			public MHexLocation() {}
+			public MHexLocation(int x, int y) {
+				this.x = x;
+				this.y = y;
+			}
+			
 			public int getX() {
 				return x;
 			}

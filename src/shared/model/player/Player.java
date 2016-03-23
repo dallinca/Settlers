@@ -710,5 +710,11 @@ public class Player {
 	   public int getNumberUnplayedSettlements() {
 		   return playerPieces.getNumberUnplayedSettlements();
 	   }
+
+	public DevelopmentCardHand getDevelopmentCardHand() {
+		return developmentCardHand;
+	}
+	   
+	   
 		
 }
