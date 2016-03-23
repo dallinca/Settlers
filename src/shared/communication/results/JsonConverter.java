@@ -715,42 +715,29 @@ public class JsonConverter {
 		
 			// ROADS
 		System.out.println("Initializing Roads");
-		
 		ArrayList<ClientModel.MMap.EdgeValue> modelRoads = new ArrayList<ClientModel.MMap.EdgeValue>();
 		
-		System.out.println("Looping");
 		for(Player Zplayer: game.getAllPlayers()) {
 			if (Zplayer==null){
 				break;
 			}
-			System.out.println("Inner looping");
 			for(Road Zroad: Zplayer.getPlayerPieces().getRoads()) {
 				// If the road has been placed
-				System.out.println("Double inner loop");
 				if(Zroad.getEdge() != null) {
-					System.out.print("Not null. ");
 					// Add the road only if it is on the map
 					
 					ClientModel.MMap.EdgeValue ev;
 					
-					System.out.print("Getting player index. ");
 					int playerIndex = game.getIndexOfPlayer(Zroad.getPlayer());
 					
 					ClientModel.MMap.MEdgeLocation el;					
 					
-					System.out.print("Getting edge direction. ");
 					String edgeDirection = putEdgeDirectionIntoString(Zroad.getEdge().getTheirEdgeDirection());
-					System.out.print("Edge X ");
 					int edgeX = Zroad.getEdge().getTheirX_coord();
-					System.out.print("Edge Y ");
 					int edgeY = Zroad.getEdge().getTheirY_coord();
-					System.out.print("Edge location generation. ");
 					el = clientModel.map.new MEdgeLocation(edgeDirection, edgeX, edgeY);
-					System.out.print("Edge value generation. ");
-					ev = clientModel.map.new EdgeValue(playerIndex, el);	
-					System.out.print("Adding to model roads. ");
+					ev = clientModel.map.new EdgeValue(playerIndex, el);
 					modelRoads.add(ev);
-					System.out.println("Success. ");
 
 				}
 			}
@@ -776,12 +763,14 @@ public class JsonConverter {
 					String setVDirection = putVertexDirectionIntoString(Zsettlement.getVertex().getTheirVertexDirection());
 					int setX = Zsettlement.getVertex().getTheirX_coord_ver();
 					int setY = Zsettlement.getVertex().getTheirY_coord_ver();
-					
-					ClientModel.MMap.MVertexLocation vo = clientModel.map.new MVertexLocation(setVDirection,setX,setY);
+						// Make Vertex Location and get player index
+					ClientModel.MMap.MVertexLocation vl = clientModel.map.new MVertexLocation(setVDirection,setX,setY);
+					int playerIndex = game.getIndexOfPlayer(Zsettlement.getPlayer());
 					
 					// Make Vertex Object
-					
-					modelSettlements.add( clientModel.map.new VertexObject( game.getIndexOfPlayer(Zsettlement.getPlayer()),vo));
+					ClientModel.MMap.VertexObject vo = clientModel.map.new VertexObject(playerIndex,vl);
+
+					modelSettlements.add(vo);
 				}
 			}
 		}
