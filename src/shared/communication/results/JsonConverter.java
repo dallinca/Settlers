@@ -697,16 +697,6 @@ public class JsonConverter {
 	
 
 	public void toClientModel() {
-		// Setup Ports
-		for(ClientModel.MMap.Port port: modelMap.getPorts()) {
-			// Get hex Locations
-			HexLocation hexLoc = new HexLocation(port.getLocation().getX(), port.getLocation().getY());
-			//EdgeDirection ed = getEdgeDirectionFromString(port.getDirection());
-			PortType pt = getPortTypeFromString(port.getResource());
-			// One by one setup the array of PortTypes for the vertex initialization of the Map
-			board.initPortTypesFromServer(hexLoc, pt);
-		}
-		board.initBordersAndVertices();
 	}
 
 
