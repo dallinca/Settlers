@@ -760,13 +760,13 @@ public class JsonConverter {
 			for(Settlement Zsettlement: Zplayer.getPlayerPieces().getSettlements()) {
 				// If the settlement has been placed
 				if(Zsettlement.getVertex() != null) {
-					// Add the settlement only if it is on the map
 					
 					// Vertex Location info
 					String setVDirection = putVertexDirectionIntoString(Zsettlement.getVertex().getTheirVertexDirection());
 					int setX = Zsettlement.getVertex().getTheirX_coord_ver();
 					int setY = Zsettlement.getVertex().getTheirY_coord_ver();
-						// Make Vertex Location and get player index
+					
+					// Make Vertex Location and get player index
 					ClientModel.MMap.MVertexLocation vl = clientModel.map.new MVertexLocation(setVDirection,setX,setY);
 					int playerIndex = game.getIndexOfPlayer(Zsettlement.getPlayer());
 					
@@ -792,13 +792,26 @@ public class JsonConverter {
 			for(City Zcity: Zplayer.getPlayerPieces().getCities()) {
 				// If the city has been placed
 				if(Zcity.getVertex() != null) {
-					// Add the city only if it is on the map
-					modelCities.add( clientModel.map.new VertexObject( game.getIndexOfPlayer(Zcity.getPlayer()),
+					/*modelCities.add( clientModel.map.new VertexObject( game.getIndexOfPlayer(Zcity.getPlayer()),
 							clientModel.map.new MVertexLocation(putVertexDirectionIntoString(Zcity.getVertex().getTheirVertexDirection()),
 									Zcity.getVertex().getTheirX_coord_ver(),
 									Zcity.getVertex().getTheirY_coord_ver())
 							)
-					);
+					);*/
+					
+					// Vertex Location info
+					String setVDirection = putVertexDirectionIntoString(Zcity.getVertex().getTheirVertexDirection());
+					int setX = Zcity.getVertex().getTheirX_coord_ver();
+					int setY = Zcity.getVertex().getTheirY_coord_ver();
+					
+					// Make Vertex Location and get player index
+					ClientModel.MMap.MVertexLocation vl = clientModel.map.new MVertexLocation(setVDirection,setX,setY);
+					int playerIndex = game.getIndexOfPlayer(Zcity.getPlayer());
+					
+					// Make Vertex Object
+					ClientModel.MMap.VertexObject vo = clientModel.map.new VertexObject(playerIndex,vl);
+
+					modelSettlements.add(vo);
 				}
 			}
 		}
