@@ -11,6 +11,7 @@ import com.google.gson.JsonObject;
 import client.ClientFacade;
 import client.data.GameInfo;
 import client.data.PlayerInfo;
+import client.data.TradeInfo;
 import client.proxy.ServerProxy;
 import server.commands.Command;
 import shared.communication.User;
@@ -25,6 +26,8 @@ import shared.communication.params.nonmove.ListAI_Params;
 import shared.communication.params.nonmove.List_Params;
 import shared.communication.params.nonmove.Login_Params;
 import shared.communication.params.nonmove.Register_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.ClientModel.ResourceList;
 import shared.communication.results.move.AcceptTrade_Result;
 import shared.communication.results.move.BuildCity_Result;
 import shared.communication.results.move.BuildRoad_Result;
@@ -285,14 +288,64 @@ public class ServerFacade implements IServerFacade {
 	@Override
 	public Game canDoOfferTrade(OfferTrade_Params params, int gameID,int userID) {
 
-		Offer offer = params.getOffer();
-
 		Game game = findGame(gameID);
+		
+		ClientModel clientModel = new ClientModel();
+		ClientModel.ResourceList resourceList = clientModel.new ResourceList();
+		resourceList.brick = params.getOffer().getBrick();
+		resourceList.wood = params.getOffer().getWood();
+		resourceList.wheat = params.getOffer().getWheat();
+		resourceList.ore = params.getOffer().getOre();
+		resourceList.sheep = params.getOffer().getSheep();
+		
+		
+		TradeInfo tradeInfo = new TradeInfo(params.getPlayerIndex(), params.getReceiver(), resourceList);
+		
+		ResourceList o = tradeInfo.getOffer();
+		int[] offer = new int[5];
+		int[] receive = new int[5];
 
-		int[] p1resources = null;//TODO
-		int[] p2resources = null;//TODO
+		if (o.getBrick() >= 0) {
+			offer[0] = o.getBrick();
+			receive[0] = 0;
+		} else {
+			receive[0] = o.getBrick() * -1;
+			offer[0] = 0;
+		}
 
-		if(game.canDoPlayerDoDomesticTrade(userID, p1resources, params.getReceiver(), p2resources)){
+		if (o.getWood() >= 0) {
+			offer[1] = o.getWood();
+			receive[1] = 0;
+		} else {
+			receive[1] = o.getWood() * -1;
+			offer[1] = 0;
+		}
+
+		if (o.getWheat() >= 0) {
+			offer[2] = o.getWheat();
+			receive[2] = 0;
+		} else {
+			receive[2] = o.getWheat() * -1;
+			offer[2] = 0;
+		}
+
+		if (o.getOre() >= 0) {
+			offer[3] = o.getOre();
+			receive[3] = 0;
+		} else {
+			receive[3] = o.getOre() * -1;
+			offer[3] = 0;
+		}
+
+		if (o.getBrick() >= 0) {
+			offer[4] = o.getSheep();
+			receive[4] = 0;
+		} else {
+			receive[4] = o.getSheep() * -1;
+			offer[4] = 0;
+		}
+
+		if(game.canDoPlayerDoDomesticTrade(userID, offer, params.getReceiver(), receive)){
 			return game;
 		}
 		return null;

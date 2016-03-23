@@ -556,11 +556,12 @@ public class ClientModel {
 
 	public class ResourceList{		
 
-		int brick;
-		int ore;
-		int sheep;
-		int wheat;
-		int wood;
+		public int brick;
+		public int ore;
+		public int sheep;
+		public int wheat;
+		public int wood;
+		
 		public int getBrick() {
 			return brick;
 		}

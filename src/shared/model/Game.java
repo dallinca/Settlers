@@ -405,7 +405,7 @@ public class Game {
 	 */
 	public void buyDevelopmentCard() throws CannotBuyException, InsufficientPlayerResourcesException {
 		if (currentPlayer.canDoBuyDevelopmentCard(bank)) {
-			currentPlayer.buyDevelopmentCard(bank);
+			currentPlayer.buyDevelopmentCard(turnNumber, bank);
 		}
 	}
 
