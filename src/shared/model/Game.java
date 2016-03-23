@@ -1334,15 +1334,23 @@ public class Game {
 		for (int i = 0; i < 4; i ++){
 			if (players[i]!=null){ //Check for vacancy in game roster.
 				playerCount++;
-			}			
+			}
 		}
-
 		return playerCount;
 	}
 
 	public void addPlayer(int userID, CatanColor playerColor) {
-		// TODO Auto-generated method stub
 
+		if(players == null)
+			players = new Player[numberofPlayers];
+
+		if( players.length < 4){
+			players[players.length].setPlayerId(userID);
+			players[players.length].setPlayerColor(playerColor);
+		}
+
+		if(players.length == 4)
+			status = "FirstRound";
 	}
 
 	public String getTitle() {
@@ -1351,6 +1359,24 @@ public class Game {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public Bank getBank() {
+		return bank;
+	}
+
+	public void setBank(Bank bank) {
+		this.bank = bank;
+	}
+
+	public int getIndexOfPlayer(Player player) {
+		int index = -1;
+		for(int i = 0; i < players.length; i++) {
+			if(player.getPlayerId() == players[i].getPlayerId()) {
+				index = i;
+			}
+		}
+		return index;
 	}
 
 
