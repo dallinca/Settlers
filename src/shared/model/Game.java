@@ -1389,6 +1389,9 @@ public class Game {
 	}
 
 	public int getIndexOfPlayer(Player player) {
+		if(player == null) {
+			return -1;
+		}
 		int index = -1;
 		for(int i = 0; i < players.length; i++) {
 			if(player.getPlayerId() == players[i].getPlayerId()) {
