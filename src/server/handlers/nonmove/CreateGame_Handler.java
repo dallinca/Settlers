@@ -36,28 +36,35 @@ public class CreateGame_Handler extends SettlersOfCatanHandler{
 
 		LinkedList<String> cookies = extractCookies(exchange);
 
-		User user = gson.fromJson(cookies.getFirst(), User.class);		
+		User user = gson.fromJson(cookies.getFirst(), User.class);	
+		System.out.println("Temp handler user created.");
 
 		if (facade.validateUser(user)){
+			System.out.println("User is valid.");
 
 			job = getExchangeBody(exchange); //get json string from exchange.
 			request = gson.fromJson(job, Create_Params.class); //deserialize request from json		
-			result = facade.create(request);//Call facade to perform operation with request
+						
+			result = facade.create(request, user.getPlayerID());//Call facade to perform operation with request
 
 			if (result.isValid()){
+				System.out.println("Create success.");
 				job = gson.toJson(result);	//serialize result to json			
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);				
 			}
 			else {
+				System.out.println("Create failed.");
 				job = "Failed";
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0); //Cookies invalid
 			}
 
 		}else{
+			System.out.println("Invalid user.");
 			job = "Failed";
 			exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0); //Cookies invalid
 		}			
 
+		System.out.println("Writing response.");
 		OutputStreamWriter sw = new OutputStreamWriter(exchange.getResponseBody());
 		sw.write(job);//Write result to stream.
 		sw.flush();		

@@ -1,5 +1,7 @@
 package shared.communication.results.nonmove;
 
+import shared.communication.results.ClientModel;
+
 /**
  * Result object from join command.
  *
@@ -7,6 +9,8 @@ package shared.communication.results.nonmove;
 public class Join_Result {
 	
 	private boolean valid;
+	
+	private ClientModel model;
 	private String response;
 	private String gameCookie;
 	
@@ -64,5 +68,13 @@ public class Join_Result {
 
 	public String getGameCookie() {
 		return gameCookie;
+	}
+
+	public ClientModel getModel() {
+		return model;
+	}
+
+	public void setModel(ClientModel model) {
+		this.model = model;
 	}	
 }

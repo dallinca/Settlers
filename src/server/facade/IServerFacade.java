@@ -51,10 +51,13 @@ public interface IServerFacade {
 	// Non Command pattern actions (nonmove actions)
 	public Login_Result login(Login_Params params);
 	public Register_Result register(Register_Params params);
+	
 	public List_Result list(List_Params params);
 	public Create_Result create(Create_Params params, int userID);
-	public GetVersion_Result model(GetVersion_Params params);
+	
+	public GetVersion_Result model(GetVersion_Params params, int userID);
 	public AddAI_Result addAI(AddAI_Params params);
+	
 	public ListAI_Result listAI(ListAI_Params params);
 	public Join_Result join(Join_Params params, int userID);
 	

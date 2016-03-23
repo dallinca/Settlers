@@ -562,7 +562,7 @@ public class Game {
 						System.out.println("Something went wrong when trying to move the robber or steal resources");
 						e.printStackTrace();
 					}
-					
+
 
 					boolean firstTime = true;
 
@@ -1344,16 +1344,32 @@ public class Game {
 
 	public void addPlayer(int userID, CatanColor playerColor) {
 
+		System.out.println("Game.addPlayer");
 		if(players == null)
 			players = new Player[numberofPlayers];
 
-		if( players.length < 4){
-			players[players.length].setPlayerId(userID);
-			players[players.length].setPlayerColor(playerColor);
+		int playerCount = 0;
+		while (players[playerCount]!=null){
+			playerCount++;
+			if (playerCount==4){
+				break;
+			}
 		}
 
-		if(players.length == 4)
+		System.out.println("Player count == "+playerCount);
+
+		if( playerCount < 4){
+			System.out.println("Adding new player.");
+			Player p = new Player(playerCount, bank);
+			p.setPlayerId(userID);
+			p.setPlayerColor(playerColor);			
+			players[playerCount] = p;
+		}
+
+		if(playerCount == 4){
+			System.out.println("Beginning game.");
 			status = "FirstRound";
+		}
 	}
 
 	public String getTitle() {

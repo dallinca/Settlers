@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.logging.Logger;
 
 import server.handlers.SettlersOfCatanHandler;
+import shared.communication.User;
 import shared.communication.params.nonmove.GetVersion_Params;
 import shared.communication.results.ClientModel;
 import shared.communication.results.nonmove.GetVersion_Result;
@@ -40,12 +41,14 @@ public class GetVersion_Handler extends SettlersOfCatanHandler {
 
 		if (check.equals("VALID")){
 
+			User user = gson.fromJson(cookies.getFirst(), User.class);		
+			
 			request = new GetVersion_Params();			
 			job = exchange.getRequestURI().toString();			
 			job = job.substring(job.lastIndexOf('=') + 1);//Get version number from URI
 
 			request.setVersionNumber(Integer.parseInt(job));
-			result = facade.model(request);
+			result = facade.model(request, Integer.parseInt(cookies.get(1)));
 	
 			if (result.isValid()){
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); //Everything's okay

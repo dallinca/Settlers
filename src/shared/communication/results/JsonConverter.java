@@ -542,12 +542,15 @@ public class JsonConverter {
 	}
 
 	public ClientModel toClientModel(Game game) {
+		System.out.println("jsonConverter.toClientModel");
 		// Init client Model with general information
+		System.out.println("Initializing general info");
 		ClientModel clientModel = new ClientModel();
 		clientModel.version = game.getVersionNumber();
 		clientModel.winner = game.getWinner();
 		
 		// Init the BANK with the current amounts of resources and development cards
+		System.out.println("Initializing bank");
 		Bank bank = game.getBank();
 		
 		ClientModel.MBank modelbank = clientModel.new MBank();
@@ -570,11 +573,20 @@ public class JsonConverter {
 		
 		// Init the PLAYERS
 
+		System.out.println("Initializing players");
+		
 		ArrayList<ClientModel.MPlayer> players = new ArrayList<ClientModel.MPlayer>();
+
 		for(Player player: game.getAllPlayers()) {
+			if (player==null){
+				System.out.println("Null player hit.");
+				break;
+			}
 			ClientModel.MPlayer mPlayer = clientModel.new MPlayer();
 			
 			// Player General information
+
+			System.out.println("...general information");
 			mPlayer.color = putCatanColorIntoString(player.getPlayerColor());
 			mPlayer.playerID = player.getPlayerId();
 			mPlayer.name = player.getPlayerName();
@@ -584,6 +596,8 @@ public class JsonConverter {
 			mPlayer.playedDevCard = player.isHasPlayedDevCardThisTurn();
 			
 			// Player resource cards
+			System.out.println("...resource cards");
+			
 			mPlayer.resources.brick = player.getNumberResourcesOfType(ResourceType.BRICK);
 			mPlayer.resources.ore = player.getNumberResourcesOfType(ResourceType.ORE);
 			mPlayer.resources.wheat = player.getNumberResourcesOfType(ResourceType.WHEAT);
@@ -591,12 +605,14 @@ public class JsonConverter {
 			mPlayer.resources.wood = player.getNumberResourcesOfType(ResourceType.WOOD);
 			
 			// Player Development Cards
+			System.out.println("...new development cards");
 			mPlayer.newDevCards.monopoly 		= player.getDevelopmentCardHand().numberUnplayedNEWDevCards(DevCardType.MONOPOLY, game.getTurnNumber());
 			mPlayer.newDevCards.monument 		= player.getDevelopmentCardHand().numberUnplayedNEWDevCards(DevCardType.MONUMENT, game.getTurnNumber());
 			mPlayer.newDevCards.roadBuilding 	= player.getDevelopmentCardHand().numberUnplayedNEWDevCards(DevCardType.ROAD_BUILD, game.getTurnNumber());
 			mPlayer.newDevCards.soldier 		= player.getDevelopmentCardHand().numberUnplayedNEWDevCards(DevCardType.SOLDIER, game.getTurnNumber());
 			mPlayer.newDevCards.yearOfPlenty	= player.getDevelopmentCardHand().numberUnplayedNEWDevCards(DevCardType.YEAR_OF_PLENTY, game.getTurnNumber());
 			
+			System.out.println("...old development cards");
 			mPlayer.oldDevCards.monopoly 		= player.getDevelopmentCardHand().numberUnplayedOLDDevCards(DevCardType.MONOPOLY, game.getTurnNumber());
 			mPlayer.oldDevCards.monument 		= player.getDevelopmentCardHand().numberUnplayedOLDDevCards(DevCardType.MONUMENT, game.getTurnNumber());
 			mPlayer.oldDevCards.roadBuilding 	= player.getDevelopmentCardHand().numberUnplayedOLDDevCards(DevCardType.ROAD_BUILD, game.getTurnNumber());
@@ -607,15 +623,19 @@ public class JsonConverter {
 			mPlayer.monuments = player.getDevelopmentCardHand().getNumberOfMonumentsPlayed();
 			
 			// Player pieces left to play
+			System.out.println("...pieces left to play");
 			mPlayer.cities = player.getNumberUnplayedCities();
 			mPlayer.settlements = player.getNumberUnplayedSettlements();
 			mPlayer.roads = player.getNumberUnplayedRoads();
 			
 			// Record the player into the clientModel
+			System.out.println("...adding to client model");
 			players.add(mPlayer);
+			
 		}
 		
 		// Init the TURNTRACKER
+		System.out.println("Initializing turn tracker");
 		ClientModel.MTurnTracker modelTT = clientModel.new MTurnTracker();
 		clientModel.turnTracker = modelTT;
 		modelTT.currentTurn = game.getIndexOfPlayer(game.getCurrentPlayer());
@@ -624,11 +644,13 @@ public class JsonConverter {
 		modelTT.status = game.getStatus();	
 				
 		// Init the BOARD
+		System.out.println("Initializing board");
 		ClientModel.MMap modelMap = clientModel.new MMap();
 		clientModel.map = modelMap;
 		Board board = game.getBoard();
 		
 			// HEXES
+		System.out.println("Initializing hexes");
 		Hex[][] allLandHexes = board.getMapHexes();
 		ArrayList<ClientModel.MMap.MHex> modelHexes = new ArrayList<ClientModel.MMap.MHex>();
 		
@@ -651,6 +673,7 @@ public class JsonConverter {
 		modelMap.hexes = modelHexes.toArray(modelMap.hexes);
 		
 			// PORTS
+		System.out.println("Initializing ports");
 		PortType[] allPorts = board.getMapPorts();
 		ArrayList<ClientModel.MMap.Port> modelPorts = new ArrayList<ClientModel.MMap.Port>();
 		ClientModel.MMap.Port mPort = clientModel.map.new Port();
@@ -691,6 +714,7 @@ public class JsonConverter {
 		
 		
 			// SETTLEMENTS
+		System.out.println("Initializing settlements");
 		ArrayList<ClientModel.MMap.VertexObject> modelSettlements = new ArrayList<ClientModel.MMap.VertexObject>();
 		for(Player Zplayer: game.getAllPlayers()) {
 			for(Settlement Zsettlement: Zplayer.getPlayerPieces().getSettlements()) {
@@ -712,6 +736,7 @@ public class JsonConverter {
 		
 		
 			// CITIES
+		System.out.println("Initializing cities");
 		ArrayList<ClientModel.MMap.VertexObject> modelCities = new ArrayList<ClientModel.MMap.VertexObject>();
 		for(Player Zplayer: game.getAllPlayers()) {
 			for(City Zcity: Zplayer.getPlayerPieces().getCities()) {
@@ -733,6 +758,7 @@ public class JsonConverter {
 		
 
 		// Init the TRADE OFFER
+		System.out.println("Initializing chat and logs");
 				// TODO
 		
 
@@ -744,6 +770,7 @@ public class JsonConverter {
 				// TODO
 		
 		// Return the clientModel
+		System.out.println("Returning client model");
 		return clientModel;
 	}
 

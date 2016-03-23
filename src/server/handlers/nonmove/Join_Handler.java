@@ -12,6 +12,7 @@ import server.handlers.SettlersOfCatanHandler;
 import shared.communication.User;
 import shared.communication.params.nonmove.Join_Params;
 import shared.communication.params.nonmove.List_Params;
+import shared.communication.results.ClientModel;
 import shared.communication.results.nonmove.Join_Result;
 import shared.communication.results.nonmove.List_Result;
 
@@ -31,7 +32,7 @@ public class Join_Handler extends SettlersOfCatanHandler {
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
 		System.out.println("Handling join");
-		
+
 		logger.entering("server.handlers.JoinHandler", "handle");
 		//Handling Login http exchange.
 
@@ -42,38 +43,50 @@ public class Join_Handler extends SettlersOfCatanHandler {
 		LinkedList<String> cookies = extractCookies(exchange);
 
 		User user = gson.fromJson(cookies.getFirst(), User.class);		
+		System.out.println("Temp handler user created.");
 
 		if (facade.validateUser(user)){
+			System.out.println("User valid.");
 
 			job = getExchangeBody(exchange); //get json string from exchange.
-			request = gson.fromJson(job, Join_Params.class); //deserialize request from json		
+
+			System.out.println("Getting request from json.");
+			request = gson.fromJson(job, Join_Params.class); //deserialize request from json	
+
+			System.out.println("Passing request to facade.");
 			result = facade.join(request, user.getPlayerID());//Call facade to perform operation with request
 
 			if (result.isValid()){ //Set game cookie in response
+				System.out.println("Valid result.");
+				
 				Map<String, List<String>> headers = exchange.getResponseHeaders();
 				List<String> gameCookie = new LinkedList<String>();
 				gameCookie.add(result.getGameCookie());
 				headers.put("Set-cookie", gameCookie);
 
-
-				job = "Success";	//serialize result to json
+				ClientModel cm = result.getModel();
+				
+				System.out.println("Wrting client model to json.");
+				job = gson.toJson(cm);	//serialize result to json
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); //Everything's okay
 			}
 			else{ 
-
+				System.out.println("Result invalid");
 				job = "Failure";
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0); //Game invalid
 			}			
-
-			OutputStreamWriter sw = new OutputStreamWriter(exchange.getResponseBody());
-			sw.write(job);//Write result to stream.
-			sw.flush();	
-
 		}else{
-
+			System.out.println("User invalid.");
+			job = "Failure";
 			exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0); //User invalid
 
-		}			
+		}
+
+		OutputStreamWriter sw = new OutputStreamWriter(exchange.getResponseBody());
+		sw.write(job);//Write result to stream.
+		sw.flush();	
+
+
 
 		exchange.getResponseBody().close();		
 		logger.exiting("server.handlers.JoinHandler", "handle");

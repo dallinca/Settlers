@@ -28,6 +28,7 @@ import shared.communication.params.nonmove.Login_Params;
 import shared.communication.params.nonmove.Register_Params;
 import shared.communication.results.ClientModel;
 import shared.communication.results.ClientModel.ResourceList;
+import shared.communication.results.JsonConverter;
 import shared.communication.results.move.AcceptTrade_Result;
 import shared.communication.results.move.BuildCity_Result;
 import shared.communication.results.move.BuildRoad_Result;
@@ -76,12 +77,17 @@ public class ServerFacade implements IServerFacade {
 	private int gameTracker = 0;
 	private List<Game> liveGames = new ArrayList<Game>();
 	private List<User> users = new ArrayList<User>();
+	private JsonConverter jc;
 
 	/**
 	 * Singleton pattern for serverfacade
 	 */
 	private static ServerFacade SINGLETON = null;
-	private ServerFacade() { }
+	
+	private ServerFacade() {		
+		this.jc = new JsonConverter();
+	}
+	
 	public static ServerFacade getInstance() {
 		if(SINGLETON == null){
 			SINGLETON = new ServerFacade();
@@ -745,7 +751,7 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public Create_Result create(Create_Params params, int userID) {
-
+		System.out.println("Creating game.");
 		String name = params.getName();
 		boolean numbers = params.isRandomNumbers();
 		boolean ports = params.isRandomPorts();
@@ -760,13 +766,21 @@ public class ServerFacade implements IServerFacade {
 
 		game.setTitle(name);		
 		game.setGameID(gameTracker++);
+		
+		System.out.println("Adding creator to game.");
 		game.addPlayer(userID, CatanColor.WHITE);
+		Player p = game.getPlayerByID(userID);
+		User u = users.get(userID);
+		p.setPlayerName(u.getName());
+		
+		System.out.println("Game created successfully.");
 
 		liveGames.add(game);
 
 		result.setTitle(name);
 		result.setValid(true);
 
+		System.out.println("Returning game result from server facade.");
 		return result;
 	}
 
@@ -782,57 +796,85 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public Join_Result join(Join_Params params, int userID) {
-
+		System.out.println("ServerFacade.join");
 		int gameID = params.getGameID();
 		Join_Result result = new Join_Result();
 
+		System.out.println("Finding game.");
 		Game g = findGame(gameID);
 
 		if (g==null){
+			System.out.println("Attempted to join null game");
 			return result;
 		}
+		
+		System.out.println("Getting all players from game.");
 		Player[] players = g.getAllPlayers();
+		
+		if (players == null){
+			System.out.println("Creating new player set.");
+			players = new Player[4];
+		}
 
 		boolean joinable = false;
 		for (int i = 0; i < 4; i ++){
 			if (players[i]==null){ //Check for vacancy in game roster.
+				System.out.println("Vacancy exists.");
 				joinable = true;
 				break;
 			}
 			else if (players[i].getPlayerId()==userID){ //Check if player has already joined game previously
+				System.out.println("Player already exists in game.");
 				joinable = true;
 				break;
 			}
 		}
 
 		if (!joinable){
+			System.out.println("Game cannot be joined.");
 			return result;			
 		}
 
+		System.out.println("Getting player by ID");
 		Player p = g.getPlayerByID(userID);
+		System.out.println("Converting color");
 		CatanColor playerColor = params.convertColor();
 		if (playerColor==null){
+			System.out.println("No color given. Aborting.");
 			return result;
 		}
 
 		if (p!=null){
+			System.out.println("Existing player being added to game");
 			p.setPlayerColor(playerColor);
 		}else{
+			System.out.println("New player being added to game");
 			g.addPlayer(userID, playerColor);//TODO --- Somebody help me add new players to an empty game.
 		}		
+		
+		User u = users.get(userID);
+		p.setPlayerName(u.getName());
 
 		result.setValid(true);
 
 		String gameCookie = ("catan.game="+ gameID +";Path=/;");
+		
+		System.out.println("Game cookie: "+gameCookie);
 
 		result.setGameCookie(gameCookie);
+		
+		System.out.println("Converting game to client model");
+				
+		result.setModel(jc.toClientModel(g));
 
+		System.out.println("ServerFacade.join completed");
 		return result;
 	}
 
 	/**
 	 * To be called from the Handlers.<br>
 	 * Attempts the Get Game Version action.
+	 * @param i 
 	 * 
 	 * @pre params != null
 	 * @post Game model retrieved
@@ -841,9 +883,32 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public GetVersion_Result model(GetVersion_Params params) {
-		// TODO Auto-generated method stub
-		return null;
+	public GetVersion_Result model(GetVersion_Params params, int gameID) {
+		
+		GetVersion_Result result = new GetVersion_Result();
+		
+		int clientVersion = params.getVersionNumber();
+		Game g = findGame(gameID);
+		
+		if (g.getVersionNumber()>clientVersion){
+			
+			
+			
+			result.setGame(g);
+			result.setModel(jc.toClientModel(g));
+			result.setUpToDate(false);
+			result.setValid(true);
+		}
+		else if (clientVersion == g.getVersionNumber()){
+			result.setUpToDate(true);
+			result.setValid(true);
+		}else{
+			//Critical error, user polling from the future (client's version is ahead of current version
+			//should be impossible
+			result.setValid(false);
+		}
+		
+		return result;
 	}
 
 
