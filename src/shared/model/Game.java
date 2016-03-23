@@ -1327,13 +1327,21 @@ public class Game {
 				playerCount++;
 			}
 		}
-		
 		return playerCount;
 	}
 	
 	public void addPlayer(int userID, CatanColor playerColor) {
-		// TODO Auto-generated method stub
 		
+		if(players == null)
+			players = new Player[numberofPlayers];
+		
+		if( players.length < 4){
+			players[players.length].setPlayerId(userID);
+			players[players.length].setPlayerColor(playerColor);
+		}
+		
+		if(players.length == 4)
+			 status = "FirstRound";
 	}
 
 	public String getTitle() {

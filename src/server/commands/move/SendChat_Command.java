@@ -60,7 +60,6 @@ public class SendChat_Command implements Command {
 		}
 		
 		//game.setChat(lines);
-		
 		result.setValid(true);
 
 		JsonConverter converter = new JsonConverter();
