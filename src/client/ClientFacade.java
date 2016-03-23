@@ -174,7 +174,7 @@ public class ClientFacade {
 	public Create_Result createGame(String name, boolean randomTiles, boolean randomNumbers, boolean randomPorts)  {
 		Create_Result result; 
 		Create_Params request = new Create_Params(name, randomTiles, randomNumbers, randomPorts);		
-
+		System.out.println("RESUEST IN createGame is"+request);
 		try {
 
 			result = sp.createGame(request);
