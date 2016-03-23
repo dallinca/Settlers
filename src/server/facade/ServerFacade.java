@@ -500,9 +500,11 @@ public class ServerFacade implements IServerFacade {
 	public Game canDoPlaySoldier(PlaySoldier_Params params, int gameID, int userID) {
 		Game game = findGame(gameID);
 
+
 		if (!game.canDoStealPlayerResource(userID, params.getVictimIndex()) || !game.canDoMoveRobberToHex(userID, params.getLocation()) || !game.canDoPlayerUseDevelopmentCard(userID, DevCardType.SOLDIER)) {
 			game = null;
 		} 
+
 		return game;
 	}
 
