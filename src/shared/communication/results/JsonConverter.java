@@ -764,16 +764,24 @@ public class JsonConverter {
 		System.out.println("Initializing settlements");
 		ArrayList<ClientModel.MMap.VertexObject> modelSettlements = new ArrayList<ClientModel.MMap.VertexObject>();
 		for(Player Zplayer: game.getAllPlayers()) {
+			if (Zplayer==null){
+				break;
+			}
 			for(Settlement Zsettlement: Zplayer.getPlayerPieces().getSettlements()) {
 				// If the settlement has been placed
 				if(Zsettlement.getVertex() != null) {
 					// Add the settlement only if it is on the map
-					modelSettlements.add( clientModel.map.new VertexObject( game.getIndexOfPlayer(Zsettlement.getPlayer()),
-							clientModel.map.new MVertexLocation(putVertexDirectionIntoString(Zsettlement.getVertex().getTheirVertexDirection()),
-									Zsettlement.getVertex().getTheirX_coord_ver(),
-									Zsettlement.getVertex().getTheirY_coord_ver())
-							)
-					);
+					
+					// Vertex Location info
+					String setVDirection = putVertexDirectionIntoString(Zsettlement.getVertex().getTheirVertexDirection());
+					int setX = Zsettlement.getVertex().getTheirX_coord_ver();
+					int setY = Zsettlement.getVertex().getTheirY_coord_ver();
+					
+					ClientModel.MMap.MVertexLocation vo = clientModel.map.new MVertexLocation(setVDirection,setX,setY);
+					
+					// Make Vertex Object
+					
+					modelSettlements.add( clientModel.map.new VertexObject( game.getIndexOfPlayer(Zsettlement.getPlayer()),vo));
 				}
 			}
 		}
@@ -786,6 +794,9 @@ public class JsonConverter {
 		System.out.println("Initializing cities");
 		ArrayList<ClientModel.MMap.VertexObject> modelCities = new ArrayList<ClientModel.MMap.VertexObject>();
 		for(Player Zplayer: game.getAllPlayers()) {
+			if (Zplayer==null){
+				break;
+			}
 			for(City Zcity: Zplayer.getPlayerPieces().getCities()) {
 				// If the city has been placed
 				if(Zcity.getVertex() != null) {
