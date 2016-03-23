@@ -1,29 +1,8 @@
 package server.facade;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import server.commands.Command;
 import shared.communication.params.nonmove.*;
 import shared.communication.params.move.*;
 import shared.communication.params.move.devcard.*;
-import shared.communication.results.move.AcceptTrade_Result;
-import shared.communication.results.move.BuildCity_Result;
-import shared.communication.results.move.BuildRoad_Result;
-import shared.communication.results.move.BuildSettlement_Result;
-import shared.communication.results.move.BuyDevCard_Result;
-import shared.communication.results.move.DiscardCards_Result;
-import shared.communication.results.move.FinishTurn_Result;
-import shared.communication.results.move.MaritimeTrade_Result;
-import shared.communication.results.move.OfferTrade_Result;
-import shared.communication.results.move.RobPlayer_Result;
-import shared.communication.results.move.RollNumber_Result;
-import shared.communication.results.move.SendChat_Result;
-import shared.communication.results.move.devcard.PlayMonopoly_Result;
-import shared.communication.results.move.devcard.PlayMonument_Result;
-import shared.communication.results.move.devcard.PlayRoadBuilding_Result;
-import shared.communication.results.move.devcard.PlaySoldier_Result;
-import shared.communication.results.move.devcard.PlayYearOfPlenty_Result;
 import shared.communication.results.nonmove.AddAI_Result;
 import shared.communication.results.nonmove.Create_Result;
 import shared.communication.results.nonmove.GetVersion_Result;
