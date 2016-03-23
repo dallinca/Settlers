@@ -440,6 +440,7 @@ public class ServerFacade implements IServerFacade {
 	public Game canDoPlaySoldier(PlaySoldier_Params params, int gameID, int userID) {
 		// TODO Auto-generated method stub
 		Game game = findGame(gameID);
+
 		return game;
 	}
 

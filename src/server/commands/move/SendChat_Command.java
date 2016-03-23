@@ -40,7 +40,7 @@ public class SendChat_Command implements Command {
 	}
 
 	/**
-	 * Issues the Roll Number action on the given game server game model.
+	 * Issues the send chat action on the given game server game model.
 	 * Should only be triggered by the games models Command History class.
 	 * 
 	 * @pre game != null
@@ -59,7 +59,7 @@ public class SendChat_Command implements Command {
 			return;
 		}
 		
-		//game.setChat(lines);
+		game.setChat(game.getChat() );
 		result.setValid(true);
 
 		JsonConverter converter = new JsonConverter();
