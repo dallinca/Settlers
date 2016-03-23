@@ -744,7 +744,7 @@ public class ServerFacade implements IServerFacade {
 	 * 
 	 */
 	@Override
-	public Create_Result create(Create_Params params) {
+	public Create_Result create(Create_Params params, int userID) {
 
 		String name = params.getName();
 		boolean numbers = params.isRandomNumbers();
@@ -760,6 +760,7 @@ public class ServerFacade implements IServerFacade {
 
 		game.setTitle(name);		
 		game.setGameID(gameTracker++);
+		game.addPlayer(userID, CatanColor.WHITE);
 
 		liveGames.add(game);
 
