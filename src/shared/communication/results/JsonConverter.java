@@ -764,6 +764,9 @@ public class JsonConverter {
 		System.out.println("Initializing settlements");
 		ArrayList<ClientModel.MMap.VertexObject> modelSettlements = new ArrayList<ClientModel.MMap.VertexObject>();
 		for(Player Zplayer: game.getAllPlayers()) {
+			if (Zplayer==null){
+				break;
+			}
 			for(Settlement Zsettlement: Zplayer.getPlayerPieces().getSettlements()) {
 				// If the settlement has been placed
 				if(Zsettlement.getVertex() != null) {
@@ -791,6 +794,9 @@ public class JsonConverter {
 		System.out.println("Initializing cities");
 		ArrayList<ClientModel.MMap.VertexObject> modelCities = new ArrayList<ClientModel.MMap.VertexObject>();
 		for(Player Zplayer: game.getAllPlayers()) {
+			if (Zplayer==null){
+				break;
+			}
 			for(City Zcity: Zplayer.getPlayerPieces().getCities()) {
 				// If the city has been placed
 				if(Zcity.getVertex() != null) {
