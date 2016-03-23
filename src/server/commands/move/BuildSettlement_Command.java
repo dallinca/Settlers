@@ -57,8 +57,7 @@ public class BuildSettlement_Command implements Command {
 	@Override
 	public void execute() {
 		Game game = null;
-		game = facade.buildSettlement(params, gameID, userID);
-
+		game = facade.canDoBuildSettlement(params, gameID, userID);
 		result = new BuildSettlement_Result();
 
 		if (game==null){

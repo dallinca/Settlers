@@ -30,6 +30,8 @@ public class Join_Handler extends SettlersOfCatanHandler {
 	 */
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
+		System.out.println("Handling join");
+		
 		logger.entering("server.handlers.JoinHandler", "handle");
 		//Handling Login http exchange.
 

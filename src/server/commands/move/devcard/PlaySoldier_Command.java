@@ -53,7 +53,7 @@ public class PlaySoldier_Command implements Command {
 	@Override
 	public void execute() {
 		Game game = null;
-		game = facade.playSoldier(params, gameID, userID);
+		game = facade.canDoPlaySoldier(params, gameID, userID);
 
 		result = new PlaySoldier_Result();
 

@@ -67,7 +67,7 @@ public class PlayMonopoly_Command implements Command {
 	public void execute() {
 		// TODO Auto-generated method stub
 		
-		int userID = params.getPlayerIndex();
+		//int userID = params.getPlayerIndex();
 		
 		//Ask the server facade if that action can happen
 		//If it is true, it will return a game object then call the appropriate commands on the game object
@@ -87,7 +87,7 @@ public class PlayMonopoly_Command implements Command {
 			resourceType[0] = ResourceType.SHEEP;
 		}
 		
-		Game game = facade.canDoPlayMonopoly(gameID, userID);
+		Game game = facade.canDoPlayMonopoly(params, gameID, userID);
 		result = new PlayMonopoly_Result();
 		
 		if (game != null) {

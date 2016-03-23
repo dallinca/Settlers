@@ -52,7 +52,7 @@ public class RobPlayer_Command implements Command {
 	@Override
 	public void execute() {
 		Game game = null;
-		game = facade.robPlayer(params, gameID, userID);
+		game = facade.canDoRobPlayer(params, gameID, userID);
 		result = new RobPlayer_Result();
 		
 		if (game==null){

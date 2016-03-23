@@ -48,7 +48,7 @@ public class DiscardCards_Command implements Command {
 	@Override
 	public void execute() {
 		Game game = null;
-		game = facade.discardCards(params, gameID, userID);
+		game = facade.canDoDiscardCards(params, gameID, userID);
 		result = new DiscardCards_Result();
 		
 		if (game==null){

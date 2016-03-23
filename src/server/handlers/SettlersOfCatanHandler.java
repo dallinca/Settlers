@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URLDecoder;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -63,30 +64,46 @@ public abstract class SettlersOfCatanHandler implements HttpHandler {
 	 */
 
 	public LinkedList<String> extractCookies(HttpExchange exchange){
+		System.out.println("Extracting cookies");
 		//Cookie cacher----------------------------------
 
 		String gameCookie, userCookie;
+		List<String> rawCookies = new LinkedList<String>();
 		LinkedList<String> cookies = new LinkedList<String>();
 
 		Map<String, List<String>> headers = exchange.getRequestHeaders();
-
+		
 		if (headers.size()==0){
+			System.out.println("No headers!");
 			return null;
 		}
+		
+		rawCookies = headers.get("Cookie");
 
 		//Get user cookie first.
-		userCookie = headers.get("Cookie").get(0);		
+		System.out.println("Retrieving user cookie");
+		
+		userCookie = rawCookies.get(0);
+		System.out.println(userCookie);
+		
 		userCookie = userCookie.substring(11, userCookie.length());//Cut off path from end of string		
+		System.out.println(userCookie);
+		
+		userCookie = URLDecoder.decode(userCookie);
+		System.out.println(userCookie);
 		cookies.add(userCookie);	
 
+				
 		//Get game cookie, if there is one.
-		if (headers.size()>1){
+				
+		if (rawCookies.size()>1){
+			System.out.println("Retrieving game cookie");
 
 			gameCookie = headers.get("Cookie").get(1);			 
 			gameCookie = gameCookie.substring(11, gameCookie.length());			 
 			cookies.add(gameCookie);
 		}		
-
+		System.out.println("Returning cookies");
 		return cookies;
 	}
 

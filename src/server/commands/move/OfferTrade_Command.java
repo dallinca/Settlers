@@ -1,7 +1,6 @@
 package server.commands.move;
 
 import server.commands.Command;
-import server.facade.IServerFacade;
 import shared.communication.params.move.OfferTrade_Params;
 import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
@@ -52,14 +51,22 @@ public class OfferTrade_Command implements Command {
 	@Override
 	public void execute() {
 		Game game = null;
-		game = facade.offerTrade(params, gameID, userID);
+		game = facade.canDoOfferTrade(params, gameID, userID);
 		result = new OfferTrade_Result();
 		
 		if (game==null){
 			return;
 		}
 		
-		game.doDomesticTrade(userID, p1resources, params.getReceiver(), p2resources);
+		int[] p1resources = null;
+		int[] p2resources = null;
+		
+		try {
+			game.doDomesticTrade(userID, p1resources, params.getReceiver(), p2resources);
+		} catch (Exception e) {	
+			e.printStackTrace();
+			return;
+		}
 
 		result.setValid(true);
 

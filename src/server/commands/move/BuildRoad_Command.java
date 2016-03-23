@@ -57,7 +57,7 @@ public class BuildRoad_Command implements Command {
 	@Override
 	public void execute() {
 		Game game = null;
-		game = facade.buildRoad(params, gameID, userID);
+		game = facade.canDoBuildRoad(params, gameID, userID);
 		result = new BuildRoad_Result();
 
 		if (game != null) {

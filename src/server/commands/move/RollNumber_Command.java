@@ -1,4 +1,4 @@
-package move;
+package server.commands.move;
 
 import server.commands.Command;
 import server.facade.IServerFacade;
@@ -53,7 +53,7 @@ public class RollNumber_Command implements Command {
 	public void execute() {
 		Game game = null;
 		//Call facade to check if can do operation
-		game = facade.rollNumber(params, gameID, userID);
+		game = facade.canDoRollNumber(params, gameID, userID);
 		result = new RollNumber_Result();
 		
 		if (game==null){

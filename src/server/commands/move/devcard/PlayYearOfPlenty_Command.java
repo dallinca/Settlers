@@ -54,7 +54,7 @@ public class PlayYearOfPlenty_Command implements Command {
 	public void execute() {
 		Game game = null;
 
-		game = facade.playYearOfPlenty(params, gameID, userID);
+		game = facade.canDoPlayYearOfPlenty(params, gameID, userID);
 		result = new PlayYearOfPlenty_Result();
 
 		if (game != null) {

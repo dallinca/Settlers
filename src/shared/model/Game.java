@@ -5,6 +5,7 @@ import java.util.Random;
 
 import client.data.TradeInfo;
 import server.commands.CommandHistory;
+import shared.communication.params.move.OfferTrade_Params.Offer;
 import shared.communication.results.ClientModel;
 import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
@@ -704,7 +705,7 @@ public class Game {
 	public boolean canDoPlayerDoDomesticTrade(int p1id, int[] p1resources, int p2id, int[] p2resources) {
 		//Is it the Current Players turn and do they have any resources?
 		//Do they have the resources he said he would trade
-
+				
 		ResourceType resourceType = null;
 
 		for (int i = 0; i < p1resources.length; i++) {
@@ -726,7 +727,7 @@ public class Game {
 			}
 		}
 
-		for (int g = 0; g < p1resources.length; g++) {
+		for (int g = 0; g < p2resources.length; g++) {
 
 			if (g == 0) {
 				resourceType = ResourceType.BRICK;				

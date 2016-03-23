@@ -38,6 +38,7 @@ public class Server {
 	}
 
 	private static void initLog() throws IOException {
+		System.out.println("Running initLog");
 
 		Level logLevel = Level.FINE;
 
@@ -64,8 +65,6 @@ public class Server {
 	}
 
 	private void run() {
-
-		logger.info("Initializing Model");
 
 		logger.info("Initializing HTTP Server");
 
@@ -145,8 +144,6 @@ public class Server {
 	private PlayRoadBuilding_Handler PlayRoadBuildingHandler = new PlayRoadBuilding_Handler();
 	private PlaySoldier_Handler PlaySoldierHandler = new PlaySoldier_Handler();
 	private PlayYearOfPlenty_Handler PlayYearOfPlentyHandler = new PlayYearOfPlenty_Handler();
-
-
 
 	public static void main(String[] args) {
 		if (args.length==0){

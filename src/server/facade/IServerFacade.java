@@ -47,23 +47,26 @@ public interface IServerFacade {
 	
 	
 	// Command pattern actions (move actions)
-	public Game buildCity(BuildCity_Params params, int gameID, int userID);
-	public Game buildRoad(BuildRoad_Params params, int gameID, int userID);
-	public Game buildSettlement(BuildSettlement_Params params, int gameID, int userID);
+	public Game canDoAcceptTrade(AcceptTrade_Params params);
+	public Game canDoBuildCity(BuildCity_Params params, int gameID, int userID);
+	public Game canDoBuildRoad(BuildRoad_Params params, int gameID, int userID);
+	public Game canDoBuildSettlement(BuildSettlement_Params params, int gameID, int userID);
 	
-	public Game buyDevCard(BuyDevCard_Params params, int gameID, int userID);
-	public Game discardCards(DiscardCards_Params params, int gameID, int userID);
-	public Game finishTurn(FinishTurn_Params params, int gameID, int userID);
-	public Game maritimeTrade(MaritimeTrade_Params params, int gameID, ResourceType tradeIn, ResourceType receive);
-	public Game offerTrade(OfferTrade_Params params, int gameID, int userID);
-	public Game robPlayer(RobPlayer_Params params, int gameID, int userID);
-	public Game rollNumber(RollNumber_Params params, int gameID, int userID);
-	public Game sendChat(SendChat_Params params, int gameID, int userID);
-	public Game playMonopoly(int gameID, int userID);
-	public Game playMonument(int gameID, int userID);
-	public Game playRoadBuilding(PlayRoadBuilding_Params params, int gameID, int userID);
-	public Game playSoldier(PlaySoldier_Params params, int gameID, int userID);
-	public Game playYearOfPlenty(PlayYearOfPlenty_Params params, int gameID, int userID);
+	public Game canDoBuyDevCard(BuyDevCard_Params params, int gameID, int userID);
+	public Game canDoDiscardCards(DiscardCards_Params params, int gameID, int userID);
+	public Game canDoFinishTurn(FinishTurn_Params params, int gameID, int userID);
+	public Game canDoMaritimeTrade(MaritimeTrade_Params params, int gameID, ResourceType tradeIn, ResourceType receive);
+	public Game canDoOfferTrade(OfferTrade_Params params, int gameID, int userID);
+	public Game canDoRobPlayer(RobPlayer_Params params, int gameID, int userID);
+	public Game canDoRollNumber(RollNumber_Params params, int gameID, int userID);
+	public Game canDoSendChat(SendChat_Params params, int gameID, int userID);
+	
+	//Dev card commands
+	public Game canDoPlayRoadBuilding(PlayRoadBuilding_Params params, int gameID, int userID);
+	public Game canDoPlaySoldier(PlaySoldier_Params params, int gameID, int userID);	
+	public Game canDoPlayYearOfPlenty(PlayYearOfPlenty_Params params, int gameID, int userID);
+	public Game canDoPlayMonopoly(PlayMonopoly_Params params, int gameID, int userID);
+	public Game canDoPlayMonument(int gameID, int userID);
 	
 	// Non Command pattern actions (nonmove actions)
 	public Login_Result login(Login_Params params);
@@ -73,10 +76,8 @@ public interface IServerFacade {
 	public GetVersion_Result model(GetVersion_Params params);
 	public AddAI_Result addAI(AddAI_Params params);
 	public ListAI_Result listAI(ListAI_Params params);
-	public Game canDoPlayMonopoly(int gameID, int userID);
-	Join_Result join(Join_Params params, int userID);
-	public Game canDoPlayMonument(int gameID, int userID);
-	Game canDoPlayMonopoly(int gameID, int userID, ResourceType[] resourceType);
+	public Join_Result join(Join_Params params, int userID);
+	
 	
 	// Return the game that the command is meant to operate on
 	//Game findGameForCommand(); 

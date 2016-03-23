@@ -1,21 +1,11 @@
 package server.commands.move.devcard;
 
 import server.commands.Command;
-import server.facade.IServerFacade;
-<<<<<<< HEAD
-import shared.communication.params.move.devcard.PlayMonopoly_Params;
 import shared.communication.params.move.devcard.PlayMonument_Params;
 import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
-import shared.communication.results.move.devcard.PlayMonopoly_Result;
 import shared.communication.results.move.devcard.PlayMonument_Result;
 import shared.definitions.DevCardType;
-import shared.definitions.ResourceType;
-=======
-import shared.communication.params.move.devcard.PlayMonument_Params;
-import shared.communication.results.move.devcard.PlayMonument_Result;
-import shared.definitions.DevCardType;
->>>>>>> 91c65baf303864037cbd743d5900d5e82be82076
 import shared.model.Game;
 
 /**
@@ -63,7 +53,7 @@ public class PlayMonument_Command implements Command {
 	@Override
 	public void execute() {
 
-		int userID = params.getPlayerIndex();
+		//int userID = params.getPlayerIndex();
 		result = new PlayMonument_Result();
 		
 		//Ask the server facade if that action can happen

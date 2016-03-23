@@ -52,7 +52,7 @@ public class PlayRoadBuilding_Command implements Command {
 	@Override
 	public void execute() {
 		Game game = null;
-		game = facade.playRoadBuilding(params, gameID, userID);
+		game = facade.canDoPlayRoadBuilding(params, gameID, userID);
 		result = new PlayRoadBuilding_Result();
 
 		if (game != null) {
