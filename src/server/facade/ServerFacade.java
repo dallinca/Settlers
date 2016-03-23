@@ -556,36 +556,48 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public Login_Result login(Login_Params params) {
+		System.out.println("ServerFacade.login");
 
 		String username = params.getUsername();
 		String password = params.getPassword();
 
 		Login_Result result = new Login_Result();
 
-		for (User current : users){
-			if (current.getName().equals(username)){
-				if (current.getPassword().equals(password)){
+		for (User current : users) {
+			if (current.getName().equals(username)) {
+				if (current.getPassword().equals(password)) {
 
 					result.setWasLoggedIn(true);
 
-					String userCookie = ("{\"name\":\"" + current.getName()
+					/*String userCookie = ("{\"name\":\"" + current.getName()
 							+ "\",\"password\":\""+current.getPassword()
-							+ "\",\"playerID\":"+ current.getPlayerID() +"}");
+							+ "\",\"playerID\":"+ current.getPlayerID() +"}");*/
+					
+					JsonObject json = new JsonObject();
 
+					json.addProperty("name", current.getName());
+					json.addProperty("password", current.getPassword());
+					json.addProperty("playerID", current.getPlayerID());	
+
+					String userCookie = json.toString();
+					
 					StringBuilder sb = new StringBuilder();
 					sb.append("catan.user=");
 
 					sb.append(URLEncoder.encode(userCookie));
-					sb.append(";Path=/");
+					sb.append(";Path=/;");
 					userCookie = sb.toString();
 
 					result.setUserCookie(userCookie);
 
+					System.out.println("ServerFacade.login result");
+					System.out.println(result);
 					return result;
 				}
 			}
 		}
-
+		System.out.println("ServerFacade.login result");
+		System.out.println(result);
 		return result;
 	}
 
@@ -603,9 +615,11 @@ public class ServerFacade implements IServerFacade {
 	@Override
 	public Register_Result register(Register_Params params) {
 		System.out.println("ServerFacade.register");
-
+		
+		System.out.println("users Size: " + users.size());
 		String username = params.getUsername();
 		String password = params.getPassword();
+		
 
 		Register_Result result = new Register_Result();
 
@@ -650,6 +664,8 @@ public class ServerFacade implements IServerFacade {
 
 		result.setUserCookie(userCookie);
 
+		System.out.println("users Size: " + users.size());
+		System.out.println(users);
 		return result;
 	}
 
