@@ -1,9 +1,11 @@
 package server.commands.move;
 
+import client.data.TradeInfo;
 import server.commands.Command;
 import shared.communication.params.move.OfferTrade_Params;
 import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
+import shared.communication.results.ClientModel.ResourceList;
 import shared.communication.results.move.OfferTrade_Result;
 import shared.model.Game;
 
@@ -58,11 +60,65 @@ public class OfferTrade_Command implements Command {
 			return;
 		}
 		
-		int[] p1resources = null;
-		int[] p2resources = null;
+		ClientModel clientModel = new ClientModel();
+		ClientModel.ResourceList resourceList = clientModel.new ResourceList();
+		resourceList.brick = params.getOffer().getBrick();
+		resourceList.wood = params.getOffer().getWood();
+		resourceList.wheat = params.getOffer().getWheat();
+		resourceList.ore = params.getOffer().getOre();
+		resourceList.sheep = params.getOffer().getSheep();
 		
-		try {
-			game.doDomesticTrade(userID, p1resources, params.getReceiver(), p2resources);
+		
+		TradeInfo tradeInfo = new TradeInfo(params.getPlayerIndex(), params.getReceiver(), resourceList);
+		
+		ResourceList o = tradeInfo.getOffer();
+		int[] offer = new int[5];
+		int[] receive = new int[5];
+
+		if (o.getBrick() >= 0) {
+			offer[0] = o.getBrick();
+			receive[0] = 0;
+		} else {
+			receive[0] = o.getBrick();
+			offer[0] = 0;
+		}
+
+		if (o.getWood() >= 0) {
+			offer[1] = o.getWood();
+			receive[1] = 0;
+		} else {
+			receive[1] = o.getWood();
+			offer[1] = 0;
+		}
+
+		if (o.getWheat() >= 0) {
+			offer[2] = o.getWheat();
+			receive[2] = 0;
+		} else {
+			receive[2] = o.getWheat();
+			offer[2] = 0;
+		}
+
+		if (o.getOre() >= 0) {
+			offer[3] = o.getOre();
+			receive[3] = 0;
+		} else {
+			receive[3] = o.getOre();
+			offer[3] = 0;
+		}
+
+		if (o.getBrick() >= 0) {
+			offer[4] = o.getSheep();
+			receive[4] = 0;
+		} else {
+			receive[4] = o.getSheep();
+			offer[4] = 0;
+		}
+		
+		try {			
+			
+			game.setTradeOffer(tradeInfo);
+	
 		} catch (Exception e) {	
 			e.printStackTrace();
 			return;

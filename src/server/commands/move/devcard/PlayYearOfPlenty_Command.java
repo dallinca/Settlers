@@ -1,7 +1,6 @@
 package server.commands.move.devcard;
 
 import server.commands.Command;
-import server.facade.IServerFacade;
 import shared.communication.params.move.devcard.PlayYearOfPlenty_Params;
 import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
@@ -54,32 +53,75 @@ public class PlayYearOfPlenty_Command implements Command {
 	public void execute() {
 		Game game = null;
 
-		game = facade.canDoPlayYearOfPlenty(params, gameID, userID);
-		result = new PlayYearOfPlenty_Result();
+		String r1 = params.getResource1();
+		String r2 = params.getResource2();
 
-		if (game != null) {
-			try {
-				//Need to grab the resources from the params object.............
-				game.useDevelopmentCard(userID, DevCardType.YEAR_OF_PLENTY);
-			} catch (Exception e) {
-				new PlayYearOfPlenty_Result();
-				e.printStackTrace();
-				return;
-			}
-		} else {
-			return;
+		ResourceType[] resourceType = new ResourceType[2];
+
+		try {
+
+			if (r1.equals(r2)) {
+				resourceType[0] = formatForArray(r1);
+			} else {
+				resourceType[0] = formatForArray(r1);
+				resourceType[1] = formatForArray(r2);
+			}		
+
+		} catch (Exception e) {
+			System.out.println("Invalid resource type");
+			e.printStackTrace();
 		}
 
-		result.setValid(true);
+	game = facade.canDoPlayYearOfPlenty(resourceType, gameID, userID);
+	result = new PlayYearOfPlenty_Result();
 
-		JsonConverter converter = new JsonConverter();
-		ClientModel cm = converter.toClientModel(game);
-
-		result.setModel(cm);
-
+	if (game != null) {
+		try {
+			game.useDevelopmentCard(userID, DevCardType.YEAR_OF_PLENTY, resourceType);
+		} catch (Exception e) {
+			new PlayYearOfPlenty_Result();
+			e.printStackTrace();
+			return;
+		}
+	} else {
+		return;
 	}
 
-	public PlayYearOfPlenty_Result getResult(){
-		return result;
+	result.setValid(true);
+
+	JsonConverter converter = new JsonConverter();
+	ClientModel cm = converter.toClientModel(game);
+
+	result.setModel(cm);
+
+}
+
+/**
+ * This method just converts strings from the params into ResourceType objects
+ * @param type
+ * @return
+ * @throws Exception 
+ */
+private ResourceType formatForArray(String type) throws Exception {
+	ResourceType resourceType = null;
+
+	if (type.equals(ResourceType.BRICK.toString().toLowerCase())) {
+		resourceType = ResourceType.BRICK;
+	} else if (type.equals(ResourceType.WOOD.toString().toLowerCase())) {
+		resourceType = ResourceType.WOOD;
+	} else if (type.equals(ResourceType.WHEAT.toString().toLowerCase())) {
+		resourceType = ResourceType.WHEAT;
+	} else if (type.equals(ResourceType.ORE.toString().toLowerCase())) {
+		resourceType = ResourceType.ORE;
+	} else if (type.equals(ResourceType.SHEEP.toString().toLowerCase())) {
+		resourceType = ResourceType.SHEEP;
+	} else {
+		throw new Exception("Invalid Resource Type!");
 	}
+	return resourceType;
+}
+
+public PlayYearOfPlenty_Result getResult(){
+	return result;
+}
 }

@@ -246,11 +246,12 @@ public class Player {
 	 * @post Will have payed for the Development Card, retrieved it from the Bank and placed it in players Development Card Hand
 	 * 
 	 */
-	public void buyDevelopmentCard(Bank bank) throws CannotBuyException, InsufficientPlayerResourcesException {
+	public void buyDevelopmentCard(int turnBought, Bank bank) throws CannotBuyException, InsufficientPlayerResourcesException {
 		if(canDoBuyDevelopmentCard(bank) == false) {
 			throw new CannotBuyException("Cannot Buy Development Card, possibly not enough resources");
 		}
 		DevelopmentCard cardBought = resourceCardHand.payForDevelopmentCard();
+		cardBought.setTurnBought(turnBought);
 		try {
 			developmentCardHand.addCard(cardBought);
 		} catch (NullCardException e) {

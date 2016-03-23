@@ -16,7 +16,7 @@ import shared.model.Game;
  *
  */
 public class BuildSettlement_Command implements Command {
-	private IServerFacade facade;
+	//private IServerFacade facade;
 
 	private BuildSettlement_Params params;
 	private BuildSettlement_Result result;
@@ -31,11 +31,11 @@ public class BuildSettlement_Command implements Command {
 
 	/**
 	 * Standard Command pattern constructor instantiation with the facade
-	 * 
+	 * @deprecated 
 	 * @param game
 	 */
 	public BuildSettlement_Command(IServerFacade facade) {
-		this.facade = facade;
+	//	this.facade = facade;
 	}
 
 	public BuildSettlement_Command(BuildSettlement_Params params, int gameID, int userID) {

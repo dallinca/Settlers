@@ -1,7 +1,6 @@
 package server.commands.move;
 
 import server.commands.Command;
-import server.facade.IServerFacade;
 import shared.communication.params.move.SendChat_Params;
 import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
