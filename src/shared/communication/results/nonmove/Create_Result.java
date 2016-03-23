@@ -15,9 +15,8 @@ public class Create_Result {
 
 	public Create_Result(JsonObject json) {		
 		//{"title":"TestGame","id":3,"players":[{},{},{},{}]}
-		
 		setTitle(json.get("title").toString());
-		setID(json.get("id").getAsInt());		
+		setID(json.get("ID").getAsInt());		
 		valid = true;
 	}
 

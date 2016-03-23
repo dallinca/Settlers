@@ -1,16 +1,12 @@
 package server.commands.move;
 
-import client.data.TradeInfo;
 import server.commands.Command;
 import server.facade.IServerFacade;
 import shared.communication.params.move.AcceptTrade_Params;
-import shared.communication.params.move.OfferTrade_Params.Offer;
 import shared.communication.results.ClientModel;
 import shared.communication.results.ClientModel.ResourceList;
 import shared.communication.results.JsonConverter;
 import shared.communication.results.move.AcceptTrade_Result;
-import shared.definitions.DevCardType;
-import shared.definitions.ResourceType;
 import shared.model.Game;
 
 /**

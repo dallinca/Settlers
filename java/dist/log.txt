@@ -1,4 +1,0 @@
-Mar 21, 2016 10:23:13 PM server.Server run
-INFO: Initializing HTTP Server
-Mar 21, 2016 10:23:13 PM server.Server run
-INFO: Starting HTTP Server

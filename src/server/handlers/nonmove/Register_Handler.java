@@ -56,7 +56,7 @@ public class Register_Handler extends SettlersOfCatanHandler {
 			exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0); //Everything's okay
 		}
 
-		System.out.println("Returning information.");
+		System.out.println("Returning register information.");
 		OutputStreamWriter sw = new OutputStreamWriter(exchange.getResponseBody());
 		sw.write(job);//Write result to stream.
 		sw.flush();		

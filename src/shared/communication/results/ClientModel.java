@@ -222,6 +222,11 @@ public class ClientModel {
 			int owner;
 			MVertexLocation location;
 
+			public VertexObject() {}
+			public VertexObject(int owner, MVertexLocation location) {
+				this.owner = owner;
+				this.location = location;
+			}
 
 			@Override
 			public String toString() {
@@ -243,6 +248,12 @@ public class ClientModel {
 			int x;
 			int y;
 
+			public MVertexLocation() {}
+			public MVertexLocation(String direction, int x, int y) {
+				this.direction = direction;
+				this.x = x;
+				this.y = y;
+			}
 
 			@Override
 			public String toString() {
@@ -269,6 +280,12 @@ public class ClientModel {
 			int owner;
 			MEdgeLocation location;
 
+			public EdgeValue() {}
+			public EdgeValue(int owner, MEdgeLocation location) {
+				this.owner = owner;
+				this.location = location;
+			}
+			
 			public int getOwner() {
 				return owner;
 			}
@@ -289,6 +306,13 @@ public class ClientModel {
 			String direction;
 			int x;
 			int y;
+
+			public MEdgeLocation() {}
+			public MEdgeLocation(String direction, int x, int y) {
+				this.direction = direction;
+				this.x = x;
+				this.y = y;
+			}
 
 			public int getX() {
 				return x;
@@ -313,6 +337,13 @@ public class ClientModel {
 			String direction;
 			int ratio;
 
+			public Port() {}
+			public Port(String resource, MHexLocation location, String direction, int ratio) {
+				this.resource = resource;
+				this.location = location;
+				this.direction = direction;
+				this.ratio = ratio;
+			}
 
 			@Override
 			public String toString() {
@@ -361,6 +392,12 @@ public class ClientModel {
 			int x;
 			int y;
 
+			public MHexLocation() {}
+			public MHexLocation(int x, int y) {
+				this.x = x;
+				this.y = y;
+			}
+			
 			public int getX() {
 				return x;
 			}
@@ -556,11 +593,12 @@ public class ClientModel {
 
 	public class ResourceList{		
 
-		int brick;
-		int ore;
-		int sheep;
-		int wheat;
-		int wood;
+		public int brick;
+		public int ore;
+		public int sheep;
+		public int wheat;
+		public int wood;
+		
 		public int getBrick() {
 			return brick;
 		}

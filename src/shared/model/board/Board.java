@@ -206,7 +206,6 @@ public class Board {
 	 * @throws Exception 
 	 * 
 	 * @pre canDoPlaceRoadOnEdge != false,
-	 * 
 	 * @post road is placed on the specified edge, or PlaceRoadOnEdgeException thrown
 	 */
 	public void placeRoadOnEdge(Player player, EdgeLocation edgeLocation) throws Exception {

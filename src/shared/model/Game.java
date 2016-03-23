@@ -5,8 +5,7 @@ import java.util.Random;
 
 import client.data.TradeInfo;
 import server.commands.CommandHistory;
-import shared.communication.params.move.OfferTrade_Params.Offer;
-import shared.communication.results.ClientModel;
+import shared.communication.params.move.devcard.PlaySoldier_Params;
 import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
 import shared.definitions.PortType;
@@ -18,9 +17,7 @@ import shared.model.items.*;
 import shared.model.player.*;
 import shared.model.player.exceptions.CannotBuyException;
 import shared.model.player.exceptions.InsufficientPlayerResourcesException;
-import shared.model.turn.Dice;
 import shared.model.board.Board;
-import shared.model.board.Edge;
 import shared.model.board.Hex;
 import shared.model.board.Vertex;
 
@@ -48,12 +45,12 @@ public class Game {
 	private Line[] history;
 	private int winner = -1;
 	private CommandHistory gameHistory = new CommandHistory();
-	
-	
+
+
 	//How do we create this / initialize it????
 	private int gameID;
 	private String title;
-	
+
 
 	private TradeInfo tradeOffer;
 
@@ -395,7 +392,7 @@ public class Game {
 		}
 		return player.getNumberOfSoldiersPlayed();
 	}
-	
+
 	/**
 	 * TODO Javadoc and Implement
 	 * 
@@ -404,7 +401,7 @@ public class Game {
 	 */
 	public void buyDevelopmentCard() throws CannotBuyException, InsufficientPlayerResourcesException {
 		if (currentPlayer.canDoBuyDevelopmentCard(bank)) {
-			currentPlayer.buyDevelopmentCard(bank);
+			currentPlayer.buyDevelopmentCard(turnNumber, bank);
 		}
 	}
 
@@ -427,15 +424,15 @@ public class Game {
 	 * @return how many unused cards the player has of the specified devCardType
 	 */
 	public int numberUnplayedDevCards(int userID, DevCardType devCardType) {
-		
+
 		int unplayed = -1;
-		
+
 		for (int i = 0; i < players.length; i++) {
 			if (players[i].getPlayerId() == userID) {
 				unplayed = players[i].numberUnplayedDevCards(devCardType);
 			}
 		}
-		
+
 		return unplayed;
 		//what it used to say: currentPlayer.numberUnplayedDevCards(devCardType)
 	}
@@ -531,17 +528,41 @@ public class Game {
 	 * @return whether or not you just won the game
 	 * @throws Exception
 	 */
-	public boolean useDevelopmentCard(int userID, DevCardType devCardType) throws Exception {
+	public boolean useMonumentCard(int userID, DevCardType devCardType) throws Exception {
 		if (currentPlayer.getPlayerId() == userID) {
 
 			if (currentPlayer.canDoPlayDevelopmentCard(turnNumber, devCardType)) {
 				//Marks the card as played
 				currentPlayer.playDevelopmentCard(turnNumber, devCardType);
 
-				switch (devCardType) {
-				case SOLDIER:
-					//Do they have more than three soldiers? Do they have the most soldiers? If so, award them the Largest Army award (assuming they don't already have it) and take it from the previous title holder
-					//Must move robber to a different hex
+				//Now do what monuments do:
+				currentPlayer.incrementVictoryPoints();
+				setVersionNumber(versionNumber++);
+				return doWeHaveAWinner();
+			}
+			else 
+				throw new Exception("Cannot Play Monument card!");
+		} else
+			throw new Exception("Cannot Play Monument card, you are not the current Player!");
+	}
+
+	public boolean useSoldierCard(int userID, PlaySoldier_Params params) {
+		//Do they have more than three soldiers? Do they have the most soldiers? If so, award them the Largest Army award (assuming they don't already have it) and take it from the previous title holder
+		//Must move robber to a different hex
+
+		if (currentPlayer.getPlayerId() == userID) {
+
+			if (currentPlayer.canDoPlayDevelopmentCard(turnNumber, DevCardType.SOLDIER)) {
+				if (canDoStealPlayerResource(userID, params.getVictimIndex())) {
+
+					try {
+						moveRobberToHex(userID, params.getLocation());
+						stealPlayerResource(userID, params.getVictimIndex());
+					} catch (Exception e) {
+						System.out.println("Something went wrong when trying to move the robber or steal resources");
+						e.printStackTrace();
+					}
+					
 
 					boolean firstTime = true;
 
@@ -582,27 +603,10 @@ public class Game {
 					setVersionNumber(versionNumber++);
 					return doWeHaveAWinner();
 
-				case MONUMENT:
-					//Give the player their due reward
-					currentPlayer.incrementVictoryPoints();
-					setVersionNumber(versionNumber++);
-					return doWeHaveAWinner();
-
-				case ROAD_BUILD:
-					//Perhaps to avoid the cost of the roads, we can have an overridden method that asserts true on the canDoBuy and asserts true and avoids the cost. Who knows
-
-					setVersionNumber(versionNumber++);
-					//Did the two extra roads with the game?!?! This may result in the longest road being awarded. 
-					return doWeHaveAWinner();
 				}
-
 			}
-
-			else 
-				throw new Exception("Cannot Play development card, you card doesn't exist!");
-			return doWeHaveAWinner();
-		} else
-			throw new Exception("Cannot Play development card, you are not the current Player!");
+		}
+		return doWeHaveAWinner();
 	}
 
 
@@ -705,7 +709,7 @@ public class Game {
 	public boolean canDoPlayerDoDomesticTrade(int p1id, int[] p1resources, int p2id, int[] p2resources) {
 		//Is it the Current Players turn and do they have any resources?
 		//Do they have the resources he said he would trade
-				
+
 		ResourceType resourceType = null;
 
 		for (int i = 0; i < p1resources.length; i++) {
@@ -884,21 +888,28 @@ public class Game {
 		// If we are in the setup phase, the rules for placing a road are slightly different
 		if(turnNumber < 2) {
 			board.placeInitialRoadOnEdge(getCurrentPlayer(), edgeLocation);
+			versionNumber++;
 		} else {
 			board.placeRoadOnEdge(getCurrentPlayer(), edgeLocation);
 		}
 	}
-	
 
-	public void placeRoadOnEdge(int UserId, EdgeLocation edgeLocation, boolean usingRoadBuilder) throws Exception {
-		if(canDoPlaceRoadOnEdge(UserId, edgeLocation) == false) {
+
+	public void placeRoadOnEdge(int userId, EdgeLocation edgeLocation, boolean usingRoadBuilder) throws Exception {
+		if(canDoPlaceRoadOnEdge(userId, edgeLocation) == false) {
 			throw new Exception("Specified Player cannot place a road on the given edgeLocation");
 		}
 		// If we are in the setup phase, the rules for placing a road are slightly different
 		if(usingRoadBuilder == true) {
-			board.placeRoadBuildRoadOnEdge(getCurrentPlayer(), edgeLocation);
+			if (currentPlayer.getPlayerId() == userId && currentPlayer.canDoPlayDevelopmentCard(turnNumber, DevCardType.ROAD_BUILD) && currentPlayer.getNumberUnplayedRoads() >= 2) {
+				board.placeRoadBuildRoadOnEdge(getCurrentPlayer(), edgeLocation);
+				versionNumber++;
+			} else {
+				throw new Exception("Unable to play Road Builder!");
+			}
 		} else {
 			board.placeRoadOnEdge(getCurrentPlayer(), edgeLocation);
+			versionNumber++;
 		}
 	}
 
@@ -931,9 +942,10 @@ public class Game {
 		// If we are in the first two rounds of the game
 		if(turnNumber < 2) {
 			board.placeInitialSettlementOnVertex(currentPlayer, vertexLocation);
+			versionNumber++;
 		} else {
 			board.placeSettlementOnVertex(currentPlayer, vertexLocation);
-
+			versionNumber++;
 		}
 	}
 
@@ -1318,22 +1330,30 @@ public class Game {
 
 
 	public int getPlayerCount(){
-		
+
 		Player[] players = getAllPlayers();
 		int playerCount = 0;
-		
+
 		for (int i = 0; i < 4; i ++){
 			if (players[i]!=null){ //Check for vacancy in game roster.
 				playerCount++;
-			}			
+			}
 		}
-		
 		return playerCount;
 	}
-	
+
 	public void addPlayer(int userID, CatanColor playerColor) {
-		// TODO Auto-generated method stub
-		
+
+		if(players == null)
+			players = new Player[numberofPlayers];
+
+		if( players.length < 4){
+			players[players.length].setPlayerId(userID);
+			players[players.length].setPlayerColor(playerColor);
+		}
+
+		if(players.length == 4)
+			status = "FirstRound";
 	}
 
 	public String getTitle() {
@@ -1342,6 +1362,24 @@ public class Game {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public Bank getBank() {
+		return bank;
+	}
+
+	public void setBank(Bank bank) {
+		this.bank = bank;
+	}
+
+	public int getIndexOfPlayer(Player player) {
+		int index = -1;
+		for(int i = 0; i < players.length; i++) {
+			if(player.getPlayerId() == players[i].getPlayerId()) {
+				index = i;
+			}
+		}
+		return index;
 	}
 
 
