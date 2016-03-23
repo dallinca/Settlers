@@ -646,6 +646,7 @@ public class JsonConverter {
 				}
 			}
 		}
+		// Convert the arraylist into an array for the client model
 		modelMap.hexes = new ClientModel.MMap.MHex[modelHexes.size()];
 		modelMap.hexes = modelHexes.toArray(modelMap.hexes);
 		
@@ -664,20 +665,71 @@ public class JsonConverter {
 			modelPorts.add(clientModel.map.new Port(putPortTypeIntoString(allPorts[7]),clientModel.map.new MHexLocation(-3,2), putEdgeDirectionIntoString(EdgeDirection.NorthEast),	getTradePortRatio(allPorts[7])));
 			modelPorts.add(clientModel.map.new Port(putPortTypeIntoString(allPorts[8]),clientModel.map.new MHexLocation(-2,3), putEdgeDirectionIntoString(EdgeDirection.NorthEast),	getTradePortRatio(allPorts[8])));		
 		}
-		
+			// Convert the arraylist into an array for the client model
+		modelMap.ports = new ClientModel.MMap.Port[modelPorts.size()];
+		modelMap.ports = modelPorts.toArray(modelMap.ports);
 		
 			// ROADS
-		Road[] allRoads = new Road[9];
 		ArrayList<ClientModel.MMap.EdgeValue> modelRoads = new ArrayList<ClientModel.MMap.EdgeValue>();
+		for(Player Zplayer: game.getAllPlayers()) {
+			for(Road Zroad: Zplayer.getPlayerPieces().getRoads()) {
+				// If the road has been placed
+				if(Zroad.getEdge() != null) {
+					// Add the road only if it is on the map
+					modelRoads.add( clientModel.map.new EdgeValue( game.getIndexOfPlayer(Zroad.getPlayer()),
+							clientModel.map.new MEdgeLocation(putEdgeDirectionIntoString(Zroad.getEdge().getTheirEdgeDirection()),
+									Zroad.getEdge().getTheirX_coord(),
+									Zroad.getEdge().getTheirY_coord())
+							)
+					);
+				}
+			}
+		}
+			// Convert the arraylist into an array for the client model
+		modelMap.roads = new ClientModel.MMap.EdgeValue[modelRoads.size()];
+		modelMap.roads = modelRoads.toArray(modelMap.roads);
 		
 		
 			// SETTLEMENTS
-		Settlement[] allSettlements = new Settlement[9];
-		ArrayList<ClientModel.MMap.VertexObject> modelSettlement = new ArrayList<ClientModel.MMap.VertexObject>();
+		ArrayList<ClientModel.MMap.VertexObject> modelSettlements = new ArrayList<ClientModel.MMap.VertexObject>();
+		for(Player Zplayer: game.getAllPlayers()) {
+			for(Settlement Zsettlement: Zplayer.getPlayerPieces().getSettlements()) {
+				// If the settlement has been placed
+				if(Zsettlement.getVertex() != null) {
+					// Add the settlement only if it is on the map
+					modelSettlements.add( clientModel.map.new VertexObject( game.getIndexOfPlayer(Zsettlement.getPlayer()),
+							clientModel.map.new MVertexLocation(putVertexDirectionIntoString(Zsettlement.getVertex().getTheirVertexDirection()),
+									Zsettlement.getVertex().getTheirX_coord_ver(),
+									Zsettlement.getVertex().getTheirY_coord_ver())
+							)
+					);
+				}
+			}
+		}
+			// Convert the arraylist into an array for the client model
+		modelMap.settlements = new ClientModel.MMap.VertexObject[modelSettlements.size()];
+		modelMap.settlements = modelSettlements.toArray(modelMap.settlements);
+		
 		
 			// CITIES
-		City[] allCities = new City[9];
 		ArrayList<ClientModel.MMap.VertexObject> modelCities = new ArrayList<ClientModel.MMap.VertexObject>();
+		for(Player Zplayer: game.getAllPlayers()) {
+			for(City Zcity: Zplayer.getPlayerPieces().getCities()) {
+				// If the city has been placed
+				if(Zcity.getVertex() != null) {
+					// Add the city only if it is on the map
+					modelCities.add( clientModel.map.new VertexObject( game.getIndexOfPlayer(Zcity.getPlayer()),
+							clientModel.map.new MVertexLocation(putVertexDirectionIntoString(Zcity.getVertex().getTheirVertexDirection()),
+									Zcity.getVertex().getTheirX_coord_ver(),
+									Zcity.getVertex().getTheirY_coord_ver())
+							)
+					);
+				}
+			}
+		}
+			// Convert the arraylist into an array for the client model
+		modelMap.cities = new ClientModel.MMap.VertexObject[modelCities.size()];
+		modelMap.cities = modelCities.toArray(modelMap.cities);
 		
 
 		// Init the TRADE OFFER
