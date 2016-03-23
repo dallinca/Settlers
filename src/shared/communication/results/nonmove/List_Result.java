@@ -81,6 +81,9 @@ public class List_Result {
 
 	public GameInfo[] getGames() {
 		
+		if (games!=null){
+			return games;			
+		}
 		if (listedGames==null){
 			return new GameInfo[0];
 		}else if(listedGames.size()==0){
