@@ -7,6 +7,7 @@ import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
 import shared.communication.results.move.devcard.PlaySoldier_Result;
 import shared.definitions.DevCardType;
+import shared.locations.HexLocation;
 import shared.model.Game;
 
 /**
@@ -55,12 +56,20 @@ public class PlaySoldier_Command implements Command {
 		Game game = null;
 		game = facade.canDoPlaySoldier(params, gameID, userID);
 
+		/*
+		 * Things to use: 
+		 * private int playerIndex;
+		 * private int victimIndex;
+		 * private HexLocation location;	
+		 */
+
+
 		result = new PlaySoldier_Result();
 
 		if (game != null) {
 			try {
-				//Same deal as what I just saw in road building. grab from the params object the location the soldier will be built and pass that in
-				game.useDevelopmentCard(userID, DevCardType.SOLDIER);
+				game.useSoldierCard(userID, params);
+
 			} catch (Exception e) {
 				new PlaySoldier_Result();
 				e.printStackTrace();

@@ -19,7 +19,6 @@ import shared.model.Game;
  *
  */
 public class PlayMonopoly_Command implements Command {
-	private IServerFacade facade;
 	private boolean isValid = false;
 	private PlayMonopoly_Result result;
 	private PlayMonopoly_Params params;

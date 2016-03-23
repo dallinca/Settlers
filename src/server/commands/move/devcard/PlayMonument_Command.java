@@ -62,7 +62,7 @@ public class PlayMonument_Command implements Command {
 		
 		if (game != null) {
 			try {
-				game.useDevelopmentCard(userID, DevCardType.MONUMENT);
+				game.useMonumentCard(userID, DevCardType.MONUMENT);
 			} catch (Exception e) {
 				System.out.println("");
 				e.printStackTrace();

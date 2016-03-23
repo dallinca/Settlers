@@ -59,8 +59,22 @@ public class PlayYearOfPlenty_Command implements Command {
 
 		if (game != null) {
 			try {
+
 				//Need to grab the resources from the params object.............
-				game.useDevelopmentCard(userID, DevCardType.YEAR_OF_PLENTY);
+
+				String r1 = params.getResource1();
+				String r2 = params.getResource2();
+
+				ResourceType[] resourceType = new ResourceType[2];
+
+				if (r1.equals(r2)) {
+					resourceType[0] = formatForArray(r1);
+				} else {
+					resourceType[0] = formatForArray(r1);
+					resourceType[1] = formatForArray(r2);
+				}
+
+				game.useDevelopmentCard(userID, DevCardType.YEAR_OF_PLENTY, resourceType);
 			} catch (Exception e) {
 				new PlayYearOfPlenty_Result();
 				e.printStackTrace();
@@ -77,6 +91,28 @@ public class PlayYearOfPlenty_Command implements Command {
 
 		result.setModel(cm);
 
+	}
+
+	/**
+	 * This method just converts strings from the params into ResourceType objects
+	 * @param type
+	 * @return
+	 */
+	private ResourceType formatForArray(String type) {
+		ResourceType resourceType;
+
+		if (type.equals(ResourceType.BRICK.toString().toLowerCase())) {
+			resourceType = ResourceType.BRICK;
+		} else if (type.equals(ResourceType.WOOD.toString().toLowerCase())) {
+			resourceType = ResourceType.WOOD;
+		} else if (type.equals(ResourceType.WHEAT.toString().toLowerCase())) {
+			resourceType = ResourceType.WHEAT;
+		} else if (type.equals(ResourceType.ORE.toString().toLowerCase())) {
+			resourceType = ResourceType.ORE;
+		} else if (type.equals(ResourceType.SHEEP.toString().toLowerCase())) {
+			resourceType = ResourceType.SHEEP;
+		}
+		return resourceType;
 	}
 
 	public PlayYearOfPlenty_Result getResult(){
