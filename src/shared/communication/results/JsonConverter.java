@@ -721,12 +721,17 @@ public class JsonConverter {
 				// If the settlement has been placed
 				if(Zsettlement.getVertex() != null) {
 					// Add the settlement only if it is on the map
-					modelSettlements.add( clientModel.map.new VertexObject( game.getIndexOfPlayer(Zsettlement.getPlayer()),
-							clientModel.map.new MVertexLocation(putVertexDirectionIntoString(Zsettlement.getVertex().getTheirVertexDirection()),
-									Zsettlement.getVertex().getTheirX_coord_ver(),
-									Zsettlement.getVertex().getTheirY_coord_ver())
-							)
-					);
+					
+					// Vertex Location info
+					String setVDirection = putVertexDirectionIntoString(Zsettlement.getVertex().getTheirVertexDirection());
+					int setX = Zsettlement.getVertex().getTheirX_coord_ver();
+					int setY = Zsettlement.getVertex().getTheirY_coord_ver();
+					
+					ClientModel.MMap.MVertexLocation vo = clientModel.map.new MVertexLocation(setVDirection,setX,setY);
+					
+					// Make Vertex Object
+					
+					modelSettlements.add( clientModel.map.new VertexObject( game.getIndexOfPlayer(Zsettlement.getPlayer()),vo));
 				}
 			}
 		}
