@@ -39,6 +39,7 @@ public class CreateGame_Handler extends SettlersOfCatanHandler{
 		User user = gson.fromJson(cookies.getFirst(), User.class);		
 
 		if (facade.validateUser(user)){
+			System.out.println("Valid CREATE request.");
 
 			job = getExchangeBody(exchange); //get json string from exchange.
 			request = gson.fromJson(job, Create_Params.class); //deserialize request from json		
@@ -54,6 +55,7 @@ public class CreateGame_Handler extends SettlersOfCatanHandler{
 			}
 
 		}else{
+			System.out.println("Not Valid CREATE request.");
 			job = "Failed";
 			exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0); //Cookies invalid
 		}			
