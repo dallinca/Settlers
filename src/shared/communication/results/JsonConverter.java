@@ -718,15 +718,15 @@ public class JsonConverter {
 		
 		ArrayList<ClientModel.MMap.EdgeValue> modelRoads = new ArrayList<ClientModel.MMap.EdgeValue>();
 		
-		System.out.println("Looping");
+		//System.out.println("Looping");
 		for(Player Zplayer: game.getAllPlayers()) {
 			if (Zplayer==null){
 				break;
 			}
-			System.out.println("Inner looping");
+			//System.out.println("Inner looping");
 			for(Road Zroad: Zplayer.getPlayerPieces().getRoads()) {
 				// If the road has been placed
-				System.out.println("Double inner loop");
+				//System.out.println("Double inner loop");
 				if(Zroad.getEdge() != null) {
 					System.out.print("Not null. ");
 					// Add the road only if it is on the map
