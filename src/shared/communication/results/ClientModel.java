@@ -19,6 +19,33 @@ public class ClientModel {
 	MTurnTracker turnTracker;
 	int version;
 	int winner;
+	
+	public ClientModel(MDevCardList deck, MBank bank, MChat chat, MLog log,
+			MMap map, MPlayer[] players, MTradeOffer tradeOffer,
+			MTurnTracker turnTracker, int version, int winner) {
+		super();
+		this.deck = deck;
+		this.bank = bank;
+		this.chat = chat;
+		this.log = log;
+		this.map = map;
+		this.players = players;
+		this.tradeOffer = tradeOffer;
+		this.turnTracker = turnTracker;
+		this.version = version;
+		this.winner = winner;
+	}
+	
+	public ClientModel() {
+		super();
+		this.deck = new MDevCardList();
+		this.bank = new MBank();
+		this.chat = new MChat();
+		this.log = new MLog();
+		this.map = new MMap();
+		this.turnTracker = new MTurnTracker();
+	}
+
 
 	@Override
 	public String toString() {
@@ -433,6 +460,17 @@ public class ClientModel {
 		int soldiers;
 		int victoryPoints;
 
+		
+		
+		
+		public MPlayer() {
+			super();
+			
+			this.resources = new ResourceList();
+			this.newDevCards = new MDevCardList();
+			this.oldDevCards = new MDevCardList();
+		}
+
 		public int getCities() {
 			return cities;
 		}
@@ -534,6 +572,10 @@ public class ClientModel {
 		int longestRoad;
 		int largestArmy;
 
+		public MTurnTracker(){
+			status = "";
+		}
+		
 		public int getCurrentTurn() {
 			return currentTurn;
 		}

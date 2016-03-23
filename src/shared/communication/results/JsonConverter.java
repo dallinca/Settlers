@@ -637,10 +637,17 @@ public class JsonConverter {
 		// Init the TURNTRACKER
 		System.out.println("Initializing turn tracker");
 		ClientModel.MTurnTracker modelTT = clientModel.new MTurnTracker();
+		
+		System.out.println("Turn tracker given to clientmodel");
 		clientModel.turnTracker = modelTT;
+		
+		System.out.println("Current player");
 		modelTT.currentTurn = game.getIndexOfPlayer(game.getCurrentPlayer());
+		System.out.println("Largest army");
 		modelTT.largestArmy = game.getIndexOfPlayer(game.getLargestArmy());
+		System.out.println("Longest road");
 		modelTT.longestRoad = game.getIndexOfPlayer(game.getLongestRoad());
+		System.out.println("Game status");
 		modelTT.status = game.getStatus();	
 				
 		// Init the BOARD
