@@ -850,6 +850,7 @@ public class ServerFacade implements IServerFacade {
 		}else{
 			System.out.println("New player being added to game");
 			g.addPlayer(userID, playerColor);//TODO --- Somebody help me add new players to an empty game.
+			p = g.getPlayerByID(userID);
 		}		
 		
 		User u = users.get(userID);
