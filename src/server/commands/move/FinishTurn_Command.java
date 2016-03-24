@@ -17,7 +17,7 @@ import shared.model.Game;
  */
 public class FinishTurn_Command implements Command {
 	
-	private IServerFacade facade;
+	//private IServerFacade facade;
 	private FinishTurn_Result result;
 	private FinishTurn_Params params;
 	private int gameID, userID;
@@ -65,6 +65,7 @@ public class FinishTurn_Command implements Command {
 		game.incrementPlayer();
 	
 		result.setValid(true);
+		result.setGame(game);
 		System.out.println("FinishTurn_Command3");
 
 		JsonConverter converter = new JsonConverter();

@@ -42,26 +42,31 @@ public class FinishTurn_Handler extends SettlersOfCatanHandler{
 
 		if (check.equals("VALID")){
 
+			System.out.println("Finish turn check is valid");
 			User user = gson.fromJson(cookies.getFirst(), User.class);	
 			int gameID = Integer.parseInt(cookies.get(1));
 
 			job = getExchangeBody(exchange); //get json string from exchange.
+			
 			request = gson.fromJson(job, FinishTurn_Params.class); //deserialize request from json
-
+			System.out.println("Creating command");
 			FinishTurn_Command command = new FinishTurn_Command(request, gameID, user.getPlayerID());
-
+			System.out.println("Executing command");
 			command.execute();//Execute the command	
-
+			System.out.println("Command executed");
 			result = command.getResult(); //Get result from command			
 
 			if (result.isValid()){
+				System.out.println("Finish turn result is valid");
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); //Everything's okay
-				job = gson.toJson(result);	//serialize result to json	
+				job = gson.toJson(result.getModel());	//serialize result to json	
 			}else{
+				System.out.println("Command failure");
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
 				job = "COMMAND FAILURE";	
 			}			
 		}else{
+			System.out.println("invalid user");
 			job = check;			
 			exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0); //User invalid			
 		}		
