@@ -18,14 +18,14 @@ import com.sun.net.httpserver.HttpExchange;
  */
 public class CreateGame_Handler extends SettlersOfCatanHandler{
 
-	private Logger logger = Logger.getLogger("settlers-of-catan"); 	
+	//private Logger logger = Logger.getLogger("settlers-of-catan"); 	
 
 	/**
 	 * Receives the Create Params to create a game and constructs the appropriate command and passes it to the Server Facade after decoding the object.
 	 */
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
-		System.out.println("Handling create game");
+		//System.out.println("Handling create game");
 
 		logger.entering("server.handlers.CreateHandler", "handle");
 		//Handling Login http exchange.
@@ -70,7 +70,7 @@ public class CreateGame_Handler extends SettlersOfCatanHandler{
 		sw.flush();		
 
 		exchange.getResponseBody().close();		
-		logger.exiting("server.handlers.CreateHandler", "handle");		
+		//logger.exiting("server.handlers.CreateHandler", "handle");		
 
 	}
 

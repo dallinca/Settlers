@@ -516,7 +516,7 @@ public class ServerFacade implements IServerFacade {
 
 		return game;
 	}
-
+// Resource: 
 	/**
 	 * To be called from the Handlers.<br>
 	 * Verifies which Game model the command is for.<br>

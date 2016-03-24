@@ -21,13 +21,13 @@ import com.sun.net.httpserver.HttpHandler;
 public class DiscardCards_Handler extends SettlersOfCatanHandler {
 	
 
-	private Logger logger = Logger.getLogger("settlers-of-catan"); 
+	//private Logger logger = Logger.getLogger("settlers-of-catan"); 
 	/**
 	 * Receives the DiscardCards Params and constructs the appropriate command and passes it to the Server Facade after decoding the object.
 	 */
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
-		logger.entering("server.handlers.DiscardCards", "handle");
+		//logger.entering("server.handlers.DiscardCards", "handle");
 		//Handling Login http exchange.
 
 		String job;	
@@ -69,7 +69,7 @@ public class DiscardCards_Handler extends SettlersOfCatanHandler {
 		sw.flush();	
 
 		exchange.getResponseBody().close();		
-		logger.exiting("server.handlers.DiscardCards", "handle");	
+		//logger.exiting("server.handlers.DiscardCards", "handle");	
 		
 	}
 

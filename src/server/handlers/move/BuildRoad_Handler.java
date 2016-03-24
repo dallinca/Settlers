@@ -24,14 +24,14 @@ import com.sun.net.httpserver.HttpHandler;
  */
 public class BuildRoad_Handler extends SettlersOfCatanHandler{
 	
-	private Logger logger = Logger.getLogger("settlers-of-catan");
+	//private Logger logger = Logger.getLogger("settlers-of-catan");
 	
 	/**
 	 * Receives the BuildRoad Params and constructs the appropriate command and passes it to the Server Facade after decoding the object.
 	 */
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
-		logger.entering("server.handlers.BuildRoad", "handle");
+	//	logger.entering("server.handlers.BuildRoad", "handle");
 		//Handling build road http exchange.
 		
 		System.out.println("Build road handler");
@@ -86,7 +86,7 @@ public class BuildRoad_Handler extends SettlersOfCatanHandler{
 		System.out.println("Returning to client");
 
 		exchange.getResponseBody().close();		
-		logger.exiting("server.handlers.BuildRoad", "handle");
+		//logger.exiting("server.handlers.BuildRoad", "handle");
 		
 	}
 
