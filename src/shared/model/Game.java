@@ -154,6 +154,7 @@ public class Game {
 	 * @post the next player is set.
 	 */
 	public void incrementPlayer() {
+		versionNumber++;
 		// If we are done with the first two rounds of the Game (for setup
 		for (int i = 0; i < numberofPlayers; i++) {
 			if (currentPlayer.getPlayerIndex() == players[i].getPlayerIndex()) {
