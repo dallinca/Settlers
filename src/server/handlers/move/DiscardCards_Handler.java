@@ -54,7 +54,7 @@ public class DiscardCards_Handler extends SettlersOfCatanHandler {
 
 			if (result.isValid()){
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); //Everything's okay
-				job = gson.toJson(result);	//serialize result to json	
+				job = gson.toJson(result.getModel());	//serialize result to json	
 			}else{
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
 				job = "COMMAND FAILURE";	
