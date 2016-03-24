@@ -87,7 +87,6 @@ public class ServerFacade implements IServerFacade {
 	private ServerFacade() {		
 		this.jc = new JsonConverter();
 		
-		
 		//TESTING REASON
 		User user1 = new User("scott","scott", 0);
 		User user2 = new User("thomas", "thomas", 1);
