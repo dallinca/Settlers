@@ -864,7 +864,7 @@ public class ServerFacade implements IServerFacade {
 
 		result.setValid(true);
 
-		//String gameCookie = ("catan.game="+ gameID +";Path=/;");
+		String gameCookie = ("catan.game="+ gameID +";Path=/;");
 		
 		//System.out.println("Game cookie: "+gameCookie);
 
