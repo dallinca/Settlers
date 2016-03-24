@@ -640,7 +640,7 @@ public class JsonConverter {
 		}
 		
 		
-		clientModel.players = new ClientModel.MPlayer[4];
+		clientModel.players = new ClientModel.MPlayer[players.size()];
 		
 		clientModel.players = players.toArray(clientModel.players);	
 		
