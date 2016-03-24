@@ -50,20 +50,25 @@ public class MaritimeTrade_Command implements Command {
 	 */
 	@Override
 	public void execute() {
+		System.out.println("MaritimeTrade_Command");
 		Game game = null;
 		
 		//convert from string to enum
+		System.out.println("MaritimeTrade_Command1");
 		ResourceType tradeIn = ResourceType.valueOf(params.getOutputResource() );
 		ResourceType receive = ResourceType.valueOf(params.getInputResource() );
 		
 		game = facade.canDoMaritimeTrade(params, gameID, tradeIn, receive );
 		result = new MaritimeTrade_Result();
-		
+
+		System.out.println("MaritimeTrade_Command2");
 		if (game==null){
+			System.out.println("MaritimeTrade_Command3");
 			return;
 		}
 		
 		try {
+			System.out.println("MaritimeTrade_Command4");
 			game.doMaritimeTrade(tradeIn, receive);
 		} catch (Exception e) {
 			new MaritimeTrade_Result();
@@ -71,11 +76,13 @@ public class MaritimeTrade_Command implements Command {
 			return;
 		}
 
+		System.out.println("MaritimeTrade_Command5");
 		result.setValid(true);
 
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);
 
+		System.out.println("MaritimeTrade_Command6");
 		result.setModel(cm);
 	}
 	

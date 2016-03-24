@@ -47,15 +47,19 @@ public class DiscardCards_Command implements Command {
 	 */
 	@Override
 	public void execute() {
+		System.out.println("DiscardCards_Command");
 		Game game = null;
 		game = facade.canDoDiscardCards(params, gameID, userID);
 		result = new DiscardCards_Result();
-		
+
+		System.out.println("DiscardCards_Command1");
 		if (game==null){
+			System.out.println("DiscardCards_Command2");
 			return;
 		}
 		
 		try {
+			System.out.println("DiscardCards_Command3");
 			game.discardNumberOfResourceType(userID, params.getDiscardedCards().getBrick(), ResourceType.BRICK);
 			game.discardNumberOfResourceType(userID, params.getDiscardedCards().getOre(), ResourceType.ORE);
 			game.discardNumberOfResourceType(userID, params.getDiscardedCards().getSheep(), ResourceType.SHEEP);
@@ -66,11 +70,13 @@ public class DiscardCards_Command implements Command {
 			return;
 		}
 
+		System.out.println("DiscardCards_Command4");
 		result.setValid(true);
 
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);
 
+		System.out.println("DiscardCards_Command5");
 		result.setModel(cm);
 	}
 	

@@ -57,6 +57,7 @@ public class AcceptTrade_Command implements Command {
 	 */
 	@Override
 	public void execute() {
+		System.out.println("AcceptTrade_Command");
 		Game game = null;
 
 		//Will fix in a second
@@ -64,9 +65,12 @@ public class AcceptTrade_Command implements Command {
 
 		result = new AcceptTrade_Result();
 
+		System.out.println("AcceptTrade_Command1");
 		if (game != null) {
+			System.out.println("AcceptTrade_Command2");
 			try {
 
+				System.out.println("AcceptTrade_Command3");
 				//Check and see if they declined or accepted:
 				if (params.isWillAccept()) {
 
@@ -77,6 +81,7 @@ public class AcceptTrade_Command implements Command {
 					//Ore
 					//Sheep
 
+					System.out.println("AcceptTrade_Command4");
 					ResourceList o = game.getTradeOffer().getOffer();
 					int[] offer = new int[5];
 					int[] receive = new int[5];
@@ -122,6 +127,7 @@ public class AcceptTrade_Command implements Command {
 					}
 
 					if (game.canDoPlayerDoDomesticTrade(game.getTradeOffer().getSender(), offer, userID, receive)) {
+						System.out.println("AcceptTrade_Command5");
 						
 						//Now we operate to perform the trade
 						game.doDomesticTrade(game.getTradeOffer().getSender(), offer, userID, receive);
@@ -134,6 +140,7 @@ public class AcceptTrade_Command implements Command {
 
 						result.setModel(cm);
 					} else {
+						System.out.println("AcceptTrade_Command6");
 				
 						result.setValid(false);
 						game.setTradeOffer(null);
@@ -143,7 +150,8 @@ public class AcceptTrade_Command implements Command {
 						result.setModel(cm);
 					}
 				} else {
-					
+
+					System.out.println("AcceptTrade_Command7");
 					result.setValid(false);
 					game.setTradeOffer(null);
 					JsonConverter converter = new JsonConverter();
@@ -152,6 +160,7 @@ public class AcceptTrade_Command implements Command {
 					result.setModel(cm);
 				}
 			} catch (Exception e) {
+				System.out.println("AcceptTrade_Command8");
 				System.out.println("");
 				e.printStackTrace();
 				
@@ -161,11 +170,14 @@ public class AcceptTrade_Command implements Command {
 			JsonConverter converter = new JsonConverter();
 			ClientModel cm = converter.toClientModel(game);
 
+			System.out.println("AcceptTrade_Command9");
 			result.setModel(cm);
 		} else {
+			System.out.println("AcceptTrade_Command10");
 			result.setValid(false);
 			return;
 		}
+		System.out.println("AcceptTrade_Command11");
 		//this.facade.acceptTrade(params);
 	}
 

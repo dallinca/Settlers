@@ -50,27 +50,34 @@ public class RollNumber_Command implements Command {
 	 */
 	@Override
 	public void execute() {
+		System.out.println("RollNumber_Command");
 		Game game = null;
 		//Call facade to check if can do operation
 		game = facade.canDoRollNumber(params, gameID, userID);
 		result = new RollNumber_Result();
-		
+
+		System.out.println("RollNumber_Command1");
 		if (game==null){
+			System.out.println("RollNumber_Command2");
 			return;
 		}
 		
 		try {
+			System.out.println("RollNumber_Command3");
 			game.RollDice(userID);
 		} catch (Exception e) {
+			System.out.println("RollNumber_Command4");
 			e.printStackTrace();
 			return;
 		}
 		
 		result.setValid(true);
 
+		System.out.println("RollNumber_Command5");
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);
 
+		System.out.println("RollNumber_Command6");
 		result.setModel(cm);
 		
 	}

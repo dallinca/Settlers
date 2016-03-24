@@ -47,12 +47,15 @@ public class FinishTurn_Command implements Command {
 	 */
 	@Override
 	public void execute() {
+		System.out.println("FinishTurn_Command");
 		Game game = null;
 		game = facade.canDoFinishTurn(params, gameID, userID);
 	
 		result = new FinishTurn_Result();
+		System.out.println("FinishTurn_Command1");
 		
 		if (game==null){
+			System.out.println("FinishTurn_Command2");
 			return;
 		}
 		//IS THERE AN END TURN FUNCTION ON GAME?????
@@ -62,10 +65,12 @@ public class FinishTurn_Command implements Command {
 		game.incrementPlayer();
 	
 		result.setValid(true);
+		System.out.println("FinishTurn_Command3");
 
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);
 
+		System.out.println("FinishTurn_Command4");
 		result.setModel(cm);
 	}
 	
