@@ -52,14 +52,18 @@ public class OfferTrade_Command implements Command {
 	 */
 	@Override
 	public void execute() {
+		System.out.println("OfferTrade_Command");
 		Game game = null;
+		System.out.println("OfferTrade_Command1");
 		game = facade.canDoOfferTrade(params, gameID, userID);
 		result = new OfferTrade_Result();
 		
 		if (game==null){
+			System.out.println("OfferTrade_Command2");
 			return;
 		}
-		
+
+		System.out.println("OfferTrade_Command3");
 		ClientModel clientModel = new ClientModel();
 		ClientModel.ResourceList resourceList = clientModel.new ResourceList();
 		resourceList.brick = params.getOffer().getBrick();
@@ -68,13 +72,15 @@ public class OfferTrade_Command implements Command {
 		resourceList.ore = params.getOffer().getOre();
 		resourceList.sheep = params.getOffer().getSheep();
 		
-		
+
+		System.out.println("OfferTrade_Command4");
 		TradeInfo tradeInfo = new TradeInfo(params.getPlayerIndex(), params.getReceiver(), resourceList);
 		
 		ResourceList o = tradeInfo.getOffer();
 		int[] offer = new int[5];
 		int[] receive = new int[5];
 
+		System.out.println("OfferTrade_Command5");
 		if (o.getBrick() >= 0) {
 			offer[0] = o.getBrick();
 			receive[0] = 0;
@@ -114,9 +120,11 @@ public class OfferTrade_Command implements Command {
 			receive[4] = o.getSheep();
 			offer[4] = 0;
 		}
-		
+
+		System.out.println("OfferTrade_Command6");
 		try {			
-			
+
+			System.out.println("OfferTrade_Command7");
 			game.setTradeOffer(tradeInfo);
 	
 		} catch (Exception e) {	
@@ -129,6 +137,7 @@ public class OfferTrade_Command implements Command {
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);
 
+		System.out.println("OfferTrade_Command8");
 		result.setModel(cm);
 	}
 	

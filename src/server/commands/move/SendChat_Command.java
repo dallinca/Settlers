@@ -50,20 +50,26 @@ public class SendChat_Command implements Command {
 	 */
 	@Override
 	public void execute() {
+		System.out.println("SendChat_Command");
 		Game game = null;
 		game = facade.canDoSendChat(params, gameID, userID);
 		result = new SendChat_Result();
-		
+
+		System.out.println("SendChat_Command1");
 		if (game==null){
+			System.out.println("SendChat_Command2");
 			return;
 		}
-		
+
+		System.out.println("SendChat_Command3");
 		game.setChat(game.getChat() );
 		result.setValid(true);
 
+		System.out.println("SendChat_Command4");
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);
 
+		System.out.println("SendChat_Command5");
 		result.setModel(cm);
 	}
 	

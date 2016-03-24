@@ -57,6 +57,8 @@ public class PlayRoadBuilding_Command implements Command {
 		//We have to build EdgeLocation objects from the params and then send them off to the facade.
 		//To build them we need to ascertain their hex locations and directions. 
 		//This gets lengthy because the Direction is in string format and must be compared to the enums. 
+		
+		System.out.println("PlayRoadBuilding_Command beginning");
 		HexLocation hex1 = new HexLocation(params.getSpot1().getX(), params.getSpot1().getY());
 		HexLocation hex2 = new HexLocation(params.getSpot2().getX(), params.getSpot2().getY()); 
 
@@ -67,14 +69,18 @@ public class PlayRoadBuilding_Command implements Command {
 		EdgeLocation edge1 = new EdgeLocation(hex1, dir1);
 		EdgeLocation edge2 = new EdgeLocation(hex2, dir2);
 		
+		System.out.println("PlayRoadBuilding_Command created edges and hexloc, etc.");
 		if (edge1 != null && edge2 != null) {
 			game = facade.canDoPlayRoadBuilding(params, edge1, edge2, gameID, userID);
 			result = new PlayRoadBuilding_Result();
+			System.out.println("PlayRoadBuilding_Command operated on the game");
 
 			if (game != null) {
 				try {
 					game.placeRoadOnEdge(userID, edge1, true);
+					System.out.println("PlayRoadBuilding_Command placed one road");
 					game.placeRoadOnEdge(userID, edge2, true);
+					System.out.println("PlayRoadBuilding_Command placed second road");
 				} catch (Exception e) {
 					new PlayRoadBuilding_Result();
 					e.printStackTrace();
@@ -92,6 +98,7 @@ public class PlayRoadBuilding_Command implements Command {
 		ClientModel cm = converter.toClientModel(game);
 
 		result.setModel(cm);
+		System.out.println("PlayRoadBuilding_Command end of execute");
 
 	}
 

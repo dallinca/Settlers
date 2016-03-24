@@ -50,27 +50,34 @@ public class RobPlayer_Command implements Command {
 	 */
 	@Override
 	public void execute() {
+		System.out.println("RobPlayer_Command");
 		Game game = null;
 		game = facade.canDoRobPlayer(params, gameID, userID);
 		result = new RobPlayer_Result();
-		
+
+		System.out.println("RobPlayer_Command1");
 		if (game==null){
+			System.out.println("RobPlayer_Command2");
 			return;
 		}
 		
 		try {
+			System.out.println("RobPlayer_Command3");
 			game.moveRobberToHex(userID, params.getLocation());
 			game.stealPlayerResource(userID, params.getVictimIndex());
 		} catch (Exception e) {
+			System.out.println("RobPlayer_Command4");
 			e.printStackTrace();
 			return;
 		}
 		
 		result.setValid(true);
 
+		System.out.println("RobPlayer_Command5");
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);
 
+		System.out.println("RobPlayer_Command6");
 		result.setModel(cm);
 	}
 	public RobPlayer_Result getResult(){

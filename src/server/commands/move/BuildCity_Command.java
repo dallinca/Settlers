@@ -56,12 +56,16 @@ public class BuildCity_Command implements Command {
 	 */
 	@Override
 	public void execute() {
+		System.out.println("BuildCity_Command");
 		Game game = null;
 		game = facade.canDoBuildCity(params, gameID, userID);
 		result = new BuildCity_Result();
 
+		System.out.println("BuildCity_Command1");
 		if (game != null) {
+			System.out.println("BuildCity_Command2");
 			try {
+				System.out.println("BuildCity_Command3");
 				game.placeCityOnVertex(params.getCmdVertLocation());
 			} catch (Exception e) {
 				new BuildCity_Result();
@@ -72,11 +76,13 @@ public class BuildCity_Command implements Command {
 			return;
 		}
 
+		System.out.println("BuildCity_Command4");
 		result.setValid(true);
 
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);
 
+		System.out.println("BuildCity_Command5");
 		result.setModel(cm);
 	}
 

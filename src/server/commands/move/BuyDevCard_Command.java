@@ -59,14 +59,18 @@ public class BuyDevCard_Command implements Command {
 	 */
 	@Override
 	public void execute() {
+		System.out.println("BuyDevCard_Command");
 		Game game = null;
 		game = facade.canDoBuyDevCard(params, gameID, userID);
 		result = new BuyDevCard_Result();
-		
+
+		System.out.println("BuyDevCard_Command1");
 		if (game==null){
+			System.out.println("BuyDevCard_Command2");
 			return;
 		}
 		try {
+			System.out.println("BuyDevCard_Command3");
 			game.buyDevelopmentCard();
 		} catch (CannotBuyException e) {
 			e.printStackTrace();
@@ -75,13 +79,15 @@ public class BuyDevCard_Command implements Command {
 			e.printStackTrace();
 			return;
 		}
-		
+
+		System.out.println("BuyDevCard_Command4");
 		result.setValid(true);
 		
 		JsonConverter converter = new JsonConverter();
 		
 		ClientModel cm = converter.toClientModel(game);
-		
+
+		System.out.println("BuyDevCard_Command5");
 		result.setModel(cm);
 	}
 	

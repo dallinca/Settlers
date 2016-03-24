@@ -56,26 +56,32 @@ public class BuildSettlement_Command implements Command {
 	 */
 	@Override
 	public void execute() {
+		System.out.println("BuildSettlement_Command");
 		Game game = null;
 		game = facade.canDoBuildSettlement(params, gameID, userID);
 		result = new BuildSettlement_Result();
 
+		System.out.println("BuildSettlement_Command1");
 		if (game==null){
+			System.out.println("BuildSettlement_Command2");
 			return;
 		}
 
 		try {
+			System.out.println("BuildSettlement_Command3");
 			game.placeSettlementOnVertex(userID, params.getCmdVertLocation());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return;
 		}
-		
+
+		System.out.println("BuildSettlement_Command4");
 		result.setValid(true);
 
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);
 
+		System.out.println("BuildSettlement_Command5");
 		result.setModel(cm);
 	}
 
