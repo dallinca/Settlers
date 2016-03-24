@@ -54,7 +54,7 @@ public class GetVersion_Handler extends SettlersOfCatanHandler {
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); //Everything's okay
 				
 				if (result.isUpToDate()){
-					job = "True";
+					job = "true";
 				}
 				else{
 					ClientModel cm = result.getModel();

@@ -13,6 +13,7 @@ import server.handlers.move.devcard.*;
 import server.handlers.move.*;
 import server.handlers.nonmove.*;
 
+import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
@@ -86,8 +87,11 @@ public class Server {
 		server.createContext("/games/list", (HttpHandler) ListHandler);
 		server.createContext("/games/create", (HttpHandler) CreateGameHandler);
 		server.createContext("/games/join", (HttpHandler) JoinHandler);		
-		server.createContext("/games/model?version=n", (HttpHandler) GetVersionHandler);
-
+		//server.createContext("/games/model?version=N", (HttpHandler) GetVersionHandler);
+		//server.createContext("/games/model?version=-1", (HttpHandler) GetVersionHandler);
+		//server.createContext("/games/model?version=0", (HttpHandler) GetVersionHandler);
+		server.createContext("/games/model", (HttpHandler) GetVersionHandler);
+		
 		//moves-----------------------------------------------------------------------------------
 
 		server.createContext("/moves/acceptTrade", (HttpHandler) AcceptTradeHandler);	
@@ -101,7 +105,7 @@ public class Server {
 		server.createContext("/moves/offerTrade", (HttpHandler) OfferTradeHandler);	
 		server.createContext("/moves/robPlayer", (HttpHandler) RobPlayerHandler);	
 		server.createContext("/moves/rollNumber", (HttpHandler) RollNumberHandler);	
-		server.createContext("/moves/sendChat", (HttpHandler) SendChatHandler);	
+		server.createContext("/moves/sendChat", (HttpHandler) SendChatHandler);			
 		
 		//devcards-----------------------------------------------------------------------------------
 		

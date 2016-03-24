@@ -2,6 +2,8 @@ package shared.communication.results;
 
 import java.util.ArrayList;
 
+import shared.communication.results.ClientModel.MChat;
+import shared.communication.results.ClientModel.MLog;
 import shared.communication.results.ClientModel.MMap.EdgeValue;
 import shared.communication.results.ClientModel.MMap.MEdgeLocation;
 import shared.communication.results.ClientModel.MTradeOffer;
@@ -16,6 +18,7 @@ import shared.locations.HexLocation;
 import shared.locations.VertexDirection;
 import shared.locations.VertexLocation;
 import shared.model.Bank;
+import shared.model.Game.Line;
 import client.Client;
 import client.data.PlayerInfo;
 import client.data.TradeInfo;
@@ -60,7 +63,7 @@ public class JsonConverter {
 	}	
 
 	private Game getGame() {
-		
+
 		// check to see if we are going to be updating the entire game, or just the player waiting screen
 		int counter = 0;
 		ArrayList<PlayerInfo> playersInfo = new ArrayList<PlayerInfo>();
@@ -80,7 +83,7 @@ public class JsonConverter {
 			Client.getInstance().updatePlayersInGameInfo(playersInfo);
 			return null;
 		}
-		
+
 		// Init the BANK with the current amounts of resources and development cards
 
 		ClientModel.MBank modelbank = model.getBank();
@@ -102,23 +105,23 @@ public class JsonConverter {
 		// Init the PLAYERS
 		Player[] players = new Player[4];
 		ClientModel.MPlayer[] mPlayers = model.getPlayers();
-		
+
 		for(ClientModel.MPlayer mPlayer: mPlayers) {
-			
+
 			// Get the resources the player should have right now
 			wheat = mPlayer.getResources().getWheat();
 			brick = mPlayer.getResources().getBrick();
 			wood = mPlayer.getResources().getWood();
 			sheep = mPlayer.getResources().getSheep();
 			ore = mPlayer.getResources().getOre();
-			
+
 			// Prep the Dev Cards
 			ArrayList<DevelopmentCard> soldierCards = new ArrayList<DevelopmentCard>();
 			ArrayList<DevelopmentCard> monopolyCards = new ArrayList<DevelopmentCard>();
 			ArrayList<DevelopmentCard> yearOfPlentyCards = new ArrayList<DevelopmentCard>();
 			ArrayList<DevelopmentCard> roadBuilderCards = new ArrayList<DevelopmentCard>();
 			ArrayList<DevelopmentCard> monumentCards = new ArrayList<DevelopmentCard>();
-			
+
 			// Make the Dev cards that are played that we keep track of
 			for(int i = 0; i < mPlayer.getMonuments(); i++) { monumentCards.add(new DevelopmentCard(DevCardType.MONUMENT, 2, true)); }
 			for(int i = 0; i < mPlayer.getSoldiers(); i++) 	{ soldierCards.add(new DevelopmentCard(DevCardType.SOLDIER, 2, true));}
@@ -137,7 +140,7 @@ public class JsonConverter {
 
 			// Create the player giving him his index, bank, and the cards he starts with
 			Player player = new Player(mPlayer.getPlayerIndex(), bank, brick, wheat, ore, sheep, wood, soldierCards, monopolyCards, yearOfPlentyCards, roadBuilderCards, monumentCards);
-			
+
 			// Set other primitive Player data types
 			player.setPlayerColor(getCatanColorFromString(mPlayer.getColor())); // TODO figure out color
 			player.setHasDiscarded(mPlayer.isDiscarded());
@@ -146,7 +149,7 @@ public class JsonConverter {
 			player.setPlayerId(mPlayer.getPlayerID());
 			player.setTotalVictoryPoints(mPlayer.getVictoryPoints());
 			players[player.getPlayerIndex()] = player;
-			
+
 			// Set the turn of the current player
 			if(mPlayer.getPlayerIndex() == model.turnTracker.currentTurn) {
 				player.setPlayersTurn(true);
@@ -160,7 +163,7 @@ public class JsonConverter {
 		// First with the Hexes, their types, their roll numbers
 		ClientModel.MMap modelMap = model.getMap();
 		ArrayList<Hex> newHexes = new ArrayList<Hex>();
-		
+
 		for(ClientModel.MMap.MHex mHex: modelMap.getHexes()) {
 			boolean hasRobber = false;
 			if(model.getMap().getRobber().getX() == mHex.getLocation().getX() &&
@@ -172,11 +175,11 @@ public class JsonConverter {
 			// Do our 3 offset, find the HexType of the String TODO (Verify this part is working), and the roll value
 			newHexes.add( new Hex(mHex.getLocation().getX() + 3, mHex.getLocation().getY() + 3, getHexTypeFromString(mHex.getResource()), mHex.getNumber(), hasRobber) );
 		}
-		
+
 		// Make the Board
 		Board board = new Board(newHexes);
 		board.setHexWithRobber(board.getHex(model.map.robber.x + 3, model.map.robber.y + 3));
-		
+
 		// Setup Ports
 		for(ClientModel.MMap.Port port: modelMap.getPorts()) {
 			// Get hex Locations
@@ -229,12 +232,12 @@ public class JsonConverter {
 
 		// Init the GAME//-===========================================================
 		version = new Game(players, board, bank);
-		
+
 		//Get trade offer (if exists)
 		if (model.getTradeOffer()!=null){			
 			MTradeOffer mto = model.getTradeOffer();
 			TradeInfo tradeInfo = new TradeInfo(mto.getSender(), mto.getReceiver(), mto.getOffer());
-			
+
 			version.setTradeOffer(tradeInfo);
 		}
 
@@ -276,7 +279,7 @@ public class JsonConverter {
 		} else {
 			version.setTurnNumber(3);
 		}
-		
+
 		if (model.turnTracker.largestArmy!=-1){
 
 			version.setLargestArmy(players[model.turnTracker.largestArmy]);
@@ -534,7 +537,7 @@ public class JsonConverter {
 		}
 		return null;
 	}
-	
+
 	private int getTradePortRatio(PortType port) {
 		if(port == PortType.THREE) {
 			return 3;
@@ -550,11 +553,11 @@ public class JsonConverter {
 		ClientModel clientModel = new ClientModel();
 		clientModel.version = game.getVersionNumber();
 		clientModel.winner = game.getWinner();
-		
+
 		// Init the BANK with the current amounts of resources and development cards
 		System.out.println("Initializing bank");
 		Bank bank = game.getBank();
-		
+
 		ClientModel.MBank modelbank = clientModel.new MBank();
 		ClientModel.MDevCardList modelDeck = clientModel.new MDevCardList();
 
@@ -569,14 +572,14 @@ public class JsonConverter {
 		modelDeck.roadBuilding = bank.numberOfDevCardType(DevCardType.ROAD_BUILD);
 		modelDeck.soldier = bank.numberOfDevCardType(DevCardType.SOLDIER);
 		modelDeck.yearOfPlenty = bank.numberOfDevCardType(DevCardType.YEAR_OF_PLENTY);
-		
+
 		clientModel.bank = modelbank;
 		clientModel.deck = modelDeck;
-		
+
 		// Init the PLAYERS
 
 		System.out.println("Initializing players");
-		
+
 		ArrayList<ClientModel.MPlayer> players = new ArrayList<ClientModel.MPlayer>();
 
 		for(Player player: game.getAllPlayers()) {
@@ -585,7 +588,7 @@ public class JsonConverter {
 				break;
 			}
 			ClientModel.MPlayer mPlayer = clientModel.new MPlayer();
-			
+
 			// Player General information
 
 			System.out.println("...general information");
@@ -596,16 +599,16 @@ public class JsonConverter {
 			mPlayer.victoryPoints = player.getVictoryPoints();
 			mPlayer.discarded = player.isHasDiscarded();
 			mPlayer.playedDevCard = player.isHasPlayedDevCardThisTurn();
-			
+
 			// Player resource cards
 			System.out.println("...resource cards");
-			
+
 			mPlayer.resources.brick = player.getNumberResourcesOfType(ResourceType.BRICK);
 			mPlayer.resources.ore = player.getNumberResourcesOfType(ResourceType.ORE);
 			mPlayer.resources.wheat = player.getNumberResourcesOfType(ResourceType.WHEAT);
 			mPlayer.resources.sheep = player.getNumberResourcesOfType(ResourceType.SHEEP);
 			mPlayer.resources.wood = player.getNumberResourcesOfType(ResourceType.WOOD);
-			
+
 			// Player Development Cards
 			System.out.println("...new development cards");
 			mPlayer.newDevCards.monopoly 		= player.getDevelopmentCardHand().numberUnplayedNEWDevCards(DevCardType.MONOPOLY, game.getTurnNumber());
@@ -613,36 +616,36 @@ public class JsonConverter {
 			mPlayer.newDevCards.roadBuilding 	= player.getDevelopmentCardHand().numberUnplayedNEWDevCards(DevCardType.ROAD_BUILD, game.getTurnNumber());
 			mPlayer.newDevCards.soldier 		= player.getDevelopmentCardHand().numberUnplayedNEWDevCards(DevCardType.SOLDIER, game.getTurnNumber());
 			mPlayer.newDevCards.yearOfPlenty	= player.getDevelopmentCardHand().numberUnplayedNEWDevCards(DevCardType.YEAR_OF_PLENTY, game.getTurnNumber());
-			
+
 			System.out.println("...old development cards");
 			mPlayer.oldDevCards.monopoly 		= player.getDevelopmentCardHand().numberUnplayedOLDDevCards(DevCardType.MONOPOLY, game.getTurnNumber());
 			mPlayer.oldDevCards.monument 		= player.getDevelopmentCardHand().numberUnplayedOLDDevCards(DevCardType.MONUMENT, game.getTurnNumber());
 			mPlayer.oldDevCards.roadBuilding 	= player.getDevelopmentCardHand().numberUnplayedOLDDevCards(DevCardType.ROAD_BUILD, game.getTurnNumber());
 			mPlayer.oldDevCards.soldier 		= player.getDevelopmentCardHand().numberUnplayedOLDDevCards(DevCardType.SOLDIER, game.getTurnNumber());
 			mPlayer.oldDevCards.yearOfPlenty 	= player.getDevelopmentCardHand().numberUnplayedOLDDevCards(DevCardType.YEAR_OF_PLENTY, game.getTurnNumber());
-			
+
 			mPlayer.soldiers = player.getNumberOfSoldiersPlayed();
 			mPlayer.monuments = player.getDevelopmentCardHand().getNumberOfMonumentsPlayed();
-			
+
 			// Player pieces left to play
 			System.out.println("...pieces left to play");
 			mPlayer.cities = player.getNumberUnplayedCities();
 			mPlayer.settlements = player.getNumberUnplayedSettlements();
 			mPlayer.roads = player.getNumberUnplayedRoads();
-			
+
 			// Record the player into the clientModel
 			System.out.println("...adding to client model");
 			players.add(mPlayer);
-			
+
 		}
-		
+
 		// Init the TURNTRACKER
 		System.out.println("Initializing turn tracker");
 		ClientModel.MTurnTracker modelTT = clientModel.new MTurnTracker();
-		
+
 		System.out.println("Turn tracker given to clientmodel");
 		clientModel.turnTracker = modelTT;
-		
+
 		System.out.println("Current player");
 		modelTT.currentTurn = game.getIndexOfPlayer(game.getCurrentPlayer());
 		System.out.println("Largest army");
@@ -651,28 +654,28 @@ public class JsonConverter {
 		modelTT.longestRoad = game.getIndexOfPlayer(game.getLongestRoad());
 		System.out.println("Game status");
 		modelTT.status = game.getStatus();	
-				
+
 		// Init the BOARD
 		System.out.println("Initializing board");
 		ClientModel.MMap modelMap = clientModel.new MMap();
 		clientModel.map = modelMap;
 		Board board = game.getBoard();
-		
-			// HEXES
+
+		// HEXES
 		System.out.println("Initializing hexes");
 		Hex[][] allLandHexes = board.getMapHexes();
-		
+
 		System.out.println("Array list hex");
 		ArrayList<ClientModel.MMap.MHex> modelHexes = new ArrayList<ClientModel.MMap.MHex>();
-		
+
 		Hex curHex = null;
-		
+
 		System.out.println("Looper");
 		for(int Y = 0; Y < allLandHexes.length; Y++) {
 			for(int X = 0; X <allLandHexes.length; X++) {
 				System.out.println("X: "+X + " Y: "+Y);
 				curHex = allLandHexes[Y][X];
-				
+
 				if(curHex != null) {	
 					System.out.print("Hex not null." );
 					ClientModel.MMap.MHex mHex = clientModel.map.new MHex();
@@ -687,13 +690,13 @@ public class JsonConverter {
 			}
 		}
 		// Convert the arraylist into an array for the client model
-		
+
 		System.out.println("Getting client model hex map");
 		modelMap.hexes = new ClientModel.MMap.MHex[modelHexes.size()];
 		System.out.println("Turning hexes to array");
 		modelMap.hexes = modelHexes.toArray(modelMap.hexes);
-		
-			// PORTS
+
+		// PORTS
 		System.out.println("Initializing ports");
 		PortType[] allPorts = board.getMapPorts();
 		ArrayList<ClientModel.MMap.Port> modelPorts = new ArrayList<ClientModel.MMap.Port>();
@@ -709,15 +712,15 @@ public class JsonConverter {
 			modelPorts.add(clientModel.map.new Port(putPortTypeIntoString(allPorts[7]),clientModel.map.new MHexLocation(-3,2), putEdgeDirectionIntoString(EdgeDirection.NorthEast),	getTradePortRatio(allPorts[7])));
 			modelPorts.add(clientModel.map.new Port(putPortTypeIntoString(allPorts[8]),clientModel.map.new MHexLocation(-2,3), putEdgeDirectionIntoString(EdgeDirection.NorthEast),	getTradePortRatio(allPorts[8])));		
 		}
-			// Convert the arraylist into an array for the client model
+		// Convert the arraylist into an array for the client model
 		modelMap.ports = new ClientModel.MMap.Port[modelPorts.size()];
 		modelMap.ports = modelPorts.toArray(modelMap.ports);
-		
-			// ROADS
+
+		// ROADS
 		System.out.println("Initializing Roads");
-		
+
 		ArrayList<ClientModel.MMap.EdgeValue> modelRoads = new ArrayList<ClientModel.MMap.EdgeValue>();
-		
+
 		//System.out.println("Looping");
 		for(Player Zplayer: game.getAllPlayers()) {
 			if (Zplayer==null){
@@ -730,14 +733,14 @@ public class JsonConverter {
 				if(Zroad.getEdge() != null) {
 					System.out.print("Not null. ");
 					// Add the road only if it is on the map
-					
+
 					ClientModel.MMap.EdgeValue ev;
-					
+
 					System.out.print("Getting player index. ");
 					int playerIndex = game.getIndexOfPlayer(Zroad.getPlayer());
-					
+
 					ClientModel.MMap.MEdgeLocation el;					
-					
+
 					System.out.print("Getting edge direction. ");
 					String edgeDirection = putEdgeDirectionIntoString(Zroad.getEdge().getTheirEdgeDirection());
 					System.out.print("Edge X ");
@@ -755,12 +758,12 @@ public class JsonConverter {
 				}
 			}
 		}
-			// Convert the arraylist into an array for the client model
+		// Convert the arraylist into an array for the client model
 		modelMap.roads = new ClientModel.MMap.EdgeValue[modelRoads.size()];
 		modelMap.roads = modelRoads.toArray(modelMap.roads);
-		
-		
-			// SETTLEMENTS
+
+
+		// SETTLEMENTS
 		System.out.println("Initializing settlements");
 		ArrayList<ClientModel.MMap.VertexObject> modelSettlements = new ArrayList<ClientModel.MMap.VertexObject>();
 		for(Player Zplayer: game.getAllPlayers()) {
@@ -771,26 +774,26 @@ public class JsonConverter {
 				// If the settlement has been placed
 				if(Zsettlement.getVertex() != null) {
 					// Add the settlement only if it is on the map
-					
+
 					// Vertex Location info
 					String setVDirection = putVertexDirectionIntoString(Zsettlement.getVertex().getTheirVertexDirection());
 					int setX = Zsettlement.getVertex().getTheirX_coord_ver();
 					int setY = Zsettlement.getVertex().getTheirY_coord_ver();
-					
+
 					ClientModel.MMap.MVertexLocation vo = clientModel.map.new MVertexLocation(setVDirection,setX,setY);
-					
+
 					// Make Vertex Object
-					
+
 					modelSettlements.add( clientModel.map.new VertexObject( game.getIndexOfPlayer(Zsettlement.getPlayer()),vo));
 				}
 			}
 		}
-			// Convert the arraylist into an array for the client model
+		// Convert the arraylist into an array for the client model
 		modelMap.settlements = new ClientModel.MMap.VertexObject[modelSettlements.size()];
 		modelMap.settlements = modelSettlements.toArray(modelMap.settlements);
-		
-		
-			// CITIES
+
+
+		// CITIES
 		System.out.println("Initializing cities");
 		ArrayList<ClientModel.MMap.VertexObject> modelCities = new ArrayList<ClientModel.MMap.VertexObject>();
 		for(Player Zplayer: game.getAllPlayers()) {
@@ -806,28 +809,40 @@ public class JsonConverter {
 									Zcity.getVertex().getTheirX_coord_ver(),
 									Zcity.getVertex().getTheirY_coord_ver())
 							)
-					);
+							);
 				}
 			}
 		}
-			// Convert the arraylist into an array for the client model
+		// Convert the arraylist into an array for the client model
 		modelMap.cities = new ClientModel.MMap.VertexObject[modelCities.size()];
 		modelMap.cities = modelCities.toArray(modelMap.cities);
-		
 
 		// Init the TRADE OFFER
-		System.out.println("Initializing chat and logs");
-				// TODO
 		
+		System.out.println("Initializing trade offer");
+		TradeInfo offer = game.getTradeOffer();
+		if (offer!=null){		
+			MTradeOffer mto = clientModel.new MTradeOffer(offer);
+			clientModel.tradeOffer = mto;
+		}
 
 		// Init the CHAT
-				// TODO
 		
-
+		System.out.println("Initializing chat");
+		
+		Line[] lines = game.getChat();				
+		MChat chat = clientModel.new MChat(lines);
+		clientModel.chat = chat;
+		
 		// Init the LOG
-				// TODO
+		
+		System.out.println("Initializing logs");
+		Line[] logs = game.getHistory();
+		MLog modelLog = clientModel.new MLog(logs);
+		clientModel.log = modelLog;
 		
 		// Return the clientModel
+
 		System.out.println("Returning client model");
 		return clientModel;
 	}

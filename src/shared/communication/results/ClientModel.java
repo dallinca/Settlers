@@ -2,6 +2,9 @@ package shared.communication.results;
 
 import java.util.Arrays;
 
+import shared.model.Game.Line;
+import client.data.TradeInfo;
+
 /**
  * A full model of the game for JSON deserialization.
  * 
@@ -19,7 +22,7 @@ public class ClientModel {
 	MTurnTracker turnTracker;
 	int version;
 	int winner;
-	
+
 	public ClientModel(MDevCardList deck, MBank bank, MChat chat, MLog log,
 			MMap map, MPlayer[] players, MTradeOffer tradeOffer,
 			MTurnTracker turnTracker, int version, int winner) {
@@ -35,7 +38,7 @@ public class ClientModel {
 		this.version = version;
 		this.winner = winner;
 	}
-	
+
 	public ClientModel() {
 		super();
 		this.deck = new MDevCardList();
@@ -131,6 +134,22 @@ public class ClientModel {
 		MessageLine[] lines;
 
 
+		public MChat(Line[] lines) {
+			if (lines==null){
+				this.lines = new MessageLine[0];
+				return;
+			}
+			this.lines = new MessageLine[lines.length];
+
+			for (int i = 0; i< lines.length; i++){
+				this.lines[i] = new MessageLine(lines[i]);
+			}
+		}
+
+		public MChat() {
+			lines = new MessageLine[0];
+		}
+
 		@Override
 		public String toString() {
 
@@ -154,6 +173,22 @@ public class ClientModel {
 
 	public class MLog{
 		MessageLine[] lines;
+
+		public MLog(Line[] logs) {
+			if (logs == null){
+				this.lines = new MessageLine[0];
+				return;
+			}
+			this.lines = new MessageLine[logs.length];
+
+			for (int i = 0; i< logs.length; i++){
+				this.lines[i] = new MessageLine(logs[i]);
+			}
+		}
+
+		public MLog() {
+			// TODO Auto-generated constructor stub
+		}
 
 		@Override
 		public String toString() {
@@ -191,6 +226,11 @@ public class ClientModel {
 		String message;
 		String source;	
 
+		public MessageLine(Line line) {
+			message = line.getMessage();
+			source = line.getSource();
+		}
+
 		public String getMessage() {
 			return message;
 		}
@@ -214,11 +254,11 @@ public class ClientModel {
 		VertexObject[] cities;
 		int radius;
 		MHexLocation robber;
-		
+
 
 		public MMap(){
 			robber = new MHexLocation();
-			
+
 		}
 		@Override
 		public String toString() {
@@ -313,14 +353,14 @@ public class ClientModel {
 			MEdgeLocation location;
 
 			public EdgeValue() {
-				
+
 				location = new MEdgeLocation();
 			}
 			public EdgeValue(int owner, MEdgeLocation location) {
 				this.owner = owner;
 				this.location = location;
 			}
-			
+
 			public int getOwner() {
 				return owner;
 			}
@@ -374,8 +414,8 @@ public class ClientModel {
 
 			public Port() {
 				location = new MHexLocation();
-				
-				
+
+
 			}
 			public Port(String resource, MHexLocation location, String direction, int ratio) {
 				this.resource = resource;
@@ -439,7 +479,7 @@ public class ClientModel {
 				this.x = x;
 				this.y = y;
 			}
-			
+
 			public int getX() {
 				return x;
 			}
@@ -475,12 +515,12 @@ public class ClientModel {
 		int soldiers;
 		int victoryPoints;
 
-		
-		
-		
+
+
+
 		public MPlayer() {
 			super();
-			
+
 			this.resources = new ResourceList();
 			this.newDevCards = new MDevCardList();
 			this.oldDevCards = new MDevCardList();
@@ -564,6 +604,12 @@ public class ClientModel {
 		int sender;
 		int receiver;
 		ResourceList offer;
+
+		public MTradeOffer(TradeInfo offer) {
+			this.sender = offer.getSender();
+			this.receiver = offer.getReceiver();
+			this.offer = offer.getOffer();			
+		}
 		public int getSender() {
 			return sender;
 		}
@@ -590,7 +636,7 @@ public class ClientModel {
 		public MTurnTracker(){
 			status = "";
 		}
-		
+
 		public int getCurrentTurn() {
 			return currentTurn;
 		}
@@ -655,7 +701,7 @@ public class ClientModel {
 		public int sheep;
 		public int wheat;
 		public int wood;
-		
+
 		public int getBrick() {
 			return brick;
 		}

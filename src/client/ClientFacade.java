@@ -255,6 +255,8 @@ public class ClientFacade {
 
 			e.printStackTrace();
 		}		
+		
+		System.out.println("Join result, valid or not: " + result.isValid());
 
 		return result;
 	}
