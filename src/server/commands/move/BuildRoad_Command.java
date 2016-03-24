@@ -16,7 +16,7 @@ import shared.model.Game;
  *
  */
 public class BuildRoad_Command implements Command {
-	private IServerFacade facade;
+	//private IServerFacade facade;
 
 	private BuildRoad_Params params;
 	private BuildRoad_Result result;
@@ -34,9 +34,9 @@ public class BuildRoad_Command implements Command {
 	 * 
 	 * @param game
 	 */
-	public BuildRoad_Command(IServerFacade facade) {
+	/*public BuildRoad_Command(IServerFacade facade) {
 		this.facade = facade;
-	}
+	}*/
 
 	public BuildRoad_Command(BuildRoad_Params params, int gameID, int userID) {
 		this.params = params;
