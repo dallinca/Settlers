@@ -86,6 +86,30 @@ public class ServerFacade implements IServerFacade {
 	
 	private ServerFacade() {		
 		this.jc = new JsonConverter();
+		
+		
+		//TESTING REASON
+		User user1 = new User("scott","scott", 0);
+		User user2 = new User("thomas", "thomas", 1);
+		User user3 = new User("chris", "chris", 2);
+		User user4 = new User("dallin", "dallin", 3);
+		users.add(user1);
+		users.add(user2);
+		users.add(user3);
+		users.add(user4);
+		
+		Player[] players = new Player[4];		
+		Board board = new Board(true, true, true);
+		Game game = new Game(players, board, new Bank());
+
+		game.setTitle("TESTGame");		
+		game.setGameID(1);
+		
+		game.addPlayer(0, null);
+		Player p = game.getPlayerByID(0);
+		User u = users.get(0);
+		p.setPlayerName(u.getName());
+		liveGames.add(game);
 	}
 	
 	public static ServerFacade getInstance() {
