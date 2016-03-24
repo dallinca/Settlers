@@ -66,10 +66,12 @@ public class PlayMonopoly_Command implements Command {
 		
 		//Ask the server facade if that action can happen
 		//If it is true, it will return a game object then call the appropriate commands on the game object
-		
+		System.out.println("PlayMonopoly_Command beginning");
 		String resourceName = params.getResource();
 		ResourceType[] resourceType = new ResourceType[1];
 		
+		System.out.println("PlayMonopoly_Command calculating type");
+
 		if (resourceName.equals("wheat")) {
 			resourceType[0] = ResourceType.WHEAT;
 		} else if (resourceName.equals("wood")) {
@@ -82,13 +84,19 @@ public class PlayMonopoly_Command implements Command {
 			resourceType[0] = ResourceType.SHEEP;
 		}
 		
+		System.out.println("PlayMonopoly_Command calling facade");
+
 		Game game = facade.canDoPlayMonopoly(params, gameID, userID);
 		result = new PlayMonopoly_Result();
+		System.out.println("PlayMonopoly_Command created result");
+
 		
 		if (game != null) {
 			if (game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONOPOLY)) {
 				try {	
 					game.useDevelopmentCard(userID, DevCardType.MONOPOLY, resourceType);
+					System.out.println("PlayMonopoly_Command just operated on the game");
+
 				} catch (Exception e) {
 					System.out.println("");
 					e.printStackTrace();
@@ -108,6 +116,8 @@ public class PlayMonopoly_Command implements Command {
 		ClientModel cm = converter.toClientModel(game);
 
 		result.setModel(cm);
+		System.out.println("PlayMonopoly_Command end of execute");
+
 	
 	}
 
