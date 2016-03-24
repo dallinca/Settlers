@@ -42,7 +42,7 @@ public class ResourceCardHand {
 		oreCards = new ArrayList<ResourceCard>();
 		sheepCards = new ArrayList<ResourceCard>();
 		woodCards = new ArrayList<ResourceCard>();
-		initializePreGameResources();
+		//initializePreGameResources();
 	}
 		 
 	/**
