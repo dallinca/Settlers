@@ -875,7 +875,29 @@ public class ServerFacade implements IServerFacade {
 		result.setModel(jc.toClientModel(g));
 
 		System.out.println("ServerFacade.join completed");
+		
+		boolean start = true;
+		players = g.getAllPlayers();
+		for (int y = 0; y < 4; y++){
+			if (players[y]==null){
+				start = false;
+				break;
+			}
+		}
+		if (start){
+			startGame(g);
+		}
+		
+		
 		return result;
+	}
+
+	private void startGame(Game g) {	
+		
+		g.setStatus("FirstRound");
+		g.setCurrentPlayer(g.getAllPlayers()[0]);
+		
+		return;		
 	}
 
 	/**

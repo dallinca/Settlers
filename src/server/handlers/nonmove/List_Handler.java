@@ -106,7 +106,7 @@ public class List_Handler extends SettlersOfCatanHandler {
 							pColor= pColor.substring(1, pColor.length()-1);
 							
 							System.out.println("PCOLORRRRRRRRRRRRRRRRRRRRR: "+pColor);
-
+//I am checking how many unplayed cards I have! Which is:
 							p.getAsJsonObject().addProperty("color", pColor);								
 						}
 					}	
