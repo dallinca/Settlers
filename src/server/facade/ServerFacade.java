@@ -89,26 +89,42 @@ public class ServerFacade implements IServerFacade {
 		
 		
 		//TESTING REASON
-		User user1 = new User("scott","scott", 0);
-		User user2 = new User("thomas", "thomas", 1);
-		User user3 = new User("chris", "chris", 2);
-		User user4 = new User("dallin", "dallin", 3);
+		User user1 = new User("scott","scott", users.size());
 		users.add(user1);
+		User user2 = new User("thomas", "thomas", users.size());
 		users.add(user2);
+		User user3 = new User("chris", "chris", users.size());
 		users.add(user3);
+		User user4 = new User("dallin", "dallin", users.size());
 		users.add(user4);
-		
+	
 		Player[] players = new Player[4];		
 		Board board = new Board(true, true, true);
 		Game game = new Game(players, board, new Bank());
 
 		game.setTitle("TESTGame");		
-		game.setGameID(1);
+		game.setGameID(gameTracker++);
 		
-		game.addPlayer(0, null);
+		game.addPlayer(0, CatanColor.RED);
 		Player p = game.getPlayerByID(0);
 		User u = users.get(0);
+		p.setPlayerName(u.getName());		
+		
+		game.addPlayer(1, CatanColor.BLUE);
+		p = game.getPlayerByID(1);
+		u = users.get(0);
 		p.setPlayerName(u.getName());
+		
+		game.addPlayer(2, CatanColor.WHITE);
+		p = game.getPlayerByID(2);
+		u = users.get(0);
+		p.setPlayerName(u.getName());
+		
+		game.addPlayer(3, CatanColor.GREEN);
+		p = game.getPlayerByID(3);
+		u = users.get(0);
+		p.setPlayerName(u.getName());
+		
 		liveGames.add(game);
 	}
 	
