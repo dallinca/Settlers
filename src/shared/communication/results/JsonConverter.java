@@ -689,6 +689,11 @@ public class JsonConverter {
 				}
 			}
 		}
+			// ROBBER
+		int robberX = game.getBoard().getHexWithRobber().getTheirX_coord_hex();
+		int robberY = game.getBoard().getHexWithRobber().getTheirY_coord_hex();
+		clientModel.map.robber = clientModel.map.new MHexLocation(robberX,robberY);
+		
 		// Convert the arraylist into an array for the client model
 
 		System.out.println("Getting client model hex map");
