@@ -30,6 +30,8 @@ public class FinishTurn_Handler extends SettlersOfCatanHandler{
 		//logger.entering("server.handlers.FinishTurn", "handle");
 		//Handling Login http exchange.
 
+		System.out.println("Finish turn handler");
+		
 		String job;	
 		FinishTurn_Params request;
 		FinishTurn_Result result;
