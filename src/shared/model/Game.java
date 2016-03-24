@@ -263,6 +263,7 @@ public class Game {
 			playersCollectResources(rollValue);
 		}*/
 		// If the roll is a seven, tell the client and wait for attempts to move the robber
+		versionNumber++;
 		return rollValue;
 	}
 
@@ -278,6 +279,7 @@ public class Game {
 		}
 		for(Player player: players) {
 			player.collectResources(rollValue, bank);
+			versionNumber++;
 		}
 	}
 
