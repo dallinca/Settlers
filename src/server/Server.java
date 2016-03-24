@@ -87,11 +87,7 @@ public class Server {
 		server.createContext("/user/register", (HttpHandler) RegisterHandler);
 		server.createContext("/games/list", (HttpHandler) ListHandler);
 		server.createContext("/games/create", (HttpHandler) CreateGameHandler);
-		server.createContext("/games/join", (HttpHandler) JoinHandler);		
-		//server.createContext("/games/model?version=N", (HttpHandler) GetVersionHandler);
-		//server.createContext("/games/model?version=-1", (HttpHandler) GetVersionHandler);
-		//server.createContext("/games/model?version=0", (HttpHandler) GetVersionHandler);
-		
+		server.createContext("/games/join", (HttpHandler) JoinHandler);				
 		server.createContext("/game/model", (HttpHandler) GetVersionHandler);
 		
 		//moves-----------------------------------------------------------------------------------

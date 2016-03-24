@@ -205,7 +205,10 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		List<PlayerInfo> players = game.getPlayers();
 		for(PlayerInfo player: players) {
 			// allow the user to select a different color
-			if(player.getId() != Client.getInstance().getUserId()) {
+			if (player==null){
+				
+			}
+			else if(player.getId() != Client.getInstance().getUserId()) {
 				System.out.println(player.getId());
 				getSelectColorView().setColorEnabled(player.getColor(), false);
 			}

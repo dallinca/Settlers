@@ -884,7 +884,7 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public GetVersion_Result model(GetVersion_Params params, int gameID) {
-		System.out.println("ServerFacade.GetVersion");
+	//	System.out.println("ServerFacade.GetVersion");
 		
 		GetVersion_Result result = new GetVersion_Result();
 		
@@ -896,9 +896,7 @@ public class ServerFacade implements IServerFacade {
 			result.setGame(g);
 			result.setModel(jc.toClientModel(g));
 			
-			System.out.println(result.getModel().toString());
-			
-			
+			//System.out.println(result.getModel().toString());			
 			
 			result.setUpToDate(false);
 			result.setValid(true);
