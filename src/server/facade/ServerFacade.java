@@ -800,62 +800,62 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public Join_Result join(Join_Params params, int userID) {
-		System.out.println("ServerFacade.join");
+		//System.out.println("ServerFacade.join");
 		int gameID = params.getGameID();
 		Join_Result result = new Join_Result();
 
-		System.out.println("Finding game.");
+		//System.out.println("Finding game.");
 		Game g = findGame(gameID);
 
 		if (g==null){
-			System.out.println("Attempted to join null game");
+			//System.out.println("Attempted to join null game");
 			return result;
 		}
 		
-		System.out.println("Getting all players from game.");
+		//System.out.println("Getting all players from game.");
 		Player[] players = g.getAllPlayers();
 		
 		if (players == null){
-			System.out.println("Creating new player set.");
+		//	System.out.println("Creating new player set.");
 			players = new Player[4];
 		}
 
 		boolean joinable = false;
 		for (int i = 0; i < 4; i ++){
 			if (players[i]==null){ //Check for vacancy in game roster.
-				System.out.println("Vacancy exists.");				
+			//	System.out.println("Vacancy exists.");				
 				joinable = true;
 				
 				break;
 			}
 			else if (players[i].getPlayerId()==userID){ //Check if player has already joined game previously
-				System.out.println("Player already exists in game.");
+				//System.out.println("Player already exists in game.");
 				joinable = true;
 				break;
 			}
 		}
 
 		if (!joinable){
-			System.out.println("Game cannot be joined.");
+			//System.out.println("Game cannot be joined.");
 			return result;			
 		}
 
-		System.out.println("Getting player by ID");
+		//System.out.println("Getting player by ID");
 		Player p = g.getPlayerByID(userID);
-		System.out.println("Converting color");
+		//System.out.println("Converting color");
 		CatanColor playerColor = params.convertColor();
 		if (playerColor==null){
-			System.out.println("No color given. Aborting.");
+			//System.out.println("No color given. Aborting.");
 			return result;
 		}
 
 		if (p!=null){
-			System.out.println("Existing player being added to game");		
+			//System.out.println("Existing player being added to game");		
 			
 			p.setPlayerColor(playerColor);
 		}else{
-			System.out.println("New player being added to game");
-			g.addPlayer(userID, playerColor);//TODO --- Somebody help me add new players to an empty game.
+			//System.out.println("New player being added to game");
+			g.addPlayer(userID, playerColor);
 			p = g.getPlayerByID(userID);
 		}		
 		
@@ -864,17 +864,17 @@ public class ServerFacade implements IServerFacade {
 
 		result.setValid(true);
 
-		String gameCookie = ("catan.game="+ gameID +";Path=/;");
+		//String gameCookie = ("catan.game="+ gameID +";Path=/;");
 		
-		System.out.println("Game cookie: "+gameCookie);
+		//System.out.println("Game cookie: "+gameCookie);
 
 		result.setGameCookie(gameCookie);
 		
-		System.out.println("Converting game to client model");
+		//System.out.println("Converting game to client model");
 				
 		result.setModel(jc.toClientModel(g));
 
-		System.out.println("ServerFacade.join completed");
+		//System.out.println("ServerFacade.join completed");
 		
 		boolean start = true;
 		players = g.getAllPlayers();
@@ -956,7 +956,6 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public AddAI_Result addAI(AddAI_Params params) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -972,7 +971,6 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public ListAI_Result listAI(ListAI_Params params) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
