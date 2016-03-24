@@ -19,16 +19,16 @@ import com.sun.net.httpserver.HttpExchange;
  */
 public class GetVersion_Handler extends SettlersOfCatanHandler {
 
-	private Logger logger = Logger.getLogger("settlers-of-catan"); 	
+	//private Logger logger = Logger.getLogger("settlers-of-catan"); 	
 
 	/**
 	 * Receives the GetVersion Params and constructs the appropriate command and passes it to the Server Facade after decoding the object.
 	 */
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
-		System.out.println("---------------------------------------Handling get version");
+		//System.out.println("---------------------------------------Handling get version");
 		
-		logger.entering("server.handlers.GetVersion", "handle");
+		//logger.entering("server.handlers.GetVersion", "handle");
 		//Handling Login http exchange.
 
 		String job;	
@@ -75,7 +75,7 @@ public class GetVersion_Handler extends SettlersOfCatanHandler {
 		sw.flush();	
 
 		exchange.getResponseBody().close();				
-		logger.exiting("server.handlers.GetVersion", "handle");
+		//logger.exiting("server.handlers.GetVersion", "handle");
 
 	}
 

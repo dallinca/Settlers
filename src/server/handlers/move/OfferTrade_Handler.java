@@ -20,13 +20,13 @@ import com.sun.net.httpserver.HttpHandler;
  */
 public class OfferTrade_Handler extends SettlersOfCatanHandler{
 
-	private Logger logger = Logger.getLogger("settlers-of-catan"); 	
+	//private Logger logger = Logger.getLogger("settlers-of-catan"); 	
 	/**
 	 * Receives the OfferTrade Params and constructs the appropriate command and passes it to the Server Facade after decoding the object.
 	 */
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
-		logger.entering("server.handlers.OfferTrade", "handle");
+		//logger.entering("server.handlers.OfferTrade", "handle");
 		//Handling Login http exchange.
 
 		String job;	
@@ -68,7 +68,7 @@ public class OfferTrade_Handler extends SettlersOfCatanHandler{
 		sw.flush();	
 
 		exchange.getResponseBody().close();		
-		logger.exiting("server.handlers.OfferTrade", "handle");	
+		//logger.exiting("server.handlers.OfferTrade", "handle");	
 		
 	}
 

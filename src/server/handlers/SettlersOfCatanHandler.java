@@ -64,7 +64,7 @@ public abstract class SettlersOfCatanHandler implements HttpHandler {
 	 */
 
 	public LinkedList<String> extractCookies(HttpExchange exchange){
-		System.out.println("Extracting cookies");
+		//System.out.println("Extracting cookies");
 		//Cookie cacher----------------------------------
 
 		String gameCookie, userCookie;
@@ -74,14 +74,14 @@ public abstract class SettlersOfCatanHandler implements HttpHandler {
 		Map<String, List<String>> headers = exchange.getRequestHeaders();
 
 		if (headers.size()==0){
-			System.out.println("No headers!");
+			//System.out.println("No headers!");
 			return null;
 		}
 
 		rawCookies = headers.get("Cookie");
 
 		//Get user cookie first.
-		System.out.println("Retrieving user cookie");
+		//System.out.println("Retrieving user cookie");
 
 		userCookie = rawCookies.get(0);
 		//System.out.println(userCookie);
@@ -98,7 +98,7 @@ public abstract class SettlersOfCatanHandler implements HttpHandler {
 
 		if (userCookie.contains("=")){
 
-			System.out.println("Retrieving game cookie");
+			//System.out.println("Retrieving game cookie");
 
 			gameCookie = userCookie.substring(userCookie.indexOf(';') + 2);			
 			gameCookie = gameCookie.substring(gameCookie.lastIndexOf('=')+1);			
@@ -108,14 +108,14 @@ public abstract class SettlersOfCatanHandler implements HttpHandler {
 			userCookie = userCookie.substring(0, userCookie.indexOf(';'));
 			cookies.add(userCookie);
 			cookies.add(gameCookie);
-			System.out.println("Final user cookie: "+userCookie);
-			System.out.println("Final game cookie: " + gameCookie);
+			//System.out.println("Final user cookie: "+userCookie);
+			//System.out.println("Final game cookie: " + gameCookie);
 		}	else{
 			cookies.add(userCookie);
-			System.out.println("Final single user cookie: "+userCookie);
+			//System.out.println("Final single user cookie: "+userCookie);
 		}
 		
-		System.out.println("Returning cookies");
+		//System.out.println("Returning cookies");
 
 
 

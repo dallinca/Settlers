@@ -23,14 +23,14 @@ import com.sun.net.httpserver.HttpHandler;
  * Handles calls from a client to Play a soldier development card
  */
 public class PlaySoldier_Handler extends SettlersOfCatanHandler{
-	private Logger logger = Logger.getLogger("settlers-of-catan");
+	//private Logger logger = Logger.getLogger("settlers-of-catan");
 	
 	/**
 	 * Handles the PlaySoldier Params and constructs the appropriate command and passes it to the Server Facade after decoding the object.
 	 */
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
-		logger.entering("server.handlers.PlaySoldier", "handle");
+		//logger.entering("server.handlers.PlaySoldier", "handle");
 		//Handling Login http exchange.
 
 		String job;	
@@ -74,7 +74,7 @@ public class PlaySoldier_Handler extends SettlersOfCatanHandler{
 		sw.flush();	
 
 		exchange.getResponseBody().close();		
-		logger.exiting("server.handlers.PlaySoldier", "handle");
+		//logger.exiting("server.handlers.PlaySoldier", "handle");
 		
 	}
 

@@ -24,16 +24,16 @@ import com.sun.net.httpserver.HttpHandler;
  */
 public class Join_Handler extends SettlersOfCatanHandler {
 
-	private Logger logger = Logger.getLogger("settlers-of-catan"); 	
+	//private Logger logger = Logger.getLogger("settlers-of-catan"); 	
 
 	/**
 	 * Receives the Join_Handler Params and constructs the appropriate command and passes it to the Server Facade after decoding the object.
 	 */
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
-		System.out.println("Handling join");
+		//System.out.println("Handling join");
 
-		logger.entering("server.handlers.JoinHandler", "handle");
+		//logger.entering("server.handlers.JoinHandler", "handle");
 		//Handling Login http exchange.
 
 		String job;	
@@ -46,18 +46,18 @@ public class Join_Handler extends SettlersOfCatanHandler {
 		System.out.println("Temp handler user created.");
 
 		if (facade.validateUser(user)){
-			System.out.println("User valid.");
+			//System.out.println("User valid.");
 
 			job = getExchangeBody(exchange); //get json string from exchange.
 
-			System.out.println("Getting request from json.");
+			//System.out.println("Getting request from json.");
 			request = gson.fromJson(job, Join_Params.class); //deserialize request from json	
 
-			System.out.println("Passing request to facade.");
+			//System.out.println("Passing request to facade.");
 			result = facade.join(request, user.getPlayerID());//Call facade to perform operation with request
 
 			if (result.isValid()){ //Set game cookie in response
-				System.out.println("Valid result.");
+				//System.out.println("Valid result.");
 				
 				Map<String, List<String>> headers = exchange.getResponseHeaders();
 				List<String> gameCookie = new LinkedList<String>();
@@ -66,20 +66,20 @@ public class Join_Handler extends SettlersOfCatanHandler {
 
 				ClientModel cm = result.getModel();
 												
-				System.out.println("Writing client model to json.");
+				//System.out.println("Writing client model to json.");
 				
-				System.out.println("Model sent to client::\n"+cm.toString());
+				//System.out.println("Model sent to client::\n"+cm.toString());
 				//job = gson.toJson(cm);	//serialize result to json
 				job = "Success";
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); //Everything's okay
 			}
 			else{ 
-				System.out.println("Result invalid");
+				//System.out.println("Result invalid");
 				job = "Failure";
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0); //Game invalid
 			}			
 		}else{
-			System.out.println("User invalid.");
+			//System.out.println("User invalid.");
 			job = "Failure";
 			exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0); //User invalid
 			
@@ -92,6 +92,6 @@ public class Join_Handler extends SettlersOfCatanHandler {
 
 
 		exchange.getResponseBody().close();		
-		logger.exiting("server.handlers.JoinHandler", "handle");
+		//logger.exiting("server.handlers.JoinHandler", "handle");
 	}
 }

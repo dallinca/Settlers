@@ -11,7 +11,7 @@ import server.facade.ServerFacade;
  *
  */
 public interface Command {
-	IServerFacade facade = ServerFacade.getInstance();
+	ServerFacade facade = ServerFacade.getInstance();
 	public int gameID = -1;
 	public int userID = -1;
 		

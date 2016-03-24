@@ -61,6 +61,7 @@ public class BuildRoad_Command implements Command {
 		
 		System.out.println("Can do build road.");
 		game = facade.canDoBuildRoad(params, gameID, userID);
+		System.out.println("Can do build road.2");
 		result = new BuildRoad_Result();
 
 		System.out.println("BuildRoad_Command1");

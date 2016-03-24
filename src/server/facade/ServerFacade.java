@@ -86,6 +86,30 @@ public class ServerFacade implements IServerFacade {
 	
 	private ServerFacade() {		
 		this.jc = new JsonConverter();
+		
+		
+		//TESTING REASON
+		User user1 = new User("scott","scott", 0);
+		User user2 = new User("thomas", "thomas", 1);
+		User user3 = new User("chris", "chris", 2);
+		User user4 = new User("dallin", "dallin", 3);
+		users.add(user1);
+		users.add(user2);
+		users.add(user3);
+		users.add(user4);
+		
+		Player[] players = new Player[4];		
+		Board board = new Board(true, true, true);
+		Game game = new Game(players, board, new Bank());
+
+		game.setTitle("TESTGame");		
+		game.setGameID(1);
+		
+		game.addPlayer(0, null);
+		Player p = game.getPlayerByID(0);
+		User u = users.get(0);
+		p.setPlayerName(u.getName());
+		liveGames.add(game);
 	}
 	
 	public static ServerFacade getInstance() {
@@ -149,11 +173,14 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public Game canDoBuildRoad(BuildRoad_Params params, int gameID, int userID) {
-
+		System.out.println("canDoBuildRoad SErver facade");
 		Game game = findGame(gameID);
+		System.out.println("canDoBuildRoad SErver facade1");
 		if(game.canDoPlayerBuildRoad(userID)){
+			System.out.println("canDoBuildRoad SErver facade2");
 			return game;
 		}
+		System.out.println("canDoBuildRoad SErver facade3");
 		return null;
 	}
 
@@ -513,7 +540,7 @@ public class ServerFacade implements IServerFacade {
 
 		return game;
 	}
-
+// Resource: 
 	/**
 	 * To be called from the Handlers.<br>
 	 * Verifies which Game model the command is for.<br>
@@ -562,7 +589,7 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public Login_Result login(Login_Params params) {
-		System.out.println("ServerFacade.login");
+		//System.out.println("ServerFacade.login");
 
 		String username = params.getUsername();
 		String password = params.getPassword();
@@ -596,14 +623,14 @@ public class ServerFacade implements IServerFacade {
 
 					result.setUserCookie(userCookie);
 
-					System.out.println("ServerFacade.login result");
-					System.out.println(result);
+					//System.out.println("ServerFacade.login result");
+					//System.out.println(result);
 					return result;
 				}
 			}
 		}
-		System.out.println("ServerFacade.login result");
-		System.out.println(result);
+		//System.out.println("ServerFacade.login result");
+		//System.out.println(result);
 		return result;
 	}
 
@@ -620,9 +647,9 @@ public class ServerFacade implements IServerFacade {
 	@SuppressWarnings("deprecation")
 	@Override
 	public Register_Result register(Register_Params params) {
-		System.out.println("ServerFacade.register");
+		//System.out.println("ServerFacade.register");
 		
-		System.out.println("users Size: " + users.size());
+		//System.out.println("users Size: " + users.size());
 		String username = params.getUsername();
 		String password = params.getPassword();
 		
@@ -631,7 +658,7 @@ public class ServerFacade implements IServerFacade {
 
 		for (User current : users){
 			if (current.getName().equals(username)){
-				System.out.println("Username already exists in system");
+				//System.out.println("Username already exists in system");
 				return result;
 				//no duplicate names allowed.
 			}
@@ -641,10 +668,10 @@ public class ServerFacade implements IServerFacade {
 
 		User user = new User(username, password, users.size());
 
-		System.out.println("Creating new user");
+		//System.out.println("Creating new user");
 		users.add(user); // add new user to roster
 
-		System.out.println("Creating user cookie");
+		//System.out.println("Creating user cookie");
 		//generate user cookie
 		/*String userCookie = ("{\"name\":\"" + username
 				+ "\",\"password\":\""+password
@@ -656,7 +683,7 @@ public class ServerFacade implements IServerFacade {
 		json.addProperty("password", password);
 		json.addProperty("playerID", user.getPlayerID());		
 
-		System.out.println("Unencoded cookie: "+json.toString());
+		//System.out.println("Unencoded cookie: "+json.toString());
 		String userCookie = json.toString();
 
 		StringBuilder sb = new StringBuilder();
@@ -665,13 +692,13 @@ public class ServerFacade implements IServerFacade {
 		sb.append(URLEncoder.encode(userCookie));
 		sb.append(";Path=/;");
 		userCookie = sb.toString();
-		System.out.println("Encoded cookie: "+userCookie);
+		//System.out.println("Encoded cookie: "+userCookie);
 
 
 		result.setUserCookie(userCookie);
 
-		System.out.println("users Size: " + users.size());
-		System.out.println(users);
+		//System.out.println("users Size: " + users.size());
+		//System.out.println(users);
 		return result;
 	}
 
@@ -688,7 +715,7 @@ public class ServerFacade implements IServerFacade {
 	@Override
 	public List_Result list(List_Params params) {
 
-		System.out.println("Server.ServerFacade.list");
+		//System.out.println("Server.ServerFacade.list");
 
 		List_Result result = new List_Result();
 		if (params==null){
@@ -696,7 +723,7 @@ public class ServerFacade implements IServerFacade {
 			return result;
 		}
 
-		System.out.println("Getting game info list");
+		//System.out.println("Getting game info list");
 		GameInfo[] list = new GameInfo[liveGames.size()];
 
 
@@ -720,9 +747,9 @@ public class ServerFacade implements IServerFacade {
 				pi.setPlayerIndex(p.getPlayerIndex());				
 				pi.setColor(p.getPlayerColor());
 				
-				System.out.println("PLAYER INFO---"+x);
-				System.out.println(pi.getName());
-				System.out.println(pi.getColor());				
+				//System.out.println("PLAYER INFO---"+x);
+				//System.out.println(pi.getName());
+				//System.out.println(pi.getColor());				
 
 				
 				
@@ -736,9 +763,9 @@ public class ServerFacade implements IServerFacade {
 		result.setGames(list);
 		result.setValid(true);
 
-		System.out.println("Result to string");
+		//System.out.println("Result to string");
 
-		System.out.println(result.toString());
+		//System.out.println(result.toString());
 
 		return result;
 	}
@@ -755,7 +782,7 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public Create_Result create(Create_Params params, int userID) {
-		System.out.println("Creating game.");
+		//System.out.println("Creating game.");
 		String name = params.getName();
 		boolean numbers = params.isRandomNumbers();
 		boolean ports = params.isRandomPorts();
@@ -771,20 +798,20 @@ public class ServerFacade implements IServerFacade {
 		game.setTitle(name);		
 		game.setGameID(gameTracker++);
 		
-		System.out.println("Adding creator to game.");
+		//System.out.println("Adding creator to game.");
 		game.addPlayer(userID, null);
 		Player p = game.getPlayerByID(userID);
 		User u = users.get(userID);
 		p.setPlayerName(u.getName());
 		
-		System.out.println("Game created successfully.");
+		//System.out.println("Game created successfully.");
 
 		liveGames.add(game);
 
 		result.setTitle(name);
 		result.setValid(true);
 
-		System.out.println("Returning game result from server facade.");
+		//System.out.println("Returning game result from server facade.");
 		return result;
 	}
 
