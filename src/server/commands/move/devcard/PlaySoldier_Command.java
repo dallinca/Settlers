@@ -51,8 +51,11 @@ public class PlaySoldier_Command implements Command {
 	@Override
 	public void execute() {
 		Game game = null;
+		
+		System.out.println("PlaySoldier_command beginning");
 		game = facade.canDoPlaySoldier(params, gameID, userID);
-
+		System.out.println("PlaySoldier_command got game");
+		
 		/*
 		 * Things to use: 
 		 * private int playerIndex;
@@ -66,7 +69,8 @@ public class PlaySoldier_Command implements Command {
 		if (game != null) {
 			try {
 				game.useSoldierCard(userID, params);
-
+				System.out.println("PlaySoldier_command operated on the game");
+				
 			} catch (Exception e) {
 				new PlaySoldier_Result();
 				e.printStackTrace();
@@ -82,6 +86,7 @@ public class PlaySoldier_Command implements Command {
 		ClientModel cm = converter.toClientModel(game);
 
 		result.setModel(cm);
+		System.out.println("PlaySoldier_command end of execute");
 
 	}
 

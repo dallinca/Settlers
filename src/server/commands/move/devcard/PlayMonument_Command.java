@@ -57,11 +57,17 @@ public class PlayMonument_Command implements Command {
 		result = new PlayMonument_Result();
 		//Ask the server facade if that action can happen
 		//If it is true, it will return a game object then call the appropriate commands on the game object
+		
+		System.out.println("PlayMonument_Command beginning");
+
 		Game game = facade.canDoPlayMonument(gameID, userID);
+		System.out.println("PlayMonument_Command asked facade for a game");
+
 		
 		if (game != null) {
 			try {
 				game.useMonumentCard(userID, DevCardType.MONUMENT);
+				System.out.println("PlayMonument_Command operated on game");
 			} catch (Exception e) {
 				System.out.println("");
 				e.printStackTrace();
@@ -75,7 +81,7 @@ public class PlayMonument_Command implements Command {
 		ClientModel cm = converter.toClientModel(game);
 
 		result.setModel(cm);
-		
+		System.out.println("PlayMonument_Command end of execute");
 		
 	}
 	

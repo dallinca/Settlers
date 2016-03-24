@@ -52,14 +52,16 @@ public class PlayYearOfPlenty_Command implements Command {
 	@Override
 	public void execute() {
 		Game game = null;
-
+		
+		System.out.println("PlayYearOfPlenty_command beginning");
+		
 		String r1 = params.getResource1();
 		String r2 = params.getResource2();
 
 		ResourceType[] resourceType = new ResourceType[2];
 
 		try {
-
+			System.out.println("PlayYearOfPlenty_command evaluating resource types");
 			if (r1.equals(r2)) {
 				resourceType[0] = formatForArray(r1);
 			} else {
@@ -72,12 +74,15 @@ public class PlayYearOfPlenty_Command implements Command {
 			e.printStackTrace();
 		}
 
+		
 	game = facade.canDoPlayYearOfPlenty(resourceType, gameID, userID);
 	result = new PlayYearOfPlenty_Result();
-
+	System.out.println("PlayYearOfPlenty_command got game");
+	
 	if (game != null) {
 		try {
 			game.useDevelopmentCard(userID, DevCardType.YEAR_OF_PLENTY, resourceType);
+			System.out.println("PlayYearOfPlenty_command just operated on the game");
 		} catch (Exception e) {
 			new PlayYearOfPlenty_Result();
 			e.printStackTrace();
@@ -93,6 +98,7 @@ public class PlayYearOfPlenty_Command implements Command {
 	ClientModel cm = converter.toClientModel(game);
 
 	result.setModel(cm);
+	System.out.println("PlayYearOfPlenty_command end of execute");
 
 }
 

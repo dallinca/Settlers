@@ -1,10 +1,4 @@
-<<<<<<< HEAD
-Mar 23, 2016 9:12:44 PM server.Server run
+Mar 23, 2016 9:29:48 PM server.Server run
 INFO: Initializing HTTP Server
-Mar 23, 2016 9:12:44 PM server.Server run
-=======
-Mar 23, 2016 8:06:35 PM server.Server run
-INFO: Initializing HTTP Server
-Mar 23, 2016 8:06:35 PM server.Server run
->>>>>>> 193730ec50b826f9283c14913fc9639898df0dae
+Mar 23, 2016 9:29:48 PM server.Server run
 INFO: Starting HTTP Server

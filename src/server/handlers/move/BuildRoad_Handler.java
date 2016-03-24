@@ -32,7 +32,9 @@ public class BuildRoad_Handler extends SettlersOfCatanHandler{
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
 		logger.entering("server.handlers.BuildRoad", "handle");
-		//Handling Login http exchange.
+		//Handling build road http exchange.
+		
+		System.out.println("Build road handler");
 
 		String job;	
 		BuildRoad_Params request;
@@ -41,15 +43,19 @@ public class BuildRoad_Handler extends SettlersOfCatanHandler{
 		LinkedList<String> cookies = extractCookies(exchange);
 
 		String check = validateCookies(cookies);		
-
+		
 		if (check.equals("VALID")){
+			
+			System.out.println("Valid credentials");
 
 			User user = gson.fromJson(cookies.getFirst(), User.class);	
 			int gameID = Integer.parseInt(cookies.get(1));
 
 			job = getExchangeBody(exchange); //get json string from exchange.
+			
 			request = gson.fromJson(job, BuildRoad_Params.class); //deserialize request from json
 
+			System.out.println("Creating and executing command");
 			BuildRoad_Command command = new BuildRoad_Command(request, gameID, user.getPlayerID());
 
 			command.execute();//Execute the command	
@@ -57,15 +63,18 @@ public class BuildRoad_Handler extends SettlersOfCatanHandler{
 			result = command.getResult(); //Get result from command			
 
 			if (result.isValid()){
+				System.out.println("Valid build road result.");
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); //Everything's okay
 				
 				ClientModel cm = result.getModel();
 				job = gson.toJson(cm);	//serialize result to json	
 			}else{
+				System.out.println("Build road result invalid.");
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
 				job = "COMMAND FAILURE";	
 			}			
 		}else{
+			System.out.println("Invalid user.");
 			job = check;			
 			exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0); //User invalid			
 		}		
@@ -73,6 +82,8 @@ public class BuildRoad_Handler extends SettlersOfCatanHandler{
 		OutputStreamWriter sw = new OutputStreamWriter(exchange.getResponseBody());
 		sw.write(job);//Write result to stream.
 		sw.flush();	
+		
+		System.out.println("Returning to client");
 
 		exchange.getResponseBody().close();		
 		logger.exiting("server.handlers.BuildRoad", "handle");
