@@ -154,7 +154,6 @@ public class Game {
 	 * @post the next player is set.
 	 */
 	public void incrementPlayer() {
-		versionNumber++;
 		// If we are done with the first two rounds of the Game (for setup
 		for (int i = 0; i < numberofPlayers; i++) {
 			if (currentPlayer.getPlayerIndex() == players[i].getPlayerIndex()) {
@@ -164,9 +163,11 @@ public class Game {
 					if (i == numberofPlayers-1) {
 						setCurrentPlayer(players[0]);
 						turnNumber++;
+						versionNumber++;
 						return;
 					} else {
 						setCurrentPlayer(players[i+1]);
+						versionNumber++;
 						return;
 					}
 				}
@@ -178,9 +179,11 @@ public class Game {
 						if(i == numberofPlayers - 1) {
 							setCurrentPlayer(players[numberofPlayers - 1]); // Could probably omit this line
 							turnNumber++;
+							versionNumber++;
 							return;
 						} else {
 							setCurrentPlayer(players[i+1]);
+							versionNumber++;
 							return;
 						}
 					}
@@ -190,9 +193,11 @@ public class Game {
 							setCurrentPlayer(players[0]);
 							//inSetUpPhase = false;
 							turnNumber++;
+							versionNumber++;
 							return;
 						} else {
 							setCurrentPlayer(players[i-1]);
+							versionNumber++;
 							return;
 						}
 					}
