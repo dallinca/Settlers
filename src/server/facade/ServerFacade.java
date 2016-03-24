@@ -768,7 +768,7 @@ public class ServerFacade implements IServerFacade {
 		game.setGameID(gameTracker++);
 		
 		System.out.println("Adding creator to game.");
-		game.addPlayer(userID, CatanColor.WHITE);
+		game.addPlayer(userID, null);
 		Player p = game.getPlayerByID(userID);
 		User u = users.get(userID);
 		p.setPlayerName(u.getName());
