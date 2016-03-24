@@ -49,10 +49,10 @@ public class List_Result {
 			LinkedList<Player> players = new LinkedList<Player>();
 			
 			for (JsonElement p: playerList){		
-				//System.out.println("LOOK HERE:::: "+p.toString());
+				System.out.println("LOOK HERE:::: "+p.toString());
 				
 				if (!p.getAsJsonObject().has("color")){
-					
+					System.out.println("Player does not have color!!!!!!!!!!!!!!!!!!!!!!!!!!");
 				}
 				else{				
 				String pColor = p.getAsJsonObject().get("color").toString();
@@ -115,6 +115,8 @@ public class List_Result {
 		this.games = games;
 	}
 	
+	
+	
 	/*public String toString(){
 		StringBuilder sb = new StringBuilder();
 		
@@ -135,7 +137,7 @@ public class List_Result {
 	@Override
 	public String toString() {
 		return "List_Result [valid=" + valid + ", games="
-				+ Arrays.toString(games) + ", listedGames=" + listedGames + "]";
+				+ Arrays.toString(games) + ",\n listedGames=" + listedGames + "]";
 	}
 
 	public void setValid(boolean valid) {

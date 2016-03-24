@@ -15,10 +15,13 @@ import shared.communication.params.nonmove.Login_Params;
 import shared.communication.params.nonmove.Register_Params;
 import shared.communication.results.nonmove.List_Result;
 import shared.communication.results.nonmove.Register_Result;
+import shared.communication.results.nonmove.List_Result.Game;
+import shared.communication.results.nonmove.List_Result.Player;
 import client.data.GameInfo;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sun.net.httpserver.HttpExchange;
@@ -73,8 +76,10 @@ public class List_Handler extends SettlersOfCatanHandler {
 				GameInfo[] games = result.getGames();
 
 				System.out.println("Turning to json");
+
 				for (GameInfo gi : games) {
-					String json;					   					   
+					String json;	
+
 					json = gson.toJson(gi);		
 
 					JsonParser parser = new JsonParser();
@@ -82,7 +87,33 @@ public class List_Handler extends SettlersOfCatanHandler {
 					jArray.add(jo);
 				}
 
+				for (JsonElement e: jArray){
+
+					//String title = e.getAsJsonObject().get("title").toString();
+					//int id = e.getAsJsonObject().get("id").getAsInt();
+					JsonArray playerList = e.getAsJsonObject().get("players").getAsJsonArray();
+
+					for (JsonElement p: playerList){		
+						//System.out.println("LOOK HERE:::: "+p.toString());
+
+						if (!p.getAsJsonObject().has("color")){
+							//System.out.println("Player does not have color!!!!!!!!!!!!!!!!!!!!!!!!!!");
+						}
+						else{				
+							String pColor = p.getAsJsonObject().get("color").toString();
+
+							pColor = pColor.toLowerCase();
+							pColor= pColor.substring(1, pColor.length()-1);
+							
+							System.out.println("PCOLORRRRRRRRRRRRRRRRRRRRR: "+pColor);
+
+							p.getAsJsonObject().addProperty("color", pColor);								
+						}
+					}	
+				}	
+
 				job = jArray.toString(); //gson.toJson(result.getListedGames());	//serialize result to json	
+
 				System.out.println("To json Okay: "+job);
 
 			}else{

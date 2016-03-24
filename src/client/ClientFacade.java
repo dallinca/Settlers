@@ -284,6 +284,8 @@ public class ClientFacade {
 
 			e.printStackTrace();
 		}		
+		
+		System.out.println("LIST RESULT: "+result.toString());
 
 		return result;
 	}

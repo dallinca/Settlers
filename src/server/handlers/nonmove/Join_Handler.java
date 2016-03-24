@@ -64,11 +64,11 @@ public class Join_Handler extends SettlersOfCatanHandler {
 				gameCookie.add(result.getGameCookie());
 				headers.put("Set-cookie", gameCookie);
 
-				//ClientModel cm = result.getModel();
+				ClientModel cm = result.getModel();
 												
-				//System.out.println("Writing client model to json.");
+				System.out.println("Writing client model to json.");
 				
-				//System.out.println("Model sent to client::\n"+cm.toString());
+				System.out.println("Model sent to client::\n"+cm.toString());
 				//job = gson.toJson(cm);	//serialize result to json
 				job = "Success";
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); //Everything's okay

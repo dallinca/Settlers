@@ -717,11 +717,16 @@ public class ServerFacade implements IServerFacade {
 
 				pi.setId(p.getPlayerId());
 				pi.setName(p.getPlayerName());
-				pi.setPlayerIndex(p.getPlayerIndex());
+				pi.setPlayerIndex(p.getPlayerIndex());				
 				pi.setColor(p.getPlayerColor());
+				
+				System.out.println("PLAYER INFO---"+x);
+				System.out.println(pi.getName());
+				System.out.println(pi.getColor());				
 
+				
+				
 				info.addPlayer(pi);
-
 			}
 
 
@@ -845,8 +850,7 @@ public class ServerFacade implements IServerFacade {
 		}
 
 		if (p!=null){
-			System.out.println("Existing player being added to game");
-			
+			System.out.println("Existing player being added to game");		
 			
 			p.setPlayerColor(playerColor);
 		}else{
