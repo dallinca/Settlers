@@ -26,7 +26,7 @@ public class Server {
 
 	private static int SERVER_PORT_NUMBER = 8081; 
 	private static final int MAX_WAITING_CONNECTIONS = 12;
-
+	
 	private static Logger logger;
 
 	static {
@@ -62,6 +62,7 @@ public class Server {
 	private HttpServer server;
 
 	private Server() {
+		GetVersionHandler = new GetVersion_Handler();
 		return;
 	}
 
@@ -90,7 +91,8 @@ public class Server {
 		//server.createContext("/games/model?version=N", (HttpHandler) GetVersionHandler);
 		//server.createContext("/games/model?version=-1", (HttpHandler) GetVersionHandler);
 		//server.createContext("/games/model?version=0", (HttpHandler) GetVersionHandler);
-		server.createContext("/games/model", (HttpHandler) GetVersionHandler);
+		
+		server.createContext("/game/model", (HttpHandler) GetVersionHandler);
 		
 		//moves-----------------------------------------------------------------------------------
 

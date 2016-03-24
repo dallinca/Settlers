@@ -72,38 +72,55 @@ public abstract class SettlersOfCatanHandler implements HttpHandler {
 		LinkedList<String> cookies = new LinkedList<String>();
 
 		Map<String, List<String>> headers = exchange.getRequestHeaders();
-		
+
 		if (headers.size()==0){
 			System.out.println("No headers!");
 			return null;
 		}
-		
+
 		rawCookies = headers.get("Cookie");
 
 		//Get user cookie first.
 		System.out.println("Retrieving user cookie");
-		
-		userCookie = rawCookies.get(0);
-		System.out.println(userCookie);
-		
-		userCookie = userCookie.substring(11, userCookie.length());//Cut off path from end of string		
-		System.out.println(userCookie);
-		
-		userCookie = URLDecoder.decode(userCookie);
-		System.out.println(userCookie);
-		cookies.add(userCookie);	
 
-				
+		userCookie = rawCookies.get(0);
+		//System.out.println(userCookie);
+
+		userCookie = userCookie.substring(11, userCookie.length());//Cut off path from end of string		
+		//System.out.println(userCookie);
+
+		userCookie = URLDecoder.decode(userCookie);
+		//System.out.println(userCookie);
+
+
+
 		//Get game cookie, if there is one.
-				
-		if (rawCookies.size()>1){
+
+		if (userCookie.contains("=")){
+
 			System.out.println("Retrieving game cookie");
 
-			gameCookie = headers.get("Cookie").get(1);			 
-			gameCookie = gameCookie.substring(11, gameCookie.length());			 
+			gameCookie = userCookie.substring(userCookie.indexOf(';') + 2);			
+			gameCookie = gameCookie.substring(gameCookie.lastIndexOf('=')+1);			
+
+
+
+			userCookie = userCookie.substring(0, userCookie.indexOf(';'));
+			cookies.add(userCookie);
 			cookies.add(gameCookie);
-		}		
+			System.out.println("Final user cookie: "+userCookie);
+			System.out.println("Final game cookie: " + gameCookie);
+		}	else{
+			cookies.add(userCookie);
+			System.out.println("Final single user cookie: "+userCookie);
+		}
+		
 		System.out.println("Returning cookies");
+
+
+
+
+
 		return cookies;
 	}
 
@@ -129,7 +146,7 @@ public abstract class SettlersOfCatanHandler implements HttpHandler {
 	public void writeResult(HttpExchange exchange, Object result){
 
 		try {
-			
+
 			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 
 			String job = gson.toJson(result);	//serialize result to json
