@@ -700,8 +700,7 @@ public class ServerFacade implements IServerFacade {
 		GameInfo[] list = new GameInfo[liveGames.size()];
 
 
-
-		for (int i = 0 ; i < liveGames.size(); i++){
+		for (int i = 0 ; i < liveGames.size(); i++){ 
 
 			Game g = liveGames.get(i);
 
@@ -819,8 +818,9 @@ public class ServerFacade implements IServerFacade {
 		boolean joinable = false;
 		for (int i = 0; i < 4; i ++){
 			if (players[i]==null){ //Check for vacancy in game roster.
-				System.out.println("Vacancy exists.");
+				System.out.println("Vacancy exists.");				
 				joinable = true;
+				
 				break;
 			}
 			else if (players[i].getPlayerId()==userID){ //Check if player has already joined game previously
@@ -846,6 +846,8 @@ public class ServerFacade implements IServerFacade {
 
 		if (p!=null){
 			System.out.println("Existing player being added to game");
+			
+			
 			p.setPlayerColor(playerColor);
 		}else{
 			System.out.println("New player being added to game");
