@@ -210,7 +210,9 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 			}
 			else if(player.getId() != Client.getInstance().getUserId()) {
 				System.out.println(player.getId());
-				getSelectColorView().setColorEnabled(player.getColor(), false);
+				if(player.getColor() != null) {
+					getSelectColorView().setColorEnabled(player.getColor(), false);
+				}
 			}
 		}
 		
