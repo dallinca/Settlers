@@ -55,8 +55,9 @@ public class FinishTurn_Handler extends SettlersOfCatanHandler{
 			result = command.getResult(); //Get result from command			
 
 			if (result.isValid()){
+				System.out.println("Finish turn result is valid");
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); //Everything's okay
-				job = gson.toJson(result);	//serialize result to json	
+				job = gson.toJson(result.getModel());	//serialize result to json	
 			}else{
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
 				job = "COMMAND FAILURE";	
