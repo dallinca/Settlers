@@ -56,12 +56,17 @@ public class BuildRoad_Command implements Command {
 	 */
 	@Override
 	public void execute() {
+		System.out.println("Build command.");
+		
 		Game game = null;
+		
+		System.out.println("Can do build road.");
 		game = facade.canDoBuildRoad(params, gameID, userID);
 		result = new BuildRoad_Result();
 
 		if (game != null) {
 			try {
+				System.out.println("Placing road on edge.");
 				game.placeRoadOnEdge(userID, params.getCmdEdgeLocation() );
 			} catch (Exception e) {
 				new BuildRoad_Result();
@@ -71,11 +76,12 @@ public class BuildRoad_Command implements Command {
 		} else {
 			return;
 		}
+		System.out.println("Valid command.");
 		result.setValid(true);
 
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);
-
+		System.out.println("Setting model.");
 		result.setModel(cm);
 	}
 
