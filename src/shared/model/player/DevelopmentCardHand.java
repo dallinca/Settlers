@@ -230,7 +230,7 @@ public class DevelopmentCardHand {
 			}
 		}
 		
-		System.out.println("I am checking how many unplayed cards I have! Which is: " + numberAvailable);
+		//System.out.println("I am checking how many unplayed cards I have! Which is: " + numberAvailable);
 		
 		return numberAvailable;
 	}

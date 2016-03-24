@@ -98,6 +98,9 @@ public class Join_Params {
 		else if (color.equals("brown")){
 			return CatanColor.BROWN;
 		}
+		else if (color.equals("green")){
+			return CatanColor.GREEN;
+		}
 		return null;
 	}
 }
