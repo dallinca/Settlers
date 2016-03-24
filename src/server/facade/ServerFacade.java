@@ -106,6 +106,8 @@ public class ServerFacade implements IServerFacade {
 		game.setGameID(1);
 		
 		game.addPlayer(0, null);
+		game.addPlayer(1, null);
+		game.addPlayer(2, null);
 		Player p = game.getPlayerByID(0);
 		User u = users.get(0);
 		p.setPlayerName(u.getName());
