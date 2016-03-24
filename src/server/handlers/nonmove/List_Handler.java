@@ -31,7 +31,7 @@ import com.sun.net.httpserver.HttpHandler;
  * Handles calls from a client to list the games
  */
 public class List_Handler extends SettlersOfCatanHandler {
-	private Logger logger = Logger.getLogger("settlers-of-catan"); 	
+	//private Logger logger = Logger.getLogger("settlers-of-catan"); 	
 	/**
 	 * Receives the List games Params and constructs the appropriate command and passes it to the Server Facade after decoding the object.
 	 */
@@ -39,7 +39,7 @@ public class List_Handler extends SettlersOfCatanHandler {
 	public void handle(HttpExchange exchange) throws IOException {
 		//System.out.println("Handling list");
 
-		logger.entering("server.handlers.ListHandler", "handle");
+		//logger.entering("server.handlers.ListHandler", "handle");
 		//Handling Login http exchange.
 
 		String job;	
@@ -130,7 +130,7 @@ public class List_Handler extends SettlersOfCatanHandler {
 		sw.flush();	
 
 		exchange.getResponseBody().close();		
-		logger.exiting("server.handlers.ListHandler", "handle");			
+		//logger.exiting("server.handlers.ListHandler", "handle");			
 	}
 
 }

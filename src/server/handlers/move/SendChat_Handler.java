@@ -24,7 +24,7 @@ import com.sun.net.httpserver.HttpHandler;
  */
 public class SendChat_Handler extends SettlersOfCatanHandler {
 
-	private Logger logger = Logger.getLogger("settlers-of-catan"); 	
+	//private Logger logger = Logger.getLogger("settlers-of-catan"); 	
 
 	/**
 	 * Receives the SendChat Params and constructs the appropriate command and passes it to the Server Facade after decoding the object.
@@ -32,7 +32,7 @@ public class SendChat_Handler extends SettlersOfCatanHandler {
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
 
-		logger.entering("server.handlers.SendChat", "handle");
+		//logger.entering("server.handlers.SendChat", "handle");
 		//Handling Login http exchange.
 
 		String job;	
@@ -76,7 +76,7 @@ public class SendChat_Handler extends SettlersOfCatanHandler {
 		sw.flush();	
 
 		exchange.getResponseBody().close();		
-		logger.exiting("server.handlers.SendChat", "handle");	
+		//logger.exiting("server.handlers.SendChat", "handle");	
 
 	}
 

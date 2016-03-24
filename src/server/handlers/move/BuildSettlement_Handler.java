@@ -23,14 +23,14 @@ import com.sun.net.httpserver.HttpHandler;
  * Handles calls from a client to build a settlement
  */
 public class BuildSettlement_Handler extends SettlersOfCatanHandler {
-	private Logger logger = Logger.getLogger("settlers-of-catan");
+	//private Logger logger = Logger.getLogger("settlers-of-catan");
 	
 	/**
 	 * Receives the BuildSettlement Params and constructs the appropriate command and passes it to the Server Facade after decoding the object.
 	 */
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
-		logger.entering("server.handlers.BuildSettlement", "handle");
+		//logger.entering("server.handlers.BuildSettlement", "handle");
 		//Handling Login http exchange.
 
 		String job;	
@@ -74,7 +74,7 @@ public class BuildSettlement_Handler extends SettlersOfCatanHandler {
 		sw.flush();	
 
 		exchange.getResponseBody().close();		
-		logger.exiting("server.handlers.BuildSettlement", "handle");
+		//logger.exiting("server.handlers.BuildSettlement", "handle");
 		
 	}
 

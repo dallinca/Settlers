@@ -21,13 +21,13 @@ import com.sun.net.httpserver.HttpHandler;
  */
 public class RobPlayer_Handler extends SettlersOfCatanHandler {
 
-	private Logger logger = Logger.getLogger("settlers-of-catan"); 	
+	//private Logger logger = Logger.getLogger("settlers-of-catan"); 	
 	/**
 	 * Receives the RobPlayer Params and constructs the appropriate command and passes it to the Server Facade after decoding the object.
 	 */
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
-		logger.entering("server.handlers.RobPlayer", "handle");
+		//logger.entering("server.handlers.RobPlayer", "handle");
 		//Handling Login http exchange.
 
 		String job;	
@@ -69,7 +69,7 @@ public class RobPlayer_Handler extends SettlersOfCatanHandler {
 		sw.flush();	
 
 		exchange.getResponseBody().close();		
-		logger.exiting("server.handlers.RobPlayer", "handle");	
+		//logger.exiting("server.handlers.RobPlayer", "handle");	
 		
 	}
 

@@ -24,7 +24,7 @@ import com.sun.net.httpserver.HttpHandler;
  */
 public class Join_Handler extends SettlersOfCatanHandler {
 
-	private Logger logger = Logger.getLogger("settlers-of-catan"); 	
+	//private Logger logger = Logger.getLogger("settlers-of-catan"); 	
 
 	/**
 	 * Receives the Join_Handler Params and constructs the appropriate command and passes it to the Server Facade after decoding the object.
@@ -33,7 +33,7 @@ public class Join_Handler extends SettlersOfCatanHandler {
 	public void handle(HttpExchange exchange) throws IOException {
 		//System.out.println("Handling join");
 
-		logger.entering("server.handlers.JoinHandler", "handle");
+		//logger.entering("server.handlers.JoinHandler", "handle");
 		//Handling Login http exchange.
 
 		String job;	
@@ -92,6 +92,6 @@ public class Join_Handler extends SettlersOfCatanHandler {
 
 
 		exchange.getResponseBody().close();		
-		logger.exiting("server.handlers.JoinHandler", "handle");
+		//logger.exiting("server.handlers.JoinHandler", "handle");
 	}
 }

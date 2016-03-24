@@ -30,7 +30,7 @@ public class PlayRoadBuilding_Handler extends SettlersOfCatanHandler{
 	 */
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
-		logger.entering("server.handlers.PlayRoadBuilding", "handle");
+		//logger.entering("server.handlers.PlayRoadBuilding", "handle");
 		//Handling Login http exchange.
 
 		String job;	
@@ -74,7 +74,7 @@ public class PlayRoadBuilding_Handler extends SettlersOfCatanHandler{
 		sw.flush();	
 
 		exchange.getResponseBody().close();		
-		logger.exiting("server.handlers.PlayRoadBuilding", "handle");
+		//logger.exiting("server.handlers.PlayRoadBuilding", "handle");
 
 	}
 

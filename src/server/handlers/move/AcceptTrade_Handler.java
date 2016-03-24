@@ -29,7 +29,7 @@ public class AcceptTrade_Handler extends SettlersOfCatanHandler{
 	 */
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
-		logger.entering("server.handlers.AcceptTrade", "handle");
+		//logger.entering("server.handlers.AcceptTrade", "handle");
 		//Handling Login http exchange.
 
 		String job;	
@@ -73,7 +73,7 @@ public class AcceptTrade_Handler extends SettlersOfCatanHandler{
 		sw.flush();	
 
 		exchange.getResponseBody().close();		
-		logger.exiting("server.handlers.AcceptTrade", "handle");		
+		//logger.exiting("server.handlers.AcceptTrade", "handle");		
 	}
 
 }

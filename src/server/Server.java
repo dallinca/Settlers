@@ -27,7 +27,7 @@ public class Server {
 	private static int SERVER_PORT_NUMBER = 8081; 
 	private static final int MAX_WAITING_CONNECTIONS = 12;
 	
-	private static Logger logger;
+	//private static Logger logger;
 
 	static {
 		try {
@@ -43,19 +43,19 @@ public class Server {
 
 		Level logLevel = Level.FINE;
 
-		logger = Logger.getLogger("settlers-of-catan"); 
-		logger.setLevel(logLevel);
-		logger.setUseParentHandlers(false);
+		//logger = Logger.getLogger("settlers-of-catan"); 
+		//logger.setLevel(logLevel);
+		//logger.setUseParentHandlers(false);
 
 		Handler consoleHandler = new ConsoleHandler();
 		consoleHandler.setLevel(logLevel);
 		consoleHandler.setFormatter(new SimpleFormatter());
-		logger.addHandler(consoleHandler);
+		//logger.addHandler(consoleHandler);
 
 		FileHandler fileHandler = new FileHandler("log.txt", false);
 		fileHandler.setLevel(logLevel);
 		fileHandler.setFormatter(new SimpleFormatter());
-		logger.addHandler(fileHandler);
+		//logger.addHandler(fileHandler);
 	}
 
 
@@ -68,14 +68,14 @@ public class Server {
 
 	private void run() {
 
-		logger.info("Initializing HTTP Server");
+	//	logger.info("Initializing HTTP Server");
 
 		try {
 			server = HttpServer.create(new InetSocketAddress(SERVER_PORT_NUMBER),
 					MAX_WAITING_CONNECTIONS);
 		} 
 		catch (IOException e) {
-			logger.log(Level.SEVERE, e.getMessage(), e);			
+		//	logger.log(Level.SEVERE, e.getMessage(), e);			
 			return;
 		}
 
@@ -113,7 +113,7 @@ public class Server {
 		server.createContext("/moves/Soldier", (HttpHandler) PlaySoldierHandler);
 		server.createContext("/moves/Year_of_Plenty", (HttpHandler) PlayYearOfPlentyHandler);
 		
-		logger.info("Starting HTTP Server");
+	//	logger.info("Starting HTTP Server");
 
 		server.start();
 	}

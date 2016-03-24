@@ -29,7 +29,7 @@ public class PlayMonument_Handler extends SettlersOfCatanHandler{
 	 */
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
-		logger.entering("server.handlers.PlayMonument", "handle");
+		//logger.entering("server.handlers.PlayMonument", "handle");
 		//Handling Login http exchange.
 
 		String job;	
@@ -73,7 +73,7 @@ public class PlayMonument_Handler extends SettlersOfCatanHandler{
 		sw.flush();	
 
 		exchange.getResponseBody().close();		
-		logger.exiting("server.handlers.PlayMonument", "handle");
+		//logger.exiting("server.handlers.PlayMonument", "handle");
 		
 	}
 

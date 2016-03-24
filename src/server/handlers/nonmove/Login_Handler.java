@@ -20,7 +20,7 @@ import com.sun.net.httpserver.HttpExchange;
  */
 public class Login_Handler extends SettlersOfCatanHandler{
 
-	private Logger logger = Logger.getLogger("settlers-of-catan"); 	
+	//private Logger logger = Logger.getLogger("settlers-of-catan"); 	
 
 	/**
 	 * Receives the Login Params and passes it to the Server Facade after decoding the object.
@@ -29,7 +29,7 @@ public class Login_Handler extends SettlersOfCatanHandler{
 	public void handle(HttpExchange exchange) throws IOException {
 		System.out.println("Handling login");
 		
-		logger.entering("server.handlers.LoginHandler", "handle");
+	//	logger.entering("server.handlers.LoginHandler", "handle");
 		//Handling Login http exchange.
 
 		String job;	
@@ -60,7 +60,7 @@ public class Login_Handler extends SettlersOfCatanHandler{
 		sw.flush();		
 
 		exchange.getResponseBody().close();		
-		logger.exiting("server.handlers.LoginHandler", "handle");
+	//	logger.exiting("server.handlers.LoginHandler", "handle");
 
 	}
 }
