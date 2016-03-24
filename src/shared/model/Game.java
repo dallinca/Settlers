@@ -1078,7 +1078,10 @@ public class Game {
 	 */
 	public Player getPlayerByID(int playerID) {
 		for (int i = 0; i < numberofPlayers; i++) {
-			if (playerID == players[i].getPlayerId()) {
+			if (players[i]==null){
+				
+			}
+			else if (playerID == players[i].getPlayerId()) {
 				return players[i];
 			}
 		}
