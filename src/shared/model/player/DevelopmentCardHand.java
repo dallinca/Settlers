@@ -42,7 +42,7 @@ public class DevelopmentCardHand {
 		this.monopolyCards = new ArrayList<DevelopmentCard>();
 		this.yearOfPlentyCards = new ArrayList<DevelopmentCard>();
 		
-		initTestCards();
+		//initTestCards();
 		
 	}
     
@@ -74,7 +74,7 @@ public class DevelopmentCardHand {
 	/**
 	 * This serves no purpose other than to help with testing.
 	 */
-	public void initTestCards() {
+	/*public void initTestCards() {
 		DevelopmentCard a = new DevelopmentCard(DevCardType.SOLDIER);
 		
 		DevelopmentCard b = new DevelopmentCard(DevCardType.MONOPOLY);
@@ -95,7 +95,7 @@ public class DevelopmentCardHand {
 		this.monopolyCards.add(c);
 		
 		this.yearOfPlentyCards.add(d);
-	}
+	}*/
 	
 	/**
 	 * Checks to see if there is at least one card of the said type that can be played this turn
