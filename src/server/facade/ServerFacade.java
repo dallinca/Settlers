@@ -173,11 +173,14 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public Game canDoBuildRoad(BuildRoad_Params params, int gameID, int userID) {
-
+		System.out.println("canDoBuildRoad SErver facade");
 		Game game = findGame(gameID);
+		System.out.println("canDoBuildRoad SErver facade1");
 		if(game.canDoPlayerBuildRoad(userID)){
+			System.out.println("canDoBuildRoad SErver facade2");
 			return game;
 		}
+		System.out.println("canDoBuildRoad SErver facade3");
 		return null;
 	}
 
