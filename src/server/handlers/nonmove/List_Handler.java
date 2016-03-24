@@ -37,7 +37,7 @@ public class List_Handler extends SettlersOfCatanHandler {
 	 */
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
-		System.out.println("Handling list");
+		//System.out.println("Handling list");
 
 		logger.entering("server.handlers.ListHandler", "handle");
 		//Handling Login http exchange.
@@ -60,22 +60,22 @@ public class List_Handler extends SettlersOfCatanHandler {
 			User user = gson.fromJson(cookies.getFirst(), User.class);		
 
 			if (facade.validateUser(user)){
-				System.out.println("Valid list request.");
+				//System.out.println("Valid list request.");
 
 				job = getExchangeBody(exchange); //get json string from exchange.
 				request = gson.fromJson(job, List_Params.class); //deserialize request from json
 
 				result = facade.list(request);//Call facade to perform operation with request
 
-				System.out.println("List okay");
+				//System.out.println("List okay");
 
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); //Everything's okay	
-				System.out.println("Getting jArray");
+				//System.out.println("Getting jArray");
 				JsonArray jArray = new JsonArray();
-				System.out.println("Getting game info list");
+				//System.out.println("Getting game info list");
 				GameInfo[] games = result.getGames();
 
-				System.out.println("Turning to json");
+				//System.out.println("Turning to json");
 
 				for (GameInfo gi : games) {
 					String json;	
@@ -105,7 +105,7 @@ public class List_Handler extends SettlersOfCatanHandler {
 							pColor = pColor.toLowerCase();
 							pColor= pColor.substring(1, pColor.length()-1);
 							
-							System.out.println("PCOLORRRRRRRRRRRRRRRRRRRRR: "+pColor);
+							//System.out.println("PCOLORRRRRRRRRRRRRRRRRRRRR: "+pColor);
 //I am checking how many unplayed cards I have! Which is:
 							p.getAsJsonObject().addProperty("color", pColor);								
 						}
@@ -114,17 +114,17 @@ public class List_Handler extends SettlersOfCatanHandler {
 
 				job = jArray.toString(); //gson.toJson(result.getListedGames());	//serialize result to json	
 
-				System.out.println("To json Okay: "+job);
+				//System.out.println("To json Okay: "+job);
 
 			}else{
-				System.out.println("Bad list request, invalid user");
-				System.out.println(user.toString());
+				//System.out.println("Bad list request, invalid user");
+				//System.out.println(user.toString());
 				job = "Failed";			
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0); //User invalid			
 			}	
 		}
 
-		System.out.println("Writing output");
+		//System.out.println("Writing output");
 		OutputStreamWriter sw = new OutputStreamWriter(exchange.getResponseBody());
 		sw.write(job);//Write result to stream.
 		sw.flush();	

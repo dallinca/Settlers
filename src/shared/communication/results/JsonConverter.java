@@ -688,7 +688,7 @@ public class JsonConverter {
 					mHex.location.x = curHex.getTheirX_coord_hex();
 					mHex.location.y = curHex.getTheirY_coord_hex();
 					mHex.number = curHex.getRollValue();
-					System.out.print(" Resource: X: "+mHex.resource);	
+					//System.out.print(" Resource: X: "+mHex.resource);	
 					mHex.resource = putHexTypeIntoString(curHex.getHexType());
 					modelHexes.add(mHex);
 					//System.out.println(" Good to go!");	

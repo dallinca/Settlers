@@ -26,7 +26,7 @@ public class GetVersion_Handler extends SettlersOfCatanHandler {
 	 */
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
-		System.out.println("---------------------------------------Handling get version");
+		//System.out.println("---------------------------------------Handling get version");
 		
 		logger.entering("server.handlers.GetVersion", "handle");
 		//Handling Login http exchange.
