@@ -154,6 +154,7 @@ public class Game {
 	 * @post the next player is set.
 	 */
 	public void incrementPlayer() {
+		versionNumber++;
 		// If we are done with the first two rounds of the Game (for setup
 		for (int i = 0; i < numberofPlayers; i++) {
 			if (currentPlayer.getPlayerIndex() == players[i].getPlayerIndex()) {
@@ -263,6 +264,7 @@ public class Game {
 			playersCollectResources(rollValue);
 		}*/
 		// If the roll is a seven, tell the client and wait for attempts to move the robber
+		versionNumber++;
 		return rollValue;
 	}
 
@@ -278,6 +280,7 @@ public class Game {
 		}
 		for(Player player: players) {
 			player.collectResources(rollValue, bank);
+			versionNumber++;
 		}
 	}
 
