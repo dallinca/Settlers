@@ -65,6 +65,7 @@ public class FinishTurn_Command implements Command {
 		game.incrementPlayer();
 	
 		result.setValid(true);
+		result.setGame(game);
 		System.out.println("FinishTurn_Command3");
 
 		JsonConverter converter = new JsonConverter();
