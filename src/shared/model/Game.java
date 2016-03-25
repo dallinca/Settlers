@@ -177,9 +177,10 @@ public class Game {
 					if(turnNumber == 0) {
 						// If we are on the last person in the round, he/she gets to go again
 						if(i == numberofPlayers - 1) {
-							setCurrentPlayer(players[numberofPlayers - 1]); // Could probably omit this line
+							//setCurrentPlayer(players[numberofPlayers - 1]); // Could probably omit this line
 							turnNumber++;
 							versionNumber++;
+							status = "SecondRound";
 							return;
 						} else {
 							setCurrentPlayer(players[i+1]);
@@ -194,6 +195,7 @@ public class Game {
 							//inSetUpPhase = false;
 							turnNumber++;
 							versionNumber++;
+							status = "Rolling";
 							return;
 						} else {
 							setCurrentPlayer(players[i-1]);
