@@ -58,7 +58,11 @@ public class GetVersion_Handler extends SettlersOfCatanHandler {
 				}
 				else{
 					ClientModel cm = result.getModel();
+					
 					job = gson.toJson(cm);	//serialize result to json	
+					
+					
+					System.out.println(cm.toString());
 				}
 				
 			}else{

@@ -154,7 +154,6 @@ public class Game {
 	 * @post the next player is set.
 	 */
 	public void incrementPlayer() {
-		versionNumber++;
 		// If we are done with the first two rounds of the Game (for setup
 		for (int i = 0; i < numberofPlayers; i++) {
 			if (currentPlayer.getPlayerIndex() == players[i].getPlayerIndex()) {
@@ -164,9 +163,13 @@ public class Game {
 					if (i == numberofPlayers-1) {
 						setCurrentPlayer(players[0]);
 						turnNumber++;
+						versionNumber++;
+						status = "Rolling";
 						return;
 					} else {
 						setCurrentPlayer(players[i+1]);
+						versionNumber++;
+						status = "Rolling";
 						return;
 					}
 				}
@@ -176,11 +179,14 @@ public class Game {
 					if(turnNumber == 0) {
 						// If we are on the last person in the round, he/she gets to go again
 						if(i == numberofPlayers - 1) {
-							setCurrentPlayer(players[numberofPlayers - 1]); // Could probably omit this line
+							//setCurrentPlayer(players[numberofPlayers - 1]); // Could probably omit this line
 							turnNumber++;
+							versionNumber++;
+							status = "SecondRound";
 							return;
 						} else {
 							setCurrentPlayer(players[i+1]);
+							versionNumber++;
 							return;
 						}
 					}
@@ -190,9 +196,12 @@ public class Game {
 							setCurrentPlayer(players[0]);
 							//inSetUpPhase = false;
 							turnNumber++;
+							versionNumber++;
+							status = "Rolling";
 							return;
 						} else {
 							setCurrentPlayer(players[i-1]);
+							versionNumber++;
 							return;
 						}
 					}
@@ -264,8 +273,21 @@ public class Game {
 			playersCollectResources(rollValue);
 		}*/
 		// If the roll is a seven, tell the client and wait for attempts to move the robber
-		versionNumber++;
+		
 		return rollValue;
+	}
+	
+	public void setRollDice(int UserId, int rollValue) throws Exception {
+		if(canDoRollDice(UserId) == false) {
+			throw new Exception("canDoRollDice == false");
+		}
+		if(rollValue == 7) {
+			status = "Robbing";
+		} else {
+			status = "Playing";
+			playersCollectResources(rollValue);
+		}
+		versionNumber++;
 	}
 
 	/**
@@ -638,10 +660,15 @@ public class Game {
 	 * 
 	 */
 	public void doMaritimeTrade(ResourceType tradeIn, ResourceType receive) throws Exception  {
+		
 		if (canDoPlayerDoMaritimeTrade(tradeIn, receive)) {
+			
 			ResourceCard[] tradingCards = currentPlayer.prepareBankTrade(tradeIn);
+			
 			bank.playerTurnInResources(tradingCards);
+			
 			currentPlayer.getResourceCardHand().addCard(bank.playerTakeResource(receive));
+			
 		} else
 			throw new Exception("Cannot do Maritime Trade");
 
@@ -1070,6 +1097,8 @@ public class Game {
 			throw new Exception("canDoStealPlayerResource == false");
 		}
 		currentPlayer.stealPlayerResource(getPlayerByID(victimId));
+		status = "Playing";
+		versionNumber++;
 	}
 
 	/**

@@ -42,7 +42,7 @@ public class OfferTrade_Result {
 	
 	public OfferTrade_Result(String post) {
 
-		//System.out.println("Trade post:::"+post);
+		System.out.println("Trade post:::"+post);
 		
 		if (post==null){
 			setValid(false);

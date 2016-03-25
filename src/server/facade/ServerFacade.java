@@ -83,11 +83,10 @@ public class ServerFacade implements IServerFacade {
 	 * Singleton pattern for serverfacade
 	 */
 	private static ServerFacade SINGLETON = null;
-	
+
 	private ServerFacade() {		
 		this.jc = new JsonConverter();
-		
-		
+
 		//TESTING REASON
 		User user1 = new User("scott","scott", users.size());
 		users.add(user1);
@@ -97,37 +96,37 @@ public class ServerFacade implements IServerFacade {
 		users.add(user3);
 		User user4 = new User("dallin", "dallin", users.size());
 		users.add(user4);
-	
+
 		Player[] players = new Player[4];		
 		Board board = new Board(true, true, true);
 		Game game = new Game(players, board, new Bank());
 
 		game.setTitle("TESTGame");		
 		game.setGameID(gameTracker++);
-		
+
 		game.addPlayer(0, CatanColor.RED);
 		Player p = game.getPlayerByID(0);
 		User u = users.get(0);
 		p.setPlayerName(u.getName());		
-		
+
 		game.addPlayer(1, CatanColor.BLUE);
 		p = game.getPlayerByID(1);
 		u = users.get(1);
 		p.setPlayerName(u.getName());
-		
+
 		game.addPlayer(2, CatanColor.WHITE);
 		p = game.getPlayerByID(2);
 		u = users.get(2);
 		p.setPlayerName(u.getName());
-		
+
 		game.addPlayer(3, CatanColor.GREEN);
 		p = game.getPlayerByID(3);
 		u = users.get(3);
 		p.setPlayerName(u.getName());
-		
+
 		liveGames.add(game);
 	}
-	
+
 	public static ServerFacade getInstance() {
 		if(SINGLETON == null){
 			SINGLETON = new ServerFacade();
@@ -338,7 +337,7 @@ public class ServerFacade implements IServerFacade {
 	public Game canDoOfferTrade(OfferTrade_Params params, int gameID,int userID) {
 
 		Game game = findGame(gameID);
-		
+
 		ClientModel clientModel = new ClientModel();
 		ClientModel.ResourceList resourceList = clientModel.new ResourceList();
 		resourceList.brick = params.getOffer().getBrick();
@@ -346,10 +345,10 @@ public class ServerFacade implements IServerFacade {
 		resourceList.wheat = params.getOffer().getWheat();
 		resourceList.ore = params.getOffer().getOre();
 		resourceList.sheep = params.getOffer().getSheep();
-		
-		
+
+
 		TradeInfo tradeInfo = new TradeInfo(params.getPlayerIndex(), params.getReceiver(), resourceList);
-		
+
 		ResourceList o = tradeInfo.getOffer();
 		int[] offer = new int[5];
 		int[] receive = new int[5];
@@ -416,11 +415,34 @@ public class ServerFacade implements IServerFacade {
 	public Game canDoRobPlayer(RobPlayer_Params params, int gameID, int userID) {
 
 		Game game = findGame(gameID);
-		if(game.canDoMoveRobberToHex(userID, params.getLocation())){
-			if(game.canDoStealPlayerResource(userID, params.getVictimIndex() )){
+		//System.out.println("canDoRobPlayer 1");
+		Player stealer = game.getAllPlayers()[params.getPlayerIndex()];
+		//System.out.println("canDoRobPlayer 2");
+		//System.out.println("canDoRobPlayer 3");
+		
+		
+		if(game.canDoMoveRobberToHex(stealer.getPlayerId(), params.getLocation())){ // MOVER Id
+
+			//System.out.println("canDoRobPlayer 4");
+			if (params.getVictimIndex() == -1){
+				//System.out.println("canDoRobPlayer 5");
+				game.setVersionNumber(game.getVersionNumber() + 1);
+				game.setStatus("Playing");
+				//System.out.println("canDoRobPlayer 6");
 				return game;
 			}
+
+			Player victim = game.getAllPlayers()[params.getVictimIndex()];
+			if(game.canDoStealPlayerResource(stealer.getPlayerId(), victim.getPlayerId() )){ // USER Id, VICTIM Id
+
+				//System.out.println("canDoRobPlayer 7");
+				return game;
+			}
+
 		}
+
+
+		//System.out.println("canDoRobPlayer 8");
 		return null;
 	}
 
@@ -556,7 +578,7 @@ public class ServerFacade implements IServerFacade {
 
 		return game;
 	}
-// Resource: 
+	// Resource: 
 	/**
 	 * To be called from the Handlers.<br>
 	 * Verifies which Game model the command is for.<br>
@@ -621,7 +643,7 @@ public class ServerFacade implements IServerFacade {
 					/*String userCookie = ("{\"name\":\"" + current.getName()
 							+ "\",\"password\":\""+current.getPassword()
 							+ "\",\"playerID\":"+ current.getPlayerID() +"}");*/
-					
+
 					JsonObject json = new JsonObject();
 
 					json.addProperty("name", current.getName());
@@ -629,7 +651,7 @@ public class ServerFacade implements IServerFacade {
 					json.addProperty("playerID", current.getPlayerID());	
 
 					String userCookie = json.toString();
-					
+
 					StringBuilder sb = new StringBuilder();
 					sb.append("catan.user=");
 
@@ -664,11 +686,11 @@ public class ServerFacade implements IServerFacade {
 	@Override
 	public Register_Result register(Register_Params params) {
 		//System.out.println("ServerFacade.register");
-		
+
 		//System.out.println("users Size: " + users.size());
 		String username = params.getUsername();
 		String password = params.getPassword();
-		
+
 
 		Register_Result result = new Register_Result();
 
@@ -762,13 +784,13 @@ public class ServerFacade implements IServerFacade {
 				pi.setName(p.getPlayerName());
 				pi.setPlayerIndex(p.getPlayerIndex());				
 				pi.setColor(p.getPlayerColor());
-				
+
 				//System.out.println("PLAYER INFO---"+x);
 				//System.out.println(pi.getName());
 				//System.out.println(pi.getColor());				
 
-				
-				
+
+
 				info.addPlayer(pi);
 			}
 
@@ -813,13 +835,13 @@ public class ServerFacade implements IServerFacade {
 
 		game.setTitle(name);		
 		game.setGameID(gameTracker++);
-		
+
 		//System.out.println("Adding creator to game.");
 		game.addPlayer(userID, null);
 		Player p = game.getPlayerByID(userID);
 		User u = users.get(userID);
 		p.setPlayerName(u.getName());
-		
+
 		//System.out.println("Game created successfully.");
 
 		liveGames.add(game);
@@ -854,21 +876,21 @@ public class ServerFacade implements IServerFacade {
 			//System.out.println("Attempted to join null game");
 			return result;
 		}
-		
+
 		//System.out.println("Getting all players from game.");
 		Player[] players = g.getAllPlayers();
-		
+
 		if (players == null){
-		//	System.out.println("Creating new player set.");
+			//	System.out.println("Creating new player set.");
 			players = new Player[4];
 		}
 
 		boolean joinable = false;
 		for (int i = 0; i < 4; i ++){
 			if (players[i]==null){ //Check for vacancy in game roster.
-			//	System.out.println("Vacancy exists.");				
+				//	System.out.println("Vacancy exists.");				
 				joinable = true;
-				
+
 				break;
 			}
 			else if (players[i].getPlayerId()==userID){ //Check if player has already joined game previously
@@ -887,6 +909,7 @@ public class ServerFacade implements IServerFacade {
 		Player p = g.getPlayerByID(userID);
 		//System.out.println("Converting color");
 		CatanColor playerColor = params.convertColor();
+
 		if (playerColor==null){
 			//System.out.println("No color given. Aborting.");
 			return result;
@@ -894,52 +917,55 @@ public class ServerFacade implements IServerFacade {
 
 		if (p!=null){
 			//System.out.println("Existing player being added to game");		
-			
+
 			p.setPlayerColor(playerColor);
 		}else{
 			//System.out.println("New player being added to game");
 			g.addPlayer(userID, playerColor);
 			p = g.getPlayerByID(userID);
+
+			User u = users.get(userID);
+			p.setPlayerName(u.getName());
 		}		
-		
-		User u = users.get(userID);
-		p.setPlayerName(u.getName());
 
 		result.setValid(true);
 
 		String gameCookie = ("catan.game="+ gameID +";Path=/;");
-		
+
 		//System.out.println("Game cookie: "+gameCookie);
 
 		result.setGameCookie(gameCookie);
-		
+
 		//System.out.println("Converting game to client model");
-				
+
 		result.setModel(jc.toClientModel(g));
 
 		//System.out.println("ServerFacade.join completed");
-		
+
 		boolean start = true;
+
 		players = g.getAllPlayers();
+
 		for (int y = 0; y < 4; y++){
 			if (players[y]==null){
 				start = false;
 				break;
 			}
 		}
-		if (start){
+
+		if (start && g.getStatus().equals("")){
 			startGame(g);
 		}
-		
-		
+
+
 		return result;
 	}
 
 	private void startGame(Game g) {	
-		
+
 		g.setStatus("FirstRound");
 		g.setCurrentPlayer(g.getAllPlayers()[0]);
-		
+
 		return;		
 	}
 
@@ -956,20 +982,20 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public GetVersion_Result model(GetVersion_Params params, int gameID) {
-	//	System.out.println("ServerFacade.GetVersion");
-		
+		//	System.out.println("ServerFacade.GetVersion");
+
 		GetVersion_Result result = new GetVersion_Result();
-		
+
 		int clientVersion = params.getVersionNumber();
 		Game g = findGame(gameID);
-		
+
 		if (g.getVersionNumber()>clientVersion){
-			
+
 			result.setGame(g);
 			result.setModel(jc.toClientModel(g));
-			
+
 			//System.out.println(result.getModel().toString());			
-			
+
 			result.setUpToDate(false);
 			result.setValid(true);
 		}
@@ -981,7 +1007,7 @@ public class ServerFacade implements IServerFacade {
 			//should be impossible
 			result.setValid(false);
 		}
-		
+
 		return result;
 	}
 

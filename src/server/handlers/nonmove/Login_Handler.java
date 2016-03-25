@@ -48,6 +48,7 @@ public class Login_Handler extends SettlersOfCatanHandler{
 			headers.put("Set-cookie", cookieList);
 			job = "Success";
 			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); //Everything's okay
+			System.out.println("Login for: "+result.getName());
 		} else {
 			System.out.println("Login Not Valid");
 			job = "Failure";

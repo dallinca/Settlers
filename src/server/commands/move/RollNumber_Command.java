@@ -64,7 +64,7 @@ public class RollNumber_Command implements Command {
 		
 		try {
 			System.out.println("RollNumber_Command3");
-			game.RollDice(userID);
+			game.setRollDice(userID, params.getNumber());
 		} catch (Exception e) {
 			System.out.println("RollNumber_Command4");
 			e.printStackTrace();

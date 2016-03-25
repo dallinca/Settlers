@@ -5,6 +5,7 @@ import shared.communication.params.move.MaritimeTrade_Params;
 import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
 import shared.communication.results.move.MaritimeTrade_Result;
+import shared.definitions.PortType;
 import shared.definitions.ResourceType;
 import shared.model.Game;
 
@@ -55,8 +56,12 @@ public class MaritimeTrade_Command implements Command {
 		
 		//convert from string to enum
 		System.out.println("MaritimeTrade_Command1");
-		ResourceType tradeIn = ResourceType.valueOf(params.getOutputResource() );
-		ResourceType receive = ResourceType.valueOf(params.getInputResource() );
+		
+		
+		System.out.println(params.getOutputResource().toUpperCase());
+		
+		ResourceType tradeIn = convert(params.getInputResource()); 
+		ResourceType receive = convert(params.getOutputResource()); 
 		
 		game = facade.canDoMaritimeTrade(params, gameID, tradeIn, receive );
 		result = new MaritimeTrade_Result();
@@ -88,5 +93,23 @@ public class MaritimeTrade_Command implements Command {
 	
 	public MaritimeTrade_Result getResult(){
 		return result;
+	}
+	
+	private ResourceType convert(String type){
+		
+		if(type.equals("wood")) {
+			return ResourceType.WOOD;
+		} else if(type.equals("brick")) {
+			return ResourceType.BRICK;
+		} else if(type.equals("sheep")) {
+			return ResourceType.SHEEP;
+		} else if(type.equals("wheat")) {
+			return ResourceType.WHEAT;
+		} else if(type.equals("ore")) {
+			return ResourceType.ORE;
+		}
+		return null;
+		
+		
 	}
 }
