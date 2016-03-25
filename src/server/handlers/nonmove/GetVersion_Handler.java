@@ -61,6 +61,7 @@ public class GetVersion_Handler extends SettlersOfCatanHandler {
 					
 					job = gson.toJson(cm);	//serialize result to json	
 					
+					
 					System.out.println(cm.toString());
 				}
 				

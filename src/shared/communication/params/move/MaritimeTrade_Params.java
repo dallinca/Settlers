@@ -1,5 +1,6 @@
 package shared.communication.params.move;
 
+import shared.communication.results.JsonConverter;
 import shared.definitions.ResourceType;
 
 /**
@@ -54,12 +55,15 @@ public class MaritimeTrade_Params {
 		this.inputResource = inputResource;
 	}
 	public String getOutputResource() {
+		
+		
+		
+		
 		return outputResource;
 	}
 	public void setOutputResource(String outputResource) {
 		this.outputResource = outputResource;
 	}
-	
 	
 
 }

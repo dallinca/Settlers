@@ -55,8 +55,8 @@ public class MaritimeTrade_Command implements Command {
 		
 		//convert from string to enum
 		System.out.println("MaritimeTrade_Command1");
-		ResourceType tradeIn = ResourceType.valueOf(params.getOutputResource() );
-		ResourceType receive = ResourceType.valueOf(params.getInputResource() );
+		ResourceType tradeIn = ResourceType.valueOf(params.getOutputResource().toUpperCase());
+		ResourceType receive = ResourceType.valueOf(params.getInputResource().toUpperCase());
 		
 		game = facade.canDoMaritimeTrade(params, gameID, tradeIn, receive );
 		result = new MaritimeTrade_Result();
