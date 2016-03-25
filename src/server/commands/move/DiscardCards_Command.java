@@ -17,7 +17,7 @@ import shared.model.Game;
  *
  */
 public class DiscardCards_Command implements Command {
-	private IServerFacade facade;
+	//private IServerFacade facade;
 	private DiscardCards_Params params;
 	private DiscardCards_Result result;
 	private int gameID, userID;

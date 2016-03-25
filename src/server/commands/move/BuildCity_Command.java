@@ -16,7 +16,7 @@ import shared.model.Game;
  *
  */
 public class BuildCity_Command implements Command {
-	private IServerFacade facade;
+	//private IServerFacade facade;
 
 	private BuildCity_Params params;
 	private BuildCity_Result result;
@@ -34,9 +34,9 @@ public class BuildCity_Command implements Command {
 	 * 
 	 * @param game
 	 */
-	public BuildCity_Command(IServerFacade facade) {
+	/*public BuildCity_Command(IServerFacade facade) {
 		this.facade = facade;
-	}
+	}*/
 
 	public BuildCity_Command(BuildCity_Params params, int gameID, int userID) {
 		this.params = params;

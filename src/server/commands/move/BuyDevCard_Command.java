@@ -19,7 +19,7 @@ import shared.model.player.exceptions.InsufficientPlayerResourcesException;
  */
 public class BuyDevCard_Command implements Command {
 	
-	private IServerFacade facade;
+	//private IServerFacade facade;
 	
 	private BuyDevCard_Params params;
 	private BuyDevCard_Result result;
@@ -37,9 +37,9 @@ public class BuyDevCard_Command implements Command {
 	 * 
 	 * @param game
 	 */
-	public BuyDevCard_Command(IServerFacade facade) {
+	/*public BuyDevCard_Command(IServerFacade facade) {
 		this.facade = facade;
-	}
+	}*/
 	
 	public BuyDevCard_Command(BuyDevCard_Params params, int gameID, int userID) {
 		this.params = params;

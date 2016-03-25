@@ -17,7 +17,7 @@ import shared.model.Game;
  *
  */
 public class AcceptTrade_Command implements Command {
-	private IServerFacade facade;
+	//private IServerFacade facade;
 
 	private AcceptTrade_Params params;
 	private int gameID, userID;
@@ -35,9 +35,9 @@ public class AcceptTrade_Command implements Command {
 	 * 
 	 * @param game
 	 */
-	public AcceptTrade_Command(IServerFacade facade) {
+	/*public AcceptTrade_Command(IServerFacade facade) {
 		this.facade = facade;
-	}
+	}*/
 
 	public AcceptTrade_Command(AcceptTrade_Params params, int gameID, int userID) {
 		this.params = params;
