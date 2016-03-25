@@ -1001,8 +1001,10 @@ public class Game {
 	 * @post a city is placed on a vertex
 	 */
 	public void placeCityOnVertex(VertexLocation vertexLocation) throws Exception {
-		if(canDoPlaceCityOnVertex(vertexLocation))
+		if(canDoPlaceCityOnVertex(vertexLocation)) {
 			board.placeCityOnVertex(currentPlayer, vertexLocation);
+			versionNumber++;
+		}
 		else
 			throw new Exception("Cannot build City on this vertex, this should not have been allowed to get this far.");
 	}
