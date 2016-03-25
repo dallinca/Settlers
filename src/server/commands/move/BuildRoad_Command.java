@@ -7,6 +7,7 @@ import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
 import shared.communication.results.move.BuildRoad_Result;
 import shared.model.Game;
+import shared.model.player.Player;
 
 /**
  * Concrete command implementing the Command interface.
@@ -69,7 +70,27 @@ public class BuildRoad_Command implements Command {
 			System.out.println("BuildRoad_Command2");
 			try {
 				System.out.println("Placing road on edge.");
+				
 				game.placeRoadOnEdge(userID, params.getCmdEdgeLocation() );
+								
+				Player longest = game.getLongestRoad();
+				Player p = game.getPlayerByID(userID);					
+				int playedRoads = 15 - p.getNumberUnplayedRoads();
+				
+				if (longest==null){					
+					if (playedRoads>4){
+						game.setLongestRoad(p);
+						p.setHasLongestRoad(true);
+					}
+				}else if (playedRoads>(15-longest.getNumberUnplayedRoads())){
+					game.setLongestRoad(p);
+					p.setHasLongestRoad(true);
+					longest.setHasLongestRoad(false);
+				}
+				game.getLongestRoad();
+				
+				
+				
 			} catch (Exception e) {
 				new BuildRoad_Result();
 				e.printStackTrace();

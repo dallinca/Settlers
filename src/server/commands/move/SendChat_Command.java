@@ -6,6 +6,7 @@ import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
 import shared.communication.results.move.SendChat_Result;
 import shared.model.Game;
+import shared.model.Game.Line;
 
 /**
  * Concrete command implementing the Command interface.
@@ -62,7 +63,34 @@ public class SendChat_Command implements Command {
 		}
 
 		System.out.println("SendChat_Command3");
-		game.setChat(game.getChat() );
+		
+		Line message = game. new Line(); 
+		message.setMessage(params.getContent());
+		message.setSource(game.getAllPlayers()[params.getPlayerIndex()].getPlayerName());
+		
+		Line[] chat = game.getChat();
+		Line[] newChat;
+		 
+		int length = 1;
+		//initial chat
+		if(chat != null){
+				length = chat.length+1;
+			 
+				
+				
+				 
+			newChat = new Line[length];
+			
+			for (int i =0;i<chat.length;i++){
+				newChat[i]=chat[i];	
+			}
+			newChat[newChat.length-1]=message;
+		}else{
+			newChat = new Line[length];
+			newChat[0] = message;
+		}
+		
+		game.setChat(newChat);
 		result.setValid(true);
 
 		System.out.println("SendChat_Command4");
