@@ -42,14 +42,14 @@ public class FinishTurn_Handler extends SettlersOfCatanHandler{
 
 		if (check.equals("VALID")){
 
-			System.out.println("Finish turn check is valid");
+			//System.out.println("Finish turn check is valid");
 			User user = gson.fromJson(cookies.getFirst(), User.class);	
 			int gameID = Integer.parseInt(cookies.get(1));
 
 			job = getExchangeBody(exchange); //get json string from exchange.
 			
 			request = gson.fromJson(job, FinishTurn_Params.class); //deserialize request from json
-			System.out.println("Creating command");
+			//System.out.println("Creating command");
 			FinishTurn_Command command = new FinishTurn_Command(request, gameID, user.getPlayerID());
 			System.out.println("Executing command");
 			command.execute();//Execute the command	
