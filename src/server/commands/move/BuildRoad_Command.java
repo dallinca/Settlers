@@ -81,10 +81,15 @@ public class BuildRoad_Command implements Command {
 					if (playedRoads>4){
 						game.setLongestRoad(p);
 						p.setHasLongestRoad(true);
+						p.setTotalVictoryPoints(p.getTotalVictoryPoints() + 2);
 					}
-				}else if (playedRoads>(15-longest.getNumberUnplayedRoads())){
+				}
+				// Verify that the builder now has the most roads, and that he doesn't already own the longest road.
+				else if (playedRoads > (15 - longest.getNumberUnplayedRoads()) && longest.getPlayerId() != p.getPlayerId()){
 					game.setLongestRoad(p);
+					p.setTotalVictoryPoints(p.getTotalVictoryPoints() + 2);
 					p.setHasLongestRoad(true);
+					longest.setTotalVictoryPoints(longest.getTotalVictoryPoints() - 2);
 					longest.setHasLongestRoad(false);
 				}
 				game.getLongestRoad();
