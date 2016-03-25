@@ -660,10 +660,15 @@ public class Game {
 	 * 
 	 */
 	public void doMaritimeTrade(ResourceType tradeIn, ResourceType receive) throws Exception  {
+		
 		if (canDoPlayerDoMaritimeTrade(tradeIn, receive)) {
+			
 			ResourceCard[] tradingCards = currentPlayer.prepareBankTrade(tradeIn);
+			
 			bank.playerTurnInResources(tradingCards);
+			
 			currentPlayer.getResourceCardHand().addCard(bank.playerTakeResource(receive));
+			
 		} else
 			throw new Exception("Cannot do Maritime Trade");
 
