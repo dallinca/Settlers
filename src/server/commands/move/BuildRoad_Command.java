@@ -109,8 +109,6 @@ public class BuildRoad_Command implements Command {
 
 		System.out.println("BuildRoad_Command4");
 		
-		game.setVersionNumber(game.getVersionNumber()+1);
-
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);
 
