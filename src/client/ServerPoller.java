@@ -72,7 +72,7 @@ public class ServerPoller {
 	 * @post Current game state will be obtained from server.
 	 */	
 	private void pollServer(){
-		System.out.print(" Poll.");
+		//System.out.print(" Poll.");
 
 		GetVersion_Result pollResult = ClientFacade.getInstance().getVersion();
 
