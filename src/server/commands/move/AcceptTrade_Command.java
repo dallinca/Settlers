@@ -189,11 +189,11 @@ public class AcceptTrade_Command implements Command {
 	 * @post this.facade = facade
 	 * @param facade
 	 */
-	public void setGame(IServerFacade facade) {
+	/*public void setGame(IServerFacade facade) {
 		if(this.facade == null) {
 			this.facade = facade;
 		}
-	}
+	}*/
 
 	public AcceptTrade_Result getResult() {
 		return result;
