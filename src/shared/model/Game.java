@@ -162,12 +162,14 @@ public class Game {
 				if(turnNumber > 1) {
 					if (i == numberofPlayers-1) {
 						setCurrentPlayer(players[0]);
+						currentPlayer.setHasDiscarded(false);
 						turnNumber++;
 						versionNumber++;
 						status = "Rolling";
 						return;
 					} else {
 						setCurrentPlayer(players[i+1]);
+						currentPlayer.setHasDiscarded(false);
 						versionNumber++;
 						status = "Rolling";
 						return;
