@@ -887,6 +887,7 @@ public class ServerFacade implements IServerFacade {
 		Player p = g.getPlayerByID(userID);
 		//System.out.println("Converting color");
 		CatanColor playerColor = params.convertColor();
+		
 		if (playerColor==null){
 			//System.out.println("No color given. Aborting.");
 			return result;
@@ -900,11 +901,11 @@ public class ServerFacade implements IServerFacade {
 			//System.out.println("New player being added to game");
 			g.addPlayer(userID, playerColor);
 			p = g.getPlayerByID(userID);
+			
+			User u = users.get(userID);
+			p.setPlayerName(u.getName());
 		}		
-		
-		User u = users.get(userID);
-		p.setPlayerName(u.getName());
-
+				
 		result.setValid(true);
 
 		String gameCookie = ("catan.game="+ gameID +";Path=/;");
@@ -920,14 +921,17 @@ public class ServerFacade implements IServerFacade {
 		//System.out.println("ServerFacade.join completed");
 		
 		boolean start = true;
+		
 		players = g.getAllPlayers();
+		
 		for (int y = 0; y < 4; y++){
 			if (players[y]==null){
 				start = false;
 				break;
 			}
 		}
-		if (start){
+				
+		if (start && g.getStatus().equals("")){
 			startGame(g);
 		}
 		
