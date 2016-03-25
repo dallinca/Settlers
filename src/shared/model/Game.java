@@ -164,10 +164,12 @@ public class Game {
 						setCurrentPlayer(players[0]);
 						turnNumber++;
 						versionNumber++;
+						status = "Rolling";
 						return;
 					} else {
 						setCurrentPlayer(players[i+1]);
 						versionNumber++;
+						status = "Rolling";
 						return;
 					}
 				}
@@ -271,8 +273,21 @@ public class Game {
 			playersCollectResources(rollValue);
 		}*/
 		// If the roll is a seven, tell the client and wait for attempts to move the robber
-		versionNumber++;
+		
 		return rollValue;
+	}
+	
+	public void setRollDice(int UserId, int rollValue) throws Exception {
+		if(canDoRollDice(UserId) == false) {
+			throw new Exception("canDoRollDice == false");
+		}
+		if(rollValue == 7) {
+			status = "Robbing";
+		} else {
+			status = "Playing";
+			playersCollectResources(rollValue);
+		}
+		versionNumber++;
 	}
 
 	/**
