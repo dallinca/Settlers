@@ -111,6 +111,8 @@ public class PlayMonopoly_Command implements Command {
 		//Should this happen in the handler because that is where it would be serialized? The Handler has the gameID, so it can retrieve the appropriate modified game after this method is through executing.
 		
 		result.setValid(true);
+		
+		game.setVersionNumber(game.getVersionNumber()+1);
 	
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);

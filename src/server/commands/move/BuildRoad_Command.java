@@ -108,6 +108,7 @@ public class BuildRoad_Command implements Command {
 		result.setValid(true);
 
 		System.out.println("BuildRoad_Command4");
+		
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);
 
