@@ -1097,6 +1097,8 @@ public class Game {
 			throw new Exception("canDoStealPlayerResource == false");
 		}
 		currentPlayer.stealPlayerResource(getPlayerByID(victimId));
+		status = "Playing";
+		versionNumber++;
 	}
 
 	/**
