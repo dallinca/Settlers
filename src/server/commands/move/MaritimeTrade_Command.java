@@ -60,9 +60,6 @@ public class MaritimeTrade_Command implements Command {
 		
 		System.out.println(params.getOutputResource().toUpperCase());
 		
-		
-		
-		
 		ResourceType tradeIn = convert(params.getInputResource()); 
 		ResourceType receive = convert(params.getOutputResource()); 
 		

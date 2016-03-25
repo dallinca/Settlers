@@ -416,18 +416,34 @@ public class ServerFacade implements IServerFacade {
 	public Game canDoRobPlayer(RobPlayer_Params params, int gameID, int userID) {
 
 		Game game = findGame(gameID);
+		//System.out.println("canDoRobPlayer 1");
+		Player stealer = game.getAllPlayers()[params.getPlayerIndex()];
+		//System.out.println("canDoRobPlayer 2");
+		//System.out.println("canDoRobPlayer 3");
+		
+		
+		if(game.canDoMoveRobberToHex(stealer.getPlayerId(), params.getLocation())){ // MOVER Id
 
-		if(game.canDoMoveRobberToHex(userID, params.getLocation())){
-
-			if (userID == -1){
+			//System.out.println("canDoRobPlayer 4");
+			if (params.getVictimIndex() == -1){
+				//System.out.println("canDoRobPlayer 5");
+				game.setVersionNumber(game.getVersionNumber() + 1);
+				game.setStatus("Playing");
+				//System.out.println("canDoRobPlayer 6");
 				return game;
-			} else if(game.canDoStealPlayerResource(userID, params.getVictimIndex() )){
+			}
+
+			Player victim = game.getAllPlayers()[params.getVictimIndex()];
+			if(game.canDoStealPlayerResource(stealer.getPlayerId(), victim.getPlayerId() )){ // USER Id, VICTIM Id
+
+				//System.out.println("canDoRobPlayer 7");
 				return game;
 			}
 
 		}
 
 
+		//System.out.println("canDoRobPlayer 8");
 		return null;
 	}
 
