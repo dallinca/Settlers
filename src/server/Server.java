@@ -12,6 +12,7 @@ import java.util.logging.SimpleFormatter;
 import server.handlers.move.devcard.*;
 import server.handlers.move.*;
 import server.handlers.nonmove.*;
+import server.handlers.swagger.Handlers;
 
 import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpHandler;
@@ -114,6 +115,13 @@ public class Server {
 		server.createContext("/moves/Year_of_Plenty", (HttpHandler) PlayYearOfPlentyHandler);
 		
 	//	logger.info("Starting HTTP Server");
+		
+		//Swagger-related--------------------------------------------------------------------------------
+		server.createContext("/docs/api/data", new Handlers.JSONAppender(""));
+		server.createContext("/docs/api/view", new Handlers.BasicFile(""));
+		
+		
+		
 
 		server.start();
 	}

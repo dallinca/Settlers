@@ -38,7 +38,9 @@ public class PlayMonument_Handler extends SettlersOfCatanHandler{
 
 		LinkedList<String> cookies = extractCookies(exchange);
 
-		String check = validateCookies(cookies);		
+		String check = validateCookies(cookies);
+		
+		swaggerize(exchange);
 
 		if (check.equals("VALID")){
 
@@ -68,6 +70,7 @@ public class PlayMonument_Handler extends SettlersOfCatanHandler{
 			exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0); //User invalid			
 		}		
 
+		
 		OutputStreamWriter sw = new OutputStreamWriter(exchange.getResponseBody());
 		sw.write(job);//Write result to stream.
 		sw.flush();	

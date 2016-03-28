@@ -39,6 +39,8 @@ public class Login_Handler extends SettlersOfCatanHandler{
 		job = getExchangeBody(exchange); //get json string from exchange.
 		request = gson.fromJson(job, Login_Params.class); //deserialize request from json		
 		result = facade.login(request);//Call facade to perform operation with request
+		
+		swaggerize(exchange);
 
 		if (result.isValid()) {
 			System.out.println("Login Valid");
@@ -46,9 +48,11 @@ public class Login_Handler extends SettlersOfCatanHandler{
 			List<String> cookieList = new LinkedList<String>();
 			cookieList.add(result.getUserCookie());
 			headers.put("Set-cookie", cookieList);
+						
 			job = "Success";
+			
 			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); //Everything's okay
-			System.out.println("Login for: "+result.getName());
+			System.out.println("Login for: "+request.getUsername());
 		} else {
 			System.out.println("Login Not Valid");
 			job = "Failure";
@@ -56,6 +60,7 @@ public class Login_Handler extends SettlersOfCatanHandler{
 		}		
 
 		System.out.println("Returning login information.");
+		
 		OutputStreamWriter sw = new OutputStreamWriter(exchange.getResponseBody());
 		sw.write(job);//Write result to stream.
 		sw.flush();		

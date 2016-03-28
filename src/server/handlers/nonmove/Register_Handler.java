@@ -41,6 +41,8 @@ public class Register_Handler extends SettlersOfCatanHandler {
 		job = getExchangeBody(exchange); //get json string from exchange.
 		request = gson.fromJson(job, Register_Params.class); //deserialize request from json		
 		result = facade.register(request);//Call facade to perform operation with request
+		
+		swaggerize(exchange);
 
 		if (result.isValid()){ //Set user cookie in response
 			System.out.println("Register result is valid");
@@ -57,6 +59,7 @@ public class Register_Handler extends SettlersOfCatanHandler {
 		}
 
 		System.out.println("Returning register information.");
+
 		OutputStreamWriter sw = new OutputStreamWriter(exchange.getResponseBody());
 		sw.write(job);//Write result to stream.
 		sw.flush();		
