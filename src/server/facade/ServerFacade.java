@@ -140,16 +140,17 @@ public class ServerFacade implements IServerFacade {
 	 * Verifies that the client/player performing the action belongs to the game.<br>
 	 * Verifies that the command is a valid action for that game.<br>
 	 * Performs the Accept Trade action on the game model.
+	 * @param gameID 
 	 * 
 	 * @pre none
 	 * @post Accept Trade action will be performed on the correct model, or nothing
 	 * @return whether the Accept Trade action was performed
 	 * 
 	 */
-	@Deprecated
 	@Override
-	public Game canDoAcceptTrade(AcceptTrade_Params params) {
-		return null;
+	public Game canDoAcceptTrade(AcceptTrade_Params params, int gameID) {
+		Game game = findGame(gameID);		
+		return game;
 	}
 
 	/**
