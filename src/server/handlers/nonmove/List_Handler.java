@@ -48,6 +48,8 @@ public class List_Handler extends SettlersOfCatanHandler {
 
 
 		LinkedList<String> cookies = extractCookies(exchange);
+		
+		swaggerize(exchange);
 
 		if (cookies==null){
 			System.out.println("Critical failure");

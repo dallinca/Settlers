@@ -44,7 +44,8 @@ public class Join_Handler extends SettlersOfCatanHandler {
 
 		User user = gson.fromJson(cookies.getFirst(), User.class);		
 		System.out.println("Temp handler user created.");
-
+		swaggerize(exchange);
+		
 		if (facade.validateUser(user)){
 			//System.out.println("User valid.");
 

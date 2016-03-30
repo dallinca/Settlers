@@ -120,14 +120,13 @@ public class PlayRoadBuilding_Command implements Command {
 
 		result.setValid(true);
 
-		game.setVersionNumber(game.getVersionNumber()+1);
+		//game.setVersionNumber(game.getVersionNumber()+1);
 		
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);
 
 		result.setModel(cm);
 		System.out.println("PlayRoadBuilding_Command end of execute");
-
 	}
 
 	/**

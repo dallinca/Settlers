@@ -162,6 +162,10 @@ public abstract class SettlersOfCatanHandler implements HttpHandler {
 
 	}
 
+	public void swaggerize(HttpExchange exchange){
+		
+		exchange.getResponseHeaders().set("Content-type:", "application/text");
+	}
 
 
 }

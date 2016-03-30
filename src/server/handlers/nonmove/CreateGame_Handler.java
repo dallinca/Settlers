@@ -38,6 +38,7 @@ public class CreateGame_Handler extends SettlersOfCatanHandler{
 
 		User user = gson.fromJson(cookies.getFirst(), User.class);	
 		System.out.println("Temp handler user created.");
+		swaggerize(exchange);
 
 		if (facade.validateUser(user)){
 			System.out.println("User is valid.");
@@ -47,6 +48,8 @@ public class CreateGame_Handler extends SettlersOfCatanHandler{
 						
 			result = facade.create(request, user.getPlayerID());//Call facade to perform operation with request
 
+			
+			
 			if (result.isValid()){
 				System.out.println("Create success.");
 				job = gson.toJson(result);	//serialize result to json			
@@ -65,6 +68,7 @@ public class CreateGame_Handler extends SettlersOfCatanHandler{
 		}			
 
 		System.out.println("Writing response.");
+		
 		OutputStreamWriter sw = new OutputStreamWriter(exchange.getResponseBody());
 		sw.write(job);//Write result to stream.
 		sw.flush();		

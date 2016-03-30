@@ -37,7 +37,9 @@ public class GetVersion_Handler extends SettlersOfCatanHandler {
 
 		LinkedList<String> cookies = extractCookies(exchange);
 
-		String check = validateCookies(cookies);		
+		String check = validateCookies(cookies);	
+		
+		swaggerize(exchange);
 
 		if (check.equals("VALID")){
 

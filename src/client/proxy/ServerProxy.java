@@ -851,7 +851,7 @@ public class ServerProxy implements IServerProxy {
 			if (request.getClass()==MaritimeTrade_Params.class){
 				System.out.println(" |||| Response code: "+connection.getResponseCode());
 			}*/
-			//System.out.println(" |||| Response code: "+connection.getResponseCode());
+			System.out.println(" |||| Response code: "+connection.getResponseCode());
 
 			InputStream in = connection.getInputStream();
 
@@ -871,7 +871,7 @@ public class ServerProxy implements IServerProxy {
 
 			in.close();
 
-			//System.out.println("Response: "+job+'\n');
+			System.out.println("Response: "+job+'\n');
 
 			/*if (request.getClass()==MaritimeTrade_Params.class){
 				System.out.println("Response: "+job+'\n');
