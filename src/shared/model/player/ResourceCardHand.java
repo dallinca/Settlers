@@ -372,7 +372,7 @@ public class ResourceCardHand {
 	    * @post 2 wheat cards and 3 ore cards are removed from the players Hand, and put back into the bank
 	    */
 	   public void payForCity() throws InsufficientPlayerResourcesException {
-		   if(canDoPayForRoad() == false) {
+		   if(canDoPayForCity() == false) {
 			   throw new InsufficientPlayerResourcesException("Player doesn't have the resources to pay for a city");
 		   }
 		   ArrayList<ResourceCard> cards = new ArrayList<ResourceCard>();
