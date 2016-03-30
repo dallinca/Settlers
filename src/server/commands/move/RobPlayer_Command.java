@@ -63,23 +63,27 @@ public class RobPlayer_Command implements Command {
 		}
 		
 		try {
+			Game.Line[] history = game.getHistory();
+			Game.Line[] newHistory = new Game.Line[history.length+1];
+			Game.Line newEntry = game.new Line();
+			
 			//System.out.println("RobPlayer_Command3");
 			if(params.getVictimIndex() != -1) {
 				game.stealPlayerResource(userID, params.getVictimIndex());
 				// Add Player Robbed history
+				newEntry.setMessage(game.getPlayerByID(userID).getPlayerName() + " moved the robber like a boss and robbed " + game.getAllPlayers()[params.getVictimIndex()].getPlayerName());
+				newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
+				newHistory[history.length] = newEntry;
+				
+				for (int i = 0; i < history.length; i++) {
+					newHistory[i] = history[i];
+				}
+				
+			} else {
+				newEntry.setMessage(game.getPlayerByID(userID).getPlayerName() + " moved the robber.");
+				newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
+				newHistory[history.length] = newEntry;
 			}
-			Game.Line[] history = game.getHistory();
-			Game.Line[] newHistory = new Game.Line[history.length+1];
-			
-			for (int i = 0; i < history.length; i++) {
-				newHistory[i] = history[i];
-			}
-			
-			//Just a round-about way to create an object of type Game.Line without too much difficulty
-			Game.Line newEntry = game.new Line();
-			newEntry.setMessage(game.getPlayerByID(userID).getPlayerName() + " robbed" + game.getAllPlayers()[params.getVictimIndex()].getPlayerName());
-			newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
-			newHistory[history.length] = newEntry;
 			
 			game.setHistory(newHistory);
 			
@@ -90,11 +94,11 @@ public class RobPlayer_Command implements Command {
 		}
 		
 		result.setValid(true);
-
+		game.setVersionNumber(game.getVersionNumber() + 1);
 		//System.out.println("RobPlayer_Command5");
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);
-
+		
 		//System.out.println("RobPlayer_Command6");
 		result.setModel(cm);
 	}
