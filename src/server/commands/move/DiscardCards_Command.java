@@ -1,32 +1,38 @@
 package server.commands.move;
 
 import server.commands.Command;
+import server.facade.IServerFacade;
+import shared.communication.params.move.DiscardCards_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
+import shared.communication.results.move.DiscardCards_Result;
+import shared.definitions.ResourceType;
 import shared.model.Game;
 
 /**
  * Concrete command implementing the Command interface.
- * Issues the Discard action on the server game model.
+ * Issues the Discard action on the server facade.
  * 
  * @author Dallin
  *
  */
 public class DiscardCards_Command implements Command {
-	private Game game;
+	//private IServerFacade facade;
+	private DiscardCards_Params params;
+	private DiscardCards_Result result;
+	private int gameID, userID;
 
 	/**
-	 * Non-standard command pattern constructor instantiation without the game model.
-	 * The game model will be determined after original command instantiation.
+	 * Non-standard command pattern constructor instantiation without the facade.
+	 * The facade will be determined after original command instantiation.
 	 * 
 	 */
 	public DiscardCards_Command() {}
 	
-	/**
-	 * Standard Command pattern constructor instantiation with the game model
-	 * 
-	 * @param game
-	 */
-	public DiscardCards_Command(Game game) {
-		this.game = game;
+	public DiscardCards_Command(DiscardCards_Params params, int gameID, int userID) {
+		this.params = params;
+		this.gameID = gameID;
+		this.userID = userID;
 	}
 
 	/**
@@ -41,22 +47,41 @@ public class DiscardCards_Command implements Command {
 	 */
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
-		
-	}
+		System.out.println("DiscardCards_Command");
+		Game game = null;
+		game = facade.canDoDiscardCards(params, gameID, userID);
+		result = new DiscardCards_Result();
 
-	/**
-	 * For use coupled with the non-standard initialization of the command.
-	 * Allows for one and only one setting of the game for which the command is to execute.
-	 * 
-	 * @pre this.game == null && game != null
-	 * @post this.game = game
-	 * @param game
-	 */
-	public void setGame(Game game) {
-		if(this.game == null) {
-			this.game = game;
+		System.out.println("DiscardCards_Command1");
+		if (game==null){
+			System.out.println("DiscardCards_Command2");
+			return;
 		}
+		
+		try {
+			System.out.println("DiscardCards_Command3");
+			game.discardNumberOfResourceType(userID, params.getDiscardedCards().getBrick(), ResourceType.BRICK);
+			game.discardNumberOfResourceType(userID, params.getDiscardedCards().getOre(), ResourceType.ORE);
+			game.discardNumberOfResourceType(userID, params.getDiscardedCards().getSheep(), ResourceType.SHEEP);
+			game.discardNumberOfResourceType(userID, params.getDiscardedCards().getWheat(), ResourceType.WHEAT);
+			game.discardNumberOfResourceType(userID, params.getDiscardedCards().getWood(), ResourceType.WOOD);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
+
+		System.out.println("DiscardCards_Command4");
+		result.setValid(true);
+
+		JsonConverter converter = new JsonConverter();
+		ClientModel cm = converter.toClientModel(game);
+
+		System.out.println("DiscardCards_Command5");
+		result.setModel(cm);
+	}
+	
+	public DiscardCards_Result getResult(){
+		return result;
 	}
 
 }

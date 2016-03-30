@@ -26,37 +26,25 @@ public class PlayYearOfPlenty_Params {
 		resource2 = type2.toString().toLowerCase();
 	}
 
-
-
 	public int getPlayerIndex() {
 		return playerIndex;
 	}
-
-
 
 	public void setPlayerIndex(int playerIndex) {
 		this.playerIndex = playerIndex;
 	}
 
-
-
 	public String getResource1() {
 		return resource1;
 	}
-
-
 
 	public void setResource1(String resource1) {
 		this.resource1 = resource1;
 	}
 
-
-
 	public String getResource2() {
 		return resource2;
 	}
-
-
 
 	public void setResource2(String resource2) {
 		this.resource2 = resource2;

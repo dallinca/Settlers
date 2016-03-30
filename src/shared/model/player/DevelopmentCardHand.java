@@ -42,7 +42,7 @@ public class DevelopmentCardHand {
 		this.monopolyCards = new ArrayList<DevelopmentCard>();
 		this.yearOfPlentyCards = new ArrayList<DevelopmentCard>();
 		
-		initTestCards();
+		//initTestCards();
 		
 	}
     
@@ -74,7 +74,7 @@ public class DevelopmentCardHand {
 	/**
 	 * This serves no purpose other than to help with testing.
 	 */
-	public void initTestCards() {
+	/*public void initTestCards() {
 		DevelopmentCard a = new DevelopmentCard(DevCardType.SOLDIER);
 		
 		DevelopmentCard b = new DevelopmentCard(DevCardType.MONOPOLY);
@@ -95,7 +95,7 @@ public class DevelopmentCardHand {
 		this.monopolyCards.add(c);
 		
 		this.yearOfPlentyCards.add(d);
-	}
+	}*/
 	
 	/**
 	 * Checks to see if there is at least one card of the said type that can be played this turn
@@ -188,7 +188,7 @@ public class DevelopmentCardHand {
 		}
 	}
 	
-	
+
 	/**
 	 * Checks to see how many unplayed cards of the said type the player owns
 	 * 
@@ -230,7 +230,99 @@ public class DevelopmentCardHand {
 			}
 		}
 		
-		System.out.println("I am checking how many unplayed cards I have! Which is: " + numberAvailable);
+		//System.out.println("I am checking how many unplayed cards I have! Which is: " + numberAvailable);
+		
+		return numberAvailable;
+	}
+	
+	/**
+	 * Checks to see how many NEW unplayed cards of the said type the player owns
+	 * 
+	 * @pre None;
+	 * 
+	 * @return the Number of NEW unplayed dev cards of the specified type
+	 */
+	public int numberUnplayedNEWDevCards(DevCardType devCardType, int currentTurnNumber) {
+		int numberAvailable = 0;
+		if(devCardType == DevCardType.SOLDIER) {
+			for(DevelopmentCard Soldier : soldierCards) {
+				if(Soldier.hasBeenPlayed() == false && Soldier.getTurnBought() == currentTurnNumber) {
+					numberAvailable++;
+				}
+			}
+		} else if(devCardType == DevCardType.MONUMENT) {
+			for(DevelopmentCard VP : victoryPointCards) {
+				if(VP.hasBeenPlayed() == false && VP.getTurnBought() == currentTurnNumber) {
+					numberAvailable++;
+				}
+			}
+		} else if(devCardType == DevCardType.ROAD_BUILD) {
+			for(DevelopmentCard RB : roadBuilderCards) {
+				if(RB.hasBeenPlayed() == false && RB.getTurnBought() == currentTurnNumber) {
+					numberAvailable++;
+				}
+			}
+		} else if(devCardType == DevCardType.MONOPOLY) {
+			for(DevelopmentCard Monopoly : monopolyCards) {
+				if(Monopoly.hasBeenPlayed() == false && Monopoly.getTurnBought() == currentTurnNumber) {
+					numberAvailable++;
+				}
+			}
+		} else if(devCardType == DevCardType.YEAR_OF_PLENTY) {
+			for(DevelopmentCard YOP : yearOfPlentyCards) {
+				if(YOP.hasBeenPlayed() == false && YOP.getTurnBought() == currentTurnNumber) {
+					numberAvailable++;
+				}
+			}
+		}
+		
+		//System.out.println("I am checking how many unplayed cards I have! Which is: " + numberAvailable);
+		
+		return numberAvailable;
+	}
+
+	/**
+	 * Checks to see how many OLD unplayed cards of the said type the player owns
+	 * 
+	 * @pre None;
+	 * 
+	 * @return the Number of OLD unplayed dev cards of the specified type
+	 */
+	public int numberUnplayedOLDDevCards(DevCardType devCardType, int currentTurnNumber) {
+		int numberAvailable = 0;
+		if(devCardType == DevCardType.SOLDIER) {
+			for(DevelopmentCard Soldier : soldierCards) {
+				if(Soldier.hasBeenPlayed() == false && Soldier.getTurnBought() < currentTurnNumber) {
+					numberAvailable++;
+				}
+			}
+		} else if(devCardType == DevCardType.MONUMENT) {
+			for(DevelopmentCard VP : victoryPointCards) {
+				if(VP.hasBeenPlayed() == false && VP.getTurnBought() < currentTurnNumber) {
+					numberAvailable++;
+				}
+			}
+		} else if(devCardType == DevCardType.ROAD_BUILD) {
+			for(DevelopmentCard RB : roadBuilderCards) {
+				if(RB.hasBeenPlayed() == false && RB.getTurnBought() < currentTurnNumber) {
+					numberAvailable++;
+				}
+			}
+		} else if(devCardType == DevCardType.MONOPOLY) {
+			for(DevelopmentCard Monopoly : monopolyCards) {
+				if(Monopoly.hasBeenPlayed() == false && Monopoly.getTurnBought() < currentTurnNumber) {
+					numberAvailable++;
+				}
+			}
+		} else if(devCardType == DevCardType.YEAR_OF_PLENTY) {
+			for(DevelopmentCard YOP : yearOfPlentyCards) {
+				if(YOP.hasBeenPlayed() == false && YOP.getTurnBought() < currentTurnNumber) {
+					numberAvailable++;
+				}
+			}
+		}
+		
+		//System.out.println("I am checking how many unplayed cards I have! Which is: " + numberAvailable);
 		
 		return numberAvailable;
 	}
@@ -264,7 +356,7 @@ public class DevelopmentCardHand {
     }
   
    
-	
+
 	/**
 	 * Gets the number of soldier cards that the player has played
 	 * 
@@ -276,6 +368,24 @@ public class DevelopmentCardHand {
 		int numberPlayed = 0;
 		// Iterate through all the player owned soldier cards to check, which of these have been played
 		for(DevelopmentCard card: soldierCards) {
+			if(card.hasBeenPlayed()) {
+				numberPlayed++;
+			}
+		}
+		return numberPlayed;
+	}
+	
+	/**
+	 * Gets the number of monument cards that the player has played
+	 * 
+	 * @pre none
+	 * 
+	 * @post return value contains number of monuments that have been played by the player
+	 */
+	public int getNumberOfMonumentsPlayed() {
+		int numberPlayed = 0;
+		// Iterate through all the player owned soldier cards to check, which of these have been played
+		for(DevelopmentCard card: victoryPointCards) {
 			if(card.hasBeenPlayed()) {
 				numberPlayed++;
 			}

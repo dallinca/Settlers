@@ -2,6 +2,9 @@ package shared.communication.results;
 
 import java.util.Arrays;
 
+import shared.model.Game.Line;
+import client.data.TradeInfo;
+
 /**
  * A full model of the game for JSON deserialization.
  * 
@@ -19,6 +22,33 @@ public class ClientModel {
 	MTurnTracker turnTracker;
 	int version;
 	int winner;
+
+	public ClientModel(MDevCardList deck, MBank bank, MChat chat, MLog log,
+			MMap map, MPlayer[] players, MTradeOffer tradeOffer,
+			MTurnTracker turnTracker, int version, int winner) {
+		super();
+		this.deck = deck;
+		this.bank = bank;
+		this.chat = chat;
+		this.log = log;
+		this.map = map;
+		this.players = players;
+		this.tradeOffer = tradeOffer;
+		this.turnTracker = turnTracker;
+		this.version = version;
+		this.winner = winner;
+	}
+
+	public ClientModel() {
+		super();
+		this.deck = new MDevCardList();
+		this.bank = new MBank();
+		this.chat = new MChat();
+		this.log = new MLog();
+		this.map = new MMap();
+		this.turnTracker = new MTurnTracker();
+	}
+
 
 	@Override
 	public String toString() {
@@ -104,6 +134,22 @@ public class ClientModel {
 		MessageLine[] lines;
 
 
+		public MChat(Line[] lines) {
+			if (lines==null){
+				this.lines = new MessageLine[0];
+				return;
+			}
+			this.lines = new MessageLine[lines.length];
+
+			for (int i = 0; i< lines.length; i++){
+				this.lines[i] = new MessageLine(lines[i]);
+			}
+		}
+
+		public MChat() {
+			lines = new MessageLine[0];
+		}
+
 		@Override
 		public String toString() {
 
@@ -127,6 +173,22 @@ public class ClientModel {
 
 	public class MLog{
 		MessageLine[] lines;
+
+		public MLog(Line[] logs) {
+			if (logs == null){
+				this.lines = new MessageLine[0];
+				return;
+			}
+			this.lines = new MessageLine[logs.length];
+
+			for (int i = 0; i< logs.length; i++){
+				this.lines[i] = new MessageLine(logs[i]);
+			}
+		}
+
+		public MLog() {
+			// TODO Auto-generated constructor stub
+		}
 
 		@Override
 		public String toString() {
@@ -164,6 +226,11 @@ public class ClientModel {
 		String message;
 		String source;	
 
+		public MessageLine(Line line) {
+			message = line.getMessage();
+			source = line.getSource();
+		}
+
 		public String getMessage() {
 			return message;
 		}
@@ -188,6 +255,11 @@ public class ClientModel {
 		int radius;
 		MHexLocation robber;
 
+
+		public MMap(){
+			robber = new MHexLocation();
+
+		}
 		@Override
 		public String toString() {
 			return "Map [hexes=" + Arrays.toString(hexes) + ",\n ports="
@@ -222,6 +294,11 @@ public class ClientModel {
 			int owner;
 			MVertexLocation location;
 
+			public VertexObject() {}
+			public VertexObject(int owner, MVertexLocation location) {
+				this.owner = owner;
+				this.location = location;
+			}
 
 			@Override
 			public String toString() {
@@ -243,6 +320,12 @@ public class ClientModel {
 			int x;
 			int y;
 
+			public MVertexLocation() {}
+			public MVertexLocation(String direction, int x, int y) {
+				this.direction = direction;
+				this.x = x;
+				this.y = y;
+			}
 
 			@Override
 			public String toString() {
@@ -269,6 +352,15 @@ public class ClientModel {
 			int owner;
 			MEdgeLocation location;
 
+			public EdgeValue() {
+
+				location = new MEdgeLocation();
+			}
+			public EdgeValue(int owner, MEdgeLocation location) {
+				this.owner = owner;
+				this.location = location;
+			}
+
 			public int getOwner() {
 				return owner;
 			}
@@ -289,6 +381,13 @@ public class ClientModel {
 			String direction;
 			int x;
 			int y;
+
+			public MEdgeLocation() {}
+			public MEdgeLocation(String direction, int x, int y) {
+				this.direction = direction;
+				this.x = x;
+				this.y = y;
+			}
 
 			public int getX() {
 				return x;
@@ -313,6 +412,17 @@ public class ClientModel {
 			String direction;
 			int ratio;
 
+			public Port() {
+				location = new MHexLocation();
+
+
+			}
+			public Port(String resource, MHexLocation location, String direction, int ratio) {
+				this.resource = resource;
+				this.location = location;
+				this.direction = direction;
+				this.ratio = ratio;
+			}
 
 			@Override
 			public String toString() {
@@ -340,6 +450,9 @@ public class ClientModel {
 			String resource;
 			int number;
 
+			public MHex(){
+				location = new MHexLocation();
+			}
 			public MHexLocation getLocation() {
 				return location;
 			}
@@ -360,6 +473,12 @@ public class ClientModel {
 		public class MHexLocation{
 			int x;
 			int y;
+
+			public MHexLocation() {}
+			public MHexLocation(int x, int y) {
+				this.x = x;
+				this.y = y;
+			}
 
 			public int getX() {
 				return x;
@@ -395,6 +514,17 @@ public class ClientModel {
 		int settlements;
 		int soldiers;
 		int victoryPoints;
+
+
+
+
+		public MPlayer() {
+			super();
+
+			this.resources = new ResourceList();
+			this.newDevCards = new MDevCardList();
+			this.oldDevCards = new MDevCardList();
+		}
 
 		public int getCities() {
 			return cities;
@@ -474,6 +604,12 @@ public class ClientModel {
 		int sender;
 		int receiver;
 		ResourceList offer;
+
+		public MTradeOffer(TradeInfo offer) {
+			this.sender = offer.getSender();
+			this.receiver = offer.getReceiver();
+			this.offer = offer.getOffer();			
+		}
 		public int getSender() {
 			return sender;
 		}
@@ -496,6 +632,10 @@ public class ClientModel {
 		String status;
 		int longestRoad;
 		int largestArmy;
+
+		public MTurnTracker(){
+			status = "";
+		}
 
 		public int getCurrentTurn() {
 			return currentTurn;
@@ -556,11 +696,12 @@ public class ClientModel {
 
 	public class ResourceList{		
 
-		int brick;
-		int ore;
-		int sheep;
-		int wheat;
-		int wood;
+		public int brick;
+		public int ore;
+		public int sheep;
+		public int wheat;
+		public int wood;
+
 		public int getBrick() {
 			return brick;
 		}

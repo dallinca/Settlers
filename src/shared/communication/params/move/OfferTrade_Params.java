@@ -15,7 +15,7 @@ public class OfferTrade_Params {
 			int sheep, int wheat, int wood) {
 		
 		this.playerIndex = playerIndex;		
-		offer = new Offer(brick, ore, sheep, wheat, wood);
+		setOffer(new Offer(brick, ore, sheep, wheat, wood));
 		this.receiver = receiver;
 	}
 
@@ -27,14 +27,20 @@ public class OfferTrade_Params {
 		this.playerIndex = playerIndex;
 	}
 
-
-
 	public int getReceiver() {
 		return receiver;
 	}
 
 	public void setReceiver(int receiver) {
 		this.receiver = receiver;
+	}
+
+	public Offer getOffer() {
+		return offer;
+	}
+
+	public void setOffer(Offer offer) {
+		this.offer = offer;
 	}
 
 	public class Offer{

@@ -29,10 +29,20 @@ public class OfferTrade_Result {
 	public Game getGame(){
 		return game;
 	}
-
+	
+	public OfferTrade_Result(Game game){
+		this.game = game;	
+		
+		if (game == null){
+			valid = false;
+		}else{
+			valid = true;
+		}
+	}
+	
 	public OfferTrade_Result(String post) {
 
-		//System.out.println("Trade post:::"+post);
+		System.out.println("Trade post:::"+post);
 		
 		if (post==null){
 			setValid(false);

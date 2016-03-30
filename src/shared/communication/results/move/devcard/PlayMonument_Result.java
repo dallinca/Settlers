@@ -30,6 +30,16 @@ public class PlayMonument_Result {
 		return game;
 	}
 
+	public PlayMonument_Result(Game game){
+		this.game = game;	
+		
+		if (game == null){
+			valid = false;
+		}else{
+			valid = true;
+		}
+	}
+		
 	public PlayMonument_Result(String post) {
 
 		if (post==null){

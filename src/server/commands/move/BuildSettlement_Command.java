@@ -1,32 +1,47 @@
 package server.commands.move;
 
 import server.commands.Command;
+import server.facade.IServerFacade;
+import shared.communication.params.move.BuildSettlement_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
+import shared.communication.results.move.BuildSettlement_Result;
 import shared.model.Game;
 
 /**
  * Concrete command implementing the Command interface.
- * Issues the Build Settlement action on the server game model.
+ * Issues the Build Settlement action on the server facade.
  * 
  * @author Dallin
  *
  */
 public class BuildSettlement_Command implements Command {
-	private Game game;
+	//private IServerFacade facade;
+
+	private BuildSettlement_Params params;
+	private BuildSettlement_Result result;
+	private int gameID, userID;
 
 	/**
-	 * Non-standard command pattern constructor instantiation without the game model.
-	 * The game model will be determined after original command instantiation.
+	 * Non-standard command pattern constructor instantiation without the facade.
+	 * The facade will be determined after original command instantiation.
 	 * 
 	 */
 	public BuildSettlement_Command() {}
-	
+
 	/**
-	 * Standard Command pattern constructor instantiation with the game model
-	 * 
+	 * Standard Command pattern constructor instantiation with the facade
+	 * @deprecated 
 	 * @param game
 	 */
-	public BuildSettlement_Command(Game game) {
-		this.game = game;
+	public BuildSettlement_Command(IServerFacade facade) {
+	//	this.facade = facade;
+	}
+
+	public BuildSettlement_Command(BuildSettlement_Params params, int gameID, int userID) {
+		this.params = params;
+		this.gameID = gameID;
+		this.userID = userID;
 	}
 
 	/**
@@ -41,22 +56,36 @@ public class BuildSettlement_Command implements Command {
 	 */
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
-		
-	}
+		System.out.println("BuildSettlement_Command");
+		Game game = null;
+		game = facade.canDoBuildSettlement(params, gameID, userID);
+		result = new BuildSettlement_Result();
 
-	/**
-	 * For use coupled with the non-standard initialization of the command.
-	 * Allows for one and only one setting of the game for which the command is to execute.
-	 * 
-	 * @pre this.game == null && game != null
-	 * @post this.game = game
-	 * @param game
-	 */
-	public void setGame(Game game) {
-		if(this.game == null) {
-			this.game = game;
+		System.out.println("BuildSettlement_Command1");
+		if (game==null){
+			System.out.println("BuildSettlement_Command2");
+			return;
 		}
+
+		try {
+			System.out.println("BuildSettlement_Command3");
+			game.placeSettlementOnVertex(userID, params.getCmdVertLocation());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
+
+		System.out.println("BuildSettlement_Command4");
+		result.setValid(true);
+
+		JsonConverter converter = new JsonConverter();
+		ClientModel cm = converter.toClientModel(game);
+
+		System.out.println("BuildSettlement_Command5");
+		result.setModel(cm);
 	}
 
+	public BuildSettlement_Result getResult(){
+		return result;
+	}
 }

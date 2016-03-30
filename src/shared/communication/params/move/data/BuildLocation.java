@@ -33,7 +33,6 @@ public class BuildLocation {
 
 		default: //Do nothing, doesn't happen.
 			break;
-
 		}
 	}
 

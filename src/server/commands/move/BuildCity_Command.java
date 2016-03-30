@@ -1,32 +1,47 @@
 package server.commands.move;
 
 import server.commands.Command;
+import server.facade.IServerFacade;
+import shared.communication.params.move.BuildCity_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
+import shared.communication.results.move.BuildCity_Result;
 import shared.model.Game;
 
 /**
  * Concrete command implementing the Command interface.
- * Issues the Build City action on the server game model.
+ * Issues the Build City action on the server facade.
  * 
  * @author Dallin
  *
  */
 public class BuildCity_Command implements Command {
-	private Game game;
+	//private IServerFacade facade;
+
+	private BuildCity_Params params;
+	private BuildCity_Result result;
+	private int gameID, userID;
 
 	/**
-	 * Non-standard command pattern constructor instantiation without the game model.
-	 * The game model will be determined after original command instantiation.
+	 * Non-standard command pattern constructor instantiation without the facade.
+	 * The facade will be determined after original command instantiation.
 	 * 
 	 */
 	public BuildCity_Command() {}
-	
+
 	/**
-	 * Standard Command pattern constructor instantiation with the game model
+	 * Standard Command pattern constructor instantiation with the facade
 	 * 
 	 * @param game
 	 */
-	public BuildCity_Command(Game game) {
-		this.game = game;
+	/*public BuildCity_Command(IServerFacade facade) {
+		this.facade = facade;
+	}*/
+
+	public BuildCity_Command(BuildCity_Params params, int gameID, int userID) {
+		this.params = params;
+		this.gameID = gameID;
+		this.userID = userID;
 	}
 
 	/**
@@ -41,22 +56,37 @@ public class BuildCity_Command implements Command {
 	 */
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
-		
-	}
+		System.out.println("BuildCity_Command");
+		Game game = null;
+		game = facade.canDoBuildCity(params, gameID, userID);
+		result = new BuildCity_Result();
 
-	/**
-	 * For use coupled with the non-standard initialization of the command.
-	 * Allows for one and only one setting of the game for which the command is to execute.
-	 * 
-	 * @pre this.game == null && game != null
-	 * @post this.game = game
-	 * @param game
-	 */
-	public void setGame(Game game) {
-		if(this.game == null) {
-			this.game = game;
+		System.out.println("BuildCity_Command1");
+		if (game != null) {
+			System.out.println("BuildCity_Command2");
+			try {
+				System.out.println("BuildCity_Command3");
+				game.placeCityOnVertex(params.getCmdVertLocation());
+			} catch (Exception e) {
+				new BuildCity_Result();
+				e.printStackTrace();
+				return;
+			}
+		} else {
+			return;
 		}
+
+		System.out.println("BuildCity_Command4");
+		result.setValid(true);
+
+		JsonConverter converter = new JsonConverter();
+		ClientModel cm = converter.toClientModel(game);
+
+		System.out.println("BuildCity_Command5");
+		result.setModel(cm);
 	}
 
+	public BuildCity_Result getResult(){
+		return result;
+	}
 }

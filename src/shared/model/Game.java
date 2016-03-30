@@ -5,7 +5,7 @@ import java.util.Random;
 
 import client.data.TradeInfo;
 import server.commands.CommandHistory;
-import shared.communication.results.ClientModel;
+import shared.communication.params.move.devcard.PlaySoldier_Params;
 import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
 import shared.definitions.PortType;
@@ -17,9 +17,7 @@ import shared.model.items.*;
 import shared.model.player.*;
 import shared.model.player.exceptions.CannotBuyException;
 import shared.model.player.exceptions.InsufficientPlayerResourcesException;
-import shared.model.turn.Dice;
 import shared.model.board.Board;
-import shared.model.board.Edge;
 import shared.model.board.Hex;
 import shared.model.board.Vertex;
 
@@ -34,7 +32,7 @@ public class Game {
 	//private boolean inSetUpPhase = true; // This is a state boolean for the first two setup rounds
 	private Player[] players = null;
 	private Player currentPlayer = null;
-	private Board board = null;;
+	private Board board = null;
 	private Player largestArmy;
 	private Player longestRoad;
 	private static int numberofPlayers = 4;
@@ -47,7 +45,12 @@ public class Game {
 	private Line[] history;
 	private int winner = -1;
 	private CommandHistory gameHistory = new CommandHistory();
-	
+
+
+	//How do we create this / initialize it????
+	private int gameID;
+	private String title;
+
 
 	private TradeInfo tradeOffer;
 
@@ -159,10 +162,16 @@ public class Game {
 				if(turnNumber > 1) {
 					if (i == numberofPlayers-1) {
 						setCurrentPlayer(players[0]);
+						currentPlayer.setHasDiscarded(false);
 						turnNumber++;
+						versionNumber++;
+						status = "Rolling";
 						return;
 					} else {
 						setCurrentPlayer(players[i+1]);
+						currentPlayer.setHasDiscarded(false);
+						versionNumber++;
+						status = "Rolling";
 						return;
 					}
 				}
@@ -172,11 +181,14 @@ public class Game {
 					if(turnNumber == 0) {
 						// If we are on the last person in the round, he/she gets to go again
 						if(i == numberofPlayers - 1) {
-							setCurrentPlayer(players[numberofPlayers - 1]); // Could probably omit this line
+							//setCurrentPlayer(players[numberofPlayers - 1]); // Could probably omit this line
 							turnNumber++;
+							versionNumber++;
+							status = "SecondRound";
 							return;
 						} else {
 							setCurrentPlayer(players[i+1]);
+							versionNumber++;
 							return;
 						}
 					}
@@ -186,9 +198,12 @@ public class Game {
 							setCurrentPlayer(players[0]);
 							//inSetUpPhase = false;
 							turnNumber++;
+							versionNumber++;
+							status = "Rolling";
 							return;
 						} else {
 							setCurrentPlayer(players[i-1]);
+							versionNumber++;
 							return;
 						}
 					}
@@ -260,7 +275,21 @@ public class Game {
 			playersCollectResources(rollValue);
 		}*/
 		// If the roll is a seven, tell the client and wait for attempts to move the robber
+		
 		return rollValue;
+	}
+	
+	public void setRollDice(int UserId, int rollValue) throws Exception {
+		if(canDoRollDice(UserId) == false) {
+			throw new Exception("canDoRollDice == false");
+		}
+		if(rollValue == 7) {
+			status = "Robbing";
+		} else {
+			status = "Playing";
+			playersCollectResources(rollValue);
+		}
+		versionNumber++;
 	}
 
 	/**
@@ -275,6 +304,7 @@ public class Game {
 		}
 		for(Player player: players) {
 			player.collectResources(rollValue, bank);
+			versionNumber++;
 		}
 	}
 
@@ -389,7 +419,7 @@ public class Game {
 		}
 		return player.getNumberOfSoldiersPlayed();
 	}
-	
+
 	/**
 	 * TODO Javadoc and Implement
 	 * 
@@ -398,7 +428,7 @@ public class Game {
 	 */
 	public void buyDevelopmentCard() throws CannotBuyException, InsufficientPlayerResourcesException {
 		if (currentPlayer.canDoBuyDevelopmentCard(bank)) {
-			currentPlayer.buyDevelopmentCard(bank);
+			currentPlayer.buyDevelopmentCard(turnNumber, bank);
 		}
 	}
 
@@ -421,15 +451,15 @@ public class Game {
 	 * @return how many unused cards the player has of the specified devCardType
 	 */
 	public int numberUnplayedDevCards(int userID, DevCardType devCardType) {
-		
+
 		int unplayed = -1;
-		
+
 		for (int i = 0; i < players.length; i++) {
 			if (players[i].getPlayerId() == userID) {
 				unplayed = players[i].numberUnplayedDevCards(devCardType);
 			}
 		}
-		
+
 		return unplayed;
 		//what it used to say: currentPlayer.numberUnplayedDevCards(devCardType)
 	}
@@ -525,17 +555,41 @@ public class Game {
 	 * @return whether or not you just won the game
 	 * @throws Exception
 	 */
-	public boolean useDevelopmentCard(int userID, DevCardType devCardType) throws Exception {
+	public boolean useMonumentCard(int userID, DevCardType devCardType) throws Exception {
 		if (currentPlayer.getPlayerId() == userID) {
 
 			if (currentPlayer.canDoPlayDevelopmentCard(turnNumber, devCardType)) {
 				//Marks the card as played
 				currentPlayer.playDevelopmentCard(turnNumber, devCardType);
 
-				switch (devCardType) {
-				case SOLDIER:
-					//Do they have more than three soldiers? Do they have the most soldiers? If so, award them the Largest Army award (assuming they don't already have it) and take it from the previous title holder
-					//Must move robber to a different hex
+				//Now do what monuments do:
+				currentPlayer.incrementVictoryPoints();
+				setVersionNumber(versionNumber++);
+				return doWeHaveAWinner();
+			}
+			else 
+				throw new Exception("Cannot Play Monument card!");
+		} else
+			throw new Exception("Cannot Play Monument card, you are not the current Player!");
+	}
+
+	public boolean useSoldierCard(int userID, PlaySoldier_Params params) {
+		//Do they have more than three soldiers? Do they have the most soldiers? If so, award them the Largest Army award (assuming they don't already have it) and take it from the previous title holder
+		//Must move robber to a different hex
+
+		if (currentPlayer.getPlayerId() == userID) {
+
+			if (currentPlayer.canDoPlayDevelopmentCard(turnNumber, DevCardType.SOLDIER)) {
+				if (canDoStealPlayerResource(userID, params.getVictimIndex())) {
+
+					try {
+						moveRobberToHex(userID, params.getLocation());
+						stealPlayerResource(userID, params.getVictimIndex());
+					} catch (Exception e) {
+						System.out.println("Something went wrong when trying to move the robber or steal resources");
+						e.printStackTrace();
+					}
+
 
 					boolean firstTime = true;
 
@@ -576,27 +630,14 @@ public class Game {
 					setVersionNumber(versionNumber++);
 					return doWeHaveAWinner();
 
-				case MONUMENT:
-					//Give the player their due reward
-					currentPlayer.incrementVictoryPoints();
-					setVersionNumber(versionNumber++);
-					return doWeHaveAWinner();
-
-				case ROAD_BUILD:
-					//Perhaps to avoid the cost of the roads, we can have an overridden method that asserts true on the canDoBuy and asserts true and avoids the cost. Who knows
-
-					setVersionNumber(versionNumber++);
-					//Did the two extra roads with the game?!?! This may result in the longest road being awarded. 
-					return doWeHaveAWinner();
 				}
-
+				
+				
+				
+				
 			}
-
-			else 
-				throw new Exception("Cannot Play development card, you card doesn't exist!");
-			return doWeHaveAWinner();
-		} else
-			throw new Exception("Cannot Play development card, you are not the current Player!");
+		}
+		return doWeHaveAWinner();
 	}
 
 
@@ -625,10 +666,15 @@ public class Game {
 	 * 
 	 */
 	public void doMaritimeTrade(ResourceType tradeIn, ResourceType receive) throws Exception  {
+		
 		if (canDoPlayerDoMaritimeTrade(tradeIn, receive)) {
+			
 			ResourceCard[] tradingCards = currentPlayer.prepareBankTrade(tradeIn);
+			
 			bank.playerTurnInResources(tradingCards);
+			
 			currentPlayer.getResourceCardHand().addCard(bank.playerTakeResource(receive));
+			
 		} else
 			throw new Exception("Cannot do Maritime Trade");
 
@@ -721,7 +767,7 @@ public class Game {
 			}
 		}
 
-		for (int g = 0; g < p1resources.length; g++) {
+		for (int g = 0; g < p2resources.length; g++) {
 
 			if (g == 0) {
 				resourceType = ResourceType.BRICK;				
@@ -878,21 +924,28 @@ public class Game {
 		// If we are in the setup phase, the rules for placing a road are slightly different
 		if(turnNumber < 2) {
 			board.placeInitialRoadOnEdge(getCurrentPlayer(), edgeLocation);
+			versionNumber++;
 		} else {
 			board.placeRoadOnEdge(getCurrentPlayer(), edgeLocation);
 		}
 	}
-	
 
-	public void placeRoadOnEdge(int UserId, EdgeLocation edgeLocation, boolean usingRoadBuilder) throws Exception {
-		if(canDoPlaceRoadOnEdge(UserId, edgeLocation) == false) {
+
+	public void placeRoadOnEdge(int userId, EdgeLocation edgeLocation, boolean usingRoadBuilder) throws Exception {
+		if(canDoPlaceRoadOnEdge(userId, edgeLocation) == false) {
 			throw new Exception("Specified Player cannot place a road on the given edgeLocation");
 		}
 		// If we are in the setup phase, the rules for placing a road are slightly different
 		if(usingRoadBuilder == true) {
-			board.placeRoadBuildRoadOnEdge(getCurrentPlayer(), edgeLocation);
+			if (currentPlayer.getPlayerId() == userId && currentPlayer.canDoPlayDevelopmentCard(turnNumber, DevCardType.ROAD_BUILD) && currentPlayer.getNumberUnplayedRoads() >= 2) {
+				board.placeRoadBuildRoadOnEdge(getCurrentPlayer(), edgeLocation);
+				versionNumber++;
+			} else {
+				throw new Exception("Unable to play Road Builder!");
+			}
 		} else {
 			board.placeRoadOnEdge(getCurrentPlayer(), edgeLocation);
+			versionNumber++;
 		}
 	}
 
@@ -925,9 +978,21 @@ public class Game {
 		// If we are in the first two rounds of the game
 		if(turnNumber < 2) {
 			board.placeInitialSettlementOnVertex(currentPlayer, vertexLocation);
+			versionNumber++;
+			// Here we collect the resources for the second placed settlement in setup round
+			if(turnNumber == 1) {
+				Hex[] adjacentHexes = board.getVertex(vertexLocation).getAdjacentHexes();
+				for(Hex hex: adjacentHexes) {
+					if(hex != null) {
+						ResourceType hexResourceType = hex.getHexResourceType();
+						ResourceCard card = bank.playerTakeResource(hexResourceType);
+						currentPlayer.getResourceCardHand().addCard(card);
+					}
+				}
+			}
 		} else {
 			board.placeSettlementOnVertex(currentPlayer, vertexLocation);
-
+			versionNumber++;
 		}
 	}
 
@@ -951,8 +1016,10 @@ public class Game {
 	 * @post a city is placed on a vertex
 	 */
 	public void placeCityOnVertex(VertexLocation vertexLocation) throws Exception {
-		if(canDoPlaceCityOnVertex(vertexLocation))
+		if(canDoPlaceCityOnVertex(vertexLocation)) {
 			board.placeCityOnVertex(currentPlayer, vertexLocation);
+			versionNumber++;
+		}
 		else
 			throw new Exception("Cannot build City on this vertex, this should not have been allowed to get this far.");
 	}
@@ -1049,6 +1116,8 @@ public class Game {
 			throw new Exception("canDoStealPlayerResource == false");
 		}
 		currentPlayer.stealPlayerResource(getPlayerByID(victimId));
+		status = "Playing";
+		versionNumber++;
 	}
 
 	/**
@@ -1060,7 +1129,10 @@ public class Game {
 	 */
 	public Player getPlayerByID(int playerID) {
 		for (int i = 0; i < numberofPlayers; i++) {
-			if (playerID == players[i].getPlayerId()) {
+			if (players[i]==null){
+				
+			}
+			else if (playerID == players[i].getPlayerId()) {
 				return players[i];
 			}
 		}
@@ -1271,6 +1343,16 @@ public class Game {
 
 
 
+	public int getGameID() {
+		return gameID;
+	}
+
+	public void setGameID(int gameID) {
+		this.gameID = gameID;
+	}
+
+
+
 	/**
 	 * Hear ye, hear ye! We have a class line that is designated for the functionality of the ChatController and the GameHistoryController
 	 * its purpose is to keep track of all the message type objects we get from the server so it can be accessed and printed by the two controllers mentioned above.
@@ -1297,6 +1379,80 @@ public class Game {
 		public String getSource() {
 			return source;
 		}
+	}
+
+
+
+	public int getPlayerCount(){
+
+		Player[] players = getAllPlayers();
+		int playerCount = 0;
+
+		for (int i = 0; i < 4; i ++){
+			if (players[i]!=null){ //Check for vacancy in game roster.
+				playerCount++;
+			}
+		}
+		return playerCount;
+	}
+
+	public void addPlayer(int userID, CatanColor playerColor) {
+
+		System.out.println("Game.addPlayer");
+		if(players == null)
+			players = new Player[numberofPlayers];
+
+		int playerCount = 0;
+		while (players[playerCount]!=null){
+			playerCount++;
+			if (playerCount==4){
+				break;
+			}
+		}
+
+		System.out.println("Player count == "+playerCount);
+
+		if( playerCount < 4){
+			System.out.println("Adding new player.");
+			Player p = new Player(playerCount, bank);
+			p.setPlayerId(userID);
+			p.setPlayerColor(playerColor);			
+			players[playerCount] = p;
+		}
+
+		if(playerCount == 4){
+			System.out.println("Beginning game.");
+			status = "FirstRound";
+		}
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public Bank getBank() {
+		return bank;
+	}
+
+	public void setBank(Bank bank) {
+		this.bank = bank;
+	}
+
+	public int getIndexOfPlayer(Player player) {
+		if(player == null) {
+			return -1;
+		}
+		int index = -1;
+		for(int i = 0; i < players.length; i++) {
+			if(player.getPlayerId() == players[i].getPlayerId()) {
+				index = i;
+			}
+		}
+		return index;
 	}
 
 

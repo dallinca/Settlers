@@ -1,5 +1,6 @@
 package shared.communication.params.move;
 
+import shared.communication.results.JsonConverter;
 import shared.definitions.ResourceType;
 
 /**
@@ -34,11 +35,9 @@ public class MaritimeTrade_Params {
 		this.outputResource = outputResource.toString().toLowerCase();
 	}
 
-
 	public int getPlayerIndex() {
 		return playerIndex;
 	}
-	
 	
 	public void setPlayerIndex(int playerIndex) {
 		this.playerIndex = playerIndex;
@@ -56,12 +55,15 @@ public class MaritimeTrade_Params {
 		this.inputResource = inputResource;
 	}
 	public String getOutputResource() {
+		
+		
+		
+		
 		return outputResource;
 	}
 	public void setOutputResource(String outputResource) {
 		this.outputResource = outputResource;
 	}
-	
 	
 
 }

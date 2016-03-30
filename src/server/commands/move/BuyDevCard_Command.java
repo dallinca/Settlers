@@ -1,32 +1,50 @@
 package server.commands.move;
 
 import server.commands.Command;
+import server.facade.IServerFacade;
+import shared.communication.params.move.BuyDevCard_Params;
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
+import shared.communication.results.move.BuyDevCard_Result;
 import shared.model.Game;
+import shared.model.player.exceptions.CannotBuyException;
+import shared.model.player.exceptions.InsufficientPlayerResourcesException;
 
 /**
  * Concrete command implementing the Command interface.
- * Issues the Buy Dev Card action on the server game model.
+ * Issues the Buy Dev Card action on the server facade.
  * 
  * @author Dallin
  *
  */
 public class BuyDevCard_Command implements Command {
-	private Game game;
+	
+	//private IServerFacade facade;
+	
+	private BuyDevCard_Params params;
+	private BuyDevCard_Result result;
+	private int gameID, userID;
 
 	/**
-	 * Non-standard command pattern constructor instantiation without the game model.
-	 * The game model will be determined after original command instantiation.
+	 * Non-standard command pattern constructor instantiation without the facade.
+	 * The facade will be determined after original command instantiation.
 	 * 
 	 */
 	public BuyDevCard_Command() {}
 	
 	/**
-	 * Standard Command pattern constructor instantiation with the game model
+	 * Standard Command pattern constructor instantiation with the facade
 	 * 
 	 * @param game
 	 */
-	public BuyDevCard_Command(Game game) {
-		this.game = game;
+	/*public BuyDevCard_Command(IServerFacade facade) {
+		this.facade = facade;
+	}*/
+	
+	public BuyDevCard_Command(BuyDevCard_Params params, int gameID, int userID) {
+		this.params = params;
+		this.gameID = gameID;
+		this.userID = userID;
 	}
 
 	/**
@@ -41,22 +59,39 @@ public class BuyDevCard_Command implements Command {
 	 */
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
-		
-	}
+		System.out.println("BuyDevCard_Command");
+		Game game = null;
+		game = facade.canDoBuyDevCard(params, gameID, userID);
+		result = new BuyDevCard_Result();
 
-	/**
-	 * For use coupled with the non-standard initialization of the command.
-	 * Allows for one and only one setting of the game for which the command is to execute.
-	 * 
-	 * @pre this.game == null && game != null
-	 * @post this.game = game
-	 * @param game
-	 */
-	public void setGame(Game game) {
-		if(this.game == null) {
-			this.game = game;
+		System.out.println("BuyDevCard_Command1");
+		if (game==null){
+			System.out.println("BuyDevCard_Command2");
+			return;
 		}
-	}
+		try {
+			System.out.println("BuyDevCard_Command3");
+			game.buyDevelopmentCard();
+		} catch (CannotBuyException e) {
+			e.printStackTrace();
+			return;
+		} catch (InsufficientPlayerResourcesException e) {
+			e.printStackTrace();
+			return;
+		}
 
+		System.out.println("BuyDevCard_Command4");
+		result.setValid(true);
+		
+		JsonConverter converter = new JsonConverter();
+		
+		ClientModel cm = converter.toClientModel(game);
+
+		System.out.println("BuyDevCard_Command5");
+		result.setModel(cm);
+	}
+	
+	public BuyDevCard_Result getResult(){
+		return result;
+	}
 }

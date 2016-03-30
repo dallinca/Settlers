@@ -30,6 +30,16 @@ public class PlayMonopoly_Result {
 		return game;
 	}
 
+	public PlayMonopoly_Result(Game game){
+		this.game = game;	
+		
+		if (game == null){
+			valid = false;
+		}else{
+			valid = true;
+		}
+	}
+	
 	public PlayMonopoly_Result(String post) {
 
 		if (post==null){
