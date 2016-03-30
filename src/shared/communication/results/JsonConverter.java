@@ -850,6 +850,10 @@ public class JsonConverter {
 		if (offer!=null){		
 			MTradeOffer mto = clientModel.new MTradeOffer(offer);
 			clientModel.tradeOffer = mto;
+			System.out.println("Current trade offer: ---------------------------------------");
+			System.out.println(mto.toString());
+		}else{
+			System.out.println("No trade offer available ---------------------------------------");
 		}
 
 		// Init the CHAT

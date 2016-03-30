@@ -27,7 +27,7 @@ public interface IServerFacade {
 	
 	
 	// Command pattern actions (move actions)
-	public Game canDoAcceptTrade(AcceptTrade_Params params);
+	public Game canDoAcceptTrade(AcceptTrade_Params params, int gameID);
 	public Game canDoBuildCity(BuildCity_Params params, int gameID, int userID);
 	public Game canDoBuildRoad(BuildRoad_Params params, int gameID, int userID);
 	public Game canDoBuildSettlement(BuildSettlement_Params params, int gameID, int userID);
