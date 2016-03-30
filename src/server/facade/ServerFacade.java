@@ -423,6 +423,12 @@ public class ServerFacade implements IServerFacade {
 		
 		if(game.canDoMoveRobberToHex(stealer.getPlayerId(), params.getLocation())){ // MOVER Id
 
+			try {
+				game.moveRobberToHex(stealer.getPlayerId(), params.getLocation());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 			//System.out.println("canDoRobPlayer 4");
 			if (params.getVictimIndex() == -1){
 				//System.out.println("canDoRobPlayer 5");
@@ -437,6 +443,7 @@ public class ServerFacade implements IServerFacade {
 
 				//System.out.println("canDoRobPlayer 7");
 				game.setVersionNumber(game.getVersionNumber() + 1);
+				game.setStatus("Playing");
 				return game;
 			}
 
@@ -444,6 +451,7 @@ public class ServerFacade implements IServerFacade {
 
 
 		game.setVersionNumber(game.getVersionNumber() + 1);
+		game.setStatus("Playing");
 		//System.out.println("canDoRobPlayer 8");
 		return null;
 	}

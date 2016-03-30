@@ -74,7 +74,7 @@ public class Game {
 		}
 		// init board to normal setup
 		board = new Board(true, true, true);
-		history = null;
+		history = new Line[10];
 		chat = null;
 	}
 

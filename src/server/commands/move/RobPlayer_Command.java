@@ -63,8 +63,9 @@ public class RobPlayer_Command implements Command {
 		
 		try {
 			//System.out.println("RobPlayer_Command3");
-			game.moveRobberToHex(userID, params.getLocation());
-			game.stealPlayerResource(userID, params.getVictimIndex());
+			if(params.getVictimIndex() != -1) {
+				game.stealPlayerResource(userID, params.getVictimIndex());
+			}
 		} catch (Exception e) {
 			//System.out.println("RobPlayer_Command4");
 			e.printStackTrace();
