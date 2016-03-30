@@ -1,5 +1,6 @@
 package server.commands.move;
 
+import client.data.TradeInfo;
 import server.commands.Command;
 import server.facade.IServerFacade;
 import shared.communication.params.move.AcceptTrade_Params;
@@ -61,7 +62,7 @@ public class AcceptTrade_Command implements Command {
 		Game game = null;
 
 		//Will fix in a second
-		game = facade.canDoAcceptTrade(params);
+		game = facade.canDoAcceptTrade(params, gameID);
 
 		result = new AcceptTrade_Result();
 
@@ -72,6 +73,8 @@ public class AcceptTrade_Command implements Command {
 
 				System.out.println("AcceptTrade_Command3");
 				//Check and see if they declined or accepted:
+				TradeInfo ti = game.getTradeOffer();
+				ResourceList o = ti.getOffer();
 				if (params.isWillAccept()) {
 
 					//The Order
@@ -81,8 +84,8 @@ public class AcceptTrade_Command implements Command {
 					//Ore
 					//Sheep
 
-					System.out.println("AcceptTrade_Command4");
-					ResourceList o = game.getTradeOffer().getOffer();
+					System.out.println("AcceptTrade_Command4");					
+					
 					int[] offer = new int[5];
 					int[] receive = new int[5];
 
@@ -118,19 +121,28 @@ public class AcceptTrade_Command implements Command {
 						offer[3] = 0;
 					}
 
-					if (o.getBrick() >= 0) {
+					if (o.getSheep() >= 0) {
 						offer[4] = o.getSheep();
 						receive[4] = 0;
 					} else {
 						receive[4] = o.getSheep();
 						offer[4] = 0;
 					}
+					
+					for (int i = 0; i < 5; i++){
+						
+						System.out.println("Trade offer index ["+i+"]: "+ offer[i]);
+						System.out.println("Trade receive index ["+i+"]: "+ receive[i]);
+					}
 
-					if (game.canDoPlayerDoDomesticTrade(game.getTradeOffer().getSender(), offer, userID, receive)) {
+					if (game.canDoPlayerDoDomesticTrade(ti.getSender(), offer, userID, receive)) {
 						System.out.println("AcceptTrade_Command5");
 						
 						//Now we operate to perform the trade
-						game.doDomesticTrade(game.getTradeOffer().getSender(), offer, userID, receive);
+						
+						//int user2 = game.getAllPlayers()[ti.getReceiver()].getPlayerId();
+						
+						game.doDomesticTrade(ti.getSender(), offer, ti.getReceiver(), receive);
 						
 						Game.Line[] history = game.getHistory();
 						Game.Line[] newHistory = new Game.Line[history.length+1];
@@ -141,8 +153,9 @@ public class AcceptTrade_Command implements Command {
 						
 						//Just a round-about way to create an object of type Game.Line without too much difficulty
 						Game.Line newEntry = game.new Line();
-						newEntry.setMessage(game.getPlayerByID(game.getTradeOffer().getSender()).getPlayerName() + " traded with " + game.getPlayerByID(game.getTradeOffer().getSender()).getPlayerName());
-						newEntry.setSource(game.getPlayerByID(game.getTradeOffer().getSender()).getPlayerName());
+						newEntry.setMessage(game.getPlayerByID(ti.getSender()).getPlayerName() 
+								+ " traded with " + game.getPlayerByID(ti.getReceiver()).getPlayerName());
+						newEntry.setSource(game.getPlayerByID(ti.getSender()).getPlayerName());
 						newHistory[history.length] = newEntry;
 						
 						game.setHistory(newHistory);
@@ -175,8 +188,8 @@ public class AcceptTrade_Command implements Command {
 					
 					//Just a round-about way to create an object of type Game.Line without too much difficulty
 					Game.Line newEntry = history[history.length-1];
-					newEntry.setMessage(" failed to trade with " + game.getPlayerByID(game.getTradeOffer().getSender()).getPlayerName());
-					newEntry.setSource(game.getPlayerByID(game.getTradeOffer().getSender()).getPlayerName());
+					newEntry.setMessage(" failed to trade with " + game.getPlayerByID(ti.getSender()).getPlayerName());
+					newEntry.setSource(game.getPlayerByID(ti.getSender()).getPlayerName());
 					newHistory[history.length] = newEntry;
 					
 					game.setHistory(newHistory);
@@ -201,6 +214,7 @@ public class AcceptTrade_Command implements Command {
 			}
 
 			JsonConverter converter = new JsonConverter();
+			game.setVersionNumber(game.getVersionNumber()+1);
 			ClientModel cm = converter.toClientModel(game);
 
 			System.out.println("AcceptTrade_Command9");

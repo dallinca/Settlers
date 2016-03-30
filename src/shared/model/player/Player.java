@@ -443,6 +443,7 @@ public class Player {
 		   }
 		   resourceCardHand.payForCity();
 		   playerPieces.placeCity(vertex);
+		   
 		   // increment victory points
 		   totalVictoryPoints++;
 	   }

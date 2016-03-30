@@ -135,8 +135,10 @@ public class OfferTrade_Command implements Command {
 		result.setValid(true);
 
 		JsonConverter converter = new JsonConverter();
+		
+		game.setVersionNumber(game.getVersionNumber()+1);
+		
 		ClientModel cm = converter.toClientModel(game);
-
 		System.out.println("OfferTrade_Command8");
 		result.setModel(cm);
 	}

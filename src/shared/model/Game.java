@@ -275,10 +275,10 @@ public class Game {
 			playersCollectResources(rollValue);
 		}*/
 		// If the roll is a seven, tell the client and wait for attempts to move the robber
-		
+
 		return rollValue;
 	}
-	
+
 	public void setRollDice(int UserId, int rollValue) throws Exception {
 		if(canDoRollDice(UserId) == false) {
 			throw new Exception("canDoRollDice == false");
@@ -645,10 +645,10 @@ public class Game {
 					return doWeHaveAWinner();
 
 				}
-				
-				
-				
-				
+
+
+
+
 			}
 		}
 		return doWeHaveAWinner();
@@ -680,15 +680,15 @@ public class Game {
 	 * 
 	 */
 	public void doMaritimeTrade(ResourceType tradeIn, ResourceType receive) throws Exception  {
-		
+
 		if (canDoPlayerDoMaritimeTrade(tradeIn, receive)) {
-			
+
 			ResourceCard[] tradingCards = currentPlayer.prepareBankTrade(tradeIn);
-			
+
 			bank.playerTurnInResources(tradingCards);
-			
+
 			currentPlayer.getResourceCardHand().addCard(bank.playerTakeResource(receive));
-			
+
 		} else
 			throw new Exception("Cannot do Maritime Trade");
 
@@ -827,7 +827,8 @@ public class Game {
 
 	/**
 	 * Does the actual Domestic trade
-	 * In the integer arrays passed in (p1 and p2 resources) the values at the index represent how many of a specific type of resource you are wanting to trade.
+	 * In the integer arrays passed in (p1 and p2 resources) the values at the index represent 
+	 * how many of a specific type of resource you are wanting to trade.
 	 * Each index is represented as follows:
 	 * 0 = brick
 	 * 1 = wood
@@ -840,50 +841,96 @@ public class Game {
 	 * 
 	 */
 	public void doDomesticTrade(int p1id, int[] p1resources, int p2id, int[] p2resources) throws Exception {
-		if (canDoPlayerDoDomesticTrade(p1id, p1resources, p2id, p2resources)) {
-			ResourceType resourceType = null;
-			for (int i = 0; i < p1resources.length; i++) {
-				if (p1resources[i] > 0) {
-					if (i == 0)
-						resourceType = ResourceType.BRICK;
-					else if (i == 1)
-						resourceType = ResourceType.WOOD;
-					else if (i == 2)
-						resourceType = ResourceType.WHEAT;
-					else if (i == 3)
-						resourceType = ResourceType.ORE;
-					else if (i == 4)
-						resourceType = ResourceType.SHEEP;
-					ResourceCard[] trade = players[p1id].preparePlayerTrade(resourceType, p1resources[i]);
 
+		if (canDoPlayerDoDomesticTrade(p1id, p1resources, p2id, p2resources)) {
+
+			ResourceType resourceType = null;
+
+			System.out.println("PLAYER 1");
+
+			for (int i = 0; i < p1resources.length; i++) {
+
+				if (p1resources[i] > 0) {
+
+					if (i == 0){
+
+						resourceType = ResourceType.BRICK;
+
+						System.out.println("BRICK");
+					}
+
+					else if (i == 1){
+						resourceType = ResourceType.WOOD;
+
+						System.out.println("WOOD");
+					}
+					else if (i == 2){
+						resourceType = ResourceType.WHEAT;
+
+						System.out.println("WHEAT");
+					}
+					else if (i == 3){
+						resourceType = ResourceType.ORE;
+
+						System.out.println("ORE");
+					}
+					else if (i == 4){
+						resourceType = ResourceType.SHEEP;
+						System.out.println("SHEEP");
+					}	
+
+					ResourceCard[] trade = players[p1id].preparePlayerTrade(resourceType, p1resources[i]);
+					System.out.println("TRADE: "+trade.length);
+					
 					for (int g = 0; g < p1resources[i]; g++) {
 						players[p2id].getResourceCardHand().addCard(trade[g]);
+						System.out.println("HAPPENING");
 					}
 				}
 			}
+
+			System.out.println("PLAYER 2");
 
 			for (int t = 0; t < p2resources.length; t++) {
-				if (p2resources[t] > 0) {
-					if (t == 0)
-						resourceType = ResourceType.BRICK;
-					else if (t == 1)
-						resourceType = ResourceType.WOOD;
-					else if (t == 2)
-						resourceType = ResourceType.WHEAT;
-					else if (t == 3)
-						resourceType = ResourceType.ORE;
-					else if (t == 4)
-						resourceType = ResourceType.SHEEP;
-					ResourceCard[] trade = players[p2id].preparePlayerTrade(resourceType, p2resources[t]);
 
-					for (int g = 0; g < p1resources[t]; g++) {
+				if (p2resources[t] < 0) {
+
+					if (t == 0){
+						resourceType = ResourceType.BRICK;
+						System.out.println("BRICK");
+					}
+					else if (t == 1){
+						resourceType = ResourceType.WOOD;
+						System.out.println("WOOD");
+					}
+					else if (t == 2){
+						resourceType = ResourceType.WHEAT;
+						System.out.println("WHEAT");
+					}
+					else if (t == 3){
+						resourceType = ResourceType.ORE;
+
+						System.out.println("ORE");
+					}
+					else if (t == 4){
+						resourceType = ResourceType.SHEEP;
+						System.out.println("SHEEP");
+					}
+					
+					ResourceCard[] trade = players[p2id].preparePlayerTrade(resourceType, -p2resources[t]);
+					System.out.println("TRADE: "+trade.length);
+					
+					for (int g = 0; g < trade.length; g++) {
 						players[p1id].getResourceCardHand().addCard(trade[g]);
+						System.out.println("HAPPENING");
 					}
 				}
 			}
 
-		} else 
+		} else			
 			throw new Exception("You cannot trade!!");
+
+
 	}
 
 
@@ -1145,7 +1192,7 @@ public class Game {
 	public Player getPlayerByID(int playerID) {
 		for (int i = 0; i < numberofPlayers; i++) {
 			if (players[i]==null){
-				
+
 			}
 			else if (playerID == players[i].getPlayerId()) {
 				return players[i];
