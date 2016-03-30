@@ -436,12 +436,14 @@ public class ServerFacade implements IServerFacade {
 			if(game.canDoStealPlayerResource(stealer.getPlayerId(), victim.getPlayerId() )){ // USER Id, VICTIM Id
 
 				//System.out.println("canDoRobPlayer 7");
+				game.setVersionNumber(game.getVersionNumber() + 1);
 				return game;
 			}
 
 		}
 
 
+		game.setVersionNumber(game.getVersionNumber() + 1);
 		//System.out.println("canDoRobPlayer 8");
 		return null;
 	}

@@ -32,7 +32,7 @@ public class Game {
 	//private boolean inSetUpPhase = true; // This is a state boolean for the first two setup rounds
 	private Player[] players = null;
 	private Player currentPlayer = null;
-	private Board board = null;;
+	private Board board = null;
 	private Player largestArmy;
 	private Player longestRoad;
 	private static int numberofPlayers = 4;
@@ -979,6 +979,17 @@ public class Game {
 		if(turnNumber < 2) {
 			board.placeInitialSettlementOnVertex(currentPlayer, vertexLocation);
 			versionNumber++;
+			// Here we collect the resources for the second placed settlement in setup round
+			if(turnNumber == 1) {
+				Hex[] adjacentHexes = board.getVertex(vertexLocation).getAdjacentHexes();
+				for(Hex hex: adjacentHexes) {
+					if(hex != null) {
+						ResourceType hexResourceType = hex.getHexResourceType();
+						ResourceCard card = bank.playerTakeResource(hexResourceType);
+						currentPlayer.getResourceCardHand().addCard(card);
+					}
+				}
+			}
 		} else {
 			board.placeSettlementOnVertex(currentPlayer, vertexLocation);
 			versionNumber++;
