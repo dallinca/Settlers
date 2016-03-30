@@ -65,6 +65,7 @@ public class DiscardCards_Command implements Command {
 			game.discardNumberOfResourceType(userID, params.getDiscardedCards().getSheep(), ResourceType.SHEEP);
 			game.discardNumberOfResourceType(userID, params.getDiscardedCards().getWheat(), ResourceType.WHEAT);
 			game.discardNumberOfResourceType(userID, params.getDiscardedCards().getWood(), ResourceType.WOOD);
+			game.setVersionNumber(game.getVersionNumber() + 1);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return;
