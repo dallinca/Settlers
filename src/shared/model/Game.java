@@ -285,6 +285,13 @@ public class Game {
 		}
 		if(rollValue == 7) {
 			status = "Robbing";
+			// If there is any player that has more than 7 cards and has not yet discarded this turn
+			// must discard, so we set the game status to "Discarding"
+			for(Player player: players) {
+				if(player.getResourceCardHandSize() > 7 && player.isHasDiscarded() == false) {
+					status = "Discarding";
+				}
+			}
 		} else {
 			status = "Playing";
 			playersCollectResources(rollValue);
@@ -1190,7 +1197,18 @@ public class Game {
 	 */
 	public void discardNumberOfResourceType(int UserId, int numberToDiscard, ResourceType resourceType) throws Exception {
 		getPlayerByID(UserId).discardResourcesOfType(resourceType, numberToDiscard);
-
+		getPlayerByID(UserId).setHasDiscarded(true);
+		status = "Robbing";
+		System.out.println("Status: " + status);
+		// If there is any player that has more than 7 cards and has not yet discarded this turn
+		// must discard, so we set the game status to "Discarding"
+		for(Player player: players) {
+			if(player.getResourceCardHandSize() > 7 && player.isHasDiscarded() == false) {
+				status = "Discarding";
+				System.out.println("Status: " + status);
+			}
+		}
+		
 	}
 
 	/**
