@@ -90,11 +90,11 @@ public class RobPlayer_Command implements Command {
 		}
 		
 		result.setValid(true);
-
+		game.setVersionNumber(game.getVersionNumber() + 1);
 		//System.out.println("RobPlayer_Command5");
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);
-
+		
 		//System.out.println("RobPlayer_Command6");
 		result.setModel(cm);
 	}
