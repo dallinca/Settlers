@@ -70,7 +70,7 @@ public class BuildCity_Command implements Command {
 				game.placeCityOnVertex(params.getCmdVertLocation());
 				Game.Line[] history = game.getHistory();
 				Game.Line[] newHistory = new Game.Line[history.length+1];
-				
+
 				for (int i = 0; i < history.length; i++) {
 					newHistory[i] = history[i];
 				}
