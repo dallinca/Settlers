@@ -65,6 +65,22 @@ public class RollNumber_Command implements Command {
 		try {
 			System.out.println("RollNumber_Command3");
 			game.setRollDice(userID, params.getNumber());
+			
+			Game.Line[] history = game.getHistory();
+			Game.Line[] newHistory = new Game.Line[history.length+1];
+			
+			for (int i = 0; i < history.length; i++) {
+				newHistory[i] = history[i];
+			}
+			
+			//Just a round-about way to create an object of type Game.Line without too much difficulty
+			Game.Line newEntry = game.new Line();
+			newEntry.setMessage(game.getPlayerByID(userID).getPlayerName() + " rolled a " + params.getNumber());
+			newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
+			newHistory[history.length] = newEntry;
+			
+			game.setHistory(newHistory);
+			
 		} catch (Exception e) {
 			System.out.println("RollNumber_Command4");
 			e.printStackTrace();

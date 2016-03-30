@@ -98,20 +98,33 @@ public class PlayMonopoly_Command implements Command {
 				try {	
 					game.useDevelopmentCard(userID, DevCardType.MONOPOLY, resourceType);
 					Game.Line[] history = game.getHistory();
-					Game.Line[] newHistory = new Game.Line[history.length+1];
 					
-					for (int i = 0; i < history.length; i++) {
-						newHistory[i] = history[i];
+					
+					if (history == null) {
+						history = new Game.Line[1];
+						Game.Line firstLine = game.new Line();
+						firstLine.setMessage(game.getPlayerByID(userID).getPlayerName() + "played a Monopoly card");
+						firstLine.setSource(game.getPlayerByID(userID).getPlayerName());
+						history[0] = firstLine;
+						game.setHistory(history);
+						
+					} else {
+						Game.Line[] newHistory = new Game.Line[history.length+1];
+						
+						for (int i = 0; i < history.length; i++) {
+							newHistory[i] = history[i];
+						}
+						
+						//Just a round-about way to create an object of type Game.Line without too much difficulty
+						Game.Line newEntry = game.new Line();
+						newEntry.setMessage(game.getPlayerByID(userID).getPlayerName() + " played a Monopoly card");
+						newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
+						
+						newHistory[history.length] = newEntry;
+						
+						game.setHistory(newHistory);
 					}
 					
-					//Just a round-about way to create an object of type Game.Line without too much difficulty
-					Game.Line newEntry = history[history.length-1];
-					newEntry.setMessage("played a monopoly card.");
-					newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
-					newHistory[history.length] = newEntry;
-					
-					game.setHistory(newHistory);
-					System.out.println("PlayMonopoly_Command just operated on the game");
 
 				} catch (Exception e) {
 					System.out.println("");

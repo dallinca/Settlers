@@ -7,6 +7,7 @@ import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
 import shared.communication.results.move.BuildSettlement_Result;
 import shared.model.Game;
+import shared.model.Game.Line;
 
 /**
  * Concrete command implementing the Command interface.
@@ -35,7 +36,7 @@ public class BuildSettlement_Command implements Command {
 	 * @param game
 	 */
 	public BuildSettlement_Command(IServerFacade facade) {
-	//	this.facade = facade;
+		//	this.facade = facade;
 	}
 
 	public BuildSettlement_Command(BuildSettlement_Params params, int gameID, int userID) {
@@ -70,6 +71,33 @@ public class BuildSettlement_Command implements Command {
 		try {
 			System.out.println("BuildSettlement_Command3");
 			game.placeSettlementOnVertex(userID, params.getCmdVertLocation());
+			Game.Line[] history = game.getHistory();
+
+			if (history == null) {
+				history = new Game.Line[1];
+				Game.Line firstLine = game.new Line();
+				firstLine.setMessage(game.getPlayerByID(userID).getPlayerName() + " built a settlement");
+				firstLine.setSource(game.getPlayerByID(userID).getPlayerName());
+				history[0] = firstLine;
+				game.setHistory(history);
+
+			} else {
+
+				Game.Line[] newHistory = new Game.Line[history.length+1];
+
+				for (int i = 0; i < history.length; i++) {
+					newHistory[i] = history[i];
+				}
+
+				//Just a round-about way to create an object of type Game.Line without too much difficulty
+				Game.Line newEntry = game.new Line();
+				newEntry.setMessage(game.getPlayerByID(userID).getPlayerName() + " built a settlement");
+				newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
+
+				newHistory[history.length] = newEntry;
+
+				game.setHistory(newHistory);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return;

@@ -71,7 +71,35 @@ public class BuildRoad_Command implements Command {
 			try {
 				System.out.println("Placing road on edge.");
 				
+				System.out.println("AASDFLKJSDFKLJSHDFASKJHASDFKLJHADFLAKSJFLK");
+				
 				game.placeRoadOnEdge(userID, params.getCmdEdgeLocation() );
+				Game.Line[] history = game.getHistory();
+				
+				if (history == null) {
+					history = new Game.Line[1];
+					Game.Line firstLine = game.new Line();
+					firstLine.setMessage(game.getPlayerByID(userID).getPlayerName() + " built a road");
+					firstLine.setSource(game.getPlayerByID(userID).getPlayerName());
+					history[0] = firstLine;
+					game.setHistory(history);
+					
+				} else {
+					Game.Line[] newHistory = new Game.Line[history.length+1];
+					
+					for (int i = 0; i < history.length; i++) {
+						newHistory[i] = history[i];
+					}
+					
+					//Just a round-about way to create an object of type Game.Line without too much difficulty
+					Game.Line newEntry = game.new Line();
+					newEntry.setMessage(game.getPlayerByID(userID).getPlayerName() + " built a road");
+					newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
+					
+					newHistory[history.length] = newEntry;
+					
+					game.setHistory(newHistory);
+				}
 								
 				Player longest = game.getLongestRoad();
 				Player p = game.getPlayerByID(userID);					

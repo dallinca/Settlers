@@ -834,7 +834,12 @@ public class ServerFacade implements IServerFacade {
 		Player[] players = new Player[4];		
 		Board board = new Board(tiles, numbers, ports);
 		Game game = new Game(players, board, new Bank());
-
+		
+		/*Game.Line[] initHistory = new Game.Line[1];
+		initHistory[0].setMessage("");
+		initHistory[0].setSource("");*/
+		//game.setHistory(initHistory);
+		
 		game.setTitle(name);		
 		game.setGameID(gameTracker++);
 

@@ -7,6 +7,7 @@ import shared.communication.results.JsonConverter;
 import shared.communication.results.move.devcard.PlayMonument_Result;
 import shared.definitions.DevCardType;
 import shared.model.Game;
+import shared.model.Game.Line;
 
 /**
  * Concrete command implementing the Command interface.
@@ -68,19 +69,32 @@ public class PlayMonument_Command implements Command {
 			try {
 				game.useMonumentCard(userID, DevCardType.MONUMENT);
 				Game.Line[] history = game.getHistory();
-				Game.Line[] newHistory = new Game.Line[history.length+1];
-				
-				for (int i = 0; i < history.length; i++) {
-					newHistory[i] = history[i];
+								
+				if (history == null) {
+					history = new Game.Line[1];
+					Game.Line firstLine = game.new Line();
+					firstLine.setMessage(game.getPlayerByID(userID).getPlayerName() + "played a Monument card");
+					firstLine.setSource(game.getPlayerByID(userID).getPlayerName());
+					history[0] = firstLine;
+					game.setHistory(history);
+					
+				} else {
+					Game.Line[] newHistory = new Game.Line[history.length+1];
+					
+					for (int i = 0; i < history.length; i++) {
+						newHistory[i] = history[i];
+					}
+					
+					//Just a round-about way to create an object of type Game.Line without too much difficulty
+					Game.Line newEntry = game.new Line();
+					newEntry.setMessage(game.getPlayerByID(userID).getPlayerName() + " played a Monument card");
+					newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
+					
+					newHistory[history.length] = newEntry;
+					
+					game.setHistory(newHistory);
 				}
 				
-				//Just a round-about way to create an object of type Game.Line without too much difficulty
-				Game.Line newEntry = history[history.length-1];
-				newEntry.setMessage("played a monument card.");
-				newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
-				newHistory[history.length] = newEntry;
-				
-				game.setHistory(newHistory);
 				System.out.println("PlayMonopoly_Command just operated on the game");
 				
 				System.out.println("PlayMonument_Command operated on game");

@@ -92,7 +92,7 @@ public class PlayYearOfPlenty_Command implements Command {
 			
 			//Just a round-about way to create an object of type Game.Line without too much difficulty
 			Game.Line newEntry = history[history.length-1];
-			newEntry.setMessage("played a year of plenty card.");
+			newEntry.setMessage(game.getPlayerByID(userID).getPlayerName() + " played a year of plenty card.");
 			newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
 			newHistory[history.length] = newEntry;
 			

@@ -37,13 +37,17 @@ public class GameHistoryController extends Controller implements IGameHistoryCon
 		
 		if (Client.getInstance().getGame() != null) {
 			Game.Line[] history = Client.getInstance().getGame().getHistory();
+			
+			
 			Player[] players =  Client.getInstance().getGame().getAllPlayers();
 			
 			for (int i = 0; i < history.length; i++) {  
 				//Get color or user, if user than we can call the color method in the client or something...?
 				 String user = history[i].getSource();
 				 String action = history[i].getMessage(); 
-							 
+					
+				 System.out.println(user + " " + action + " the command");
+				 
 				 CatanColor color = null;
 							 
 				 //Now we have to acertain the color of the player based on the sender:
@@ -87,7 +91,7 @@ public class GameHistoryController extends Controller implements IGameHistoryCon
 			//Get color or user, if user than we can call the color method in the client or something...?
 			 String user = history[i].getSource();
 			 String action = history[i].getMessage(); 
-			 
+			 System.out.println(action + " the command");
 			 CatanColor color = null;
 			 
 			 //Now we have to acertain the color of the player based on the sender:

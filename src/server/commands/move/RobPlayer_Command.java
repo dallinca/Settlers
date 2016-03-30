@@ -6,6 +6,7 @@ import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
 import shared.communication.results.move.RobPlayer_Result;
 import shared.model.Game;
+import shared.model.Game.Line;
 
 /**
  * Concrete command implementing the Command interface.
@@ -65,6 +66,22 @@ public class RobPlayer_Command implements Command {
 			//System.out.println("RobPlayer_Command3");
 			game.moveRobberToHex(userID, params.getLocation());
 			game.stealPlayerResource(userID, params.getVictimIndex());
+			
+			Game.Line[] history = game.getHistory();
+			Game.Line[] newHistory = new Game.Line[history.length+1];
+			
+			for (int i = 0; i < history.length; i++) {
+				newHistory[i] = history[i];
+			}
+			
+			//Just a round-about way to create an object of type Game.Line without too much difficulty
+			Game.Line newEntry = game.new Line();
+			newEntry.setMessage(game.getPlayerByID(userID).getPlayerName() + " robbed" + game.getAllPlayers()[params.getVictimIndex()].getPlayerName());
+			newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
+			newHistory[history.length] = newEntry;
+			
+			game.setHistory(newHistory);
+			
 		} catch (Exception e) {
 			//System.out.println("RobPlayer_Command4");
 			e.printStackTrace();
