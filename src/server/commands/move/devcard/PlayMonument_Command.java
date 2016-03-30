@@ -67,6 +67,22 @@ public class PlayMonument_Command implements Command {
 		if (game != null) {
 			try {
 				game.useMonumentCard(userID, DevCardType.MONUMENT);
+				Game.Line[] history = game.getHistory();
+				Game.Line[] newHistory = new Game.Line[history.length+1];
+				
+				for (int i = 0; i < history.length; i++) {
+					newHistory[i] = history[i];
+				}
+				
+				//Just a round-about way to create an object of type Game.Line without too much difficulty
+				Game.Line newEntry = history[history.length-1];
+				newEntry.setMessage("played a monument card.");
+				newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
+				newHistory[history.length] = newEntry;
+				
+				game.setHistory(newHistory);
+				System.out.println("PlayMonopoly_Command just operated on the game");
+				
 				System.out.println("PlayMonument_Command operated on game");
 			} catch (Exception e) {
 				System.out.println("");

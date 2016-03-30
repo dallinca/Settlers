@@ -82,6 +82,22 @@ public class PlayYearOfPlenty_Command implements Command {
 	if (game != null) {
 		try {
 			game.useDevelopmentCard(userID, DevCardType.YEAR_OF_PLENTY, resourceType);
+			
+			Game.Line[] history = game.getHistory();
+			Game.Line[] newHistory = new Game.Line[history.length+1];
+			
+			for (int i = 0; i < history.length; i++) {
+				newHistory[i] = history[i];
+			}
+			
+			//Just a round-about way to create an object of type Game.Line without too much difficulty
+			Game.Line newEntry = history[history.length-1];
+			newEntry.setMessage("played a year of plenty card.");
+			newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
+			newHistory[history.length] = newEntry;
+			
+			game.setHistory(newHistory);
+			
 			System.out.println("PlayYearOfPlenty_command just operated on the game");
 		} catch (Exception e) {
 			new PlayYearOfPlenty_Result();

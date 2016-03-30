@@ -69,6 +69,29 @@ public class PlaySoldier_Command implements Command {
 		if (game != null) {
 			try {
 				game.useSoldierCard(userID, params);
+				Game.Line[] history = game.getHistory();
+				Game.Line[] newHistory = new Game.Line[history.length+3];
+				
+				for (int i = 0; i < history.length; i++) {
+					newHistory[i] = history[i];
+				}
+				
+				//Just a round-about way to create an object of type Game.Line without too much difficulty
+				Game.Line newEntry = history[history.length-1];
+				newEntry.setMessage("played a solider card.");
+				newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
+				newHistory[history.length] = newEntry;
+				
+				//This re-writes newEntry, I don't have to create more variables.
+				newEntry.setMessage("moved the robber.");
+				newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
+				newHistory[history.length+1] = newEntry;
+								
+				newEntry.setMessage("robbed " + game.getPlayerByID(params.getVictimIndex()).getPlayerName());
+				newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
+				newHistory[history.length+2] = newEntry;
+				
+				game.setHistory(newHistory);
 				System.out.println("PlaySoldier_command operated on the game");
 				
 			} catch (Exception e) {

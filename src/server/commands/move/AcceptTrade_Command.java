@@ -132,6 +132,21 @@ public class AcceptTrade_Command implements Command {
 						//Now we operate to perform the trade
 						game.doDomesticTrade(game.getTradeOffer().getSender(), offer, userID, receive);
 						
+						Game.Line[] history = game.getHistory();
+						Game.Line[] newHistory = new Game.Line[history.length+1];
+						
+						for (int i = 0; i < history.length; i++) {
+							newHistory[i] = history[i];
+						}
+						
+						//Just a round-about way to create an object of type Game.Line without too much difficulty
+						Game.Line newEntry = history[history.length-1];
+						newEntry.setMessage(game.getPlayerByID(game.getTradeOffer().getSender()).getPlayerName() + " traded with " + game.getPlayerByID(game.getTradeOffer().getSender()).getPlayerName());
+						newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
+						newHistory[history.length] = newEntry;
+						
+						game.setHistory(newHistory);
+						
 						result.setValid(true);
 						game.setTradeOffer(null);
 						

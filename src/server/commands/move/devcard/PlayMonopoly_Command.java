@@ -1,5 +1,6 @@
 package server.commands.move.devcard;
 
+import client.Client;
 import server.commands.Command;
 import server.facade.IServerFacade;
 import shared.communication.params.move.devcard.PlayMonopoly_Params;
@@ -9,6 +10,7 @@ import shared.communication.results.move.devcard.PlayMonopoly_Result;
 import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
 import shared.model.Game;
+import shared.model.Game.Line;
 
 /**
  * Concrete command implementing the Command interface.
@@ -95,6 +97,20 @@ public class PlayMonopoly_Command implements Command {
 			if (game.canDoPlayerUseDevelopmentCard(userID, DevCardType.MONOPOLY)) {
 				try {	
 					game.useDevelopmentCard(userID, DevCardType.MONOPOLY, resourceType);
+					Game.Line[] history = game.getHistory();
+					Game.Line[] newHistory = new Game.Line[history.length+1];
+					
+					for (int i = 0; i < history.length; i++) {
+						newHistory[i] = history[i];
+					}
+					
+					//Just a round-about way to create an object of type Game.Line without too much difficulty
+					Game.Line newEntry = history[history.length-1];
+					newEntry.setMessage("played a monopoly card.");
+					newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
+					newHistory[history.length] = newEntry;
+					
+					game.setHistory(newHistory);
 					System.out.println("PlayMonopoly_Command just operated on the game");
 
 				} catch (Exception e) {

@@ -78,8 +78,34 @@ public class PlayRoadBuilding_Command implements Command {
 			if (game != null) {
 				try {
 					game.placeRoadOnEdge(userID, edge1, true);
+					System.out.println("PlayMonopoly_Command just operated on the game");					
+					
+					Game.Line[] history = game.getHistory();
+					Game.Line[] newHistory = new Game.Line[history.length+3];
+					
+					for (int i = 0; i < history.length; i++) {
+						newHistory[i] = history[i];
+					}
+					
+					//Just a round-about way to create an object of type Game.Line without too much difficulty
+					Game.Line newEntry = history[history.length-1];
+					newEntry.setMessage("played a road building card.");
+					newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
+					newHistory[history.length] = newEntry;
+					
+					//This re-writes newEntry, I don't have to create more variables.
+					newEntry.setMessage("built a road.");
+					newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
+					newHistory[history.length+1] = newEntry;
+					
 					System.out.println("PlayRoadBuilding_Command placed one road");
 					game.placeRoadOnEdge(userID, edge2, true);
+					
+					newEntry.setMessage("built a road.");
+					newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
+					newHistory[history.length+2] = newEntry;
+					
+					game.setHistory(newHistory);
 					System.out.println("PlayRoadBuilding_Command placed second road");
 				} catch (Exception e) {
 					new PlayRoadBuilding_Result();
