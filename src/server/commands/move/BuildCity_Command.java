@@ -77,7 +77,7 @@ public class BuildCity_Command implements Command {
 				
 				//Just a round-about way to create an object of type Game.Line without too much difficulty
 				Game.Line newEntry = game.new Line();
-				newEntry.setMessage(" built a city");
+				newEntry.setMessage(game.getPlayerByID(userID).getPlayerName() + " built a city");
 				newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
 				newHistory[history.length] = newEntry;
 				
@@ -85,6 +85,7 @@ public class BuildCity_Command implements Command {
 			} catch (Exception e) {
 				new BuildCity_Result();
 				e.printStackTrace();
+				System.out.println(e.getMessage());
 				return;
 			}
 		} else {

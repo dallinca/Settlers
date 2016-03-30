@@ -113,7 +113,7 @@ public class DevelopmentCardHand {
 			}
 		} else if(devCardType == DevCardType.MONUMENT) {
 			for(DevelopmentCard VP : victoryPointCards) {
-				if(VP.hasBeenPlayed() == false && VP.getTurnBought() < turnNumber) {
+				if(VP.hasBeenPlayed() == false && VP.getTurnBought() <= turnNumber) {
 					return true;
 				}
 			}

@@ -521,6 +521,7 @@ public class Game {
 						}
 					}
 					currentPlayer.playDevelopmentCard(turnNumber, DevCardType.MONOPOLY);
+					currentPlayer.setHasPlayedDevCardThisTurn(true);
 					setVersionNumber(versionNumber++);
 					return doWeHaveAWinner();
 				case YEAR_OF_PLENTY:
@@ -542,6 +543,7 @@ public class Game {
 							}
 						}
 						currentPlayer.playDevelopmentCard(turnNumber, DevCardType.YEAR_OF_PLENTY);
+						currentPlayer.setHasPlayedDevCardThisTurn(true);
 						setVersionNumber(versionNumber++);
 						return doWeHaveAWinner();
 					} else {
@@ -570,7 +572,8 @@ public class Game {
 			if (currentPlayer.canDoPlayDevelopmentCard(turnNumber, devCardType)) {
 				//Marks the card as played
 				currentPlayer.playDevelopmentCard(turnNumber, devCardType);
-
+				currentPlayer.setHasPlayedDevCardThisTurn(true);
+				
 				//Now do what monuments do:
 				currentPlayer.incrementVictoryPoints();
 				setVersionNumber(versionNumber++);
@@ -595,6 +598,7 @@ public class Game {
 						moveRobberToHex(userID, params.getLocation());
 						stealPlayerResource(userID, params.getVictimIndex());
 						currentPlayer.playDevelopmentCard(turnNumber, DevCardType.SOLDIER);
+						currentPlayer.setHasPlayedDevCardThisTurn(true);
 					} catch (Exception e) {
 						System.out.println("Something went wrong when trying to move the robber or steal resources");
 						e.printStackTrace();
@@ -1028,6 +1032,7 @@ public class Game {
 	public void placeCityOnVertex(VertexLocation vertexLocation) throws Exception {
 		if(canDoPlaceCityOnVertex(vertexLocation)) {
 			board.placeCityOnVertex(currentPlayer, vertexLocation);
+			versionNumber++;
 			versionNumber++;
 		}
 		else
