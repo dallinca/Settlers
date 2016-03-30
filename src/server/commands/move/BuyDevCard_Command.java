@@ -7,6 +7,7 @@ import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
 import shared.communication.results.move.BuyDevCard_Result;
 import shared.model.Game;
+import shared.model.Game.Line;
 import shared.model.player.exceptions.CannotBuyException;
 import shared.model.player.exceptions.InsufficientPlayerResourcesException;
 
@@ -72,6 +73,20 @@ public class BuyDevCard_Command implements Command {
 		try {
 			System.out.println("BuyDevCard_Command3");
 			game.buyDevelopmentCard();
+			Game.Line[] history = game.getHistory();
+			Game.Line[] newHistory = new Game.Line[history.length+1];
+			
+			for (int i = 0; i < history.length; i++) {
+				newHistory[i] = history[i];
+			}
+			
+			//Just a round-about way to create an object of type Game.Line without too much difficulty
+			Game.Line newEntry = game.new Line();
+			newEntry.setMessage(" bought a development card");
+			newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
+			newHistory[history.length] = newEntry;
+			
+			game.setHistory(newHistory);
 		} catch (CannotBuyException e) {
 			e.printStackTrace();
 			return;

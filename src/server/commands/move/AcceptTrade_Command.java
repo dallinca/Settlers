@@ -140,9 +140,9 @@ public class AcceptTrade_Command implements Command {
 						}
 						
 						//Just a round-about way to create an object of type Game.Line without too much difficulty
-						Game.Line newEntry = history[history.length-1];
+						Game.Line newEntry = game.new Line();
 						newEntry.setMessage(game.getPlayerByID(game.getTradeOffer().getSender()).getPlayerName() + " traded with " + game.getPlayerByID(game.getTradeOffer().getSender()).getPlayerName());
-						newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
+						newEntry.setSource(game.getPlayerByID(game.getTradeOffer().getSender()).getPlayerName());
 						newHistory[history.length] = newEntry;
 						
 						game.setHistory(newHistory);
@@ -166,6 +166,24 @@ public class AcceptTrade_Command implements Command {
 					}
 				} else {
 
+					Game.Line[] history = game.getHistory();
+					Game.Line[] newHistory = new Game.Line[history.length+1];
+					
+					for (int i = 0; i < history.length; i++) {
+						newHistory[i] = history[i];
+					}
+					
+					//Just a round-about way to create an object of type Game.Line without too much difficulty
+					Game.Line newEntry = history[history.length-1];
+					newEntry.setMessage(" failed to trade with " + game.getPlayerByID(game.getTradeOffer().getSender()).getPlayerName());
+					newEntry.setSource(game.getPlayerByID(game.getTradeOffer().getSender()).getPlayerName());
+					newHistory[history.length] = newEntry;
+					
+					game.setHistory(newHistory);
+					
+					result.setValid(true);
+					game.setTradeOffer(null);
+					
 					System.out.println("AcceptTrade_Command7");
 					result.setValid(false);
 					game.setTradeOffer(null);

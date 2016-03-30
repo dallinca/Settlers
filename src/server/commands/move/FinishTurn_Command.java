@@ -63,6 +63,20 @@ public class FinishTurn_Command implements Command {
 		//Well at the very least we need to move to the next player! But we should probably come up with the action associated with this as it gets sent back across
 		//For the game history controller at least
 		game.incrementPlayer();
+		Game.Line[] history = game.getHistory();
+		Game.Line[] newHistory = new Game.Line[history.length+1];
+		
+		for (int i = 0; i < history.length; i++) {
+			newHistory[i] = history[i];
+		}
+		
+		//Just a round-about way to create an object of type Game.Line without too much difficulty
+		Game.Line newEntry = game.new Line();
+		newEntry.setMessage(game.getPlayerByID(userID).getPlayerName() + "'s turn just ended.");
+		newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
+		newHistory[history.length] = newEntry;
+		
+		game.setHistory(newHistory);
 	
 		result.setValid(true);
 		result.setGame(game);

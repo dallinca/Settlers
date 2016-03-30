@@ -83,7 +83,7 @@ public class PlaySoldier_Command implements Command {
 				newHistory[history.length] = newEntry;
 				
 				//This re-writes newEntry, I don't have to create more variables.
-				newEntry.setMessage("moved the robber.");
+				newEntry.setMessage(game.getPlayerByID(userID).getPlayerName() + " moved the robber.");
 				newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
 				newHistory[history.length+1] = newEntry;
 								

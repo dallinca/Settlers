@@ -23,8 +23,8 @@ import shared.model.board.Vertex;
 
 
 /**
- * The Game class is essentially a combination of the traditional game class and the bank. It keeps track of how many un-used resource cards and development cards there are.
- * It also handles all transactions a player may make whether through trading or turning in cards after being robbed. 
+ * The Game class handles all of the classic actions that occur during a game and their various can-dos. Since the last update this class was split into two with a more specialized version now called "Bank.java"
+ * Now the game class has a primary function of performing operations on model classes and verifying if they can be done or not. This will be used heavily when executing commands. 
  * It also keeps track of how many players there are, who is next, and who is the current player.
  */
 public class Game {

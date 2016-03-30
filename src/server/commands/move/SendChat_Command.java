@@ -64,7 +64,7 @@ public class SendChat_Command implements Command {
 
 		System.out.println("SendChat_Command3");
 		
-		Line message = game. new Line(); 
+		Line message = game.new Line(); 
 		message.setMessage(params.getContent());
 		message.setSource(game.getAllPlayers()[params.getPlayerIndex()].getPlayerName());
 		
