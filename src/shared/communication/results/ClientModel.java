@@ -183,7 +183,7 @@ public class ClientModel {
 
 			for (int i = 0; i< logs.length; i++){
 				this.lines[i] = new MessageLine(logs[i]);
-				System.out.println("-----------------" + this.lines[i].getMessage());
+				//System.out.println("-----------------" + this.lines[i].getMessage());
 			}
 		}
 

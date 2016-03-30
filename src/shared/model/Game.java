@@ -520,6 +520,7 @@ public class Game {
 							players[i].conformToMonopoly(resourceType[0]).clear();
 						}
 					}
+					currentPlayer.playDevelopmentCard(turnNumber, DevCardType.MONOPOLY);
 					setVersionNumber(versionNumber++);
 					return doWeHaveAWinner();
 				case YEAR_OF_PLENTY:
@@ -540,6 +541,7 @@ public class Game {
 								currentPlayer.conformToMonopoly(resourceType[g]).add(resource);
 							}
 						}
+						currentPlayer.playDevelopmentCard(turnNumber, DevCardType.YEAR_OF_PLENTY);
 						setVersionNumber(versionNumber++);
 						return doWeHaveAWinner();
 					} else {
@@ -592,6 +594,7 @@ public class Game {
 					try {
 						moveRobberToHex(userID, params.getLocation());
 						stealPlayerResource(userID, params.getVictimIndex());
+						currentPlayer.playDevelopmentCard(turnNumber, DevCardType.SOLDIER);
 					} catch (Exception e) {
 						System.out.println("Something went wrong when trying to move the robber or steal resources");
 						e.printStackTrace();

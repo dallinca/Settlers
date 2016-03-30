@@ -87,7 +87,7 @@ public class PlaySoldier_Command implements Command {
 				newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
 				newHistory[history.length+1] = newEntry;
 								
-				newEntry.setMessage("robbed " + game.getPlayerByID(params.getVictimIndex()).getPlayerName());
+				newEntry.setMessage(game.getPlayerByID(userID).getPlayerName() + " robbed " + game.getPlayerByID(params.getVictimIndex()).getPlayerName());
 				newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
 				newHistory[history.length+2] = newEntry;
 				

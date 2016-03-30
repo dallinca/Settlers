@@ -82,7 +82,7 @@ public class BuyDevCard_Command implements Command {
 			
 			//Just a round-about way to create an object of type Game.Line without too much difficulty
 			Game.Line newEntry = game.new Line();
-			newEntry.setMessage(" bought a development card");
+			newEntry.setMessage(game.getPlayerByID(userID).getPlayerName() + " bought a development card");
 			newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
 			newHistory[history.length] = newEntry;
 			
