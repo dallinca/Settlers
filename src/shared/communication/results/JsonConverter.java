@@ -812,10 +812,7 @@ public class JsonConverter {
 			}
 			for(City Zcity: Zplayer.getPlayerPieces().getCities()) {
 				// If the city has been placed
-				if(Zcity.getVertex() != null) {
-					System.out.println("======================="
-							+ "===========CITY HAS BEEN PLACED======================================");
-					
+				if(Zcity.getVertex() != null) {					
 					
 					/*modelCities.add( clientModel.map.new VertexObject( game.getIndexOfPlayer(Zcity.getPlayer()),
 							clientModel.map.new MVertexLocation(putVertexDirectionIntoString(Zcity.getVertex().getTheirVertexDirection()),
