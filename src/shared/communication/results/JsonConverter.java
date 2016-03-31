@@ -836,7 +836,7 @@ public class JsonConverter {
 					// Make Vertex Object
 					ClientModel.MMap.VertexObject vo = clientModel.map.new VertexObject(playerIndex,vl);
 
-					modelSettlements.add(vo);
+					modelCities.add(vo);
 				}
 			}
 		}

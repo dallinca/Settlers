@@ -379,6 +379,7 @@ public class ResourceCardHand {
 		   if(!canDoPayForCity()) {
 			   throw new InsufficientPlayerResourcesException("Player doesn't have the resources to pay for a city");
 		   }
+		   
 		   ArrayList<ResourceCard> cards = new ArrayList<ResourceCard>();
 		   // Transfer Cards to Bank
 		   cards.add(wheatCards.get(wheatCards.size() - 1));
