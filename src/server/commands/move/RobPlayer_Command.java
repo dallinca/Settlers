@@ -75,14 +75,14 @@ public class RobPlayer_Command implements Command {
 				newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
 				newHistory[history.length] = newEntry;
 				
-				for (int i = 0; i < history.length; i++) {
-					newHistory[i] = history[i];
-				}
-				
 			} else {
 				newEntry.setMessage(game.getPlayerByID(userID).getPlayerName() + " moved the robber.");
 				newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
 				newHistory[history.length] = newEntry;
+			}
+			
+			for (int i = 0; i < history.length; i++) {
+				newHistory[i] = history[i];
 			}
 			
 			game.setHistory(newHistory);
