@@ -56,9 +56,9 @@ public class RobPlayer_Command implements Command {
 		game = facade.canDoRobPlayer(params, gameID, userID);
 		result = new RobPlayer_Result();
 
-		//System.out.println("RobPlayer_Command1");
+		System.out.println("RobPlayer_Command1");
 		if (game==null){
-			//System.out.println("RobPlayer_Command2");
+			System.out.println("RobPlayer_Command2");
 			return;
 		}
 		
@@ -67,7 +67,7 @@ public class RobPlayer_Command implements Command {
 			Game.Line[] newHistory = new Game.Line[history.length+1];
 			Game.Line newEntry = game.new Line();
 			
-			//System.out.println("RobPlayer_Command3");
+			System.out.println("RobPlayer_Command3");
 			if(params.getVictimIndex() != -1) {
 				game.stealPlayerResource(userID, params.getVictimIndex());
 				// Add Player Robbed history
@@ -88,18 +88,18 @@ public class RobPlayer_Command implements Command {
 			game.setHistory(newHistory);
 			
 		} catch (Exception e) {
-			//System.out.println("RobPlayer_Command4");
+			System.out.println("RobPlayer_Command4");
 			e.printStackTrace();
 			return;
 		}
 		
 		result.setValid(true);
 		game.setVersionNumber(game.getVersionNumber() + 1);
-		//System.out.println("RobPlayer_Command5");
+		System.out.println("RobPlayer_Command5");
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);
 		
-		//System.out.println("RobPlayer_Command6");
+		System.out.println("RobPlayer_Command6");
 		result.setModel(cm);
 	}
 	public RobPlayer_Result getResult(){
