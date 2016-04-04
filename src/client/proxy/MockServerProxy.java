@@ -6,12 +6,12 @@ import java.io.ObjectInputStream;
 import java.net.URL;
 import java.util.Scanner;
 
-import org.apache.http.HttpEntity;
+/*import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClientBuilder;*/
 
 import shared.communication.params.move.AcceptTrade_Params;
 import shared.communication.params.move.BuildCity_Params;
@@ -75,6 +75,7 @@ import com.google.gson.JsonObject;
  * 
  */
 
+/*
 public class MockServerProxy implements IServerProxy {
 
 
@@ -97,7 +98,7 @@ public class MockServerProxy implements IServerProxy {
 			throws ClientException {
 		// TODO Auto-generated method stub
 		return null;
-	}*/
+	}
 
 	@Override
 	public Create_Result createGame(Create_Params request)
@@ -124,14 +125,14 @@ public class MockServerProxy implements IServerProxy {
 		//{"Date":"Fri, 05 Feb 2016 22:30:45 GMT",
 		//"Content-Type":"application/json",
 		//"Content-Length":"58"}
-	}
+	//}
 
 /*	@Override
 	public GetCommands_Result getCommands(GetCommands_Params request)
 			throws ClientException {
 		// TODO Auto-generated method stub
 		return null;
-	}*/
+	}
 
 	@Override
 	public GetVersion_Result getVersion(GetVersion_Params request)
@@ -189,7 +190,7 @@ public class MockServerProxy implements IServerProxy {
 		//"Content-Type":"text/html",
 		//"Content-Length":"7"}
 
-
+/*
 		return null;
 	}
 
@@ -209,7 +210,7 @@ public class MockServerProxy implements IServerProxy {
 /*	public Load_Result loadGame(Load_Params request) throws ClientException {
 		// TODO Auto-generated method stub
 		return null;
-	}*/
+	}
 
 	@Override
 	public Login_Result login(Login_Params request) throws ClientException {
@@ -238,7 +239,7 @@ public class MockServerProxy implements IServerProxy {
 			throws ClientException {
 		// TODO Auto-generated method stub
 		return null;
-	}*/
+	}
 
 	@Override
 	public Register_Result register(Register_Params request)
@@ -251,7 +252,7 @@ public class MockServerProxy implements IServerProxy {
 	public Save_Result saveGame(Save_Params request) throws ClientException {
 		// TODO Auto-generated method stub
 		return null;
-	}*/
+	}
 
 	@Override
 	public AcceptTrade_Result acceptTrade(AcceptTrade_Params request)
@@ -405,5 +406,4 @@ public class MockServerProxy implements IServerProxy {
 
 	}
 
-
-}
+}*/
