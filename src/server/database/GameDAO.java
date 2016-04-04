@@ -6,20 +6,27 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import shared.communication.User;
+import shared.communication.results.nonmove.Join_Result;
 import shared.model.Game;
 
 public class GameDAO implements GameDAOInterface {
 
 	//Database db;
-
+	/**
+	 * Constructor
+	 * takes in a database object
+	 */
 	public GameDAO(/*Database db*/) {
 		//this.db = db;
 	}
 
 	/**
-	 * Inserts a new Users object into the database
+	 * Inserts a new game object into the database
+	 * @pre data in the game object is correct
 	 * @return a boolean representing whether or not the create was successful
 	 */
+	@Override
 	public boolean create(Game g) { //throws SQLException{
 		/*Connection connection = db.getConnection();
 		PreparedStatement stmt = null;
@@ -57,14 +64,16 @@ public class GameDAO implements GameDAOInterface {
 	}
 
 	/**
-	 * Updates the Users object in the database
-	 * @return The updated User
+	 * Updates the game object in the database
+	 * @pre the given game object is accurately represented
+	 * @return The updated game
 	 */
-	public Game update(Game g) throws SQLException {
-		Connection connection = db.getConnection();
+	@Override
+	public Game update(Game g) { //throws SQLException {
+		//Connection connection = db.getConnection();
 		// Start a transaction
 
-		PreparedStatement stmt = null;
+		/*PreparedStatement stmt = null;
 
 		try {
 			String sql = "update Users "
@@ -88,14 +97,17 @@ public class GameDAO implements GameDAOInterface {
 			if (stmt != null)
 				stmt.close();
 		}
-		return f;
+		return f;*/
+		return null;
 	}
 	/**
-	 * Deletes the Users object from the database
+	 * Deletes the given corresponding game object from the database
+	 * @pre the given game is a valid game in the database
 	 * @return a boolean depicting whether or not the delete was successful
 	 */
-	public boolean delete(Users f) {
-		Connection connection = db.getConnection();
+	@Override
+	public boolean delete(Game game) {
+		/*Connection connection = db.getConnection();
 		PreparedStatement stmt = null;
 
 		try {
@@ -114,15 +126,19 @@ public class GameDAO implements GameDAOInterface {
 		} catch (SQLException e) {
 			System.err.println("Could NOT Delete the User");
 			return false;
-		}
+		}*/
+		
+		return false;
 
 	}
 	/**
-	 * Queries the database for the specific Users object and returns the result
+	 * Queries the database for the specific Game object and returns the result
+	 * @pre valid game id is given
 	 * @return the value if it finds it
 	 */
-	public Users read(ValidateUserGetFieldsRequest NamePass) {
-		Connection connection = db.getConnection();
+	@Override
+	public Game read(int gameID) {
+		/*Connection connection = db.getConnection();
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		Users user = null;
@@ -167,7 +183,36 @@ public class GameDAO implements GameDAOInterface {
 				e.printStackTrace();
 			}
 		}
+		 */
+		return null;
+	}
 
+	/**
+	 * The purpose of this method is to validate that the user belongs to this game and that the gameID they gave is valid
+	 * @pre valid userID and gameID
+	 * @post they are then permitted re-entry to the game
+	 */
+	@Override
+	public boolean validateGame(User user, int gameID) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/**
+	 * this may be the same as the read method, so this may become deprecated...
+	 */
+	@Override
+	public Game getGame(int gameID) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Assigns the user a gameID, and assigns the game another user. May belong in the UserDAO, so this is a tentative location for it.
+	 */
+	@Override
+	public Join_Result join(int gameID) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

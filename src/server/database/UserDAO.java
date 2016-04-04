@@ -6,6 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import shared.communication.User;
+import shared.communication.params.nonmove.Register_Params;
+import shared.communication.results.nonmove.Register_Result;
+
 
 public class UserDAO implements UserDAOInterface {
 
@@ -17,9 +21,11 @@ public class UserDAO implements UserDAOInterface {
 
 	/**
 	 * Inserts a new Users object into the database
+	 * @pre the user object given to create in the database is valid
 	 * @return a boolean representing whether or not the create was successful
 	 */
-	public boolean create(/*Users f*/) throws SQLException{
+	@Override
+	public boolean create(User f) { // throws SQLException{
 		/*Connection connection = db.getConnection();
 				PreparedStatement stmt = null;
 				Statement keyStmt = null;
@@ -57,10 +63,13 @@ public class UserDAO implements UserDAOInterface {
 
 	/**
 	 * Updates the Users object in the database
+	 * @pre the user object to update is valid
 	 * @return The updated User
+	 * 
 	 */
-	public Users update(Users f) throws SQLException {
-		Connection connection = db.getConnection();
+	@Override
+	public User update(User f) { //throws SQLException {
+		/*Connection connection = db.getConnection();
 		// Start a transaction
 
 		PreparedStatement stmt = null;
@@ -87,14 +96,18 @@ public class UserDAO implements UserDAOInterface {
 			if (stmt != null)
 				stmt.close();
 		}
-		return f;
+		return f;*/
+		return null;
 	}
 	/**
 	 * Deletes the Users object from the database
+	 * @pre the user to delete is a valid user
 	 * @return a boolean depicting whether or not the delete was successful
+	 * 
 	 */
-	public boolean delete(Users f) {
-		Connection connection = db.getConnection();
+	@Override
+	public boolean delete(User f) {
+		/*Connection connection = db.getConnection();
 		PreparedStatement stmt = null;
 
 		try {
@@ -113,15 +126,19 @@ public class UserDAO implements UserDAOInterface {
 		} catch (SQLException e) {
 			System.err.println("Could NOT Delete the User");
 			return false;
-		}
+		}*/
+		return false;
 
 	}
+	
 	/**
 	 * Queries the database for the specific Users object and returns the result
-	 * @return the value if it finds it
+	 * @pre you are asking for a valid user
+	 * @post the user object from the database
+	 * 
 	 */
-	public Users read(ValidateUserGetFieldsRequest NamePass) {
-		Connection connection = db.getConnection();
+	public User read(/*ValidateUserGetFieldsRequest NamePass*/) {
+		/*Connection connection = db.getConnection();
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		Users user = null;
@@ -166,7 +183,29 @@ public class UserDAO implements UserDAOInterface {
 				e.printStackTrace();
 			}
 		}
+		 */
+		return null;
+	}
 
+	/**
+	 * Validate the user with the database
+	 * @pre user is a valid user
+	 * @post user can join, re-join, or create games
+	 */
+	@Override
+	public boolean validateUser(User user) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/**
+	 * Creates a new user object assuming the input is correct
+	 * @pre valid username and password
+	 * @post takes them to the game hub where they can join, re-join, or create games
+	 */
+	@Override
+	public Register_Result register(Register_Params params) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

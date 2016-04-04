@@ -14,5 +14,7 @@ abstract public interface GameDAOInterface {
 	public boolean validateGame(User user, int gameID);
 	public Game getGame(int gameID);
 	public Join_Result join(int gameID);
+	public Game read(int gameID);
+	public boolean delete(Game game);
 	
 }
