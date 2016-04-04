@@ -1,5 +1,5 @@
 package server.database;
 
-public class UserDAO {
+public class UserDAO implements UserDAOInterface {
 
 }

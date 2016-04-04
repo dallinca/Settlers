@@ -2,7 +2,9 @@ package server.persistenceprovider.plugins;
 
 import server.commands.Command;
 import server.database.GameDAO;
+import server.database.GameDAOInterface;
 import server.database.UserDAO;
+import server.database.UserDAOInterface;
 import server.persistenceprovider.PersistenceProviderInterface;
 
 public class PersistenceProvider implements PersistenceProviderInterface{
@@ -76,7 +78,7 @@ public class PersistenceProvider implements PersistenceProviderInterface{
 	 * @return
 	 */
 	@Override
-	public UserDAO getUserDAO() {
+	public UserDAOInterface getUserDAO() {
 		return userDAO;
 	}
 
@@ -85,7 +87,7 @@ public class PersistenceProvider implements PersistenceProviderInterface{
 	 * @return
 	 */
 	@Override
-	public GameDAO getGameDAO() {
+	public GameDAOInterface getGameDAO() {
 		return gameDAO;
 	}
 

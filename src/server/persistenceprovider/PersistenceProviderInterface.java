@@ -2,7 +2,9 @@ package server.persistenceprovider;
 
 import server.commands.Command;
 import server.database.GameDAO;
+import server.database.GameDAOInterface;
 import server.database.UserDAO;
+import server.database.UserDAOInterface;
 
 /**
  * Interface for Persistence Provider plugins.
@@ -17,13 +19,13 @@ public abstract interface PersistenceProviderInterface  {
 	 * Returns persistence provider's user DAO.
 	 * @return
 	 */
-	abstract UserDAO getUserDAO();
+	abstract UserDAOInterface getUserDAO();
 	
 	/**
 	 * Returns persistence provider's game DAO.
 	 * @return
 	 */
-	abstract GameDAO getGameDAO() ;
+	abstract GameDAOInterface getGameDAO() ;
 	
 	/**
 	 * Begins a database transaction

@@ -1,5 +1,5 @@
 package server.database;
 
-public class GameDAO {
+public class GameDAO implements GameDAOInterface {
 
 }
