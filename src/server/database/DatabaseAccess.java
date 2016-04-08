@@ -15,8 +15,6 @@ public class DatabaseAccess {
 	private Connection connection;
 	
 	public DatabaseAccess(){
-		accessuser = new UserDAO(this);
-		accessgame = new GameDAO(this);
 		connection = null;
 	}
 	
