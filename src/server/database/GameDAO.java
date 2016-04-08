@@ -12,13 +12,13 @@ import shared.model.Game;
 
 public class GameDAO implements GameDAOInterface {
 
-	//Database db;
+	DatabaseAccess db;
 	/**
 	 * Constructor
 	 * takes in a database object
 	 */
-	public GameDAO(/*Database db*/) {
-		//this.db = db;
+	public GameDAO(DatabaseAccess db) {
+		this.db = db;
 	}
 
 	/**
