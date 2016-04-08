@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import shared.communication.User;
 import shared.communication.results.nonmove.Join_Result;
@@ -214,6 +216,14 @@ public class GameDAO implements GameDAOInterface {
 	public Join_Result join(int gameID) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<Game> getGames() {
+		List<Game> games = new ArrayList<Game>();
+		
+		
+		return games;
 	}
 
 }
