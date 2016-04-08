@@ -1,6 +1,7 @@
 package server.database;
 
 import java.sql.*;
+import java.util.*;
 
 import shared.communication.User;
 import shared.communication.params.nonmove.Register_Params;
@@ -15,24 +16,70 @@ public class UserDAO implements UserDAOInterface {
 		this.db = db;
 	}
 
+
+	/**
+	 * Get all users object from the database and return a list of them
+	 * @pre the user object given to create in the database is valid
+	 * @return Arraylist of User
+	 * @throws DatabaseException, SQLException 
+	 */
+	public ArrayList<User> getAll() throws DatabaseException, SQLException {
+		System.out.println("UserDAO getAll()");
+		
+		ArrayList<User> users = new ArrayList<User>();
+		
+		PreparedStatement stmt = null;
+		Statement keyStmt = null;
+		ResultSet keyRS = null;
+		
+		try {
+			String sql = "SELECT * FROM User";
+			stmt = db.getConnection().prepareStatement(sql);
+			keyRS = stmt.executeQuery();
+			
+			while (keyRS.next()) {
+				String name = keyRS .getString(1);
+				String password = keyRS .getString(2);
+				int playerID = keyRS .getInt(3);
+				
+				User user = new User(name, password, playerID);
+				users.add(user);
+			}
+			
+		} catch (SQLException e) {
+			DatabaseException serverEx = new DatabaseException(e.getMessage(), e);
+			throw serverEx;
+			//e.printStackTrace();
+		}finally {
+			if (stmt != null)
+				stmt.close();
+			if (keyRS != null)
+				keyRS.close();
+			if (keyStmt != null)
+				keyStmt.close();
+		}
+		return users;
+	}
+	
+	
 	/**
 	 * Inserts a new Users object into the database
 	 * @pre the user object given to create in the database is valid
 	 * @return a boolean representing whether or not the create was successful
 	 */
 	@Override
-	public boolean create(User f) { // throws SQLException{
-		System.out.println("UserDAO create");
+	public boolean create(User user) { // throws SQLException{
+		System.out.println("UserDAO create()");
 		
-		//Connection connection = db.getConnection();
 		PreparedStatement stmt = null;
 		Statement keyStmt = null;
 		ResultSet keyRS = null;
-		/*
+		
 		try {
-			String sql = "insert into Users (username, password, firstname, lastname, email, userID) values (?, ?, ?, ?, ?, ?)";
+			/*WE NEED TO MAKE SURE IT IS USERS AND NOT User*/
+			String sql = "INSERT INTO Users (username, password, userID) values (?, ?, ?)";
 			stmt = connection.prepareStatement(sql);
-			stmt.setString(1, f.getUserName());
+			stmt.setString(1, user.getUserName());
 			stmt.setString(2, f.getPassword());
 			stmt.setString(3, f.getFirstName());
 			stmt.setString(4, f.getLastName());
@@ -55,7 +102,6 @@ public class UserDAO implements UserDAOInterface {
 			if (keyStmt != null)
 				keyStmt.close();
 		}
- */
 		return true;
 	}
 

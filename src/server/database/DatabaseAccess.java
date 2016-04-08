@@ -76,4 +76,12 @@ public class DatabaseAccess {
 	public GameDAO Access_Game(){
 		return accessgame;
 	}
+	
+	public Connection getConnection() {
+		return connection;
+	}
+	
+	public void setConnection(Connection connection) {
+		this.connection = connection;
+	}
 }
