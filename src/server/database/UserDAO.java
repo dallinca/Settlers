@@ -29,8 +29,8 @@ public class UserDAO implements UserDAOInterface {
 		ResultSet keyRS = null;
 		
 		try {
-			/*WE NEED TO MAKE SURE IT IS USERS AND NOT User*/
-			String sql = "INSERT INTO Users (username, password, userID) values (?, ?, ?)";
+
+			String sql = "INSERT INTO Users (userID, username, password) values (?, ?, ?)";
 			stmt = db.getConnection().prepareStatement(sql);
 			stmt.setString(1, user.getName());
 			stmt.setString(2, user.getPassword());

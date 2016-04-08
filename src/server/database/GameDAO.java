@@ -26,7 +26,7 @@ public class GameDAO implements GameDAOInterface {
 	 * @return a boolean representing whether or not the create was successful
 	 */
 	@Override
-	public boolean create(Game g) { //throws SQLException{
+	public boolean create(Game game) { //throws SQLException{
 		System.out.println("GameDAO create()");
 		
 		PreparedStatement stmt = null;
@@ -34,14 +34,14 @@ public class GameDAO implements GameDAOInterface {
 		ResultSet keyRS = null;
 		
 		try {
-			String sql = "INSERT INTO Games (username, password, userID) values (?, ?, ?, ?, ?)";
-			stmt = cdb.getConnection().prepareStatement(sql);
-			stmt.setString(1, f.getUserName());
-			stmt.setString(2, f.getPassword());
-			stmt.setString(3, f.getFirstName());
-			stmt.setString(4, f.getLastName());
-			stmt.setString(5, f.getEmail());
-			stmt.setInt(7, f.getUserID());
+
+			String sql = "INSERT INTO Games (gameID, game, commands) values (?, ?, ?)";
+			stmt = db.getConnection().prepareStatement(sql);
+			stmt.setInt(1, game.getGameID());
+			
+			Blob blob;
+			blob.
+			stmt.setBlob(2, game);
 
 			if (stmt.executeUpdate() == 1) {
 				return true;
