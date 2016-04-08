@@ -1,10 +1,6 @@
 package server.database;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 import shared.communication.User;
 import shared.communication.params.nonmove.Register_Params;
@@ -13,10 +9,10 @@ import shared.communication.results.nonmove.Register_Result;
 
 public class UserDAO implements UserDAOInterface {
 
-	//Database db;
+	DatabaseAccess db;
 
-	public UserDAO(/*Database db*/) {
-		//this.db = db;
+	public UserDAO(DatabaseAccess db) {
+		this.db = db;
 	}
 
 	/**
@@ -26,38 +22,40 @@ public class UserDAO implements UserDAOInterface {
 	 */
 	@Override
 	public boolean create(User f) { // throws SQLException{
-		/*Connection connection = db.getConnection();
-				PreparedStatement stmt = null;
-				Statement keyStmt = null;
-				ResultSet keyRS = null;
+		System.out.println("UserDAO create");
+		
+		//Connection connection = db.getConnection();
+		PreparedStatement stmt = null;
+		Statement keyStmt = null;
+		ResultSet keyRS = null;
+		/*
+		try {
+			String sql = "insert into Users (username, password, firstname, lastname, email, userID) values (?, ?, ?, ?, ?, ?)";
+			stmt = connection.prepareStatement(sql);
+			stmt.setString(1, f.getUserName());
+			stmt.setString(2, f.getPassword());
+			stmt.setString(3, f.getFirstName());
+			stmt.setString(4, f.getLastName());
+			stmt.setString(5, f.getEmail());
+			stmt.setInt(7, f.getUserID());
 
-				try {
-					String sql = "insert into Users (username, password, firstname, lastname, email, userID) values (?, ?, ?, ?, ?, ?)";
-					stmt = connection.prepareStatement(sql);
-					stmt.setString(1, f.getUserName());
-					stmt.setString(2, f.getPassword());
-					stmt.setString(3, f.getFirstName());
-					stmt.setString(4, f.getLastName());
-					stmt.setString(5, f.getEmail());
-					stmt.setInt(7, f.getUserID());
-
-					if (stmt.executeUpdate() == 1) {
-						return true;
-					} else {
-						return false;
-					}
-				} catch (SQLException e) {
-					e.printStackTrace();
-					return false;
-				} finally {
-					if (stmt != null)
-						stmt.close();
-					if (keyRS != null)
-						keyRS.close();
-					if (keyStmt != null)
-						keyStmt.close();
-				}
-		 */
+			if (stmt.executeUpdate() == 1) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			if (stmt != null)
+				stmt.close();
+			if (keyRS != null)
+				keyRS.close();
+			if (keyStmt != null)
+				keyStmt.close();
+		}
+ */
 		return true;
 	}
 
