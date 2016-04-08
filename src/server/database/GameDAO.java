@@ -16,6 +16,7 @@ import shared.model.Game;
 public class GameDAO implements GameDAOInterface {
 
 	DatabaseAccess db;
+	
 	/**
 	 * Constructor
 	 * takes in a database object
