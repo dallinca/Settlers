@@ -1,6 +1,7 @@
 package server.persistenceprovider;
 
 import server.commands.Command;
+import server.database.DatabaseException;
 import server.database.GameDAO;
 import server.database.GameDAOInterface;
 import server.database.UserDAO;
@@ -29,13 +30,14 @@ public abstract interface PersistenceProviderInterface  {
 	
 	/**
 	 * Begins a database transaction
+	 * @throws DatabaseException 
 	 */
-	abstract void startTransaction();	
+	abstract void startTransaction() throws DatabaseException;	
 	
 	/**
 	 * Ends a database transaction
 	 */
-	abstract void endTransaction();
+	abstract void endTransaction(boolean commit);
 	
 	/**
 	 * Stores a command for a game.

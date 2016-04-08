@@ -142,6 +142,7 @@ public class BuildRoad_Command implements Command {
 
 		System.out.println("Setting model.");
 		result.setModel(cm);
+		facade.storeCommand(gameID, this);
 	}
 
 	public BuildRoad_Result getResult(){

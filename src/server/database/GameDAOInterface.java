@@ -2,6 +2,7 @@ package server.database;
 
 import java.util.List;
 
+import server.commands.Command;
 import shared.communication.User;
 import shared.communication.params.nonmove.GetVersion_Params;
 import shared.communication.params.nonmove.Join_Params;
@@ -19,5 +20,7 @@ abstract public interface GameDAOInterface {
 	public Game read(int gameID);
 	public boolean delete(Game game);
 	public List<Game> getGames();
+	public void joinPlayer(int gameID, int userID);
+	public void storeCommand(int gameID, Command command);
 	
 }

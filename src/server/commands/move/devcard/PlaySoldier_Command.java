@@ -113,6 +113,7 @@ public class PlaySoldier_Command implements Command {
 
 		result.setModel(cm);
 		System.out.println("PlaySoldier_command end of execute");
+		facade.storeCommand(gameID, this);
 
 	}
 

@@ -148,8 +148,8 @@ public class PlayMonopoly_Command implements Command {
 
 		result.setModel(cm);
 		System.out.println("PlayMonopoly_Command end of execute");
-
-	
+		
+		facade.storeCommand(gameID, this);
 	}
 
 	/**

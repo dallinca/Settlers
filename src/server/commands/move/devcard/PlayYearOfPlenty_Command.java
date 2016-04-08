@@ -117,6 +117,7 @@ public class PlayYearOfPlenty_Command implements Command {
 
 	result.setModel(cm);
 	System.out.println("PlayYearOfPlenty_command end of execute");
+	facade.storeCommand(gameID, this);
 
 }
 

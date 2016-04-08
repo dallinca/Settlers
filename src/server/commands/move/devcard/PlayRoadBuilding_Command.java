@@ -127,6 +127,7 @@ public class PlayRoadBuilding_Command implements Command {
 
 		result.setModel(cm);
 		System.out.println("PlayRoadBuilding_Command end of execute");
+		facade.storeCommand(gameID, this);
 	}
 
 	/**

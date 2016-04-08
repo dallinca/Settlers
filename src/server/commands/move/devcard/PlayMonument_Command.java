@@ -115,7 +115,7 @@ public class PlayMonument_Command implements Command {
 
 		result.setModel(cm);
 		System.out.println("PlayMonument_Command end of execute");
-		
+		facade.storeCommand(gameID, this);
 	}
 	
 	public PlayMonument_Result getResult(){

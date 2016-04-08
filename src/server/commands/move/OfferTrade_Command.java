@@ -141,6 +141,7 @@ public class OfferTrade_Command implements Command {
 		ClientModel cm = converter.toClientModel(game);
 		System.out.println("OfferTrade_Command8");
 		result.setModel(cm);
+		facade.storeCommand(gameID, this);
 	}
 	
 	public 	OfferTrade_Result getResult(){

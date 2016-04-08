@@ -104,6 +104,7 @@ public class BuyDevCard_Command implements Command {
 
 		System.out.println("BuyDevCard_Command5");
 		result.setModel(cm);
+		facade.storeCommand(gameID, this);
 	}
 	
 	public BuyDevCard_Result getResult(){

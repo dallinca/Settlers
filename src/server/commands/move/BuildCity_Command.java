@@ -100,6 +100,7 @@ public class BuildCity_Command implements Command {
 
 		System.out.println("BuildCity_Command5");
 		result.setModel(cm);
+		facade.storeCommand(gameID, this);
 	}
 
 	public BuildCity_Result getResult(){
