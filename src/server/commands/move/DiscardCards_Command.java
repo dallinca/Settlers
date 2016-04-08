@@ -80,6 +80,7 @@ public class DiscardCards_Command implements Command {
 		System.out.println("DiscardCards_Command5");
 		result.setModel(cm);
 		System.out.println("Status: " + game.getStatus());
+		facade.storeCommand(gameID, this);
 	}
 	
 	public DiscardCards_Result getResult(){

@@ -27,7 +27,7 @@ public class RobPlayer_Command implements Command {
 	 * 
 	 */
 	public RobPlayer_Command() {}
-	
+
 	/**
 	 * Standard Command pattern constructor instantiation with the facade
 	 * 
@@ -61,46 +61,45 @@ public class RobPlayer_Command implements Command {
 			System.out.println("RobPlayer_Command2");
 			return;
 		}
-		
+
 		try {
 			Game.Line[] history = game.getHistory();
 			Game.Line[] newHistory = new Game.Line[history.length+1];
 			Game.Line newEntry = game.new Line();
-			
-			System.out.println("RobPlayer_Command3");
+			//System.out.println("RobPlayer_Command3");
 			if(params.getVictimIndex() != -1) {
 				game.stealPlayerResource(userID, params.getVictimIndex());
 				// Add Player Robbed history
 				newEntry.setMessage(game.getPlayerByID(userID).getPlayerName() + " moved the robber like a boss and robbed " + game.getAllPlayers()[params.getVictimIndex()].getPlayerName());
 				newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
 				newHistory[history.length] = newEntry;
-				
+
 			} else {
 				newEntry.setMessage(game.getPlayerByID(userID).getPlayerName() + " moved the robber.");
 				newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
 				newHistory[history.length] = newEntry;
 			}
-			
+
 			for (int i = 0; i < history.length; i++) {
 				newHistory[i] = history[i];
 			}
-			
+
 			game.setHistory(newHistory);
-			
+
 		} catch (Exception e) {
 			System.out.println("RobPlayer_Command4");
 			e.printStackTrace();
 			return;
 		}
-		
+
 		result.setValid(true);
 		game.setVersionNumber(game.getVersionNumber() + 1);
 		System.out.println("RobPlayer_Command5");
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);
-		
-		System.out.println("RobPlayer_Command6");
+		//System.out.println("RobPlayer_Command6");
 		result.setModel(cm);
+		facade.storeCommand(gameID, this);
 	}
 	public RobPlayer_Result getResult(){
 		return result;

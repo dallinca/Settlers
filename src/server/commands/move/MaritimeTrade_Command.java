@@ -89,6 +89,7 @@ public class MaritimeTrade_Command implements Command {
 
 		System.out.println("MaritimeTrade_Command6");
 		result.setModel(cm);
+		facade.storeCommand(gameID, this);
 	}
 	
 	public MaritimeTrade_Result getResult(){

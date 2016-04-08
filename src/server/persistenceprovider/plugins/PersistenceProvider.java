@@ -1,6 +1,8 @@
 package server.persistenceprovider.plugins;
 
 import server.commands.Command;
+import server.database.DatabaseAccess;
+import server.database.DatabaseException;
 import server.database.GameDAO;
 import server.database.GameDAOInterface;
 import server.database.UserDAO;
@@ -11,39 +13,42 @@ public class PersistenceProvider implements PersistenceProviderInterface{
 	
 	UserDAO userDAO;
 	GameDAO gameDAO;
+	DatabaseAccess DA;
 	
 	/**
 	 * Creates a new persistence provider.
 	 * @param users
 	 * @param games
 	 */
-	PersistenceProvider(UserDAO users, GameDAO games){
-		gameDAO = new GameDAO();
-		userDAO = new UserDAO();		
+	public PersistenceProvider(DatabaseAccess DA){
+				
+		this.DA = DA;
+		gameDAO = new GameDAO(DA);
+		userDAO = new UserDAO(DA);		
 	}
 	
 	/**
 	 * Begins a database transaction
+	 * @throws DatabaseException 
 	 */
-	public void startTransaction(){
-		
+	public void startTransaction() throws DatabaseException{
+		DA.startTransaction();
 		return;
 	}
 	
 	/**
 	 * Ends a database transaction
 	 */
-	public void endTransaction(){
-		
+	public void endTransaction(boolean commit){
+		DA.endTransaction(commit);
 		return;
 	}
-	
+/*	
 	/**
 	 * Stores a command for a game.
 	 * @param command
 	 */
 	public void storeCommand(Command command){
-		
 		
 		return;
 	}
@@ -90,5 +95,6 @@ public class PersistenceProvider implements PersistenceProviderInterface{
 	public GameDAOInterface getGameDAO() {
 		return gameDAO;
 	}
+
 
 }

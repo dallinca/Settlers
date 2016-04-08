@@ -95,6 +95,7 @@ public class RollNumber_Command implements Command {
 
 		System.out.println("RollNumber_Command6");
 		result.setModel(cm);
+		facade.storeCommand(gameID, this);
 		
 	}
 	

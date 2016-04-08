@@ -1,9 +1,13 @@
 package server.persistenceprovider;
 
+import server.database.DatabaseAccess;
 import server.facade.ServerFacade;
+import server.persistenceprovider.plugins.PersistenceProvider;
 
 
 public class AbstractFactory {
+	
+	private DatabaseAccess DA;
 	
 	private static AbstractFactory SINGLETON = null;
 	
@@ -21,7 +25,8 @@ public class AbstractFactory {
 
 	public PersistenceProviderInterface getPersistenceProvider(){
 		
-		return null;		
+		PersistenceProvider pp = new PersistenceProvider(DA);
+		return pp;		
 	}
 	
 	void specifyPlugin(){

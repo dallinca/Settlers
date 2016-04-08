@@ -225,7 +225,7 @@ public class AcceptTrade_Command implements Command {
 			return;
 		}
 		System.out.println("AcceptTrade_Command11");
-		//this.facade.acceptTrade(params);
+		facade.storeCommand(gameID, this);
 	}
 
 	/**

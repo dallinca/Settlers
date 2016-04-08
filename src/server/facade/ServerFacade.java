@@ -1122,9 +1122,6 @@ public class ServerFacade implements IServerFacade {
 		return true;
 	}
 
-
-
-
 	private Game findGame(int gameID){
 
 		for(Game currentGame: liveGames){
@@ -1135,5 +1132,11 @@ public class ServerFacade implements IServerFacade {
 		return null;		
 	}
 
+	public void storeCommand(int gameID, Command command) {
+		gameDAO.storeCommand(gameID, command);		
+	}
 
+
+	
+	
 }

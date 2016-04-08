@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import server.commands.Command;
 import shared.communication.User;
 import shared.communication.results.nonmove.Join_Result;
 import shared.model.Game;
@@ -224,6 +225,21 @@ public class GameDAO implements GameDAOInterface {
 		
 		
 		return games;
+	}
+
+	@Override
+	public void joinPlayer(int gameID, int userID) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void storeCommand(int gameID, Command command) {
+		// TODO Auto-generated method stub
+		
+		//If there are 10 total commands with the game, save the game, remove all commands
+		//If there are total 9 or less commands with the game, save the new command with the game.
+		
 	}
 
 }

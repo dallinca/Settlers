@@ -101,6 +101,7 @@ public class SendChat_Command implements Command {
 
 		System.out.println("SendChat_Command5");
 		result.setModel(cm);
+		facade.storeCommand(gameID, this);
 	}
 	
 	public SendChat_Result getResult(){

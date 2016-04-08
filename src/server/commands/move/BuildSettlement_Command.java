@@ -110,6 +110,7 @@ public class BuildSettlement_Command implements Command {
 
 		System.out.println("BuildSettlement_Command5");
 		result.setModel(cm);
+		facade.storeCommand(gameID, this);
 	}
 
 	public BuildSettlement_Result getResult(){
