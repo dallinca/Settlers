@@ -1,8 +1,25 @@
 package server.persistenceprovider;
 
-public class AbstractFactory {
+import server.facade.ServerFacade;
 
-	PersistenceProviderInterface getPersistenceProvider(){
+
+public class AbstractFactory {
+	
+	private static AbstractFactory SINGLETON = null;
+	
+	private AbstractFactory() {	
+		
+		
+	}
+	
+	public static AbstractFactory getInstance() {
+		if(SINGLETON == null){
+			SINGLETON = new AbstractFactory();
+		}
+		return SINGLETON;
+	}
+
+	public PersistenceProviderInterface getPersistenceProvider(){
 		
 		return null;		
 	}

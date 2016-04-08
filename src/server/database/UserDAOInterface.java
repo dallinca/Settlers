@@ -1,5 +1,7 @@
 package server.database;
 
+import java.util.List;
+
 import shared.communication.User;
 import shared.communication.params.nonmove.Register_Params;
 import shared.communication.results.nonmove.Register_Result;
@@ -12,5 +14,6 @@ abstract public interface UserDAOInterface {
 	public User update(User f);
 	public boolean delete(User f);
 	public User read(/*ValidateUserGetFieldsRequest NamePass*/);
+	public List<User> getUsers();
 	
 }

@@ -1,5 +1,7 @@
 package server.database;
 
+import java.util.List;
+
 import shared.communication.User;
 import shared.communication.params.nonmove.GetVersion_Params;
 import shared.communication.params.nonmove.Join_Params;
@@ -16,5 +18,6 @@ abstract public interface GameDAOInterface {
 	public Join_Result join(int gameID);
 	public Game read(int gameID);
 	public boolean delete(Game game);
+	public List<Game> getGames();
 	
 }

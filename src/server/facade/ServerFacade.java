@@ -14,6 +14,10 @@ import client.data.PlayerInfo;
 import client.data.TradeInfo;
 import client.proxy.ServerProxy;
 import server.commands.Command;
+import server.database.GameDAOInterface;
+import server.database.UserDAOInterface;
+import server.persistenceprovider.AbstractFactory;
+import server.persistenceprovider.PersistenceProviderInterface;
 import shared.communication.User;
 import shared.communication.params.move.devcard.*;
 import shared.communication.params.move.*;
@@ -78,13 +82,29 @@ public class ServerFacade implements IServerFacade {
 	private List<Game> liveGames = new ArrayList<Game>();
 	private List<User> users = new ArrayList<User>();
 	private JsonConverter jc;
-
+	
+	private UserDAOInterface userDAO;
+	private GameDAOInterface gameDAO;
+	private PersistenceProviderInterface persistenceProvider;
+	
+	
 	/**
 	 * Singleton pattern for serverfacade
 	 */
 	private static ServerFacade SINGLETON = null;
 
-	private ServerFacade() {		
+	private ServerFacade() {	
+		
+		persistenceProvider = AbstractFactory.getInstance().getPersistenceProvider();
+		userDAO = persistenceProvider.getUserDAO();
+		gameDAO = persistenceProvider.getGameDAO();
+		
+		users = userDAO.getUsers(); 		
+		liveGames = gameDAO.getGames();
+		//commands = commandDAO.getCommands();
+		
+		
+		
 		this.jc = new JsonConverter();
 
 		//TESTING REASON
@@ -748,6 +768,9 @@ public class ServerFacade implements IServerFacade {
 
 		//System.out.println("users Size: " + users.size());
 		//System.out.println(users);
+		
+		
+		userDAO.create(user);
 		return result;
 	}
 
@@ -866,6 +889,8 @@ public class ServerFacade implements IServerFacade {
 		result.setValid(true);
 
 		//System.out.println("Returning game result from server facade.");
+		
+		gameDAO.create(game);
 		return result;
 	}
 
@@ -973,6 +998,7 @@ public class ServerFacade implements IServerFacade {
 			startGame(g);
 		}
 
+		gameDAO.joinPlayer(gameID, userID);
 
 		return result;
 	}
