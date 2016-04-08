@@ -851,26 +851,30 @@ public class JsonConverter {
 		if (offer!=null){		
 			MTradeOffer mto = clientModel.new MTradeOffer(offer);
 			clientModel.tradeOffer = mto;
-			System.out.println("Current trade offer: ---------------------------------------");
-			System.out.println(mto.toString());
+			//System.out.println("Current trade offer: ---------------------------------------");
+			//System.out.println(mto.toString());
 		}else{
-			System.out.println("No trade offer available ---------------------------------------");
+			//System.out.println("No trade offer available ---------------------------------------");
 		}
 
 		// Init the CHAT
 		
 		////System.out.println("Initializing chat");
-		
+		System.out.println("HERE1");
 		Line[] lines = game.getChat();				
 		MChat chat = clientModel.new MChat(lines);
 		clientModel.chat = chat;
+		System.out.println("HERE2");
 		
 		// Init the LOG
 		
 		////System.out.println("Initializing logs");
 		Line[] logs = game.getHistory();
+		System.out.println("HERE322");
 		MLog modelLog = clientModel.new MLog(logs);
+		System.out.println("HERE333");
 		clientModel.log = modelLog;
+		System.out.println("HERE3");
 		
 		// Return the clientModel
 

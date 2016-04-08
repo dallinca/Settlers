@@ -31,6 +31,33 @@ public class DatabaseAccess {
 		}
 	}
 	
+	/**
+	 * TODO this needs to be called to setup the db ... and stuff
+	 * 
+	 */
+	public void setupDatabase() throws DatabaseException {
+		
+		try {
+			startTransaction();
+			
+			Statement stat = connection.createStatement();
+				stat.executeUpdate("drop table if exists Users;");
+				stat.executeUpdate("create table Users(userID INTEGER PRIMARY KEY,			" +
+								   "				   username TEXT,						" +
+								   "				   password TEXT,						");
+
+				stat.executeUpdate("drop table if exists Games;");
+				stat.executeUpdate("create table Games(gameID INTEGER PRIMARY KEY,			" +
+								   "				   game BLOB,							" +
+								   "				   commands BLOB,						");
+				
+			endTransaction(true);
+		} catch(SQLException e) {
+			throw new DatabaseException(e.getMessage());
+		}
+		
+	}
+	
 	public void startTransaction() throws DatabaseException {	
 		System.out.println("DatabaseAccess :: start transaction");
 		

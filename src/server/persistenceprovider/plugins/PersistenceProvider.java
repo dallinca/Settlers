@@ -58,7 +58,11 @@ public class PersistenceProvider implements PersistenceProviderInterface{
 	 * @param file
 	 */
 	public void importFromFile(String file){
-		
+		try {
+			DA.setupDatabase();
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+		}
 		return;
 	}
 	
