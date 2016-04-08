@@ -1,15 +1,11 @@
 package server.database;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import server.commands.Command;
-import shared.communication.User;
+import shared.communication.*;
 import shared.communication.results.nonmove.Join_Result;
 import shared.model.Game;
 
@@ -31,14 +27,15 @@ public class GameDAO implements GameDAOInterface {
 	 */
 	@Override
 	public boolean create(Game g) { //throws SQLException{
-		/*Connection connection = db.getConnection();
+		System.out.println("GameDAO create()");
+		
 		PreparedStatement stmt = null;
 		Statement keyStmt = null;
 		ResultSet keyRS = null;
-
+		
 		try {
-			String sql = "insert into Game 
-			stmt = connection.prepareStatement(sql);
+			String sql = "INSERT INTO Games (username, password, userID) values (?, ?, ?, ?, ?)";
+			stmt = cdb.getConnection().prepareStatement(sql);
 			stmt.setString(1, f.getUserName());
 			stmt.setString(2, f.getPassword());
 			stmt.setString(3, f.getFirstName());
@@ -62,7 +59,6 @@ public class GameDAO implements GameDAOInterface {
 			if (keyStmt != null)
 				keyStmt.close();
 		}
-		 */
 		return true;
 	}
 
@@ -134,91 +130,7 @@ public class GameDAO implements GameDAOInterface {
 		return false;
 
 	}
-	/**
-	 * Queries the database for the specific Game object and returns the result
-	 * @pre valid game id is given
-	 * @return the value if it finds it
-	 */
-	@Override
-	public Game read(int gameID) {
-		/*Connection connection = db.getConnection();
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		Users user = null;
-		// String title, String helphtml, String knowndata, int xcoord,
-		// int width, int numFields, int batchid, int fieldID1
-
-		try {
-			//String sql = "select * from Users where (username, password) values (?, ?)";
-			String sql = "select * from Users where username = ? and password = ?";
-			stmt = connection.prepareStatement(sql);
-			stmt.setString(1, NamePass.getUserName());
-			stmt.setString(2, NamePass.getPassword());
-			//stmt = connection.prepareStatement(sql);
-			rs = stmt.executeQuery();
-
-			if (rs.next()) {
-				String username = rs.getString("username");
-				String password = rs.getString("password");
-				String firstname = rs.getString("firstname");
-				String lastname = rs.getString("lastname");
-				String email = rs.getString("email");
-				int indexedrecords = rs.getInt("indexedrecords");
-				int userID = rs.getInt("userID");
-				int imageID = rs.getInt("imageID");
-
-				user = new Users(username, password, firstname, lastname, email, indexedrecords, userID);
-				user.setImageID(imageID);
-				return user;
-			}
-			else
-				return null;
-
-		} catch (SQLException e) {
-			System.out.println("Read/Search: " + e.getMessage());
-		} finally {
-			try {
-				if (rs != null)
-					rs.close();
-				if (stmt != null)
-					stmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		 */
-		return null;
-	}
-
-	/**
-	 * The purpose of this method is to validate that the user belongs to this game and that the gameID they gave is valid
-	 * @pre valid userID and gameID
-	 * @post they are then permitted re-entry to the game
-	 */
-	@Override
-	public boolean validateGame(User user, int gameID) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	/**
-	 * this may be the same as the read method, so this may become deprecated...
-	 */
-	@Override
-	public Game getGame(int gameID) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * Assigns the user a gameID, and assigns the game another user. May belong in the UserDAO, so this is a tentative location for it.
-	 */
-	@Override
-	public Join_Result join(int gameID) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	@Override
 	public List<Game> getGames() {
 		List<Game> games = new ArrayList<Game>();
