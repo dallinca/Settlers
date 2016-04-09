@@ -143,7 +143,7 @@ public class GameDAO implements GameDAOInterface {
 			stmt = connection.prepareStatement(sql);
 			//stmt.setBlob(1, gameBlob);
 			//stmt.setString(2, g.getGameHistory());
-			
+
 			stmt.setString(1, serialized);
 			stmt.setInt(2, game.getGameID());		
 
@@ -211,20 +211,22 @@ public class GameDAO implements GameDAOInterface {
 			stmt = DatabaseAccess.getInstance().getConnection().prepareStatement(sql);
 			keyRS = stmt.executeQuery();
 
-			Blob gameBlob = null;
+			//Blob gameBlob = null;
 			while (keyRS.next()) {
 
-				gameBlob = keyRS.getBlob(1);
-				byte[] byteArray = gameBlob.getBytes(1, (int) gameBlob.length());
-				gameBlob.free();
+				//gameBlob = keyRS.getBlob(1);
+				//byte[] byteArray = gameBlob.getBytes(1, (int) gameBlob.length());
+				//gameBlob.free();
+				
+				String serialized = keyRS.getString(2);
 
-				ByteArrayInputStream in = new ByteArrayInputStream(byteArray);
-				ObjectInputStream is = new ObjectInputStream(in);				
-				String serialized = (String) is.readObject();				
+				//ByteArrayInputStream in = new ByteArrayInputStream(byteArray);
+				//ObjectInputStream is = new ObjectInputStream(in);				
+				//String serialized = (String) is.readObject();				
 				Game game = converter.parseJson(serialized);//gson.fromJson(serialized, Game.class);	
 
-				in.close();
-				is.close();
+				//in.close();
+				//is.close();
 
 				games.add(game);
 			}		
@@ -232,13 +234,8 @@ public class GameDAO implements GameDAOInterface {
 		} catch (SQLException e) {
 			DatabaseException serverEx = new DatabaseException(e.getMessage(), e);
 			throw serverEx;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally {
+		} 
+		finally {
 			if (stmt != null)
 				stmt.close();
 			if (keyRS != null)
@@ -260,6 +257,7 @@ public class GameDAO implements GameDAOInterface {
 
 		PreparedStatement stmt = null;
 		ResultSet keyRS = null;
+		Game game = null;
 
 		try {
 			String sql = "SELECT game FROM Games WHERE gameID = ?";
@@ -278,14 +276,14 @@ public class GameDAO implements GameDAOInterface {
 				//ObjectInputStream is = new ObjectInputStream(in);
 				String serialized = keyRS.getString(1);//(String) is.readObject();	
 
-				Game game = converter.parseJson(serialized);	
+				game = converter.parseJson(serialized);	
 
 				//in.close();
 				//is.close();
 
 				game.addPlayer(userID, playerColor);
 
-				update(game);		
+
 			}
 
 		} catch (SQLException e) {
@@ -299,6 +297,12 @@ public class GameDAO implements GameDAOInterface {
 				stmt.close();
 			if (keyRS != null)
 				keyRS.close();
+
+			if (game!=null){
+				update(game);	
+			}
+
+
 		}		
 
 		return true;
