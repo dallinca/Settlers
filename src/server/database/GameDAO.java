@@ -12,6 +12,7 @@ import javax.sql.rowset.serial.SerialBlob;
 import server.commands.Command;
 import shared.communication.*;
 import shared.communication.results.nonmove.Join_Result;
+import shared.definitions.CatanColor;
 import shared.model.Game;
 
 public class GameDAO implements GameDAOInterface {
@@ -173,7 +174,7 @@ public class GameDAO implements GameDAOInterface {
 	 * 
 	 */
 	@Override
-	public void joinPlayer(int gameID, int userID) {
+	public void joinPlayer(int gameID, int userID, CatanColor playerColor) {
 		System.out.println("GameDAO joinPlayer()");//
 		// TODO Auto-generated method stub
 
@@ -187,6 +188,18 @@ public class GameDAO implements GameDAOInterface {
 	public void storeCommand(int gameID, Command command) {
 		System.out.println("GameDAO storeCommand()");//
 
+	}
+
+	@Override
+	public void clearCommands(int gameID) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Command> getCommands(int gameID) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
