@@ -1,19 +1,19 @@
 package server.facade;
 
 import java.net.URLEncoder;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import client.ClientFacade;
 import client.data.GameInfo;
 import client.data.PlayerInfo;
 import client.data.TradeInfo;
-import client.proxy.ServerProxy;
 import server.commands.Command;
+import server.database.DatabaseException;
 import server.database.GameDAOInterface;
 import server.database.UserDAOInterface;
 import server.persistenceprovider.AbstractFactory;
@@ -21,7 +21,6 @@ import server.persistenceprovider.PersistenceProviderInterface;
 import shared.communication.User;
 import shared.communication.params.move.devcard.*;
 import shared.communication.params.move.*;
-import shared.communication.params.move.OfferTrade_Params.Offer;
 import shared.communication.params.nonmove.AddAI_Params;
 import shared.communication.params.nonmove.Create_Params;
 import shared.communication.params.nonmove.GetVersion_Params;
@@ -33,23 +32,6 @@ import shared.communication.params.nonmove.Register_Params;
 import shared.communication.results.ClientModel;
 import shared.communication.results.ClientModel.ResourceList;
 import shared.communication.results.JsonConverter;
-import shared.communication.results.move.AcceptTrade_Result;
-import shared.communication.results.move.BuildCity_Result;
-import shared.communication.results.move.BuildRoad_Result;
-import shared.communication.results.move.BuildSettlement_Result;
-import shared.communication.results.move.BuyDevCard_Result;
-import shared.communication.results.move.DiscardCards_Result;
-import shared.communication.results.move.FinishTurn_Result;
-import shared.communication.results.move.MaritimeTrade_Result;
-import shared.communication.results.move.OfferTrade_Result;
-import shared.communication.results.move.RobPlayer_Result;
-import shared.communication.results.move.RollNumber_Result;
-import shared.communication.results.move.SendChat_Result;
-import shared.communication.results.move.devcard.PlayMonopoly_Result;
-import shared.communication.results.move.devcard.PlayMonument_Result;
-import shared.communication.results.move.devcard.PlayRoadBuilding_Result;
-import shared.communication.results.move.devcard.PlaySoldier_Result;
-import shared.communication.results.move.devcard.PlayYearOfPlenty_Result;
 import shared.communication.results.nonmove.AddAI_Result;
 import shared.communication.results.nonmove.Create_Result;
 import shared.communication.results.nonmove.GetVersion_Result;
@@ -61,9 +43,7 @@ import shared.communication.results.nonmove.Register_Result;
 import shared.definitions.CatanColor;
 import shared.definitions.DevCardType;
 import shared.definitions.ResourceType;
-import shared.locations.EdgeDirection;
 import shared.locations.EdgeLocation;
-import shared.locations.HexLocation;
 import shared.model.Bank;
 import shared.model.Game;
 import shared.model.board.Board;
@@ -83,6 +63,8 @@ public class ServerFacade implements IServerFacade {
 	private List<User> users = new ArrayList<User>();
 	private JsonConverter jc;
 	
+	private Map <Integer, Integer> commandMap; 
+	
 	private UserDAOInterface userDAO;
 	private GameDAOInterface gameDAO;
 	private PersistenceProviderInterface persistenceProvider;
@@ -95,12 +77,22 @@ public class ServerFacade implements IServerFacade {
 
 	private ServerFacade() {	
 		
+		commandMap = new HashMap<Integer, Integer>();
+		
 		persistenceProvider = AbstractFactory.getInstance().getPersistenceProvider();
 		userDAO = persistenceProvider.getUserDAO();
 		gameDAO = persistenceProvider.getGameDAO();
 		
-		users = userDAO.getUsers(); 		
+		try {
+			users = userDAO.getUsers();
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 		
+		
 		liveGames = gameDAO.getGames();
+		
 		//commands = commandDAO.getCommands();
 		
 		
@@ -108,6 +100,7 @@ public class ServerFacade implements IServerFacade {
 		this.jc = new JsonConverter();
 
 		//TESTING REASON
+		/*
 		User user1 = new User("scott","scott", users.size());
 		users.add(user1);
 		User user2 = new User("thomas", "thomas", users.size());
@@ -144,7 +137,27 @@ public class ServerFacade implements IServerFacade {
 		u = users.get(3);
 		p.setPlayerName(u.getName());
 
-		liveGames.add(game);
+		liveGames.add(game);*/
+	}
+
+	public void updateAllGames() {
+				
+		//For every game
+		//Get all commands
+		//execute all commands
+		
+		for (Game g : liveGames){
+			
+			List<Command> commands = gameDAO.getCommands(g.getGameID());
+			
+			if (commands.size()!=0){
+				gameDAO.clearCommands(g.getGameID());				
+			}
+			
+			for (Command c : commands){
+				c.execute();
+			}			
+		}	
 	}
 
 	public static ServerFacade getInstance() {
@@ -770,7 +783,12 @@ public class ServerFacade implements IServerFacade {
 		//System.out.println(users);
 		
 		
-		userDAO.create(user);
+		try {
+			userDAO.create(user);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return result;
 	}
 
@@ -890,7 +908,12 @@ public class ServerFacade implements IServerFacade {
 
 		//System.out.println("Returning game result from server facade.");
 		
-		gameDAO.create(game);
+		try {
+			gameDAO.create(game);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return result;
 	}
 
@@ -998,7 +1021,7 @@ public class ServerFacade implements IServerFacade {
 			startGame(g);
 		}
 
-		gameDAO.joinPlayer(gameID, userID);
+		gameDAO.joinPlayer(gameID, userID, playerColor);
 
 		return result;
 	}
@@ -1006,7 +1029,8 @@ public class ServerFacade implements IServerFacade {
 	private void startGame(Game g) {	
 
 		g.setStatus("FirstRound");
-		g.setCurrentPlayer(g.getAllPlayers()[0]);
+		g.setCurrentPlayer(g.getAllPlayers()[0]);		
+		gameDAO.update(g);
 
 		return;		
 	}
@@ -1133,6 +1157,38 @@ public class ServerFacade implements IServerFacade {
 	}
 
 	public void storeCommand(int gameID, Command command) {
+				
+		Game game = findGame(gameID);
+		
+		if (game.doWeHaveAWinner()){
+			gameDAO.delete(game);
+			return;
+		}
+		
+		if (commandMap.containsKey(gameID)){
+			
+			int commandCount = commandMap.get(gameID);
+			
+			commandCount++;
+			
+			if (commandCount == 10){
+				
+				commandCount = 0;
+				gameDAO.update(game);
+				gameDAO.clearCommands(gameID);
+				commandMap.put(gameID, commandCount);
+				
+				return;
+			}
+			
+			commandMap.put(gameID, commandCount);
+			
+			
+		}else{
+			
+			commandMap.put(gameID, 1);
+		}
+		
 		gameDAO.storeCommand(gameID, command);		
 	}
 

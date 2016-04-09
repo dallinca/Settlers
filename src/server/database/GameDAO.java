@@ -185,9 +185,8 @@ public class GameDAO implements GameDAOInterface {
 	 * 
 	 */
 	@Override
-	public void joinPlayer(int gameID, int userID, CatanColor color) {
-		System.out.println("GameDAO joinPlayer()");//
-		// TODO Auto-generated method stub
+	public void joinPlayer(int gameID, int userID, CatanColor playerColor) {
+		System.out.println("GameDAO joinPlayer()");
 
 	}
 
@@ -239,6 +238,18 @@ public class GameDAO implements GameDAOInterface {
 			return false;
 		}
 
+	}
+
+	@Override
+	public void clearCommands(int gameID) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Command> getCommands(int gameID) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import server.facade.ServerFacade;
 import server.handlers.move.devcard.*;
 import server.handlers.move.*;
 import server.handlers.nonmove.*;
@@ -122,6 +123,9 @@ public class Server {
 		
 		
 		
+		
+		
+		ServerFacade.getInstance().updateAllGames();
 
 		server.start();
 	}
@@ -156,6 +160,8 @@ public class Server {
 	private PlayYearOfPlenty_Handler PlayYearOfPlentyHandler = new PlayYearOfPlenty_Handler();
 
 	public static void main(String[] args) {
+		
+		
 		if (args.length==0){
 			//Do nothing, no parameters.
 		}
@@ -168,5 +174,8 @@ public class Server {
 		}	
 		new Server().run();
 	}
+	
+	
+	
 
 }
