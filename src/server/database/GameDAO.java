@@ -1,8 +1,13 @@
 package server.database;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.sql.rowset.serial.SerialBlob;
 
 import server.commands.Command;
 import shared.communication.*;
@@ -12,7 +17,7 @@ import shared.model.Game;
 public class GameDAO implements GameDAOInterface {
 
 	DatabaseAccess db;
-	
+
 	/**
 	 * Constructor
 	 * takes in a database object
@@ -25,24 +30,43 @@ public class GameDAO implements GameDAOInterface {
 	 * Inserts a new game object into the database
 	 * @pre data in the game object is correct
 	 * @return a boolean representing whether or not the create was successful
+	 * @throws SQLException 
 	 */
 	@Override
-	public boolean create(Game game) { //throws SQLException{
+	public boolean create(Game game) throws SQLException { //throws SQLException{
 		System.out.println("GameDAO create()");
-		
+
 		PreparedStatement stmt = null;
-		Statement keyStmt = null;
-		ResultSet keyRS = null;
-		
+
 		try {
 
 			String sql = "INSERT INTO Games (gameID, game, commands) values (?, ?, ?)";
 			stmt = db.getConnection().prepareStatement(sql);
+			
 			stmt.setInt(1, game.getGameID());
 			
-			Blob blob;
-			blob.
-			stmt.setBlob(2, game);
+			Blob gameBlob;
+			ByteArrayOutputStream bos = null;
+			
+			try {
+				
+				bos = new ByteArrayOutputStream();
+				ObjectOutputStream oos = new ObjectOutputStream(bos);
+				oos.writeObject(game);
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
+			
+			byte[] byteArray = bos.toByteArray();
+
+			gameBlob = new SerialBlob(byteArray);
+
+			stmt.setBlob(2, gameBlob);
+			
+			Blob commandBlob = null; //There exist no commands for a new game. DO NOT TRY TO ADD NONEXISTENT COMMANDS!
+			stmt.setBlob(3, commandBlob);
 
 			if (stmt.executeUpdate() == 1) {
 				return true;
@@ -55,12 +79,7 @@ public class GameDAO implements GameDAOInterface {
 		} finally {
 			if (stmt != null)
 				stmt.close();
-			if (keyRS != null)
-				keyRS.close();
-			if (keyStmt != null)
-				keyStmt.close();
 		}
-		return true;
 	}
 
 	/**
@@ -72,6 +91,9 @@ public class GameDAO implements GameDAOInterface {
 	public Game update(Game g) { //throws SQLException {
 		
 		Connection connection = db.getConnection();
+
+		System.out.println("GameDAO update()"); //((Called to save the game))
+		
 		// Start a transaction
 		
 		PreparedStatement stmt = null;
@@ -101,11 +123,14 @@ public class GameDAO implements GameDAOInterface {
 	}
 	/**
 	 * Deletes the given corresponding game object from the database
+	 * Used to remove the game upon game completion.
 	 * @pre the given game is a valid game in the database
 	 * @return a boolean depicting whether or not the delete was successful
 	 */
 	@Override
 	public boolean delete(Game game) {
+		System.out.println("GameDAO delete()");//
+		
 		/*Connection connection = db.getConnection();
 		PreparedStatement stmt = null;
 
@@ -126,32 +151,41 @@ public class GameDAO implements GameDAOInterface {
 			System.err.println("Could NOT Delete the User");
 			return false;
 		}*/
-		
+
 		return false;
 
 	}
-	
+
+	/**Used to retrieve list of all game objects.
+	 * 
+	 */
 	@Override
 	public List<Game> getGames() {
+		System.out.println("GameDAO getGames()");//
 		List<Game> games = new ArrayList<Game>();
-		
-		
+
+
 		return games;
 	}
 
+	/**Used to add a player to the given game.
+	 * 
+	 */
 	@Override
 	public void joinPlayer(int gameID, int userID) {
+		System.out.println("GameDAO joinPlayer()");//
 		// TODO Auto-generated method stub
-		
+
 	}
 
+	/**Used to add a command to the given game database object
+	 * If there are 10 total commands with the game, save the game, then remove all commands
+	 * If there are total 9 or less commands with the game, save the new command with the game.
+	 */
 	@Override
 	public void storeCommand(int gameID, Command command) {
-		// TODO Auto-generated method stub
-		
-		//If there are 10 total commands with the game, save the game, remove all commands
-		//If there are total 9 or less commands with the game, save the new command with the game.
-		
+		System.out.println("GameDAO storeCommand()");//
+
 	}
 
 }
