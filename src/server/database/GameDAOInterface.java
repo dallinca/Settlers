@@ -2,6 +2,9 @@ package server.database;
 
 import java.sql.SQLException;
 import java.util.List;
+
+import javax.sql.rowset.serial.SerialException;
+
 import server.commands.Command;
 import shared.communication.User;
 import shared.communication.params.nonmove.GetVersion_Params;
@@ -17,15 +20,9 @@ abstract public interface GameDAOInterface {
 	public Game update(Game g) throws SQLException;
 	public boolean delete(Game game);
 	public List<Game> getGames();
-<<<<<<< HEAD
-	public void joinPlayer(int gameID, int userID,  CatanColor color);
-	public void storeCommand(int gameID, Command command);
-	public boolean clearCommand(int gameID);	
-	
-=======
+	public boolean storeCommand(int gameID, Command command) throws SerialException, SQLException;
 	public void joinPlayer(int gameID, int userID, CatanColor playerColor);
-	public void storeCommand(int gameID, Command command);
-	public void clearCommands(int gameID);
+	public boolean clearCommands(int gameID);
 	public List<Command> getCommands(int gameID);
->>>>>>> a297bbc27163104965f212c476404c75ea69b6af
+
 }

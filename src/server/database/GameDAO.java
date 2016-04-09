@@ -1,13 +1,17 @@
 package server.database;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.rowset.serial.SerialBlob;
+import javax.sql.rowset.serial.SerialException;
 
 import server.commands.Command;
 import shared.communication.*;
@@ -43,29 +47,29 @@ public class GameDAO implements GameDAOInterface {
 
 			String sql = "INSERT INTO Games (gameID, game, commands) values (?, ?, ?)";
 			stmt = db.getConnection().prepareStatement(sql);
-			
+
 			stmt.setInt(1, game.getGameID());
-			
+
 			Blob gameBlob;
 			ByteArrayOutputStream bos = null;
-			
+
 			try {
-				
+
 				bos = new ByteArrayOutputStream();
 				ObjectOutputStream oos = new ObjectOutputStream(bos);
 				oos.writeObject(game);
-				
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}			
-			
+
 			byte[] byteArray = bos.toByteArray();
 
 			gameBlob = new SerialBlob(byteArray);
 
 			stmt.setBlob(2, gameBlob);
-			
+
 			Blob commandBlob = null; //There exist no commands for a new game. DO NOT TRY TO ADD NONEXISTENT COMMANDS!
 			stmt.setBlob(3, commandBlob);
 
@@ -91,36 +95,36 @@ public class GameDAO implements GameDAOInterface {
 	 */
 	@Override
 	public Game update(Game g) throws SQLException {
-		
+
 		Connection connection = db.getConnection();
 
 		System.out.println("GameDAO update()"); //((Called to save the game))
-		
+
 		// Start a transaction
-		
+
 		PreparedStatement stmt = null;
 
 		Blob gameBlob;
 		ByteArrayOutputStream bos = null;
-		
+
 		try {
 			String sql = "update Games SET game = ? WHERE gameID = ?";
 
 			try {
-				
+
 				bos = new ByteArrayOutputStream();
 				ObjectOutputStream oos = new ObjectOutputStream(bos);
 				oos.writeObject(g);
-				
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}			
-			
+
 			byte[] byteArray = bos.toByteArray();
 
 			gameBlob = new SerialBlob(byteArray);
-			
+
 			stmt = connection.prepareStatement(sql);
 			stmt.setBlob(1, gameBlob);
 			//stmt.setString(2, g.getGameHistory());
@@ -147,7 +151,7 @@ public class GameDAO implements GameDAOInterface {
 	@Override
 	public boolean delete(Game game) {
 		System.out.println("GameDAO delete()");//
-		
+
 		Connection connection = db.getConnection();
 		PreparedStatement stmt = null;
 
@@ -193,37 +197,76 @@ public class GameDAO implements GameDAOInterface {
 	/**Used to add a command to the given game database object
 	 * If there are 10 total commands with the game, save the game, then remove all commands
 	 * If there are total 9 or less commands with the game, save the new command with the game.
+	 * @throws SQLException 
+	 * @throws SerialException 
 	 */
 	@Override
-	public void storeCommand(int gameID, Command command) {
+	public boolean storeCommand(int gameID, Command command) throws SerialException, SQLException {
 		System.out.println("GameDAO storeCommand()");
-		
+
 		Connection connection = db.getConnection();
 		PreparedStatement stmt = null;
-		Statement keyStmt = null;
-		ResultSet keyRS = null;
-		
-		String select = "SELECT Commands from Games where gameID = ?";
-		
-		String sql = "UPDATE Games SET Commands = ? WHERE gameID = ?";
-		
+
+		List<Command> commands = getCommands(gameID);
+
+		commands.add(command);
+
+		Blob commandBlob;
+		ByteArrayOutputStream bos = null;
+
+		try {
+
+			bos = new ByteArrayOutputStream();
+			ObjectOutputStream oos = new ObjectOutputStream(bos);
+			oos.writeObject(commands);
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}			
+
+		byte[] byteArray = bos.toByteArray();
+
+		commandBlob = new SerialBlob(byteArray);
+
+
+		try {
+			// Start a transaction
+			String sql = "UPDATE Games SET commands = ? WHERE gameID = ?";
+			stmt = connection.prepareStatement(sql);
+			stmt.setBlob(2, commandBlob);
+			stmt.setInt(2, gameID);
+
+			int g = stmt.executeUpdate();
+			if (g == 1)
+				return true;
+			else
+				return false;
+
+		} catch (SQLException e) {
+			System.err.println("Could NOT store commands");
+			return false;
+		}
+
+
+
 		//All your base are belong to us
-		
+
 	}
-	
+
 	/**
 	 * This is used to clear the command list out so the game can be stored again
 	 * @pre this is called when the number of commands in the database = 10
 	 * @post ability to re-store the game blob in the database
 	 */
 	@Override
-	public boolean clearCommand(int gameID) {
+	public boolean clearCommands(int gameID) {
 		Connection connection = db.getConnection();
 		PreparedStatement stmt = null;
 
 		try {
 			// Start a transaction
-			String sql = "delete Commands from Games where gameID = ?";
+			String sql = "delete commands from Games where gameID = ?";
 			stmt = connection.prepareStatement(sql);
 			stmt.setInt(1, gameID);
 
@@ -241,15 +284,58 @@ public class GameDAO implements GameDAOInterface {
 	}
 
 	@Override
-	public void clearCommands(int gameID) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public List<Command> getCommands(int gameID) {
-		// TODO Auto-generated method stub
-		return null;
+
+		Connection connection = db.getConnection();
+		PreparedStatement stmt = null;
+
+		Statement keyStmt = null;
+		ResultSet keyRS = null;
+
+
+		try {
+			// Start a transaction
+			String sql = "SELECT commands from Games where gameID = ?";
+			stmt = connection.prepareStatement(sql);
+			stmt.setInt(1, gameID);
+
+			keyRS = stmt.executeQuery();
+			Blob commandBlob = null;
+			while (keyRS.next()) {
+				commandBlob = keyRS.getBlob(1);
+			}			
+
+			ObjectInputStream ois = new ObjectInputStream(commandBlob.getBinaryStream());
+
+			byte[] byteArray = commandBlob.getBytes(1, (int) commandBlob.length());
+			commandBlob.free();
+
+			try {
+				ByteArrayInputStream in = new ByteArrayInputStream(byteArray);
+				ObjectInputStream is = new ObjectInputStream(in);
+				List<Command> commands = (List<Command>) is.readObject();
+
+				in.close();
+				is.close();
+
+				return commands;
+
+			} catch (IOException e) {
+
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}			
+
+		} catch (SQLException e) {
+			System.err.println("Could NOT get the Commands");
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		return new ArrayList<Command>();
+		
 	}
 
 }
