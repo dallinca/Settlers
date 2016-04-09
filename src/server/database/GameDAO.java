@@ -56,32 +56,35 @@ public class GameDAO implements GameDAOInterface {
 
 			stmt.setInt(1, game.getGameID());
 
-			Blob gameBlob;
-			ByteArrayOutputStream bos = null;
+			//Blob gameBlob;
+			//ByteArrayOutputStream bos = null;
 
-			try {
+			//try {
+			String serialized = gson.toJson(converter.toClientModel(game));
 
-
-
-				String serialized = gson.toJson(converter.toClientModel(game));
-
-				bos = new ByteArrayOutputStream();
+			/*bos = new ByteArrayOutputStream();
 				ObjectOutputStream oos = new ObjectOutputStream(bos);			
-				oos.writeObject(serialized);
+				oos.writeObject(serialized);*/
 
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
+			//} catch (IOException e) {
+			// TODO Auto-generated catch block
+			//		e.printStackTrace();
+			//}			
 
-			byte[] byteArray = bos.toByteArray();
+			//byte[] byteArray = bos.toByteArray();
 
-			gameBlob = new SerialBlob(byteArray);
+			//gameBlob = DatabaseAccess.getInstance().getConnection().createBlob();			
+			//gameBlob.setBytes(0, byteArray);
 
-			stmt.setBlob(2, gameBlob);//crashes here----------
+			//gameBlob = new SerialBlob(byteArray);
 
-			Blob commandBlob = null; //There exist no commands for a new game. DO NOT TRY TO ADD NONEXISTENT COMMANDS!
-			stmt.setBlob(3, commandBlob);
+			//stmt.setBlob(2, gameBlob);//crashes here----------
+			stmt.setString(2, serialized);
+
+
+			//	Blob commandBlob = null; //There exist no commands for a new game. DO NOT TRY TO ADD NONEXISTENT COMMANDS!
+			//stmt.setBlob(3, commandBlob);\
+			stmt.setString(3, "");
 
 			if (stmt.executeUpdate() == 1) {
 				return true;
@@ -114,33 +117,35 @@ public class GameDAO implements GameDAOInterface {
 
 		PreparedStatement stmt = null;
 
-		Blob gameBlob;
-		ByteArrayOutputStream bos = null;
+		//Blob gameBlob;
+		//ByteArrayOutputStream bos = null;
 
 		try {
 			String sql = "update Games SET game = ? WHERE gameID = ?";
 
-			try {
+			//try {
 
-				String serialized = gson.toJson(converter.toClientModel(game));
+			String serialized = gson.toJson(converter.toClientModel(game));
 
-				bos = new ByteArrayOutputStream();
-				ObjectOutputStream oos = new ObjectOutputStream(bos);			
-				oos.writeObject(serialized);
+			//bos = new ByteArrayOutputStream();
+			//ObjectOutputStream oos = new ObjectOutputStream(bos);			
+			//oos.writeObject(serialized);
 
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
+			//} catch (IOException e) {
+			// TODO Auto-generated catch block
+			//	e.printStackTrace();
+			//}			
 
-			byte[] byteArray = bos.toByteArray();
+			//byte[] byteArray = bos.toByteArray();
 
-			gameBlob = new SerialBlob(byteArray);
+			//gameBlob = new SerialBlob(byteArray);
 
 			stmt = connection.prepareStatement(sql);
-			stmt.setBlob(1, gameBlob);
+			//stmt.setBlob(1, gameBlob);
 			//stmt.setString(2, g.getGameHistory());
-			stmt.setInt(2, game.getGameID());
+			
+			stmt.setString(1, serialized);
+			stmt.setInt(2, game.getGameID());		
 
 			if (stmt.executeUpdate() == 1)
 				return true;
@@ -257,25 +262,26 @@ public class GameDAO implements GameDAOInterface {
 		ResultSet keyRS = null;
 
 		try {
-			String sql = "SELECT FROM Games WHERE gameID = ?";
+			String sql = "SELECT game FROM Games WHERE gameID = ?";
 			stmt = DatabaseAccess.getInstance().getConnection().prepareStatement(sql);					
 			stmt.setInt(1, gameID);			
 			keyRS = stmt.executeQuery();
 
-			Blob gameBlob = null;
+			//Blob gameBlob = null;
 			while (keyRS.next()) {
 
-				gameBlob = keyRS.getBlob(2);
-				byte[] byteArray = gameBlob.getBytes(1, (int) gameBlob.length());
-				gameBlob.free();
+				//gameBlob = keyRS.getBlob(2);
+				//byte[] byteArray = gameBlob.getBytes(1, (int) gameBlob.length());
+				//gameBlob.free();
 
-				ByteArrayInputStream in = new ByteArrayInputStream(byteArray);
-				ObjectInputStream is = new ObjectInputStream(in);
-				String serialized = (String) is.readObject();				
+				//ByteArrayInputStream in = new ByteArrayInputStream(byteArray);
+				//ObjectInputStream is = new ObjectInputStream(in);
+				String serialized = keyRS.getString(1);//(String) is.readObject();	
+
 				Game game = converter.parseJson(serialized);	
 
-				in.close();
-				is.close();
+				//in.close();
+				//is.close();
 
 				game.addPlayer(userID, playerColor);
 
@@ -286,15 +292,7 @@ public class GameDAO implements GameDAOInterface {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		}
+		} 
 		finally{
 
 			if (stmt != null)
