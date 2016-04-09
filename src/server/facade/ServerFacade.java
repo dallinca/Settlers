@@ -7,12 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.sql.rowset.serial.SerialException;
+
 import com.google.gson.JsonObject;
 
 import client.data.GameInfo;
 import client.data.PlayerInfo;
 import client.data.TradeInfo;
 import server.commands.Command;
+import server.database.DatabaseAccess;
 import server.database.DatabaseException;
 import server.database.GameDAOInterface;
 import server.database.UserDAOInterface;
@@ -62,41 +65,66 @@ public class ServerFacade implements IServerFacade {
 	private List<Game> liveGames = new ArrayList<Game>();
 	private List<User> users = new ArrayList<User>();
 	private JsonConverter jc;
-	
+
 	private Map <Integer, Integer> commandMap; 
-	
+
 	private UserDAOInterface userDAO;
 	private GameDAOInterface gameDAO;
 	private PersistenceProviderInterface persistenceProvider;
-	
-	
+
+
 	/**
 	 * Singleton pattern for serverfacade
 	 */
 	private static ServerFacade SINGLETON = null;
 
-	private ServerFacade() {	
-		
+	private ServerFacade() {
+
+		System.out.println("SERVER FACADE: SERVER FACADE CONSTRUCTOR.");
+
 		commandMap = new HashMap<Integer, Integer>();
-		
+
+		System.out.println("SERVER FACADE: ACQUIRING PERSISTENCE PROVIDER.");
 		persistenceProvider = AbstractFactory.getInstance().getPersistenceProvider();
+
+		System.out.println("SERVER FACADE: ACQUIRING PP DAOs.");
 		userDAO = persistenceProvider.getUserDAO();
 		gameDAO = persistenceProvider.getGameDAO();
-		
+
+		System.out.println("SERVER FACADE: Quering for users and games.");
 		try {
-			users = userDAO.getUsers();
+			persistenceProvider.startTransaction();
+
+			users = userDAO.getUsers();		
+			
+			for (User user : users){
+				
+				System.out.println(user.toString());
+				
+			}
+			
+			liveGames = gameDAO.getGames();
+			
+			for (Game game : liveGames){
+				
+				System.out.println("Game: "+game.getGameID());
+				
+			}
+			
+
+			persistenceProvider.endTransaction(true);			
+
 		} catch (DatabaseException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} 		
-		
-		liveGames = gameDAO.getGames();
-		
+
+
 		//commands = commandDAO.getCommands();
-		
-		
-		
+
+
+
 		this.jc = new JsonConverter();
 
 		//TESTING REASON
@@ -141,22 +169,34 @@ public class ServerFacade implements IServerFacade {
 	}
 
 	public void updateAllGames() {
-				
+
 		//For every game
 		//Get all commands
 		//execute all commands
-		
+
 		for (Game g : liveGames){
-			
-			List<Command> commands = gameDAO.getCommands(g.getGameID());
-			
-			if (commands.size()!=0){
-				gameDAO.clearCommands(g.getGameID());				
+			try {
+				persistenceProvider.startTransaction();
+				List<Command> commands = gameDAO.getCommands(g.getGameID());
+
+				if (commands.size()!=0){
+
+
+
+					gameDAO.clearCommands(g.getGameID());	
+
+
+				}
+
+				persistenceProvider.endTransaction(true);
+
+				for (Command c : commands){
+					c.execute();
+				}		
+			} catch (DatabaseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			
-			for (Command c : commands){
-				c.execute();
-			}			
 		}	
 	}
 
@@ -453,8 +493,8 @@ public class ServerFacade implements IServerFacade {
 		Player stealer = game.getAllPlayers()[params.getPlayerIndex()];
 		//System.out.println("canDoRobPlayer 2");
 		//System.out.println("canDoRobPlayer 3");
-		
-		
+
+
 		if(game.canDoMoveRobberToHex(stealer.getPlayerId(), params.getLocation())){ // MOVER Id
 
 			try {
@@ -462,7 +502,7 @@ public class ServerFacade implements IServerFacade {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+
 			//System.out.println("canDoRobPlayer 4");
 			if (params.getVictimIndex() == -1){
 				//System.out.println("canDoRobPlayer 5");
@@ -781,11 +821,16 @@ public class ServerFacade implements IServerFacade {
 
 		//System.out.println("users Size: " + users.size());
 		//System.out.println(users);
-		
-		
+
+
 		try {
+			persistenceProvider.startTransaction();
 			userDAO.create(user);
+			persistenceProvider.endTransaction(true);
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -884,17 +929,19 @@ public class ServerFacade implements IServerFacade {
 		Player[] players = new Player[4];		
 		Board board = new Board(tiles, numbers, ports);
 		Game game = new Game(players, board, new Bank());
-		
+
 		/*Game.Line[] initHistory = new Game.Line[1];
 		initHistory[0].setMessage("");
 		initHistory[0].setSource("");*/
 		//game.setHistory(initHistory);
-		
+
 		game.setTitle(name);		
 		game.setGameID(gameTracker++);
 
 		//System.out.println("Adding creator to game.");
 		game.addPlayer(userID, null);
+		
+		
 		Player p = game.getPlayerByID(userID);
 		User u = users.get(userID);
 		p.setPlayerName(u.getName());
@@ -907,10 +954,17 @@ public class ServerFacade implements IServerFacade {
 		result.setValid(true);
 
 		//System.out.println("Returning game result from server facade.");
-		
+
 		try {
+			persistenceProvider.startTransaction();
 			gameDAO.create(game);
+			gameDAO.joinPlayer(game.getGameID(), userID, CatanColor.WHITE);
+			persistenceProvider.endTransaction(true);
+
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -1021,7 +1075,17 @@ public class ServerFacade implements IServerFacade {
 			startGame(g);
 		}
 
-		gameDAO.joinPlayer(gameID, userID, playerColor);
+		try {
+			persistenceProvider.startTransaction();
+			gameDAO.joinPlayer(gameID, userID, playerColor);
+			persistenceProvider.endTransaction(true);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DatabaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return result;
 	}
@@ -1030,7 +1094,19 @@ public class ServerFacade implements IServerFacade {
 
 		g.setStatus("FirstRound");
 		g.setCurrentPlayer(g.getAllPlayers()[0]);		
-		gameDAO.update(g);
+		try {
+			persistenceProvider.startTransaction();
+
+			gameDAO.update(g);
+
+			persistenceProvider.endTransaction(true);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DatabaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return;		
 	}
@@ -1157,42 +1233,66 @@ public class ServerFacade implements IServerFacade {
 	}
 
 	public void storeCommand(int gameID, Command command) {
-				
+
 		Game game = findGame(gameID);
-		
-		if (game.doWeHaveAWinner()){
-			gameDAO.delete(game);
-			return;
-		}
-		
-		if (commandMap.containsKey(gameID)){
-			
-			int commandCount = commandMap.get(gameID);
-			
-			commandCount++;
-			
-			if (commandCount == 10){
-				
-				commandCount = 0;
-				gameDAO.update(game);
-				gameDAO.clearCommands(gameID);
-				commandMap.put(gameID, commandCount);
-				
+		try {
+			persistenceProvider.startTransaction();
+
+			if (game.doWeHaveAWinner()){
+
+				gameDAO.delete(game);
+				persistenceProvider.endTransaction(true);
 				return;
 			}
-			
-			commandMap.put(gameID, commandCount);
-			
-			
-		}else{
-			
-			commandMap.put(gameID, 1);
+
+			if (commandMap.containsKey(gameID)){
+
+				int commandCount = commandMap.get(gameID);
+
+				commandCount++;
+
+				if (commandCount == 10){
+
+					commandCount = 0;
+					try {
+
+						gameDAO.update(game);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					gameDAO.clearCommands(gameID);
+					commandMap.put(gameID, commandCount);
+					persistenceProvider.endTransaction(true);
+					return;
+				}
+
+				commandMap.put(gameID, commandCount);
+
+
+			}else{
+
+				commandMap.put(gameID, 1);
+			}
+
+			try {
+				gameDAO.storeCommand(gameID, command);
+			} catch (SerialException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}		
+
+			persistenceProvider.endTransaction(true);
+		} catch (DatabaseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-		
-		gameDAO.storeCommand(gameID, command);		
 	}
 
 
-	
-	
+
+
 }

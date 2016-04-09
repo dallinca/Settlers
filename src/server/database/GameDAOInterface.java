@@ -16,8 +16,8 @@ import shared.model.Game;
 
 abstract public interface GameDAOInterface {
 
-	public boolean create(Game g) throws SQLException;
-	public Game update(Game g) throws SQLException;
+	public boolean create(Game game) throws SQLException;
+	public boolean update(Game game) throws SQLException;
 	public boolean delete(Game game);
 	public List<Game> getGames() throws SQLException, DatabaseException;
 	public boolean storeCommand(int gameID, Command command) throws SerialException, SQLException;

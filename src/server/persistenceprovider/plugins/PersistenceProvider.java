@@ -13,18 +13,16 @@ public class PersistenceProvider implements PersistenceProviderInterface{
 	
 	UserDAO userDAO;
 	GameDAO gameDAO;
-	DatabaseAccess DA;
 	
 	/**
 	 * Creates a new persistence provider.
 	 * @param users
 	 * @param games
 	 */
-	public PersistenceProvider(DatabaseAccess DA){
+	public PersistenceProvider(){
 				
-		this.DA = DA;
-		gameDAO = new GameDAO(DA);
-		userDAO = new UserDAO(DA);		
+		gameDAO = new GameDAO();
+		userDAO = new UserDAO();		
 	}
 	
 	/**
@@ -32,7 +30,7 @@ public class PersistenceProvider implements PersistenceProviderInterface{
 	 * @throws DatabaseException 
 	 */
 	public void startTransaction() throws DatabaseException{
-		DA.startTransaction();
+		DatabaseAccess.getInstance().startTransaction();
 		return;
 	}
 	
@@ -40,7 +38,7 @@ public class PersistenceProvider implements PersistenceProviderInterface{
 	 * Ends a database transaction
 	 */
 	public void endTransaction(boolean commit){
-		DA.endTransaction(commit);
+		DatabaseAccess.getInstance().endTransaction(commit);
 		return;
 	}
 /*	
@@ -59,7 +57,7 @@ public class PersistenceProvider implements PersistenceProviderInterface{
 	 */
 	public void importFromFile(String file){
 		try {
-			DA.setupDatabase();
+			DatabaseAccess.getInstance().setupDatabase();
 		} catch (DatabaseException e) {
 			e.printStackTrace();
 		}

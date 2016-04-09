@@ -5,28 +5,50 @@ import java.sql.*;
 
 public class DatabaseAccess {
 
-	private static final String DATABASE_DIRECTORY = "Database";
-	private static final String DATABASE_FILE = "Database.sqlite";
-	private static final String DATABASE_URL = "jdbc:sqlite:" + DATABASE_DIRECTORY +
-			File.separator + DATABASE_FILE;
+	public static DatabaseAccess singleton = null;
 
-	private Connection connection;
 
-	public DatabaseAccess(){
+	public static DatabaseAccess getInstance(){
+
+		if (singleton == null){
+
+			singleton = new DatabaseAccess();
+
+		}
+
+		return singleton;
+	}
+
+
+	private DatabaseAccess(){
+
 		connection = null;
 	}
 
-	public static void initialize() throws DatabaseException {
-		System.out.println("DatabaseAccess :: start transaction");
+	private static final String DATABASE_DIRECTORY = "Database";
+	private static final String DATABASE_FILE = "Database.sqlite";
+	/*private static final String DATABASE_URL = "jdbc:sqlite:" + DATABASE_DIRECTORY +
+			File.separator + DATABASE_FILE;*/
+	
+	private static final String DATABASE_URL = "jdbc:sqlite:Database/Database.sqlite";
 
-		try {
-			final String driver = "org.sqlite.JDBC";
-			Class.forName(driver);
+	private Connection connection;
+
+	public static void initialize() throws DatabaseException {
+		System.out.println("DatabaseAccess :: initialize");
+
+		if (singleton==null){
+
+			try {
+				final String driver = "org.sqlite.JDBC";
+				Class.forName(driver);
+			}
+			catch(ClassNotFoundException e) {
+				DatabaseException serverEx = new DatabaseException("Could not load database driver", e);
+				throw serverEx; 
+			}
 		}
-		catch(ClassNotFoundException e) {
-			DatabaseException serverEx = new DatabaseException("Could not load database driver", e);
-			throw serverEx; 
-		}
+
 	}
 
 	/**
@@ -34,26 +56,40 @@ public class DatabaseAccess {
 	 * 
 	 */
 	public void setupDatabase() throws DatabaseException {
-
+		System.out.println("Database Setup");
 		try {
 			startTransaction();
+			
+					
 
 			Statement stat = connection.createStatement();
+
+			ResultSet rs = stat.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='Users'");
+			
+			if(rs.next()){
+				rs.close();
+				stat.close();
+				endTransaction(true);			
+				System.out.println("Data tables already exist, exiting.");
+				return;
+			}
+			
+			System.out.println("Creating data tables");
+			
 			stat.executeUpdate("drop table if exists Users;");
 			stat.executeUpdate("create table Users(userID INTEGER PRIMARY KEY,			" +
 					"				   username TEXT,						" +
-					"				   password TEXT,						");
+					"				   password TEXT)");
 
 			stat.executeUpdate("drop table if exists Games;");
 			stat.executeUpdate("create table Games(gameID INTEGER PRIMARY KEY,			" +
 					"				   game BLOB,							" +
-					"				   commands BLOB,						");
+					"				   commands BLOB)");
 
 			endTransaction(true);
 		} catch(SQLException e) {
 			throw new DatabaseException(e.getMessage());
 		}
-
 	}
 
 	public void startTransaction() throws DatabaseException {	

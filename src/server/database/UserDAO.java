@@ -8,10 +8,8 @@ import shared.communication.params.nonmove.*;
 
 public class UserDAO implements UserDAOInterface {
 
-	DatabaseAccess db;
 
-	public UserDAO(DatabaseAccess db) {
-		this.db = db;
+	public UserDAO() {
 	}
 
 	/**
@@ -30,33 +28,49 @@ public class UserDAO implements UserDAOInterface {
 		
 		try {
 
+			System.out.println("UserDAO 1.");
 			String sql = "INSERT INTO Users (userID, username, password) values (?, ?, ?)";
-			stmt = db.getConnection().prepareStatement(sql);
-			stmt.setString(1, user.getName());
+			System.out.println("UserDAO 2.");
+			if (DatabaseAccess.getInstance().getConnection()==null){
+				System.out.println("Database connection is null.");
+			}
+			
+			System.out.println("User: " +user.toString());
+			stmt = DatabaseAccess.getInstance().getConnection().prepareStatement(sql);
+			stmt.setString(3, user.getName());
+			System.out.println("UserDAO 3.");
 			stmt.setString(2, user.getPassword());
-			stmt.setInt(3, user.getPlayerID());
+			System.out.println("UserDAO 4. Player ID : "+user.getPlayerID());
+			stmt.setInt(1, user.getPlayerID());
+			System.out.println("UserDAO 5.");
 			
-			
+			//System.out.println("Excute: "+stmt.executeUpdate());
 			if (stmt.executeUpdate() == 1) {
-				keyStmt = db.getConnection().createStatement();
+				System.out.println("UserDAO 5.");
+				keyStmt = DatabaseAccess.getInstance().getConnection().createStatement();
 				keyRS = keyStmt.executeQuery("SELECT last_insert_rowid()"); 
 				keyRS.next();
 				int id = keyRS.getInt(1);
 				user.setPlayerID(id);
 			} else {
+				System.out.println("UserDAO 6.");
 				return false;
 			}
 		} catch (SQLException e) {
+			System.out.println("UserDAO 7.");
 			e.printStackTrace();
 			return false;
 		} finally {
-			if (stmt != null)
-				stmt.close();
+			System.out.println("UserDAO 8.");
+			if (stmt != null){
+				stmt.close();				
+			}				
 			if (keyRS != null)
 				keyRS.close();
 			if (keyStmt != null)
 				keyStmt.close();
 		}
+		System.out.println("UserDAO Finish create.");
 		return true;
 	}
 
@@ -75,16 +89,17 @@ public class UserDAO implements UserDAOInterface {
 		PreparedStatement stmt = null;
 		Statement keyStmt = null;
 		ResultSet keyRS = null;
-		
+				
 		try {
-			String sql = "SELECT * FROM User";
-			stmt = db.getConnection().prepareStatement(sql);
+			String sql = "SELECT * FROM Users";
+			stmt = DatabaseAccess.getInstance().getConnection().prepareStatement(sql);
 			keyRS = stmt.executeQuery();
 			
 			while (keyRS.next()) {
-				String name = keyRS.getString(1);
-				String password = keyRS .getString(2);
-				int playerID = keyRS .getInt(3);
+				
+				int playerID = keyRS .getInt(1);
+				String name = keyRS.getString(2);
+				String password = keyRS .getString(3);				
 				
 				User user = new User(name, password, playerID);
 				users.add(user);

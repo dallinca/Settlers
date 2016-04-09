@@ -13,22 +13,28 @@ import java.util.List;
 import javax.sql.rowset.serial.SerialBlob;
 import javax.sql.rowset.serial.SerialException;
 
+import com.google.gson.Gson;
+
 import server.commands.Command;
 import shared.communication.*;
+import shared.communication.results.ClientModel;
+import shared.communication.results.JsonConverter;
 import shared.communication.results.nonmove.Join_Result;
 import shared.definitions.CatanColor;
 import shared.model.Game;
 
 public class GameDAO implements GameDAOInterface {
 
-	DatabaseAccess db;
-
+	private Gson gson;
+	private JsonConverter converter;
 	/**
 	 * Constructor
 	 * takes in a database object
 	 */
-	public GameDAO(DatabaseAccess db) {
-		this.db = db;
+	public GameDAO() {
+
+		gson = new Gson();
+		converter = new JsonConverter();
 	}
 
 	/**
@@ -46,7 +52,7 @@ public class GameDAO implements GameDAOInterface {
 		try {
 
 			String sql = "INSERT INTO Games (gameID, game, commands) values (?, ?, ?)";
-			stmt = db.getConnection().prepareStatement(sql);
+			stmt = DatabaseAccess.getInstance().getConnection().prepareStatement(sql);
 
 			stmt.setInt(1, game.getGameID());
 
@@ -55,9 +61,13 @@ public class GameDAO implements GameDAOInterface {
 
 			try {
 
+
+
+				String serialized = gson.toJson(converter.toClientModel(game));
+
 				bos = new ByteArrayOutputStream();
-				ObjectOutputStream oos = new ObjectOutputStream(bos);
-				oos.writeObject(game);
+				ObjectOutputStream oos = new ObjectOutputStream(bos);			
+				oos.writeObject(serialized);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -68,7 +78,7 @@ public class GameDAO implements GameDAOInterface {
 
 			gameBlob = new SerialBlob(byteArray);
 
-			stmt.setBlob(2, gameBlob);
+			stmt.setBlob(2, gameBlob);//crashes here----------
 
 			Blob commandBlob = null; //There exist no commands for a new game. DO NOT TRY TO ADD NONEXISTENT COMMANDS!
 			stmt.setBlob(3, commandBlob);
@@ -94,9 +104,9 @@ public class GameDAO implements GameDAOInterface {
 	 * @throws SQLException 
 	 */
 	@Override
-	public Game update(Game g) throws SQLException {
+	public boolean update(Game game) throws SQLException {
 
-		Connection connection = db.getConnection();
+		Connection connection = DatabaseAccess.getInstance().getConnection();
 
 		System.out.println("GameDAO update()"); //((Called to save the game))
 
@@ -112,9 +122,11 @@ public class GameDAO implements GameDAOInterface {
 
 			try {
 
+				String serialized = gson.toJson(converter.toClientModel(game));
+
 				bos = new ByteArrayOutputStream();
-				ObjectOutputStream oos = new ObjectOutputStream(bos);
-				oos.writeObject(g);
+				ObjectOutputStream oos = new ObjectOutputStream(bos);			
+				oos.writeObject(serialized);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -128,10 +140,10 @@ public class GameDAO implements GameDAOInterface {
 			stmt = connection.prepareStatement(sql);
 			stmt.setBlob(1, gameBlob);
 			//stmt.setString(2, g.getGameHistory());
-			stmt.setInt(2, g.getGameID());
+			stmt.setInt(2, game.getGameID());
 
 			if (stmt.executeUpdate() == 1)
-				return g;
+				return true;
 			else
 				System.out.println("Update Game failed.");
 		} catch (SQLException e) {
@@ -140,7 +152,7 @@ public class GameDAO implements GameDAOInterface {
 			if (stmt != null)
 				stmt.close();
 		}
-		return g;
+		return true;
 	}
 	/**
 	 * Deletes the given corresponding game object from the database
@@ -152,7 +164,7 @@ public class GameDAO implements GameDAOInterface {
 	public boolean delete(Game game) {
 		System.out.println("GameDAO delete()");//
 
-		Connection connection = db.getConnection();
+		Connection connection = DatabaseAccess.getInstance().getConnection();
 		PreparedStatement stmt = null;
 
 		try {
@@ -191,7 +203,7 @@ public class GameDAO implements GameDAOInterface {
 
 		try {
 			String sql = "SELECT * FROM Games";
-			stmt = db.getConnection().prepareStatement(sql);
+			stmt = DatabaseAccess.getInstance().getConnection().prepareStatement(sql);
 			keyRS = stmt.executeQuery();
 
 			Blob gameBlob = null;
@@ -202,8 +214,9 @@ public class GameDAO implements GameDAOInterface {
 				gameBlob.free();
 
 				ByteArrayInputStream in = new ByteArrayInputStream(byteArray);
-				ObjectInputStream is = new ObjectInputStream(in);
-				Game game = (Game) is.readObject();
+				ObjectInputStream is = new ObjectInputStream(in);				
+				String serialized = (String) is.readObject();				
+				Game game = converter.parseJson(serialized);//gson.fromJson(serialized, Game.class);	
 
 				in.close();
 				is.close();
@@ -245,7 +258,7 @@ public class GameDAO implements GameDAOInterface {
 
 		try {
 			String sql = "SELECT FROM Games WHERE gameID = ?";
-			stmt = db.getConnection().prepareStatement(sql);					
+			stmt = DatabaseAccess.getInstance().getConnection().prepareStatement(sql);					
 			stmt.setInt(1, gameID);			
 			keyRS = stmt.executeQuery();
 
@@ -258,13 +271,14 @@ public class GameDAO implements GameDAOInterface {
 
 				ByteArrayInputStream in = new ByteArrayInputStream(byteArray);
 				ObjectInputStream is = new ObjectInputStream(in);
-				Game game = (Game) is.readObject();
+				String serialized = (String) is.readObject();				
+				Game game = converter.parseJson(serialized);	
 
 				in.close();
 				is.close();
 
 				game.addPlayer(userID, playerColor);
-				
+
 				update(game);		
 			}
 
@@ -303,7 +317,7 @@ public class GameDAO implements GameDAOInterface {
 	public boolean storeCommand(int gameID, Command command) throws SerialException, SQLException {
 		System.out.println("GameDAO storeCommand()");
 
-		Connection connection = db.getConnection();
+		Connection connection = DatabaseAccess.getInstance().getConnection();
 		PreparedStatement stmt = null;
 
 		List<Command> commands = getCommands(gameID);
@@ -315,9 +329,11 @@ public class GameDAO implements GameDAOInterface {
 
 		try {
 
+			String serialized = gson.toJson(commands);
+
 			bos = new ByteArrayOutputStream();
 			ObjectOutputStream oos = new ObjectOutputStream(bos);
-			oos.writeObject(commands);
+			oos.writeObject(serialized);
 
 		} catch (IOException e) {
 
@@ -360,7 +376,7 @@ public class GameDAO implements GameDAOInterface {
 	 */
 	@Override
 	public boolean clearCommands(int gameID) {
-		Connection connection = db.getConnection();
+		Connection connection = DatabaseAccess.getInstance().getConnection();
 		PreparedStatement stmt = null;
 
 		try {
@@ -386,7 +402,7 @@ public class GameDAO implements GameDAOInterface {
 	@Override
 	public List<Command> getCommands(int gameID) {
 
-		Connection connection = db.getConnection();
+		Connection connection = DatabaseAccess.getInstance().getConnection();
 		PreparedStatement stmt = null;
 
 		//Statement keyStmt = null;
@@ -413,7 +429,8 @@ public class GameDAO implements GameDAOInterface {
 			try {
 				ByteArrayInputStream in = new ByteArrayInputStream(byteArray);
 				ObjectInputStream is = new ObjectInputStream(in);
-				List<Command> commands = (List<Command>) is.readObject();
+				String serialized = (String) is.readObject();				
+				List<Command> commands = gson.fromJson(serialized, List.class);	
 
 				in.close();
 				is.close();
