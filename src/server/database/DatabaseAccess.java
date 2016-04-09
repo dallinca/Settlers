@@ -10,13 +10,9 @@ public class DatabaseAccess {
 	private static final String DATABASE_URL = "jdbc:sqlite:" + DATABASE_DIRECTORY +
 												File.separator + DATABASE_FILE;
 	
-	private UserDAO accessuser;
-	private GameDAO accessgame;
 	private Connection connection;
 	
 	public DatabaseAccess(){
-		accessuser = new UserDAO(this);
-		accessgame = new GameDAO(this);
 		connection = null;
 	}
 	
@@ -67,13 +63,5 @@ public class DatabaseAccess {
 				connection = null;
 			}
 		}
-	}
-	
-	public UserDAO Access_User(){
-		return accessuser;
-	}
-	
-	public GameDAO Access_Game(){
-		return accessgame;
 	}
 }
