@@ -70,34 +70,33 @@ public class GameDAO implements GameDAOInterface {
 	 */
 	@Override
 	public Game update(Game g) { //throws SQLException {
-		//Connection connection = db.getConnection();
+		
+		Connection connection = db.getConnection();
 		// Start a transaction
-
-		/*PreparedStatement stmt = null;
+		
+		PreparedStatement stmt = null;
+		Statement keyStmt = null;
+		ResultSet keyRS = null;
 
 		try {
-			String sql = "update Users "
-					+ "username = ?, password = ?, firstname = ?, lastname = ?, email = ?, userID = ?";
+			String sql = "update Games SET game = ?, commands = ? WHERE gameID = ?";
 
 			stmt = connection.prepareStatement(sql);
-			stmt.setString(1, f.getUserName());
-			stmt.setString(2, f.getPassword());
-			stmt.setString(3, f.getFirstName());
-			stmt.setString(4, f.getLastName());
-			stmt.setString(5, f.getEmail());
-			stmt.setInt(7, f.getUserID());
+			stmt.setBlob(1, g /*must be a JSON string first to be stored as a blob*/);
+			//stmt.setString(2, g.getGameHistory());
+			stmt.setInt(3, g.getGameID());
 
 			if (stmt.executeUpdate() == 1)
-				return f;
+				return g;
 			else
-				System.out.println("Update Project failed.");
+				System.out.println("Update Game failed.");
 		} catch (SQLException e) {
 
 		} finally {
 			if (stmt != null)
 				stmt.close();
 		}
-		return f;*/
+		return g;
 		return null;
 	}
 	/**
