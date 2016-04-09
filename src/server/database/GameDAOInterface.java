@@ -19,9 +19,9 @@ abstract public interface GameDAOInterface {
 	public boolean create(Game g) throws SQLException;
 	public Game update(Game g) throws SQLException;
 	public boolean delete(Game game);
-	public List<Game> getGames();
+	public List<Game> getGames() throws SQLException, DatabaseException;
 	public boolean storeCommand(int gameID, Command command) throws SerialException, SQLException;
-	public void joinPlayer(int gameID, int userID, CatanColor playerColor);
+	public boolean joinPlayer(int gameID, int userID, CatanColor playerColor) throws SQLException;
 	public boolean clearCommands(int gameID);
 	public List<Command> getCommands(int gameID);
 

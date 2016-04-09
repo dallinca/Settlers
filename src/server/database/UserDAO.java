@@ -82,7 +82,7 @@ public class UserDAO implements UserDAOInterface {
 			keyRS = stmt.executeQuery();
 			
 			while (keyRS.next()) {
-				String name = keyRS .getString(1);
+				String name = keyRS.getString(1);
 				String password = keyRS .getString(2);
 				int playerID = keyRS .getInt(3);
 				

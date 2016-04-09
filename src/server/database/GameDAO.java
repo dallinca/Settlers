@@ -174,23 +174,122 @@ public class GameDAO implements GameDAOInterface {
 	}
 
 	/**Used to retrieve list of all game objects.
+	 * @throws SQLException 
+	 * @throws DatabaseException 
 	 * 
 	 */
 	@Override
-	public List<Game> getGames() {
-		System.out.println("GameDAO getGames()");//
+	public List<Game> getGames() throws SQLException, DatabaseException {
+
+		System.out.println("GameDAO getGames()");
+
 		List<Game> games = new ArrayList<Game>();
 
+		PreparedStatement stmt = null;
+		Statement keyStmt = null;
+		ResultSet keyRS = null;
+
+		try {
+			String sql = "SELECT * FROM Games";
+			stmt = db.getConnection().prepareStatement(sql);
+			keyRS = stmt.executeQuery();
+
+			Blob gameBlob = null;
+			while (keyRS.next()) {
+
+				gameBlob = keyRS.getBlob(1);
+				byte[] byteArray = gameBlob.getBytes(1, (int) gameBlob.length());
+				gameBlob.free();
+
+				ByteArrayInputStream in = new ByteArrayInputStream(byteArray);
+				ObjectInputStream is = new ObjectInputStream(in);
+				Game game = (Game) is.readObject();
+
+				in.close();
+				is.close();
+
+				games.add(game);
+			}		
+
+		} catch (SQLException e) {
+			DatabaseException serverEx = new DatabaseException(e.getMessage(), e);
+			throw serverEx;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if (stmt != null)
+				stmt.close();
+			if (keyRS != null)
+				keyRS.close();
+			if (keyStmt != null)
+				keyStmt.close();
+		}
 
 		return games;
 	}
 
 	/**Used to add a player to the given game.
+	 * @throws SQLException 
 	 * 
 	 */
 	@Override
-	public void joinPlayer(int gameID, int userID, CatanColor playerColor) {
+	public boolean joinPlayer(int gameID, int userID, CatanColor playerColor) throws SQLException {
 		System.out.println("GameDAO joinPlayer()");
+
+		PreparedStatement stmt = null;
+		ResultSet keyRS = null;
+
+		try {
+			String sql = "SELECT FROM Games WHERE gameID = ?";
+			stmt = db.getConnection().prepareStatement(sql);					
+			stmt.setInt(1, gameID);			
+			keyRS = stmt.executeQuery();
+
+			Blob gameBlob = null;
+			while (keyRS.next()) {
+
+				gameBlob = keyRS.getBlob(2);
+				byte[] byteArray = gameBlob.getBytes(1, (int) gameBlob.length());
+				gameBlob.free();
+
+				ByteArrayInputStream in = new ByteArrayInputStream(byteArray);
+				ObjectInputStream is = new ObjectInputStream(in);
+				Game game = (Game) is.readObject();
+
+				in.close();
+				is.close();
+
+				game.addPlayer(userID, playerColor);
+				
+				update(game);		
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		finally{
+
+			if (stmt != null)
+				stmt.close();
+			if (keyRS != null)
+				keyRS.close();
+		}		
+
+		return true;
 
 	}
 
@@ -283,13 +382,14 @@ public class GameDAO implements GameDAOInterface {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Command> getCommands(int gameID) {
 
 		Connection connection = db.getConnection();
 		PreparedStatement stmt = null;
 
-		Statement keyStmt = null;
+		//Statement keyStmt = null;
 		ResultSet keyRS = null;
 
 
@@ -305,7 +405,7 @@ public class GameDAO implements GameDAOInterface {
 				commandBlob = keyRS.getBlob(1);
 			}			
 
-			ObjectInputStream ois = new ObjectInputStream(commandBlob.getBinaryStream());
+			//ObjectInputStream ois = new ObjectInputStream(commandBlob.getBinaryStream());
 
 			byte[] byteArray = commandBlob.getBytes(1, (int) commandBlob.length());
 			commandBlob.free();
@@ -329,13 +429,10 @@ public class GameDAO implements GameDAOInterface {
 
 		} catch (SQLException e) {
 			System.err.println("Could NOT get the Commands");
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
 		}
 
 		return new ArrayList<Command>();
-		
+
 	}
 
 }
