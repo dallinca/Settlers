@@ -1,5 +1,6 @@
 package server.database;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import server.commands.Command;
@@ -12,7 +13,7 @@ import shared.model.Game;
 
 abstract public interface GameDAOInterface {
 
-	public boolean create(Game g);
+	public boolean create(Game g) throws SQLException;
 	public Game update(Game g);
 	public boolean delete(Game game);
 	public List<Game> getGames();
