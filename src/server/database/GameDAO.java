@@ -12,6 +12,7 @@ import javax.sql.rowset.serial.SerialBlob;
 import server.commands.Command;
 import shared.communication.*;
 import shared.communication.results.nonmove.Join_Result;
+import shared.definitions.CatanColor;
 import shared.model.Game;
 
 public class GameDAO implements GameDAOInterface {
@@ -86,9 +87,10 @@ public class GameDAO implements GameDAOInterface {
 	 * Updates the game object in the database
 	 * @pre the given game object is accurately represented
 	 * @return The updated game
+	 * @throws SQLException 
 	 */
 	@Override
-	public Game update(Game g) { //throws SQLException {
+	public Game update(Game g) throws SQLException {
 		
 		Connection connection = db.getConnection();
 
@@ -97,16 +99,32 @@ public class GameDAO implements GameDAOInterface {
 		// Start a transaction
 		
 		PreparedStatement stmt = null;
-		Statement keyStmt = null;
-		ResultSet keyRS = null;
 
+		Blob gameBlob;
+		ByteArrayOutputStream bos = null;
+		
 		try {
-			String sql = "update Games SET game = ?, commands = ? WHERE gameID = ?";
+			String sql = "update Games SET game = ? WHERE gameID = ?";
 
+			try {
+				
+				bos = new ByteArrayOutputStream();
+				ObjectOutputStream oos = new ObjectOutputStream(bos);
+				oos.writeObject(g);
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
+			
+			byte[] byteArray = bos.toByteArray();
+
+			gameBlob = new SerialBlob(byteArray);
+			
 			stmt = connection.prepareStatement(sql);
-			stmt.setBlob(1, g /*must be a JSON string first to be stored as a blob*/);
+			stmt.setBlob(1, gameBlob);
 			//stmt.setString(2, g.getGameHistory());
-			stmt.setInt(3, g.getGameID());
+			stmt.setInt(2, g.getGameID());
 
 			if (stmt.executeUpdate() == 1)
 				return g;
@@ -119,7 +137,6 @@ public class GameDAO implements GameDAOInterface {
 				stmt.close();
 		}
 		return g;
-		return null;
 	}
 	/**
 	 * Deletes the given corresponding game object from the database
@@ -131,15 +148,14 @@ public class GameDAO implements GameDAOInterface {
 	public boolean delete(Game game) {
 		System.out.println("GameDAO delete()");//
 		
-		/*Connection connection = db.getConnection();
+		Connection connection = db.getConnection();
 		PreparedStatement stmt = null;
 
 		try {
 			// Start a transaction
-			// perhaps if it doesn't work, use title and projectID.
-			String sql = "delete from Projects where username = ?";
+			String sql = "delete from Games where gameID = ?";
 			stmt = connection.prepareStatement(sql);
-			stmt.setString(1, f.getUserName());
+			stmt.setInt(1, game.getGameID());
 
 			int g = stmt.executeUpdate();
 			if (g == 1)
@@ -148,12 +164,9 @@ public class GameDAO implements GameDAOInterface {
 				return false;
 
 		} catch (SQLException e) {
-			System.err.println("Could NOT Delete the User");
+			System.err.println("Could NOT Delete the Game");
 			return false;
-		}*/
-
-		return false;
-
+		}
 	}
 
 	/**Used to retrieve list of all game objects.
@@ -172,7 +185,7 @@ public class GameDAO implements GameDAOInterface {
 	 * 
 	 */
 	@Override
-	public void joinPlayer(int gameID, int userID) {
+	public void joinPlayer(int gameID, int userID, CatanColor color) {
 		System.out.println("GameDAO joinPlayer()");//
 		// TODO Auto-generated method stub
 
@@ -184,7 +197,47 @@ public class GameDAO implements GameDAOInterface {
 	 */
 	@Override
 	public void storeCommand(int gameID, Command command) {
-		System.out.println("GameDAO storeCommand()");//
+		System.out.println("GameDAO storeCommand()");
+		
+		Connection connection = db.getConnection();
+		PreparedStatement stmt = null;
+		Statement keyStmt = null;
+		ResultSet keyRS = null;
+		
+		String select = "SELECT Commands from Games where gameID = ?";
+		
+		String sql = "UPDATE Games SET Commands = ? WHERE gameID = ?";
+		
+		//All your base are belong to us
+		
+	}
+	
+	/**
+	 * This is used to clear the command list out so the game can be stored again
+	 * @pre this is called when the number of commands in the database = 10
+	 * @post ability to re-store the game blob in the database
+	 */
+	@Override
+	public boolean clearCommand(int gameID) {
+		Connection connection = db.getConnection();
+		PreparedStatement stmt = null;
+
+		try {
+			// Start a transaction
+			String sql = "delete Commands from Games where gameID = ?";
+			stmt = connection.prepareStatement(sql);
+			stmt.setInt(1, gameID);
+
+			int g = stmt.executeUpdate();
+			if (g == 1)
+				return true;
+			else
+				return false;
+
+		} catch (SQLException e) {
+			System.err.println("Could NOT clear the Commands");
+			return false;
+		}
 
 	}
 
