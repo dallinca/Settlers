@@ -35,6 +35,7 @@
 	<property name="demo.dir" value="demo"/>
     <property name="server.jar.file" value="${demo.dir}/server.jar"/>
     <property name="client.jar.file" value="${demo.dir}/client.jar"/>
+    <property name="external" value="lib/external-libs.jar"/>
 
    	<!-- CLASSPATHS -->
 	<!-- ********** -->
@@ -58,6 +59,14 @@
 
 	<!-- TARGETS -->
 	<!-- ******* -->
+
+	<!--What do we do about external .jars?-->
+ 		<!-- I found this beauty at http://stackoverflow.com/questions/10929438/create-jar-with-custom-manifest-with-multiple-libraries-in-classpath, and this should work based on the context of the article, it should allow us to use external jars that are not directly in the path-->
+		<jar jarfile="${external}">
+            <zipgroupfileset dir="lib/">
+                <include name="**/*.jar"/>
+            </zipgroupfileset>
+        </jar>
 
 	<target name="server" description="Runs the demo server">
 		<java jar="${server.jar.file}" fork="true" dir="${demo.dir}">
@@ -160,6 +169,7 @@
 				<enable/>
 			</assertions>
 		</java>
+
 	</target>
 
     <target name="make-tester-zip" depends="package" description="makes a zip file for your testing team">
