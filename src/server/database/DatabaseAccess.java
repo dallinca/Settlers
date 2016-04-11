@@ -60,8 +60,6 @@ public class DatabaseAccess {
 		try {
 			startTransaction();
 			
-					
-
 			Statement stat = connection.createStatement();
 
 			ResultSet rs = stat.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='Users'");
@@ -83,8 +81,8 @@ public class DatabaseAccess {
 
 			stat.executeUpdate("drop table if exists Games;");
 			stat.executeUpdate("create table Games(gameID INTEGER PRIMARY KEY,			" +
-					"				   game BLOB,							" +
-					"				   commands BLOB)");
+					"				   game TEXT,							" +
+					"				   commands TEXT)");
 
 			endTransaction(true);
 		} catch(SQLException e) {

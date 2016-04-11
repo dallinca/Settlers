@@ -958,6 +958,9 @@ public class ServerFacade implements IServerFacade {
 		try {
 			persistenceProvider.startTransaction();
 			gameDAO.create(game);
+			persistenceProvider.endTransaction(true);
+			
+			persistenceProvider.startTransaction();
 			gameDAO.joinPlayer(game.getGameID(), userID, CatanColor.WHITE);
 			persistenceProvider.endTransaction(true);
 
