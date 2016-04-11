@@ -20,7 +20,7 @@ import client.proxy.*;
  */
 public class ServerPollerTest {
 
-	private MockServerProxy prox;
+	//private MockServerProxy prox;
 	private ServerPoller poller;
 	private Client client;
 
