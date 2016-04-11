@@ -145,11 +145,13 @@ public class PlayMonopoly_Command implements Command {
 	
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);
-
+		
+		facade.storeCommand(gameID, this);
+		
 		result.setModel(cm);
 		System.out.println("PlayMonopoly_Command end of execute");
 		
-		facade.storeCommand(gameID, this);
+		
 	}
 
 	/**

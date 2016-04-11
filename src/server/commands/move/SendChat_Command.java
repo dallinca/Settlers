@@ -99,9 +99,11 @@ public class SendChat_Command implements Command {
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);
 
+		facade.storeCommand(gameID, this);
+		
 		System.out.println("SendChat_Command5");
 		result.setModel(cm);
-		facade.storeCommand(gameID, this);
+	
 	}
 	
 	public SendChat_Result getResult(){

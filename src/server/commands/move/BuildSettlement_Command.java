@@ -108,9 +108,11 @@ public class BuildSettlement_Command implements Command {
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);
 
+		facade.storeCommand(gameID, this);
+		
 		System.out.println("BuildSettlement_Command5");
 		result.setModel(cm);
-		facade.storeCommand(gameID, this);
+		
 	}
 
 	public BuildSettlement_Result getResult(){

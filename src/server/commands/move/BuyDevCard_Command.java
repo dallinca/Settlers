@@ -102,9 +102,11 @@ public class BuyDevCard_Command implements Command {
 		
 		ClientModel cm = converter.toClientModel(game);
 
+		facade.storeCommand(gameID, this);
+		
 		System.out.println("BuyDevCard_Command5");
 		result.setModel(cm);
-		facade.storeCommand(gameID, this);
+		
 	}
 	
 	public BuyDevCard_Result getResult(){

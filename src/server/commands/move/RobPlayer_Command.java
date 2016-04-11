@@ -98,8 +98,11 @@ public class RobPlayer_Command implements Command {
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);
 		//System.out.println("RobPlayer_Command6");
-		result.setModel(cm);
+		
 		facade.storeCommand(gameID, this);
+		
+		result.setModel(cm);
+		
 	}
 	public RobPlayer_Result getResult(){
 		return result;

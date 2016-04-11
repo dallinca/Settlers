@@ -140,9 +140,11 @@ public class BuildRoad_Command implements Command {
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);
 
+		facade.storeCommand(gameID, this);
+		
 		System.out.println("Setting model.");
 		result.setModel(cm);
-		facade.storeCommand(gameID, this);
+		
 	}
 
 	public BuildRoad_Result getResult(){

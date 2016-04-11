@@ -139,9 +139,12 @@ public class OfferTrade_Command implements Command {
 		game.setVersionNumber(game.getVersionNumber()+1);
 		
 		ClientModel cm = converter.toClientModel(game);
+		
+		facade.storeCommand(gameID, this);
+		
 		System.out.println("OfferTrade_Command8");
 		result.setModel(cm);
-		facade.storeCommand(gameID, this);
+		
 	}
 	
 	public 	OfferTrade_Result getResult(){

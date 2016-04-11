@@ -85,9 +85,11 @@ public class FinishTurn_Command implements Command {
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);
 
+		facade.storeCommand(gameID, this);
+		
 		System.out.println("FinishTurn_Command4");
 		result.setModel(cm);
-		facade.storeCommand(gameID, this);
+	
 	}
 	
 	public FinishTurn_Result getResult(){
