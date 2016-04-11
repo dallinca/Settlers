@@ -33,9 +33,13 @@
     <property name="yuidoc.dir" value="${dest.dir}/javascript"/>
     <!-- Jar file path/name from here -->
 	<property name="demo.dir" value="demo"/>
+	<property name="clean" value="no"/>
     <property name="server.jar.file" value="${demo.dir}/server.jar"/>
     <property name="client.jar.file" value="${demo.dir}/client.jar"/>
     <property name="external" value="lib/external-libs.jar"/>
+    <property name="port" value="39641"/>
+    <property name="db" value="none"/>
+    <property name="commands" value="-1"/>
 
    	<!-- CLASSPATHS -->
 	<!-- ********** -->
@@ -57,16 +61,21 @@
     <pathelement location="${build}"/>
   </path>
 
+  <path id="all-classpath">
+		<path refid="java.lib.classpath"/>
+		<pathelement location="${java.build}"/>
+	</path>
+
 	<!-- TARGETS -->
 	<!-- ******* -->
 
 	<!--What do we do about external .jars?-->
  		<!-- I found this beauty at http://stackoverflow.com/questions/10929438/create-jar-with-custom-manifest-with-multiple-libraries-in-classpath, and this should work based on the context of the article, it should allow us to use external jars that are not directly in the path-->
-		<jar jarfile="${external}">
+		<!--<jar jarfile="${external}">
             <zipgroupfileset dir="lib/">
                 <include name="**/*.jar"/>
             </zipgroupfileset>
-        </jar>
+        </jar>-->
 
 	<target name="server" description="Runs the demo server">
 		<java jar="${server.jar.file}" fork="true" dir="${demo.dir}">
@@ -164,10 +173,16 @@
 
 	<target name="our-server" depends="package" description="compiles, packages, and runs the student server">
 		<java jar="${java.dist}/catan-server.jar" dir="${java.dist}" fork="yes">
+			<!--<arg value="./lib/sqlite-jdbc-3.7.2.jar"/>-->
+			
 			<sysproperty key="com.sun.management.jmxremote" value=""/>
 			<assertions>
 				<enable/>
 			</assertions>
+			<arg value="${db}"/>
+			<arg value="${commands}"/>
+			<arg value="${clean}" />
+			<arg value="${port}"/>
 		</java>
 
 	</target>
