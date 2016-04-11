@@ -35,18 +35,18 @@ public class UserDAO implements UserDAOInterface {
 				System.out.println("Database connection is null.");
 			}
 			
-			System.out.println("User: " +user.toString());
+			//System.out.println("User: " +user.toString());
 			stmt = DatabaseAccess.getInstance().getConnection().prepareStatement(sql);
 			stmt.setString(3, user.getName());
-			System.out.println("UserDAO 3.");
+			//System.out.println("UserDAO 3.");
 			stmt.setString(2, user.getPassword());
-			System.out.println("UserDAO 4. Player ID : "+user.getPlayerID());
+			//System.out.println("UserDAO 4. Player ID : "+user.getPlayerID());
 			stmt.setInt(1, user.getPlayerID());
-			System.out.println("UserDAO 5.");
+			//System.out.println("UserDAO 5.");
 			
 			//System.out.println("Excute: "+stmt.executeUpdate());
 			if (stmt.executeUpdate() == 1) {
-				System.out.println("UserDAO 5.");
+				System.out.println("UserDAO 5;.");
 				keyStmt = DatabaseAccess.getInstance().getConnection().createStatement();
 				keyRS = keyStmt.executeQuery("SELECT last_insert_rowid()"); 
 				keyRS.next();
