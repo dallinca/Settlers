@@ -134,7 +134,7 @@ public class Server {
 
 		server.start();
 	}
-	/*
+	
 	private static void plugin(String[] args) throws MalformedURLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 		// Take in args from command line and check which persistence state they want
 		if(args[2] != null){
@@ -148,7 +148,7 @@ public class Server {
 				
 			}
 		}
-	}*/
+	}
 
 	//nonmoves-----------------------------------------------------------------------------------
 	private CreateGame_Handler CreateGameHandler = new CreateGame_Handler();
