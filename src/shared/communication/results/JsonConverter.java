@@ -71,7 +71,8 @@ public class JsonConverter {
 		for(ClientModel.MPlayer mPlayer: model.getPlayers()) {
 			if(mPlayer != null) {
 				PlayerInfo playerInfo= new PlayerInfo();
-				playerInfo.setColor(getCatanColorFromString(mPlayer.color));
+				
+				playerInfo.setColor(getCatanColorFromString(/*mPlayer.color*/ CatanColor.WHITE.toString()));
 				playerInfo.setId(mPlayer.playerID);
 				playerInfo.setName(mPlayer.name);
 				playerInfo.setPlayerIndex(mPlayer.playerIndex);
