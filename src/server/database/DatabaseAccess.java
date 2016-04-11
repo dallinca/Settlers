@@ -62,7 +62,7 @@ public class DatabaseAccess {
 			
 			Statement stat = connection.createStatement();
 
-			/*ResultSet rs = stat.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='Users'");
+			ResultSet rs = stat.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='Users'");
 			
 			if(rs.next()){
 				rs.close();
@@ -70,7 +70,7 @@ public class DatabaseAccess {
 				endTransaction(true);			
 				System.out.println("Data tables already exist, exiting.");
 				return;
-			}*/
+			}
 			
 			System.out.println("Creating data tables");
 			

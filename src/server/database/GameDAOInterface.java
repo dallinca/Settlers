@@ -23,6 +23,6 @@ abstract public interface GameDAOInterface {
 	public boolean storeCommand(int gameID, Command command) throws SerialException, SQLException;
 	public boolean joinPlayer(int gameID, int userID, CatanColor playerColor) throws SQLException;
 	public boolean clearCommands(int gameID);
-	public List<Command> getCommands(int gameID);
+	public List<Command> getCommands(int gameID) throws SQLException;
 
 }

@@ -180,12 +180,7 @@ public class ServerFacade implements IServerFacade {
 				List<Command> commands = gameDAO.getCommands(g.getGameID());
 
 				if (commands.size()!=0){
-
-
-
 					gameDAO.clearCommands(g.getGameID());	
-
-
 				}
 
 				persistenceProvider.endTransaction(true);
@@ -194,6 +189,9 @@ public class ServerFacade implements IServerFacade {
 					c.execute();
 				}		
 			} catch (DatabaseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -850,7 +848,7 @@ public class ServerFacade implements IServerFacade {
 	@Override
 	public List_Result list(List_Params params) {
 
-		//System.out.println("Server.ServerFacade.list");
+		System.out.println("Server.ServerFacade.list");
 
 		List_Result result = new List_Result();
 		if (params==null){
@@ -858,7 +856,7 @@ public class ServerFacade implements IServerFacade {
 			return result;
 		}
 
-		//System.out.println("Getting game info list");
+		System.out.println("Getting game info list");
 		GameInfo[] list = new GameInfo[liveGames.size()];
 
 
@@ -882,9 +880,9 @@ public class ServerFacade implements IServerFacade {
 				pi.setPlayerIndex(p.getPlayerIndex());				
 				pi.setColor(p.getPlayerColor());
 
-				//System.out.println("PLAYER INFO---"+x);
-				//System.out.println(pi.getName());
-				//System.out.println(pi.getColor());				
+				System.out.println("PLAYER INFO---"+x);
+				System.out.println(pi.getName());
+				System.out.println(pi.getColor());				
 
 
 
@@ -898,9 +896,9 @@ public class ServerFacade implements IServerFacade {
 		result.setGames(list);
 		result.setValid(true);
 
-		//System.out.println("Result to string");
+		System.out.println("Result to string");
 
-		//System.out.println(result.toString());
+		System.out.println(result.toString());
 
 		return result;
 	}
@@ -965,8 +963,10 @@ public class ServerFacade implements IServerFacade {
 			
 			//System.out.println("FACADE: Opening transaction.");
 			//persistenceProvider.startTransaction();
-			System.out.println("FACADE: Executing join player.");
-			gameDAO.joinPlayer(game.getGameID(), userID, CatanColor.WHITE);
+			//System.out.println("FACADE: Executing join player.");
+			
+			
+			//gameDAO.joinPlayer(game.getGameID(), userID, CatanColor.WHITE);
 			persistenceProvider.endTransaction(true);
 
 		} catch (SQLException e) {
@@ -1087,7 +1087,8 @@ public class ServerFacade implements IServerFacade {
 
 		try {
 			persistenceProvider.startTransaction();
-			gameDAO.joinPlayer(gameID, userID, playerColor);
+			//gameDAO.joinPlayer(gameID, userID, playerColor);
+			gameDAO.update(g);
 			persistenceProvider.endTransaction(true);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
