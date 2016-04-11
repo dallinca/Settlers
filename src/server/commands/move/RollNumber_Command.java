@@ -93,9 +93,11 @@ public class RollNumber_Command implements Command {
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);
 
+		facade.storeCommand(gameID, this);
+		
 		System.out.println("RollNumber_Command6");
 		result.setModel(cm);
-		facade.storeCommand(gameID, this);
+	
 		
 	}
 	

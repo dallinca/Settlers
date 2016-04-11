@@ -14,8 +14,26 @@ import javax.sql.rowset.serial.SerialBlob;
 import javax.sql.rowset.serial.SerialException;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import server.commands.Command;
+import server.commands.move.AcceptTrade_Command;
+import server.commands.move.BuildCity_Command;
+import server.commands.move.BuildRoad_Command;
+import server.commands.move.BuildSettlement_Command;
+import server.commands.move.BuyDevCard_Command;
+import server.commands.move.DiscardCards_Command;
+import server.commands.move.FinishTurn_Command;
+import server.commands.move.MaritimeTrade_Command;
+import server.commands.move.OfferTrade_Command;
+import server.commands.move.RobPlayer_Command;
+import server.commands.move.RollNumber_Command;
+import server.commands.move.SendChat_Command;
+import server.commands.move.devcard.PlayMonopoly_Command;
+import server.commands.move.devcard.PlayMonument_Command;
+import server.commands.move.devcard.PlayRoadBuilding_Command;
+import server.commands.move.devcard.PlaySoldier_Command;
+import server.commands.move.devcard.PlayYearOfPlenty_Command;
 import shared.communication.*;
 import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
@@ -61,9 +79,11 @@ public class GameDAO implements GameDAOInterface {
 			String serialized = gson.toJson(converter.toClientModel(game));			
 			stmt.setString(2, serialized);
 
-			List<Command> commandList = new ArrayList<Command>();
+			ArrayList<Object> commandList = new ArrayList<Object>();
 
-			stmt.setString(3, gson.toJson(commandList));
+			serialized = gson.toJson(commandList);
+			System.out.println("Commands: " + serialized);
+			stmt.setString(3, serialized);
 
 			if (stmt.executeUpdate() == 1) {
 				System.out.println("GameDAO 2");
@@ -329,7 +349,9 @@ public class GameDAO implements GameDAOInterface {
 		Connection connection = DatabaseAccess.getInstance().getConnection();
 		PreparedStatement stmt = null;
 
-		List<Command> commands = getCommands(gameID);
+		List<Command> commands = new ArrayList<Command>();
+
+		commands = getCommands(gameID);
 
 		commands.add(command);
 		String serialized = gson.toJson(commands);
@@ -350,52 +372,74 @@ public class GameDAO implements GameDAOInterface {
 		} catch (SQLException e) {
 			System.err.println("Could NOT store commands");
 			return false;
+		}finally{
+			if (stmt!=null){
+				stmt.close();
+			}
 		}
-
-		//All your base are belong to us
-
 	}
 
 	/**
 	 * This is used to clear the command list out so the game can be stored again
+	 * @throws SQLException 
 	 * @pre this is called when the number of commands in the database = 10
 	 * @post ability to re-store the game blob in the database
 	 */
 	@Override
-	public boolean clearCommands(int gameID) {
+	public boolean clearCommands(int gameID) throws SQLException {
+		System.out.println("GameDAO clearCommands()");
 		Connection connection = DatabaseAccess.getInstance().getConnection();
 		PreparedStatement stmt = null;
 
 		try {
+			System.out.println("GameDAO clear 1");
 			// Start a transaction
-			String sql = "delete commands from Games where gameID = ?";
+			//UPDATE Games SET commands = ? WHERE gameID = ?
+			String sql = "UPDATE Games SET commands = ? WHERE gameID = ?";
+			System.out.println("GameDAO clear 1.01");
 			stmt = connection.prepareStatement(sql);
-			stmt.setInt(1, gameID);
-
+			System.out.println("GameDAO clear 1.02");
+			stmt.setString(1, gson.toJson(new ArrayList<Command>()));
+			stmt.setInt(2, gameID);
+			//System.out.println("GameDAO clear 1.1");
 			int g = stmt.executeUpdate();
-			if (g == 1)
-				return true;
-			else
+			//System.out.println("GameDAO clear 1.2");
+
+			if (g == 1){
+				System.out.println("GameDAO clear 2");
+			}
+			else{
 				return false;
+			}
 
 		} catch (SQLException e) {
+			System.out.println("GameDAO clear 3");
 			System.err.println("Could NOT clear the Commands");
 			return false;
+		}finally{
+			if (stmt!=null){
+				System.out.println("GameDAO clear 4");
+				stmt.close();
+			}
 		}
+		System.out.println("GameDAO clear 5");
+		return true;
 
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Command> getCommands(int gameID) throws SQLException {
+		System.out.println("GameDAO getCommands()");
 
-		List<Command> commands = new ArrayList<Command>();
+		ArrayList<Command> commands = new ArrayList<Command>();
 		Connection connection = DatabaseAccess.getInstance().getConnection();
 		PreparedStatement stmt = null;
 
 		ResultSet keyRS = null;
 
 		try {
+			System.out.println("GameDAO 1");
 			// Start a transaction
 			String sql = "SELECT commands from Games where gameID = ?";
 			stmt = connection.prepareStatement(sql);
@@ -406,21 +450,97 @@ public class GameDAO implements GameDAOInterface {
 			String serialized = null;
 			while (keyRS.next()) {
 				serialized = keyRS.getString(1);
-			}			
+				System.out.println("GameDAO 2");
+			}
+			System.out.println(serialized);
+			ArrayList<Object> tempList = gson.fromJson(serialized, ArrayList.class);	
+			System.out.println("GameDAO 3");
+			for (int i = 0; i < tempList.size();i++){
+				//System.out.println(tempList.get(i).getClass());			
+				Command c = null;
 
+				Object o = tempList.get(i);
+				System.out.println(o.toString());	
 
-			commands = gson.fromJson(serialized, List.class);	
+				String indefiniteCommand = o.toString();
 
+				System.out.println("IndefiniteCommand: " + indefiniteCommand);
+
+				JsonObject jobj = gson.fromJson(indefiniteCommand, JsonObject.class);				
+				String params =	jobj.get("params").toString();	
+
+				System.out.println("Params: " + params);
+
+				jobj = gson.fromJson(params, JsonObject.class);				
+				String type = jobj.get("type").toString();
+
+				type = type.substring(1, type.length()-1);
+
+				System.out.println("Type: " + type);
+
+				if (type.equals("buildRoad")){
+					c = gson.fromJson(indefiniteCommand, BuildRoad_Command.class);
+					//	System.out.println("Build road cast.");
+					//System.out.println(c.toString());
+				} else if (type.equals("acceptTrade")){
+					c = gson.fromJson(indefiniteCommand, AcceptTrade_Command.class);			
+				} else if (type.equals("buildCity")){
+					c = gson.fromJson(indefiniteCommand, BuildCity_Command.class);			
+				}else if (type.equals("buildRoad")){
+					c = gson.fromJson(indefiniteCommand, BuildRoad_Command.class);			
+				}else if (type.equals("buildSettlement")){
+					c = gson.fromJson(indefiniteCommand, BuildSettlement_Command.class);			
+				}else if (type.equals("buyDevCard")){
+					c = gson.fromJson(indefiniteCommand, BuyDevCard_Command.class);			
+				}else if (type.equals("discardCards")){
+					c = gson.fromJson(indefiniteCommand, DiscardCards_Command.class);			
+				}else if (type.equals("finishTurn")){
+					c = gson.fromJson(indefiniteCommand, FinishTurn_Command.class);			
+				}else if (type.equals("maritimeTrade")){
+					c = gson.fromJson(indefiniteCommand, MaritimeTrade_Command.class);			
+				}else if (type.equals("offerTrade")){
+					c = gson.fromJson(indefiniteCommand, OfferTrade_Command.class);			
+				}else if (type.equals("robPlayer")){
+					c = gson.fromJson(indefiniteCommand, RobPlayer_Command.class);			
+				}else if (type.equals("rollNumber")){
+					c = gson.fromJson(indefiniteCommand, RollNumber_Command.class);			
+				}else if (type.equals("sendChat")){
+					c = gson.fromJson(indefiniteCommand, SendChat_Command.class);			
+				}else if (type.equals("Monopoly")){
+					c = gson.fromJson(indefiniteCommand, PlayMonopoly_Command.class);			
+				}else if (type.equals("Monument")){
+					c = gson.fromJson(indefiniteCommand, PlayMonument_Command.class);			
+				}else if (type.equals("Road_Building")){
+					c = gson.fromJson(indefiniteCommand, PlayRoadBuilding_Command.class);			
+				}else if (type.equals("Soldier")){
+					c = gson.fromJson(indefiniteCommand, PlaySoldier_Command.class);			
+				}else if (type.equals("Year_of_Plenty")){
+					c = gson.fromJson(indefiniteCommand, PlayYearOfPlenty_Command.class);			
+				}
+
+				//Command c = gson.fromJson(o.toString(), Command.class);
+				if (c!=null){
+					commands.add(c);
+				}else {
+					System.out.println("This will crash the program.");
+					commands.add((Command) o);
+				}				
+			}
+
+			System.out.println("GameDAO 4");
 
 		}
 		catch (SQLException e) {
+			System.out.println("GameDAO 5");
 			System.err.println("Could NOT get the Commands");
 		}
 		finally{
 			if (stmt!=null){
+				System.out.println("GameDAO 6");
 				stmt.close();
 			}			
 		}
+		System.out.println("GameDAO 7");
 		return commands;
 	}
 }

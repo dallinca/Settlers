@@ -22,7 +22,7 @@ abstract public interface GameDAOInterface {
 	public List<Game> getGames() throws SQLException, DatabaseException;
 	public boolean storeCommand(int gameID, Command command) throws SerialException, SQLException;
 	public boolean joinPlayer(int gameID, int userID, CatanColor playerColor) throws SQLException;
-	public boolean clearCommands(int gameID);
+	public boolean clearCommands(int gameID) throws SQLException;
 	public List<Command> getCommands(int gameID) throws SQLException;
 	boolean clean() throws SQLException;
 

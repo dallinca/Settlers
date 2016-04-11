@@ -165,6 +165,8 @@ public class AcceptTrade_Command implements Command {
 						
 						JsonConverter converter = new JsonConverter();
 						ClientModel cm = converter.toClientModel(game);
+						
+						facade.storeCommand(gameID, this);
 
 						result.setModel(cm);
 					} else {
@@ -174,7 +176,9 @@ public class AcceptTrade_Command implements Command {
 						game.setTradeOffer(null);
 						JsonConverter converter = new JsonConverter();
 						ClientModel cm = converter.toClientModel(game);
-
+						
+						facade.storeCommand(gameID, this);
+						
 						result.setModel(cm);
 					}
 				} else {
@@ -203,6 +207,8 @@ public class AcceptTrade_Command implements Command {
 					JsonConverter converter = new JsonConverter();
 					ClientModel cm = converter.toClientModel(game);
 
+					facade.storeCommand(gameID, this);
+					
 					result.setModel(cm);
 				}
 			} catch (Exception e) {
@@ -218,6 +224,9 @@ public class AcceptTrade_Command implements Command {
 			ClientModel cm = converter.toClientModel(game);
 
 			System.out.println("AcceptTrade_Command9");
+			
+			facade.storeCommand(gameID, this);
+			
 			result.setModel(cm);
 		} else {
 			System.out.println("AcceptTrade_Command10");
@@ -225,7 +234,7 @@ public class AcceptTrade_Command implements Command {
 			return;
 		}
 		System.out.println("AcceptTrade_Command11");
-		facade.storeCommand(gameID, this);
+		
 	}
 
 	/**

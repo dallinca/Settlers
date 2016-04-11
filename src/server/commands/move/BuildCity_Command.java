@@ -99,8 +99,10 @@ public class BuildCity_Command implements Command {
 		ClientModel cm = converter.toClientModel(game);
 
 		System.out.println("BuildCity_Command5");
-		result.setModel(cm);
+		
 		facade.storeCommand(gameID, this);
+		
+		result.setModel(cm);		
 	}
 
 	public BuildCity_Result getResult(){

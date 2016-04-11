@@ -204,11 +204,17 @@ public class ServerFacade implements IServerFacade {
 				persistenceProvider.startTransaction();
 				List<Command> commands = gameDAO.getCommands(g.getGameID());
 
+			
 				if (commands.size()!=0){
+					System.out.println("Clearing commands!");
 					gameDAO.clearCommands(g.getGameID());	
+					
+					System.out.println(commands.get(0));
 				}
 
 				persistenceProvider.endTransaction(true);
+				
+			
 
 				for (Command c : commands){
 					c.execute();
@@ -1098,7 +1104,8 @@ public class ServerFacade implements IServerFacade {
 
 		players = g.getAllPlayers();
 
-		for (int y = 0; y < 4; y++){
+		int y;
+		for (y = 0; y < 4; y++){
 			if (players[y]==null){
 				start = false;
 				break;
@@ -1109,18 +1116,21 @@ public class ServerFacade implements IServerFacade {
 			startGame(g);
 		}
 
-		try {
-			persistenceProvider.startTransaction();
-			//gameDAO.joinPlayer(gameID, userID, playerColor);
-			gameDAO.update(g);
-			persistenceProvider.endTransaction(true);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (DatabaseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (y < 4){
+			try {
+				persistenceProvider.startTransaction();
+				//gameDAO.joinPlayer(gameID, userID, playerColor);
+				gameDAO.update(g);
+				persistenceProvider.endTransaction(true);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (DatabaseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		
 
 		return result;
 	}
@@ -1324,7 +1334,10 @@ public class ServerFacade implements IServerFacade {
 		} catch (DatabaseException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		}
+		}/* catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
 	}
 
 	public void setCommands(int commands) {
