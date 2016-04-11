@@ -363,8 +363,6 @@ public class GameDAO implements GameDAOInterface {
 			return false;
 		}
 
-
-
 		//All your base are belong to us
 
 	}
