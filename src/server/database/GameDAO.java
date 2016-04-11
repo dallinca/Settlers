@@ -274,6 +274,7 @@ public class GameDAO implements GameDAOInterface {
 				System.out.println("GameDAO 7");
 				update(game);				
 			}			
+		
 		}		
 		return true;
 	}

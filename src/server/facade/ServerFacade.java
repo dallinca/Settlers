@@ -939,7 +939,7 @@ public class ServerFacade implements IServerFacade {
 		game.setGameID(gameTracker++);
 
 		System.out.println("Adding creator to game.");
-		game.addPlayer(userID, null);
+		game.addPlayer(userID, CatanColor.WHITE);
 		
 		
 		Player p = game.getPlayerByID(userID);
@@ -963,11 +963,11 @@ public class ServerFacade implements IServerFacade {
 			System.out.println("FACADE: Closing transaction.");
 			persistenceProvider.endTransaction(true);
 			
-			System.out.println("FACADE: Opening transaction.");
-			persistenceProvider.startTransaction();
-			System.out.println("FACADE: Executing join player.");
-			gameDAO.joinPlayer(game.getGameID(), userID, CatanColor.WHITE);
-			persistenceProvider.endTransaction(true);
+			//System.out.println("FACADE: Opening transaction.");
+			//persistenceProvider.startTransaction();
+			//System.out.println("FACADE: Executing join player.");
+			//gameDAO.joinPlayer(game.getGameID(), userID, CatanColor.WHITE);
+			//persistenceProvider.endTransaction(true);
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
