@@ -960,8 +960,8 @@ public class ServerFacade implements IServerFacade {
 			
 			persistenceProvider.startTransaction();
 			gameDAO.create(game);
-			System.out.println("FACADE: Closing transaction.");
-			persistenceProvider.endTransaction(true);
+			//System.out.println("FACADE: Closing transaction.");
+			//persistenceProvider.endTransaction(true);
 			
 			//System.out.println("FACADE: Opening transaction.");
 			//persistenceProvider.startTransaction();
