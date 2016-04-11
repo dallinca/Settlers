@@ -50,6 +50,9 @@ public class GameDAO implements GameDAOInterface {
 		PreparedStatement stmt = null;
 
 		try {
+			if (DatabaseAccess.getInstance().getConnection()==null){
+				System.out.println("Database connection is null.");
+			}
 			System.out.println("GameDAO 1");
 			String sql = "INSERT INTO Games (gameID, game, commands) values (?, ?, ?)";
 			stmt = DatabaseAccess.getInstance().getConnection().prepareStatement(sql);
@@ -62,7 +65,7 @@ public class GameDAO implements GameDAOInterface {
 			if (stmt.executeUpdate() == 1) {
 				System.out.println("GameDAO 2");
 				//stmt.close();
-				return true;
+				
 			} else {
 				System.out.println("GameDAO 3");
 				//stmt.close();
@@ -79,6 +82,8 @@ public class GameDAO implements GameDAOInterface {
 				stmt.close();
 			}
 		}
+		System.out.println("GameDAO Finish create.");
+		return true;
 	}
 
 	/**

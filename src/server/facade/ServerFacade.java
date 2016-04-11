@@ -917,7 +917,7 @@ public class ServerFacade implements IServerFacade {
 	 */
 	@Override
 	public Create_Result create(Create_Params params, int userID) {
-		//System.out.println("Creating game.");
+		System.out.println("Creating game.");
 		String name = params.getName();
 		boolean numbers = params.isRandomNumbers();
 		boolean ports = params.isRandomPorts();
@@ -938,7 +938,7 @@ public class ServerFacade implements IServerFacade {
 		game.setTitle(name);		
 		game.setGameID(gameTracker++);
 
-		//System.out.println("Adding creator to game.");
+		System.out.println("Adding creator to game.");
 		game.addPlayer(userID, null);
 		
 		
@@ -946,16 +946,18 @@ public class ServerFacade implements IServerFacade {
 		User u = users.get(userID);
 		p.setPlayerName(u.getName());
 
-		//System.out.println("Game created successfully.");
+		System.out.println("Game created successfully.");
 
 		liveGames.add(game);
 
 		result.setTitle(name);
 		result.setValid(true);
 
-		//System.out.println("Returning game result from server facade.");
+		
 
 		try {
+			System.out.println("Creating game shadow in database.");
+			
 			persistenceProvider.startTransaction();
 			gameDAO.create(game);
 			System.out.println("FACADE: Closing transaction.");
@@ -974,6 +976,8 @@ public class ServerFacade implements IServerFacade {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		System.out.println("Returning game result from server facade.");
 		return result;
 	}
 
