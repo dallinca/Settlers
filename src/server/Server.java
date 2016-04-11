@@ -137,15 +137,21 @@ public class Server {
 	
 	private static void plugin(String[] args) throws MalformedURLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 		// Take in args from command line and check which persistence state they want
-		if(args[2] != null){
-			if(args[2] == "PS1"){
+		if(args[0] != null){
+			if(args[0] == "PS1" || args[0] == "sqlite"){
 				File ps1File = new File("PS1.jar");
 				@SuppressWarnings("deprecation")
 				ClassLoader ps1Loader = URLClassLoader.newInstance(new URL[] { ps1File.toURL() });
 				PluginInterface ps1Plugin = (PluginInterface) ps1Loader.loadClass("plugins.PersistantState1.ps1").newInstance();
 				ps1Plugin.run();
-			}else if(args[2] == "PS2"){
-				
+			}else if(args[0] == "PS2" || args[0] == "document"){
+				/*
+				File ps1File = new File("PS2.jar");
+				@SuppressWarnings("deprecation")
+				ClassLoader ps1Loader = URLClassLoader.newInstance(new URL[] { ps1File.toURL() });
+				PluginInterface ps1Plugin = (PluginInterface) ps1Loader.loadClass("plugins.PersistantState1.ps1").newInstance();
+				ps1Plugin.run();
+				*/
 			}
 		}
 	}
@@ -184,28 +190,54 @@ public class Server {
 		if (args.length==0){
 			//Do nothing, no parameters.
 		}
-		else if (args[0].equals("")){
+		else if (args.length == 4 && args[3].equals("")){
 			//Go with default 39640 for the port number.
 		}
-		else if (args.length==1){
+		/*else if (args.length==1){
 			SERVER_PORT_NUMBER = Integer.parseInt(args[0]);
 			//Set the port number to a given value.
+		}*/
+		else if (args.length == 4 && Integer.valueOf(args[1]) == -1){
+			//there is no given length for commands?
+			SERVER_PORT_NUMBER = Integer.parseInt(args[3]);
 		}
+		else if (args.length == 4 && !args[0].equals("none") && !args[2].equals("yes")){
+			//Drop the tables
+			SERVER_PORT_NUMBER = Integer.parseInt(args[3]);
+			boolean clean = false;
+			int commands = Integer.parseInt(args[1]);
+			try {
+				plugin(args);
+			} catch (MalformedURLException | InstantiationException
+					| IllegalAccessException | ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		else if (args.length == 4 && !args[0].equals("none") && args[2].equals("yes")){
+			//Drop the tables
+			SERVER_PORT_NUMBER = Integer.parseInt(args[3]);
+			int commands = Integer.parseInt(args[1]);
+			boolean clean = true;
+			
+			try {
+				plugin(args);
+			} catch (MalformedURLException | InstantiationException
+					| IllegalAccessException | ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		
+		
+		
+		
+		
 		/*
-		try {
-			plugin(args);
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		
 		}*/
 		
 		new Server().run();

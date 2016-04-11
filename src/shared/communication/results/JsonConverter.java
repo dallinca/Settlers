@@ -72,7 +72,7 @@ public class JsonConverter {
 			if(mPlayer != null) {
 				PlayerInfo playerInfo= new PlayerInfo();
 				
-				playerInfo.setColor(getCatanColorFromString(/*mPlayer.color*/ CatanColor.WHITE.toString()));
+				playerInfo.setColor(getCatanColorFromString(mPlayer.color));
 				playerInfo.setId(mPlayer.playerID);
 				playerInfo.setName(mPlayer.name);
 				playerInfo.setPlayerIndex(mPlayer.playerIndex);
