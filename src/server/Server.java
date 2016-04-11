@@ -14,10 +14,16 @@ import server.handlers.move.devcard.*;
 import server.handlers.move.*;
 import server.handlers.nonmove.*;
 import server.handlers.swagger.Handlers;
+import server.persistenceprovider.plugins.PluginInterface;
 
 import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 /**
  * Online server capable of receiving calls from clients, and creating a digital database which can
@@ -70,8 +76,7 @@ public class Server {
 
 	private void run() {
 
-	//	logger.info("Initializing HTTP Server");
-
+		//	logger.info("Initializing HTTP Server");
 		try {
 			server = HttpServer.create(new InetSocketAddress(SERVER_PORT_NUMBER),
 					MAX_WAITING_CONNECTIONS);
@@ -129,6 +134,21 @@ public class Server {
 
 		server.start();
 	}
+	
+	private static void plugin(String[] args) throws MalformedURLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+		// Take in args from command line and check which persistence state they want
+		if(args[2] != null){
+			if(args[2] == "PS1"){
+				File ps1File = new File("PS1.jar");
+				@SuppressWarnings("deprecation")
+				ClassLoader ps1Loader = URLClassLoader.newInstance(new URL[] { ps1File.toURL() });
+				PluginInterface ps1Plugin = (PluginInterface) ps1Loader.loadClass("plugins.PersistantState1.ps1").newInstance();
+				ps1Plugin.run();
+			}else if(args[2] == "PS2"){
+				
+			}
+		}
+	}
 
 	//nonmoves-----------------------------------------------------------------------------------
 	private CreateGame_Handler CreateGameHandler = new CreateGame_Handler();
@@ -159,8 +179,7 @@ public class Server {
 	private PlaySoldier_Handler PlaySoldierHandler = new PlaySoldier_Handler();
 	private PlayYearOfPlenty_Handler PlayYearOfPlentyHandler = new PlayYearOfPlenty_Handler();
 
-	public static void main(String[] args) {
-		
+	public static void main(String[] args){
 		
 		if (args.length==0){
 			//Do nothing, no parameters.
@@ -171,11 +190,24 @@ public class Server {
 		else if (args.length==1){
 			SERVER_PORT_NUMBER = Integer.parseInt(args[0]);
 			//Set the port number to a given value.
-		}	
+		}
+		/*
+		try {
+			plugin(args);
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+		
 		new Server().run();
 	}
-	
-	
-	
-
 }

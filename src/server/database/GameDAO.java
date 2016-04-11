@@ -60,12 +60,15 @@ public class GameDAO implements GameDAOInterface {
 			stmt.setInt(1, game.getGameID());
 			String serialized = gson.toJson(converter.toClientModel(game));			
 			stmt.setString(2, serialized);
-			stmt.setString(3, "");
+			
+			List<Command> commandList = new ArrayList<Command>();
+			
+			stmt.setString(3, gson.toJson(commandList));
 
 			if (stmt.executeUpdate() == 1) {
 				System.out.println("GameDAO 2");
 				//stmt.close();
-				
+
 			} else {
 				System.out.println("GameDAO 3");
 				//stmt.close();
@@ -201,7 +204,7 @@ public class GameDAO implements GameDAOInterface {
 				//ByteArrayInputStream in = new ByteArrayInputStream(byteArray);
 				//ObjectInputStream is = new ObjectInputStream(in);				
 				//String serialized = (String) is.readObject();				
-				Game game = converter.parseJson(serialized);//gson.fromJson(serialized, Game.class);	
+				Game game = converter.parseServerJson(serialized);//gson.fromJson(serialized, Game.class);	
 
 				//in.close();
 				//is.close();
@@ -250,7 +253,7 @@ public class GameDAO implements GameDAOInterface {
 				System.out.println("GameDAO 2");
 
 				String serialized = keyRS.getString(1);	
-				game = converter.parseJson(serialized);	
+				game = converter.parseServerJson(serialized);	
 				game.addPlayer(userID, playerColor);
 
 			}
@@ -274,6 +277,7 @@ public class GameDAO implements GameDAOInterface {
 				System.out.println("GameDAO 7");
 				update(game);				
 			}			
+		
 		}		
 		return true;
 	}
@@ -294,33 +298,13 @@ public class GameDAO implements GameDAOInterface {
 		List<Command> commands = getCommands(gameID);
 
 		commands.add(command);
-
-		Blob commandBlob;
-		ByteArrayOutputStream bos = null;
-
-		try {
-
-			String serialized = gson.toJson(commands);
-
-			bos = new ByteArrayOutputStream();
-			ObjectOutputStream oos = new ObjectOutputStream(bos);
-			oos.writeObject(serialized);
-
-		} catch (IOException e) {
-
-			e.printStackTrace();
-		}			
-
-		byte[] byteArray = bos.toByteArray();
-
-		commandBlob = new SerialBlob(byteArray);
-
+		String serialized = gson.toJson(commands);
 
 		try {
 			// Start a transaction
 			String sql = "UPDATE Games SET commands = ? WHERE gameID = ?";
 			stmt = connection.prepareStatement(sql);
-			stmt.setBlob(2, commandBlob);
+			stmt.setString(1, serialized);
 			stmt.setInt(2, gameID);
 
 			int g = stmt.executeUpdate();
@@ -369,14 +353,13 @@ public class GameDAO implements GameDAOInterface {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Command> getCommands(int gameID) {
+	public List<Command> getCommands(int gameID) throws SQLException {
 
+		List<Command> commands = new ArrayList<Command>();
 		Connection connection = DatabaseAccess.getInstance().getConnection();
 		PreparedStatement stmt = null;
 
-		//Statement keyStmt = null;
 		ResultSet keyRS = null;
-
 
 		try {
 			// Start a transaction
@@ -385,42 +368,27 @@ public class GameDAO implements GameDAOInterface {
 			stmt.setInt(1, gameID);
 
 			keyRS = stmt.executeQuery();
-			Blob commandBlob = null;
+
+			String serialized = null;
 			while (keyRS.next()) {
-				commandBlob = keyRS.getBlob(1);
+				serialized = keyRS.getString(1);
 			}			
 
-			//ObjectInputStream ois = new ObjectInputStream(commandBlob.getBinaryStream());
 
-			byte[] byteArray = commandBlob.getBytes(1, (int) commandBlob.length());
-			commandBlob.free();
+			commands = gson.fromJson(serialized, List.class);	
 
-			try {
-				ByteArrayInputStream in = new ByteArrayInputStream(byteArray);
-				ObjectInputStream is = new ObjectInputStream(in);
-				String serialized = (String) is.readObject();				
-				List<Command> commands = gson.fromJson(serialized, List.class);	
 
-				in.close();
-				is.close();
-
-				return commands;
-
-			} catch (IOException e) {
-
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}			
-
-		} catch (SQLException e) {
+		}
+		catch (SQLException e) {
 			System.err.println("Could NOT get the Commands");
 		}
-
-		return new ArrayList<Command>();
-
+		finally{
+			if (stmt!=null){
+				stmt.close();
+			}			
+		}
+		return commands;
 	}
-
 }
 
 

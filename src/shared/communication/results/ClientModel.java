@@ -11,7 +11,7 @@ import client.data.TradeInfo;
  */
 public class ClientModel {
 
-
+	String title;
 	MDevCardList deck;
 	MBank bank;
 	MChat chat;
