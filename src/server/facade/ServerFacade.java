@@ -958,11 +958,11 @@ public class ServerFacade implements IServerFacade {
 		try {
 			persistenceProvider.startTransaction();
 			gameDAO.create(game);
-			System.out.println("FACADE: Closing transaction.");
-			persistenceProvider.endTransaction(true);
+			//System.out.println("FACADE: Closing transaction.");
+			//persistenceProvider.endTransaction(true);
 			
-			System.out.println("FACADE: Opening transaction.");
-			persistenceProvider.startTransaction();
+			//System.out.println("FACADE: Opening transaction.");
+			//persistenceProvider.startTransaction();
 			System.out.println("FACADE: Executing join player.");
 			gameDAO.joinPlayer(game.getGameID(), userID, CatanColor.WHITE);
 			persistenceProvider.endTransaction(true);
