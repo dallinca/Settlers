@@ -121,6 +121,39 @@ public class UserDAO implements UserDAOInterface {
 	}
 	
 	@Override
+	public boolean clean() throws SQLException {
+		System.out.println("Clean the tables Cinderella!");
+
+		Connection connection = DatabaseAccess.getInstance().getConnection();
+		PreparedStatement stmt = null;
+
+		try {
+			// Start a transaction
+			String sql = "delete * from Users";
+			stmt = connection.prepareStatement(sql);
+
+			int g = stmt.executeUpdate();
+			if (g == 1)
+				return true;
+			else
+				return false;
+
+		} catch (SQLException e) {
+			System.err.println("Could NOT Clean out the Users.");
+			return false;
+		}
+		finally {
+			if (stmt != null){
+				System.out.println("Clean User"); 
+				stmt.close();
+			}
+		}
+	}
+	
+	
+	
+	
+	@Override
 	public boolean clearUsers() {
 		System.out.println("UserDAO clearUsers()");
 		

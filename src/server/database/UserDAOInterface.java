@@ -12,5 +12,6 @@ abstract public interface UserDAOInterface {
 	public boolean create(User user) throws SQLException;
 	public boolean clearUsers();
 	public List<User> getUsers() throws DatabaseException, SQLException;
+	boolean clean() throws SQLException;
 	
 }

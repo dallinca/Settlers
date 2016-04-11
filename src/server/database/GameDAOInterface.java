@@ -24,5 +24,6 @@ abstract public interface GameDAOInterface {
 	public boolean joinPlayer(int gameID, int userID, CatanColor playerColor) throws SQLException;
 	public boolean clearCommands(int gameID);
 	public List<Command> getCommands(int gameID) throws SQLException;
+	boolean clean() throws SQLException;
 
 }

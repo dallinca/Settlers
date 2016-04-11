@@ -60,9 +60,9 @@ public class GameDAO implements GameDAOInterface {
 			stmt.setInt(1, game.getGameID());
 			String serialized = gson.toJson(converter.toClientModel(game));			
 			stmt.setString(2, serialized);
-			
+
 			List<Command> commandList = new ArrayList<Command>();
-			
+
 			stmt.setString(3, gson.toJson(commandList));
 
 			if (stmt.executeUpdate() == 1) {
@@ -140,6 +140,40 @@ public class GameDAO implements GameDAOInterface {
 			}
 		}
 	}
+
+	@Override
+	public boolean clean() throws SQLException {
+		System.out.println("Clean the tables Cinderella!");
+
+		Connection connection = DatabaseAccess.getInstance().getConnection();
+		PreparedStatement stmt = null;
+
+		try {
+			// Start a transaction
+			String sql = "delete * from Games";
+			stmt = connection.prepareStatement(sql);
+
+			int g = stmt.executeUpdate();
+			if (g == 1)
+				return true;
+			else
+				return false;
+
+		} catch (SQLException e) {
+			System.err.println("Could NOT Clean out the games.");
+			return false;
+		}
+		finally {
+			if (stmt != null){
+				System.out.println("Game cleared!"); 
+				stmt.close();
+			}
+		}
+	}
+
+
+
+
 	/**
 	 * Deletes the given corresponding game object from the database
 	 * Used to remove the game upon game completion.
@@ -277,7 +311,7 @@ public class GameDAO implements GameDAOInterface {
 				System.out.println("GameDAO 7");
 				update(game);				
 			}			
-		
+
 		}		
 		return true;
 	}
