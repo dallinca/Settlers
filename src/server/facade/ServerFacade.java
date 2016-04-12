@@ -71,7 +71,8 @@ public class ServerFacade implements IServerFacade {
 	private UserDAOInterface userDAO;
 	private GameDAOInterface gameDAO;
 	private PersistenceProviderInterface persistenceProvider;
-	private int commands = -1;
+	//commands would take in arg from commandline such that it would be dynamic
+	private int commands = 10;
 	private boolean clean = false;
 
 	/**
@@ -1295,7 +1296,7 @@ public class ServerFacade implements IServerFacade {
 
 				commandCount++;
 
-				if (commandCount == 10){
+				if (commandCount == commands){
 
 					commandCount = 0;
 					try {
