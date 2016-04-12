@@ -14,6 +14,7 @@ import server.handlers.move.devcard.*;
 import server.handlers.move.*;
 import server.handlers.nonmove.*;
 import server.handlers.swagger.Handlers;
+import server.persistenceprovider.AbstractFactory;
 import server.persistenceprovider.plugins.PluginInterface;
 
 import com.sun.net.httpserver.HttpContext;
@@ -187,6 +188,10 @@ public class Server {
 
 	public static void main(String[] args){
 		
+		
+		AbstractFactory.getInstance();
+		
+		
 		if (args.length==0){
 			//Do nothing, no parameters.
 		}
@@ -220,9 +225,17 @@ public class Server {
 		}
 		else if (args.length == 4 && !args[0].equals("none") && args[2].equals("yes")){
 			//Drop the tables
+			
 			SERVER_PORT_NUMBER = Integer.parseInt(args[3]);
+						
 			int commands = Integer.parseInt(args[1]);
+			
+			
+			
 			boolean clean = true;
+			
+			
+			
 			ServerFacade.getInstance().setClean(clean);
 			try {
 				plugin(args);
@@ -230,7 +243,9 @@ public class Server {
 					| IllegalAccessException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}
+				
 			ServerFacade.getInstance().clean();
+			
 		}
 		
 		new Server().run();

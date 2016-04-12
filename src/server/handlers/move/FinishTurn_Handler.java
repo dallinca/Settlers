@@ -7,11 +7,11 @@ import java.util.LinkedList;
 import java.util.logging.Logger;
 
 import server.commands.move.FinishTurn_Command;
+import server.facade.ServerFacade;
 import server.handlers.SettlersOfCatanHandler;
 import shared.communication.User;
 import shared.communication.params.move.FinishTurn_Params;
 import shared.communication.results.move.FinishTurn_Result;
-
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -43,11 +43,11 @@ public class FinishTurn_Handler extends SettlersOfCatanHandler{
 		swaggerize(exchange);
 
 		if (check.equals("VALID")){
-
+			
 			//System.out.println("Finish turn check is valid");
 			User user = gson.fromJson(cookies.getFirst(), User.class);	
 			int gameID = Integer.parseInt(cookies.get(1));
-
+			
 			job = getExchangeBody(exchange); //get json string from exchange.
 			
 			request = gson.fromJson(job, FinishTurn_Params.class); //deserialize request from json
