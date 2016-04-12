@@ -212,23 +212,9 @@ public class GameDAO implements GameDAOInterface {
 			stmt = DatabaseAccess.getInstance().getConnection().prepareStatement(sql);
 			keyRS = stmt.executeQuery();
 
-			//Blob gameBlob = null;
 			while (keyRS.next()) {
-
-				//gameBlob = keyRS.getBlob(1);
-				//byte[] byteArray = gameBlob.getBytes(1, (int) gameBlob.length());
-				//gameBlob.free();
-
-				String serialized = keyRS.getString(2);
-
-				//ByteArrayInputStream in = new ByteArrayInputStream(byteArray);
-				//ObjectInputStream is = new ObjectInputStream(in);				
-				//String serialized = (String) is.readObject();				
-				Game game = converter.parseServerJson(serialized);//gson.fromJson(serialized, Game.class);	
-
-				//in.close();
-				//is.close();
-
+				String serialized = keyRS.getString(2);	
+				Game game = converter.parseServerJson(serialized);
 				games.add(game);
 			}		
 

@@ -92,6 +92,8 @@ public class ServerFacade implements IServerFacade {
 		gameDAO = persistenceProvider.getGameDAO();
 
 		System.out.println("SERVER FACADE: Quering for users and games.");
+		
+		
 		try {
 			persistenceProvider.startTransaction();
 
