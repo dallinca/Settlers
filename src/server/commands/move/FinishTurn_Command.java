@@ -62,34 +62,43 @@ public class FinishTurn_Command implements Command {
 		
 		//Well at the very least we need to move to the next player! But we should probably come up with the action associated with this as it gets sent back across
 		//For the game history controller at least
+		System.out.println("FinishTurn_Command3");
 		game.incrementPlayer();
 		Game.Line[] history = game.getHistory();
 		Game.Line[] newHistory = new Game.Line[history.length+1];
+		System.out.println("FinishTurn_Command4");
 		
 		for (int i = 0; i < history.length; i++) {
 			newHistory[i] = history[i];
 		}
+		System.out.println("FinishTurn_Command5");
 		
 		//Just a round-about way to create an object of type Game.Line without too much difficulty
 		Game.Line newEntry = game.new Line();
 		newEntry.setMessage(game.getPlayerByID(userID).getPlayerName() + "'s turn just ended.");
 		newEntry.setSource(game.getPlayerByID(userID).getPlayerName());
 		newHistory[history.length] = newEntry;
+		System.out.println("FinishTurn_Command6");
 		
 		game.setHistory(newHistory);
+		
+		System.out.println("FinishTurn_Command7");
 	
 		result.setValid(true);
+		
+		facade.storeCommand(gameID, this);
+		
+		System.out.println("FinishTurn_Command8");
+		
 		result.setGame(game);
-		System.out.println("FinishTurn_Command3");
+		
 
 		JsonConverter converter = new JsonConverter();
 		ClientModel cm = converter.toClientModel(game);
-
-		facade.storeCommand(gameID, this);
 		
-		System.out.println("FinishTurn_Command4");
+		System.out.println("FinishTurn_Command9");
 		result.setModel(cm);
-	
+		System.out.println("FinishTurn_Command10");
 	}
 	
 	public FinishTurn_Result getResult(){

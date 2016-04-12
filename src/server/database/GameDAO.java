@@ -160,6 +160,40 @@ public class GameDAO implements GameDAOInterface {
 			}
 		}
 	}
+
+	@Override
+	public boolean clean() throws SQLException {
+		System.out.println("Clean the tables Cinderella!");
+
+		Connection connection = DatabaseAccess.getInstance().getConnection();
+		PreparedStatement stmt = null;
+
+		try {
+			// Start a transaction
+			String sql = "delete * from Games";
+			stmt = connection.prepareStatement(sql);
+
+			int g = stmt.executeUpdate();
+			if (g == 1)
+				return true;
+			else
+				return false;
+
+		} catch (SQLException e) {
+			System.err.println("Could NOT Clean out the games.");
+			return false;
+		}
+		finally {
+			if (stmt != null){
+				System.out.println("Game cleared!"); 
+				stmt.close();
+			}
+		}
+	}
+
+
+
+
 	/**
 	 * Deletes the given corresponding game object from the database
 	 * Used to remove the game upon game completion.
@@ -306,6 +340,9 @@ public class GameDAO implements GameDAOInterface {
 		commands = getCommands(gameID);
 
 		commands.add(command);
+
+		System.out.println("Storing: "+command.getClass());
+
 		String serialized = gson.toJson(commands);
 
 		try {
@@ -317,9 +354,16 @@ public class GameDAO implements GameDAOInterface {
 
 			int g = stmt.executeUpdate();
 			if (g == 1)
+			{
+				System.out.println("Store successful. All commands listed below.");
+				for (Command c: commands){
+					System.out.println(c.getClass());
+				}
 				return true;
-			else
+			}
+			else{
 				return false;
+			}
 
 		} catch (SQLException e) {
 			System.err.println("Could NOT store commands");
@@ -344,37 +388,41 @@ public class GameDAO implements GameDAOInterface {
 		PreparedStatement stmt = null;
 
 		try {
-			System.out.println("GameDAO clear 1");
+			//System.out.println("GameDAO clear 1");
 			// Start a transaction
 			//UPDATE Games SET commands = ? WHERE gameID = ?
 			String sql = "UPDATE Games SET commands = ? WHERE gameID = ?";
-			System.out.println("GameDAO clear 1.01");
+			//System.out.println("GameDAO clear 1.01");
 			stmt = connection.prepareStatement(sql);
-			System.out.println("GameDAO clear 1.02");
-			stmt.setString(1, gson.toJson(new ArrayList<Command>()));
+		//	System.out.println("GameDAO clear 1.02");
+//
+			ArrayList<Object> emptyCmdList = new ArrayList<Object>();
+			String gsonList = gson.toJson(emptyCmdList);
+
+			stmt.setString(1, gsonList);
 			stmt.setInt(2, gameID);
 			//System.out.println("GameDAO clear 1.1");
 			int g = stmt.executeUpdate();
 			//System.out.println("GameDAO clear 1.2");
 
 			if (g == 1){
-				System.out.println("GameDAO clear 2");
+				//System.out.println("GameDAO clear 2");
 			}
 			else{
 				return false;
 			}
 
 		} catch (SQLException e) {
-			System.out.println("GameDAO clear 3");
+			//System.out.println("GameDAO clear 3");
 			System.err.println("Could NOT clear the Commands");
 			return false;
 		}finally{
 			if (stmt!=null){
-				System.out.println("GameDAO clear 4");
+				//System.out.println("GameDAO clear 4");
 				stmt.close();
 			}
 		}
-		System.out.println("GameDAO clear 5");
+		System.out.println("GameDAO clear success.");
 		return true;
 
 	}
@@ -391,7 +439,7 @@ public class GameDAO implements GameDAOInterface {
 		ResultSet keyRS = null;
 
 		try {
-			System.out.println("GameDAO 1");
+			//System.out.println("GameDAO 1");
 			// Start a transaction
 			String sql = "SELECT commands from Games where gameID = ?";
 			stmt = connection.prepareStatement(sql);
@@ -402,26 +450,26 @@ public class GameDAO implements GameDAOInterface {
 			String serialized = null;
 			while (keyRS.next()) {
 				serialized = keyRS.getString(1);
-				System.out.println("GameDAO 2");
+				//System.out.println("GameDAO 2");
 			}
-			System.out.println(serialized);
+			//System.out.println(serialized);
 			ArrayList<Object> tempList = gson.fromJson(serialized, ArrayList.class);	
-			System.out.println("GameDAO 3");
+			//System.out.println("GameDAO 3");
 			for (int i = 0; i < tempList.size();i++){
 				//System.out.println(tempList.get(i).getClass());			
 				Command c = null;
 
 				Object o = tempList.get(i);
-				System.out.println(o.toString());	
+				//System.out.println(o.toString());	
 
 				String indefiniteCommand = o.toString();
 
-				System.out.println("IndefiniteCommand: " + indefiniteCommand);
+				//System.out.println("IndefiniteCommand: " + indefiniteCommand);
 
 				JsonObject jobj = gson.fromJson(indefiniteCommand, JsonObject.class);				
 				String params =	jobj.get("params").toString();	
 
-				System.out.println("Params: " + params);
+				//System.out.println("Params: " + params);
 
 				jobj = gson.fromJson(params, JsonObject.class);				
 				String type = jobj.get("type").toString();
@@ -492,7 +540,10 @@ public class GameDAO implements GameDAOInterface {
 				stmt.close();
 			}			
 		}
-		System.out.println("GameDAO 7");
+		System.out.println("GameDAO getCommands success: All types listed below.");
+		for (Command c: commands){
+			System.out.println(c.getClass());
+		}
 		return commands;
 	}
 }
