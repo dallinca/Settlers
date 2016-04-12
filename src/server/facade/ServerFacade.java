@@ -178,19 +178,16 @@ public class ServerFacade implements IServerFacade {
 			try {
 				persistenceProvider.startTransaction();
 				List<Command> commands = gameDAO.getCommands(g.getGameID());
-
-			
+				
 				if (commands.size()!=0){
 					System.out.println("Clearing commands!");
 					gameDAO.clearCommands(g.getGameID());	
 					
-					System.out.println(commands.get(0));
+					//System.out.println(commands.get(0));
 				}
 
 				persistenceProvider.endTransaction(true);
 				
-			
-
 				for (Command c : commands){
 					c.execute();
 				}		
