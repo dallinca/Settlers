@@ -20,8 +20,26 @@ import javax.sql.rowset.serial.SerialBlob;
 import javax.sql.rowset.serial.SerialException;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import server.commands.Command;
+import server.commands.move.AcceptTrade_Command;
+import server.commands.move.BuildCity_Command;
+import server.commands.move.BuildRoad_Command;
+import server.commands.move.BuildSettlement_Command;
+import server.commands.move.BuyDevCard_Command;
+import server.commands.move.DiscardCards_Command;
+import server.commands.move.FinishTurn_Command;
+import server.commands.move.MaritimeTrade_Command;
+import server.commands.move.OfferTrade_Command;
+import server.commands.move.RobPlayer_Command;
+import server.commands.move.RollNumber_Command;
+import server.commands.move.SendChat_Command;
+import server.commands.move.devcard.PlayMonopoly_Command;
+import server.commands.move.devcard.PlayMonument_Command;
+import server.commands.move.devcard.PlayRoadBuilding_Command;
+import server.commands.move.devcard.PlaySoldier_Command;
+import server.commands.move.devcard.PlayYearOfPlenty_Command;
 import shared.communication.*;
 import shared.communication.results.ClientModel;
 import shared.communication.results.JsonConverter;
@@ -168,7 +186,7 @@ public class GameTxtDAO implements GameDAOInterface {
 	    				// A Commands File
 	    			} else {
 	    				// A Game Server
-	    				// TODO here we convert from string to Game Object and add it to "games"
+	    				// here we convert from string to Game Object and add it to "games"
 	    				String gameString = stringBuffer.toString();
 	    				Game game = converter.parseServerJson(gameString);
 	    				games.add(game);
@@ -306,8 +324,66 @@ public class GameTxtDAO implements GameDAOInterface {
 	    				// A Commands File
 	    				// here we convert from string to Command and Add it to the Command ArrayList
 	    				String commandString = stringBuffer.toString();
-	    				commandList = gson.fromJson(commandString, List.class);
-	    				
+	    				ArrayList<Object> tempList = gson.fromJson(commandString, ArrayList.class);	
+	    				//System.out.println("GameDAO 3");
+	    				for (int i = 0; i < tempList.size();i++){
+	    					
+	    					Command c = null;
+	    					Object o = tempList.get(i);
+	    					String indefiniteCommand = o.toString();
+	    					JsonObject jobj = gson.fromJson(indefiniteCommand, JsonObject.class);				
+	    					String params =	jobj.get("params").toString();	
+	    					jobj = gson.fromJson(params, JsonObject.class);				
+	    					String type = jobj.get("type").toString();
+	    					type = type.substring(1, type.length()-1);
+	    					System.out.println("Type: " + type);
+
+	    					if (type.equals("buildRoad")){
+	    						c = gson.fromJson(indefiniteCommand, BuildRoad_Command.class);
+	    					} else if (type.equals("acceptTrade")){
+	    						c = gson.fromJson(indefiniteCommand, AcceptTrade_Command.class);			
+	    					} else if (type.equals("buildCity")){
+	    						c = gson.fromJson(indefiniteCommand, BuildCity_Command.class);			
+	    					} else if (type.equals("buildRoad")){
+	    						c = gson.fromJson(indefiniteCommand, BuildRoad_Command.class);			
+	    					} else if (type.equals("buildSettlement")){
+	    						c = gson.fromJson(indefiniteCommand, BuildSettlement_Command.class);			
+	    					} else if (type.equals("buyDevCard")){
+	    						c = gson.fromJson(indefiniteCommand, BuyDevCard_Command.class);			
+	    					} else if (type.equals("discardCards")){
+	    						c = gson.fromJson(indefiniteCommand, DiscardCards_Command.class);			
+	    					} else if (type.equals("finishTurn")){
+	    						c = gson.fromJson(indefiniteCommand, FinishTurn_Command.class);			
+	    					} else if (type.equals("maritimeTrade")){
+	    						c = gson.fromJson(indefiniteCommand, MaritimeTrade_Command.class);			
+	    					} else if (type.equals("offerTrade")){
+	    						c = gson.fromJson(indefiniteCommand, OfferTrade_Command.class);			
+	    					} else if (type.equals("robPlayer")){
+	    						c = gson.fromJson(indefiniteCommand, RobPlayer_Command.class);			
+	    					} else if (type.equals("rollNumber")){
+	    						c = gson.fromJson(indefiniteCommand, RollNumber_Command.class);			
+	    					} else if (type.equals("sendChat")){
+	    						c = gson.fromJson(indefiniteCommand, SendChat_Command.class);			
+	    					} else if (type.equals("Monopoly")){
+	    						c = gson.fromJson(indefiniteCommand, PlayMonopoly_Command.class);			
+	    					} else if (type.equals("Monument")){
+	    						c = gson.fromJson(indefiniteCommand, PlayMonument_Command.class);			
+	    					} else if (type.equals("Road_Building")){
+	    						c = gson.fromJson(indefiniteCommand, PlayRoadBuilding_Command.class);			
+	    					} else if (type.equals("Soldier")){
+	    						c = gson.fromJson(indefiniteCommand, PlaySoldier_Command.class);			
+	    					} else if (type.equals("Year_of_Plenty")){
+	    						c = gson.fromJson(indefiniteCommand, PlayYearOfPlenty_Command.class);			
+	    					}
+
+	    					//Command c = gson.fromJson(o.toString(), Command.class);
+	    					if (c!=null){
+	    						commandList.add(c);
+	    					} else {
+	    						System.out.println("This will crash the program.");
+	    						commandList.add((Command) o);
+	    					}				
+	    				}
 		    			System.out.println(stringBuffer.toString());
 	    			} else {
 	    				// A Game Server
@@ -349,6 +425,12 @@ public class GameTxtDAO implements GameDAOInterface {
 			    if(result) { System.out.println("DIR created"); }
 			}
 		}
+	}
+
+	@Override
+	public boolean clean() throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

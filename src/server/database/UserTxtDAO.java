@@ -89,7 +89,7 @@ public class UserTxtDAO implements UserDAOInterface {
 	    			}
 	    			fileReader.close();
 	    			
-	    			// TODO here we new to take the string and instead of system outing, turn it into the User object
+	    			// here we new to take the string and instead of system outing, turn it into the User object
 	    			String userAsString = stringBuffer.toString();
 	    			User user = gson.fromJson(userAsString, User.class);
 	    			System.out.println(userAsString);
@@ -139,6 +139,12 @@ public class UserTxtDAO implements UserDAOInterface {
 			    if(result) { System.out.println("DIR created"); }
 			}
 		}
+	}
+
+	@Override
+	public boolean clean() throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
 

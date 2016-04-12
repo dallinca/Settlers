@@ -4,6 +4,7 @@ import server.database.DatabaseAccess;
 import server.database.DatabaseException;
 import server.facade.ServerFacade;
 import server.persistenceprovider.plugins.PersistenceProvider;
+import server.persistenceprovider.plugins.TextPersistenceProvider;
 
 
 public class AbstractFactory {
@@ -48,7 +49,9 @@ public class AbstractFactory {
 		}
 		
 		System.out.println("ABSTRACT FACTORY: RETURNING PERSISTENCE PROVIDER.");
-		PersistenceProvider pp = new PersistenceProvider();
+		
+		//PersistenceProvider pp = new PersistenceProvider();
+		TextPersistenceProvider pp = new TextPersistenceProvider();
 		return pp;		
 	}
 	
