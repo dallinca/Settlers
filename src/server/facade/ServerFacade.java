@@ -1302,11 +1302,12 @@ public class ServerFacade implements IServerFacade {
 					try {
 
 						gameDAO.update(game);
+						gameDAO.clearCommands(gameID);
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					gameDAO.clearCommands(gameID);
+					
 					commandMap.put(gameID, commandCount);
 					persistenceProvider.endTransaction(true);
 					return;
