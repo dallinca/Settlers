@@ -206,6 +206,9 @@ public class Server {
 			SERVER_PORT_NUMBER = Integer.parseInt(args[3]);
 			boolean clean = false;
 			int commands = Integer.parseInt(args[1]);
+			
+			ServerFacade.getInstance().setCommands(commands);
+			ServerFacade.getInstance().setClean(clean);
 			try {
 				plugin(args);
 			} catch (MalformedURLException | InstantiationException
@@ -220,25 +223,15 @@ public class Server {
 			SERVER_PORT_NUMBER = Integer.parseInt(args[3]);
 			int commands = Integer.parseInt(args[1]);
 			boolean clean = true;
-			
+			ServerFacade.getInstance().setClean(clean);
 			try {
 				plugin(args);
 			} catch (MalformedURLException | InstantiationException
 					| IllegalAccessException | ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			ServerFacade.getInstance().clean();
 		}
-		
-		
-		
-		
-		
-		
-		
-		/*
-		
-		}*/
 		
 		new Server().run();
 	}

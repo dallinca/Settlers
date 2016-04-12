@@ -71,7 +71,8 @@ public class ServerFacade implements IServerFacade {
 	private UserDAOInterface userDAO;
 	private GameDAOInterface gameDAO;
 	private PersistenceProviderInterface persistenceProvider;
-
+	private int commands = -1;
+	private boolean clean = false;
 
 	/**
 	 * Singleton pattern for serverfacade
@@ -168,6 +169,30 @@ public class ServerFacade implements IServerFacade {
 		liveGames.add(game);*/
 	}
 
+	
+	
+	public void setClean(boolean clean) {
+		this.clean = clean;
+	}
+	
+	public void clean() {
+		try {
+			persistenceProvider.startTransaction();
+			
+			userDAO.clean();
+			gameDAO.clean();
+			
+			persistenceProvider.endTransaction(false);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DatabaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public void updateAllGames() {
 
 		//For every game
@@ -1306,10 +1331,15 @@ public class ServerFacade implements IServerFacade {
 		} catch (DatabaseException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		} catch (SQLException e) {
+		}/* catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
+	}
+
+	public void setCommands(int commands) {
+		this.commands  = commands;
+		
 	}
 
 
